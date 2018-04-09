@@ -52,22 +52,4 @@ public interface IPlayerConnector {
      */
     public List<String> registeredPlayers();
 
-    /**
-     * Advertises a new Game that other players can join.
-     */
-    public void advertiseGame();
-
-    /**
-     * Joins the game another host has set up.
-     * @param playerID
-     * @return
-     */
-    public boolean joinGame(String playerID);
-
-    /**
-     * Starts the game (requires that a game has been advertised by this player)
-     */
-    public boolean startGame();
-
-
 }
