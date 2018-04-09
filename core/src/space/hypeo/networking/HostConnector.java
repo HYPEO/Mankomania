@@ -2,21 +2,33 @@ package space.hypeo.networking;
 
 import java.util.List;
 
+/**
+ * Implementation of HostService as Singleton
+ */
 public class HostConnector implements IPlayerConnector, IHostConnector {
+
+    private static HostConnector instance;
+
+    private HostConnector() {}
+
+    public static HostConnector getInstance() {
+        if( instance == null ) {
+            instance = new HostConnector();
+        }
+
+        return instance;
+    }
 
     @Override
     public void changeBalance(String playerID, int amount) {
-
     }
 
     @Override
     public void movePlayer(String playerID, int position) {
-
     }
 
     @Override
     public void endTurn() {
-
     }
 
     @Override
@@ -41,7 +53,6 @@ public class HostConnector implements IPlayerConnector, IHostConnector {
 
     @Override
     public void advertiseGame() {
-
     }
 
     @Override

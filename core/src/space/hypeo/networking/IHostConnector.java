@@ -1,5 +1,8 @@
 package space.hypeo.networking;
 
+/**
+ * Interface provides service methods for player that is game-host
+ */
 public interface IHostConnector {
 
     /**
