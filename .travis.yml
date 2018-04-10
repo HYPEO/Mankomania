@@ -30,7 +30,7 @@ before_script:
 
 script:
     - ./gradlew test
-    - sonar-scanner
+    - sonar-scanner -X
 
 addons:
   sonarcloud:
