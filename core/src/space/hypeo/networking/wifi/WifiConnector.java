@@ -29,12 +29,19 @@ public class WifiConnector {
      * This must be called before calling any other Wi-Fi P2P method.
      */
     public void initialize() {
+        //WifiP2pMangager mManager;
     }
 
     /**
      * Creates a peer-to-peer group with the current device as the group owner.
      */
     public void createGroup() {
+    }
+
+    /**
+     * Removes the open peer-to-peer group.
+     */
+    public void removeGroup() {
     }
 
     /**
