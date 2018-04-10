@@ -9,7 +9,7 @@ env:
     - ADB_INSTALL_TIMEOUT=5             # Timeout für die Installation der App im Emulator
 android:
   components:
-    #- tools                            # SDK-update
+    - tools                             # SDK-update
     - platform-tools                    # platform-tools update
     - tools                             # SDK-update
     - build-tools-$ANDROID_BUILD_TOOLS  # build-tools, welche die App verwendet
