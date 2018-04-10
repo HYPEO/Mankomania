@@ -1,4 +1,4 @@
-package space.hypeo.networking;
+package space.hypeo.networking.wifi;
 
 public abstract class WifiConnector {
 
