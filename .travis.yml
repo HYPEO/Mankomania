@@ -10,7 +10,6 @@ env:
 android:
   components:
     - tools                             # to get the new `repository-11.xml`
-    - tools                             # SDK-update
     - platform-tools                    # platform-tools update
     - tools                             # SDK-update
     - build-tools-$ANDROID_BUILD_TOOLS  # build-tools, welche die App verwendet
@@ -30,6 +29,10 @@ before_script:
 
 script:
     - ./gradlew test
+    - ./gradlew sonarqube \
+    - Dsonar.organization=hypeo-game-studios \
+    - Dsonar.host.url=https://sonarcloud.io \
+    - Dsonar.login=7dddfaf39dd06f8ea1cdaeba408d543722aa633d
     - sonar-scanner -X
 
 addons:
