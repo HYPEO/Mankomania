@@ -10,12 +10,12 @@ env:
 android:
   components:
     - tools                             # to get the new `repository-11.xml`
-    - tools                             # SDK-update
     - platform-tools                    # platform-tools update
     - tools                             # SDK-update
     - build-tools-$ANDROID_BUILD_TOOLS  # build-tools, welche die App verwendet
     - android-$ANDROID_API              # Android SDK um die App zu kompilieren
     - extra-android-m2repository        # evt. benötigte m2-repositories
+#    - extra-google-m2repository
     - $ANDROID_ABI-$ANDROID_API
 
 # Emulator Management: erzeugen, starten und warten
@@ -28,15 +28,18 @@ before_script:
   # - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
-script:
-    - ./gradlew test
-    - sonar-scanner -X
+#script:
+#    - ./gradlew sonarqube \
+#      Dsonar.organization=hypeo-game-studios \
+#      Dsonar.host.url=https://sonarcloud.io \
+#      Dsonar.login=7dddfaf39dd06f8ea1cdaeba408d543722aa633d
+#    - sonar-scanner -X
 
-addons:
-  sonarcloud:
-    organization: "hypeo-game-studios" # der key der organisation auf sonarcloud.io
-    token:
-      secure: $SONAR_TOKEN       # $SONAR_TOKEN -> Umgebungsvariable auf travis-ci.org
+#addons:
+#  sonarcloud:
+#    organization: "hypeo-game-studios" # der key der organisation auf sonarcloud.io
+#    token:
+#      secure: $SONAR_TOKEN       # $SONAR_TOKEN -> Umgebungsvariable auf travis-ci.org
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
