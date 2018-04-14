@@ -15,6 +15,7 @@ android:
     - build-tools-$ANDROID_BUILD_TOOLS  # build-tools, welche die App verwendet
     - android-$ANDROID_API              # Android SDK um die App zu kompilieren
     - extra-android-m2repository        # evt. benötigte m2-repositories
+    - extra-google-m2repository
     - $ANDROID_ABI-$ANDROID_API
 
 # Emulator Management: erzeugen, starten und warten
@@ -29,9 +30,9 @@ before_script:
 
 script:
     - ./gradlew sonarqube \
-    - Dsonar.organization=hypeo-game-studios \
-    - Dsonar.host.url=https://sonarcloud.io \
-    - Dsonar.login=7dddfaf39dd06f8ea1cdaeba408d543722aa633d
+      Dsonar.organization=hypeo-game-studios \
+      Dsonar.host.url=https://sonarcloud.io \
+      Dsonar.login=7dddfaf39dd06f8ea1cdaeba408d543722aa633d
     - sonar-scanner -X
 
 addons:
