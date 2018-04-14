@@ -11,3 +11,4 @@ android:
     - sys-img-armeabi-v7a-android-26
 script:
     - ./gradlew test
+    - ./gradlew sonarqube -Dsonar.organization=hypeo -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
