@@ -78,3 +78,10 @@ project(":core") {
 tasks.eclipse.doLast {
     delete ".project"
 }
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "mankomania"
+        property "sonar.projectKey", "hypeo-game-studios"
+    }
+}
