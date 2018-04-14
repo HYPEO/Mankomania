@@ -1,7 +1,3 @@
-plugins {
-  id "org.sonarqube" version "2.6"
-}
-
 buildscript {
     
 
@@ -17,6 +13,10 @@ buildscript {
         
 
     }
+}
+
+plugins {
+  id "org.sonarqube" version "2.6"
 }
 
 allprojects {
@@ -81,7 +81,7 @@ tasks.eclipse.doLast {
 
 sonarqube {
     properties {
-        property "sonar.projectName", "mankomania"
+        property "sonar.projectName", "se2_mankomania"
         property "sonar.projectKey", "hypeo-game-studios"
     }
 }

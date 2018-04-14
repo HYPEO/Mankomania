@@ -28,7 +28,6 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-    - ./gradlew test
     - ./gradlew sonarqube \
     - Dsonar.organization=hypeo-game-studios \
     - Dsonar.host.url=https://sonarcloud.io \
