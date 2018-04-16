@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pManager;
 
+import space.hypeo.mankomania.Wifi;
+
 /**
  * A BroadcastReceiver that registers and later notifies of important Wi-Fi p2p events.
  */
@@ -12,13 +14,13 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
-    //private MyWiFiActivity mActivity;
+    private Wifi mActivity;
 
-    public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel/*, MyWifiActivity activity*/) {
+    public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel, Wifi activity) {
         super();
         this.mManager = manager;
         this.mChannel = channel;
-        //this.mActivity = activity;
+        this.mActivity = activity;
     }
 
     @Override
