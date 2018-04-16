@@ -31,6 +31,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
             // Indicates whether Wi-Fi P2P is enabled
             // Check to see if Wi-Fi is enabled and notify appropriate activity
+
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
 
             if(state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
@@ -42,6 +43,11 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             // Indicates that the available peer list has been changed
             // Call WifiP2pManager.requestPeers() to get a list of current peers
+
+            if(mManager != null) {
+                mManager.requestPeers(mChannel, mActivity.peerListListener);
+            }
+
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             // Indicates that the state of the Wi-Fi P2P connectivity has been changed
             // Respond to new connection or disconnections
