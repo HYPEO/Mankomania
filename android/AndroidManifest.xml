@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="space.hypeo.mankomania">
+    package="space.hypeo.mankomania">
 
     <uses-sdk
-            android:minSdkVersion="9"
-            android:targetSdkVersion="25"/>
+        android:minSdkVersion="9"
+        android:targetSdkVersion="25" />
 
-    <uses-feature android:name="android.hardware.wifi.direct"/>
+    <uses-feature android:name="android.hardware.wifi.direct" />
 
     <uses-permission
-            android:name="android.permission.ACCESS_WIFI_STATE"
-            android:required="true"/>
+        android:name="android.permission.ACCESS_WIFI_STATE"
+        android:required="true" />
     <uses-permission
-            android:name="android.permission.CHANGE_WIFI_STATE"
-            android:required="true"/>
+        android:name="android.permission.CHANGE_WIFI_STATE"
+        android:required="true" />
     <uses-permission
-            android:name="android.permission.CHANGE_NETWORK_STATE"
-            android:required="true"/>
+        android:name="android.permission.CHANGE_NETWORK_STATE"
+        android:required="true" />
     <uses-permission
-            android:name="android.permission.INTERNET"
-            android:required="true"/>
+        android:name="android.permission.INTERNET"
+        android:required="true" />
     <uses-permission
-            android:name="android.permission.ACCESS_NETWORK_STATE"
-            android:required="true"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        android:required="true" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-            android:allowBackup="true"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/app_name"
-            android:theme="@style/GdxTheme">
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/GdxTheme">
         <activity
-                android:name=".AndroidLauncher"
-                android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
-                android:label="@string/app_name"
-                android:screenOrientation="landscape">
+            android:name=".AndroidLauncher"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".Wifi"></activity>
     </application>
 
 </manifest>
