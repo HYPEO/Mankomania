@@ -3,7 +3,7 @@
     package="space.hypeo.mankomania">
 
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="14"
         android:targetSdkVersion="25" />
 
     <uses-feature android:name="android.hardware.wifi.direct" />
