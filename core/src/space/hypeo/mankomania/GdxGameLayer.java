@@ -28,4 +28,11 @@ public class GdxGameLayer extends GameLayer {
         }
         spriteBatch.end();
     }
+
+    public GameObject createGameObject(String texture)
+    {
+        GameObject gameObject = new GdxGameObject(spriteBatch, texture);
+        this.addGameObject(gameObject);
+        return gameObject;
+    }
 }

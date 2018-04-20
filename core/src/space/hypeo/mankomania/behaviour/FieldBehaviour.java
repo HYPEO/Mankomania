@@ -2,6 +2,8 @@ package space.hypeo.mankomania.behaviour;
 
 import com.badlogic.gdx.math.Vector3;
 
+import java.lang.reflect.Field;
+
 import space.hypeo.mankomania.GameState;
 import space.hypeo.networking.IPlayerConnector;
 import space.hypeo.spriteforce.Behaviour;
@@ -15,8 +17,9 @@ import space.hypeo.spriteforce.Behaviour;
  */
 public abstract class FieldBehaviour extends Behaviour {
 
-    IPlayerConnector connector;
-    GameState state;
+    protected IPlayerConnector connector;
+    protected GameState state;
+    protected FieldBehaviour nextField;
 
     /**
      *
@@ -36,5 +39,20 @@ public abstract class FieldBehaviour extends Behaviour {
     public Vector3 getFieldPosition()
     {
         return this.gameObject.getPosition();
+    }
+
+    public void setFieldPosition(Vector3 position)
+    {
+        this.gameObject.setPosition(position);
+    }
+
+    public FieldBehaviour getFollowingField(int steps)
+    {
+        return this.nextField.getFollowingField(steps-1);
+    }
+
+    public void setNextField(FieldBehaviour nextField)
+    {
+        this.nextField = nextField;
     }
 }

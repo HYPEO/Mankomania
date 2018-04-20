@@ -2,6 +2,7 @@ package space.hypeo.mankomania;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
 import space.hypeo.spriteforce.GameObject;
 
@@ -23,13 +24,15 @@ public class GdxGameObject extends GameObject {
 
     public GdxGameObject(SpriteBatch spriteBatch, String texturePath)
     {
-        setTexture(texturePath);
+        this.position = new Vector3();
         this.spriteBatch = spriteBatch;
+        setTexture(texturePath);
     }
 
     public void draw()
     {
-        spriteBatch.draw(this.texture, this.position.x, this.position.y);
+        if(texture !=null)
+            spriteBatch.draw(this.texture, this.position.x, this.position.y);
     }
 
     /**

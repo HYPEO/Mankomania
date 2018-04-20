@@ -67,4 +67,6 @@ public abstract class GameLayer {
     {
         layerManager.defocus(this);
     }
+
+    public abstract GameObject createGameObject(String texture);
 }

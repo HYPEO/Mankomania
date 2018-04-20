@@ -60,4 +60,11 @@ public class GameLayerManager {
             pop();
         }
     }
+
+    public void draw()
+    {
+        for (GameLayer layer:this.layers) {
+            layer.draw();
+        }
+    }
 }
