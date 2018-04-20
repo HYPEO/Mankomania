@@ -28,6 +28,7 @@ public abstract class FieldBehaviour extends Behaviour {
     public FieldBehaviour(IPlayerConnector connector, GameState gameState)
     {
         this.connector = connector;
+        this.state = gameState;
     }
 
     /**
@@ -44,6 +45,16 @@ public abstract class FieldBehaviour extends Behaviour {
     public void setFieldPosition(Vector3 position)
     {
         this.gameObject.setPosition(position);
+    }
+
+    public Vector3 getFieldScale()
+    {
+        return this.gameObject.getScale();
+    }
+
+    public void setFieldScale(Vector3 scale)
+    {
+        this.gameObject.setScale(scale);
     }
 
     public FieldBehaviour getFollowingField(int steps)

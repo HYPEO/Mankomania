@@ -27,7 +27,8 @@ public class MapFactory {
         // Create the First Field on the Map.
         FieldBehaviour firstField = new EmptyFieldBehaviour(null, null);
         mapLayer.createGameObject("wall.jpg").addBehaviour(firstField);
-
+        firstField.setFieldPosition(new Vector3(0, 30, 0));
+        firstField.setFieldScale(new Vector3(17, 17, 0));
         // Remember the first field as the previous one.
         FieldBehaviour previousField = firstField;
 
@@ -38,6 +39,7 @@ public class MapFactory {
             FieldBehaviour currentField = new EmptyFieldBehaviour(null, null);
             mapLayer.createGameObject("wall.jpg").addBehaviour(currentField);
             currentField.setFieldPosition(new Vector3(80 * i, 30, 0));
+            currentField.setFieldScale(new Vector3(17, 17, 0));
 
             // Reference the next field from the previous one.
             previousField.setNextField(currentField);

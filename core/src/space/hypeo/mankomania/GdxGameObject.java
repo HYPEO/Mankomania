@@ -24,7 +24,6 @@ public class GdxGameObject extends GameObject {
 
     public GdxGameObject(SpriteBatch spriteBatch, String texturePath)
     {
-        this.position = new Vector3();
         this.spriteBatch = spriteBatch;
         setTexture(texturePath);
     }
@@ -32,7 +31,7 @@ public class GdxGameObject extends GameObject {
     public void draw()
     {
         if(texture !=null)
-            spriteBatch.draw(this.texture, this.position.x, this.position.y);
+            spriteBatch.draw(this.texture, this.position.x, this.position.y, this.scale.x, this.scale.y);
     }
 
     /**
@@ -42,5 +41,6 @@ public class GdxGameObject extends GameObject {
     public void setTexture(String texture)
     {
         this.texture = new Texture(texture);
+        this.scale = new Vector3(this.texture.getWidth(), this.texture.getHeight(), this.texture.getDepth());
     }
 }

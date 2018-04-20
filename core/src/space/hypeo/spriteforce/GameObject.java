@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Vector;
 
 /**
  * Created by pichlermarc on 06.04.2018.
@@ -11,15 +12,10 @@ import java.util.LinkedList;
 
 public abstract class GameObject {
 
-    public Vector3 getPosition() {
-        return position;
-    }
 
-    public void setPosition(Vector3 position) {
-        this.position = position;
-    }
 
     protected Vector3 position; //TODO: Replace with engine-agnostic verison.
+    protected Vector3 scale; //TODO: Replace with engine-agnostic version.
     protected Collection<Behaviour> behaviour;
     protected GameLayer parent;
 
@@ -28,6 +24,8 @@ public abstract class GameObject {
      */
     public GameObject()
     {
+        position = new Vector3();
+        scale = new Vector3();
         behaviour = new LinkedList<Behaviour>();
     }
 
@@ -75,6 +73,22 @@ public abstract class GameObject {
         for (Behaviour b:behaviour) {
             b.update(deltaTime);
         }
+    }
+
+    public Vector3 getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector3 position) {
+        this.position = position;
+    }
+
+    public void setScale(Vector3 scale) {
+        this.scale = scale;
+    }
+
+    public Vector3 getScale() {
+        return scale;
     }
 
     /**
