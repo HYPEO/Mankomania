@@ -38,7 +38,7 @@ public class MapFactory {
             // Create new Field and link its behaviour.
             FieldBehaviour currentField = new EmptyFieldBehaviour(null, null);
             mapLayer.createGameObject("wall.jpg").addBehaviour(currentField);
-            currentField.setFieldPosition(new Vector3(80 * i, 30, 0));
+            currentField.setFieldPosition(new Vector3(40 * i, 30, 0));
             currentField.setFieldScale(new Vector3(17, 17, 0));
 
             // Reference the next field from the previous one.

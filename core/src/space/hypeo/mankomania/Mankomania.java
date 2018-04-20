@@ -17,7 +17,7 @@ public class Mankomania extends ApplicationAdapter {
 	@Override
 	public void create () {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
+		camera.setToOrtho(false, 480, 800);
 		spriteBatch = new SpriteBatch();
 		layerManager = new GameLayerManager();
 		layerManager.push(MapFactory.getMapLayer(spriteBatch, layerManager));
