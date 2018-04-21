@@ -3,29 +3,26 @@ package space.hypeo.mankomania;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-import space.hypeo.spriteforce.GameLayerManager;
-
+/**
+ * The GDX Game class, called from the android project.
+ */
 public class Mankomania extends ApplicationAdapter {
-	SpriteBatch spriteBatch;
-	GameLayerManager layerManager;
+    Stage currentStage;
 
-	@Override
-	public void create () {
-		spriteBatch = new SpriteBatch();
-		GameLayerManager layerManager;
-	}
+    @Override
+    public void create() {
+        StretchViewport viewport = new StretchViewport(480, 800);
+        currentStage = StageFactory.getMapStage(viewport);
+        Gdx.input.setInputProcessor(currentStage);
+    }
 
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		layerManager.update(Gdx.graphics.getDeltaTime());
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	}
-	
-	@Override
-	public void dispose () {
-		spriteBatch.dispose();
-	}
+    @Override
+    public void render() {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        currentStage.act();
+        currentStage.draw();
+    }
 }
