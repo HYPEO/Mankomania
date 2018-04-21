@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+/**
+ * The GDX Game class, called from the android project.
+ */
 public class Mankomania extends ApplicationAdapter {
     Stage currentStage;
 

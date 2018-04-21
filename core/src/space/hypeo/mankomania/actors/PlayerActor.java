@@ -5,10 +5,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import java.util.Random;
 
+/**
+ * Class that represents a Player.
+ */
 public class PlayerActor extends Image {
     private static final float PLAYER_SCALE = 20f;
-
-    public FieldActor currentField;
+    private FieldActor currentField;
 
     // Current player state.
     private int balance;
@@ -52,6 +54,10 @@ public class PlayerActor extends Image {
         }
     }
 
+    /**
+     * Moves the player a specific amount of steps on the board.
+     * @param steps The amount of steps to move.
+     */
     public void move(int steps) {
         currentField = currentField.getFollowingField(steps);
         if (this.isLocal())
@@ -59,6 +65,9 @@ public class PlayerActor extends Image {
         updateBounds();
     }
 
+    /**
+     * Updates the object bounds to the current field.
+     */
     private void updateBounds() {
         this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
     }

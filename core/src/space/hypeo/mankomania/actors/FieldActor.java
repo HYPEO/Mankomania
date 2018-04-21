@@ -3,9 +3,20 @@ package space.hypeo.mankomania.actors;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+/**
+ * Represents a Field.
+ */
 public abstract class FieldActor extends Image{
     FieldActor nextField;
 
+    /**
+     * Creates a new instance of the FieldActor Class.
+     * @param texture Texture that represents the field on screen.
+     * @param x X position of the Actor.
+     * @param y Y position of the Actor.
+     * @param width Width of the Actor.
+     * @param height Height of the Actor.
+     */
     public FieldActor(Texture texture, float x, float y, float width, float height)
     {
         super(texture);
