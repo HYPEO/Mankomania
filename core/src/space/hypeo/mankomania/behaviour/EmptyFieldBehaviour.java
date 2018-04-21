@@ -3,11 +3,19 @@ package space.hypeo.mankomania.behaviour;
 import space.hypeo.mankomania.GameState;
 import space.hypeo.networking.IPlayerConnector;
 
+/**
+ * EmptyFieldBehaviour, a Placeholder Field.
+ */
 public class EmptyFieldBehaviour extends FieldBehaviour {
 
-    public EmptyFieldBehaviour(IPlayerConnector connector, GameState state)
-    {
-        super(connector,state);
+    /**
+     * Creates a new instance of the EmptyFieldBehaviour Class.
+     *
+     * @param connector Connector to the other players.
+     * @param state     Current GameState.
+     */
+    public EmptyFieldBehaviour(IPlayerConnector connector, GameState state) {
+        super(connector, state);
     }
 
     @Override

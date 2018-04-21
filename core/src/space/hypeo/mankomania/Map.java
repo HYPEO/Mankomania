@@ -67,7 +67,7 @@ public class Map extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (((System.currentTimeMillis() - starttime) / 1000) > 1) {
             starttime = System.currentTimeMillis();
-            goNext((int)(6.0 * Math.random()) + 1);
+            goNext((int) (6.0 * Math.random()) + 1);
         }
 
         camera.update();
@@ -114,14 +114,14 @@ public class Map extends ApplicationAdapter {
 
     private void goNext(int number) {
         int playerfieldNew = playerfield;
-        playerfieldNew +=number;
+        playerfieldNew += number;
         int stageNew = stage;
         while (true) {
             if (playerfieldNew > 8) {
-                playerfieldNew =0;
+                playerfieldNew = 0;
                 stageNew++;
-                if(stageNew>3)
-                    stageNew=0;
+                if (stageNew > 3)
+                    stageNew = 0;
             } else {
                 System.out.println(playerfield + " " + stage + " " + playerfieldNew + " " + stageNew);
                 newPosition(playerfield, stage, playerfieldNew, stageNew);
@@ -168,8 +168,8 @@ public class Map extends ApplicationAdapter {
                 System.out.println("3 Set");
                 break;
         }
-        this.playerfield=playerfieldNew;
-        this.stage=stageNew;
+        this.playerfield = playerfieldNew;
+        this.stage = stageNew;
         render();
 
     }

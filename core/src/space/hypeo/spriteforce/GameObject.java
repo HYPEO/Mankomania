@@ -11,9 +11,6 @@ import java.util.Vector;
  */
 
 public abstract class GameObject {
-
-
-
     protected Vector3 position; //TODO: Replace with engine-agnostic verison.
     protected Vector3 scale; //TODO: Replace with engine-agnostic version.
     protected Collection<Behaviour> behaviour;
@@ -22,8 +19,7 @@ public abstract class GameObject {
     /**
      * Creates a new instance of the GameObject Class.
      */
-    public GameObject()
-    {
+    public GameObject() {
         position = new Vector3();
         scale = new Vector3();
         behaviour = new LinkedList<Behaviour>();
@@ -31,46 +27,44 @@ public abstract class GameObject {
 
     /**
      * Sets the Layer that's the parent of this GameObject
+     *
      * @param parent
      */
-    public void setParent(GameLayer parent)
-    {
+    public void setParent(GameLayer parent) {
         this.parent = parent;
     }
 
     /**
      * Defocuses the Layer this GameObject is assciated with.
      */
-    public void defocusLayer()
-    {
+    public void defocusLayer() {
         this.parent.defocus();
     }
 
     /**
      * Adds behaviour to this GameObject and sets this object as parent.
+     *
      * @param behaviour Behaviour to add.
      */
-    public void addBehaviour(Behaviour behaviour)
-    {
+    public void addBehaviour(Behaviour behaviour) {
         behaviour.setGameObject(this);
         this.behaviour.add(behaviour);
     }
 
     /**
      * Removes behaviuor from this GameObject.
+     *
      * @param behaviour
      */
-    public void removeBehaviour(Behaviour behaviour)
-    {
+    public void removeBehaviour(Behaviour behaviour) {
         this.behaviour.remove(behaviour);
     }
 
     /**
      * Update method called every frame.
      */
-    public void update(float deltaTime)
-    {
-        for (Behaviour b:behaviour) {
+    public void update(float deltaTime) {
+        for (Behaviour b : behaviour) {
             b.update(deltaTime);
         }
     }
@@ -98,6 +92,7 @@ public abstract class GameObject {
 
     /**
      * Sets the texture to be rendered on this GameObject's position.
+     *
      * @param texture
      */
     public abstract void setTexture(String texture);

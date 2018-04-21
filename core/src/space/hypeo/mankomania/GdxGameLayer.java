@@ -14,8 +14,13 @@ public class GdxGameLayer extends GameLayer {
 
     private SpriteBatch spriteBatch;
 
-    public GdxGameLayer(GameLayerManager layerManager, SpriteBatch spriteBatch)
-    {
+    /**
+     * Creates a new GameLayer for use with libGDX
+     *
+     * @param layerManager The required layerManager
+     * @param spriteBatch  SpriteBatch used for rendering associated GameObjects.
+     */
+    public GdxGameLayer(GameLayerManager layerManager, SpriteBatch spriteBatch) {
         super(layerManager);
         this.spriteBatch = spriteBatch;
     }
@@ -23,14 +28,14 @@ public class GdxGameLayer extends GameLayer {
     @Override
     public void draw() {
         spriteBatch.begin();
-        for (GameObject gameObject: this.gameObjects) {
+        for (GameObject gameObject : this.gameObjects) {
             gameObject.draw();
         }
         spriteBatch.end();
     }
 
-    public GameObject createGameObject(String texture)
-    {
+    @Override
+    public GameObject createGameObject(String texture) {
         GameObject gameObject = new GdxGameObject(spriteBatch, texture);
         this.addGameObject(gameObject);
         return gameObject;

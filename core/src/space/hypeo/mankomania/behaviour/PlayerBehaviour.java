@@ -1,5 +1,9 @@
 package space.hypeo.mankomania.behaviour;
 
+import com.badlogic.gdx.math.Vector3;
+
+import java.util.Random;
+
 import space.hypeo.mankomania.behaviour.FieldBehaviour;
 import space.hypeo.spriteforce.Behaviour;
 
@@ -16,15 +20,19 @@ public class PlayerBehaviour extends Behaviour {
     private String playerID;
     private FieldBehaviour field;
 
+    // For demostration purposes only. TODO: Remove!
+    private float timeElapsed = 0;
+    private Random die = new Random();
+
     /**
      * Creates a new instance of a Class that conatins Behaviour-Specific implementation for a player.
-     * @param playerID  The player's ID (useful for communications)
-     * @param balance   The player's current balance (starting balance)
-     * @param isLocal   Defines whether this player is the local one (i.e the one controlled with this device)
-     * @param field     Defines the players current position.
+     *
+     * @param playerID The player's ID (useful for communications)
+     * @param balance  The player's current balance (starting balance)
+     * @param isLocal  Defines whether this player is the local one (i.e the one controlled with this device)
+     * @param field    Defines the players current position.
      */
-    public PlayerBehaviour(String playerID, int balance, boolean isLocal, FieldBehaviour field)
-    {
+    public PlayerBehaviour(String playerID, int balance, boolean isLocal, FieldBehaviour field) {
         this.playerID = playerID;
         this.isLocal = isLocal;
         this.balance = balance;
@@ -33,20 +41,31 @@ public class PlayerBehaviour extends Behaviour {
 
     /**
      * Defines whether this player is the local one (i.e the one controlled with this device)
+     *
      * @return
      */
-    public boolean isLocal()
-    {
+    public boolean isLocal() {
         return this.isLocal;
     }
 
     @Override
     public void initialize() {
-        //TODO: Implement initialization behavviour.
+        //TODO: Implement initialization behaviour.
+    }
+
+    public void move(int steps) {
+        field = field.getFollowingField(steps);
+        if (this.isLocal())
+            field.trigger(this);
     }
 
     @Override
     public void update(float deltaTime) {
-        //TODO: Implement player behaviour...
+        timeElapsed += deltaTime;
+        if (timeElapsed >= 0.5f) {
+            timeElapsed = 0;
+            this.move(die.nextInt(6) + 1);
+        }
+        this.gameObject.setPosition(field.getFieldPosition());
     }
 }
