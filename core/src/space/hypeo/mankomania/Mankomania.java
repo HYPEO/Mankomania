@@ -3,38 +3,23 @@ package space.hypeo.mankomania;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import space.hypeo.spriteforce.GameLayerManager;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class Mankomania extends ApplicationAdapter {
-    SpriteBatch spriteBatch;
-    GameLayerManager layerManager;
-    OrthographicCamera camera;
+    Stage currentStage;
 
     @Override
     public void create() {
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 480, 800);
-        spriteBatch = new SpriteBatch();
-        layerManager = new GameLayerManager();
-        layerManager.push(LayerFactory.getMapLayer(spriteBatch, layerManager));
+        StretchViewport viewport = new StretchViewport(480, 800);
+        currentStage = StageFactory.getMapStage(viewport);
+        Gdx.input.setInputProcessor(currentStage);
     }
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        layerManager.update(Gdx.graphics.getDeltaTime());
-
-        camera.update();
-        spriteBatch.setProjectionMatrix(camera.combined);
-        layerManager.draw();
-    }
-
-    @Override
-    public void dispose() {
-        spriteBatch.dispose();
+        currentStage.act();
+        currentStage.draw();
     }
 }

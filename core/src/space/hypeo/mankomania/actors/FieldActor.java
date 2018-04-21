@@ -1,4 +1,4 @@
-package space.hypeo.mankomania.behaviour;
+package space.hypeo.mankomania.actors;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
