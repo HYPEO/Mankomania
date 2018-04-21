@@ -3,7 +3,9 @@ package space.hypeo.mankomania;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 /**
@@ -14,7 +16,9 @@ public class Mankomania extends ApplicationAdapter {
 
     @Override
     public void create() {
-        StretchViewport viewport = new StretchViewport(480, 800);
+        OrthographicCamera camera = new OrthographicCamera();
+        camera.setToOrtho(false,480, 800);
+        ExtendViewport viewport = new ExtendViewport(480, 800, camera);
         currentStage = StageFactory.getMapStage(viewport);
         Gdx.input.setInputProcessor(currentStage);
     }
