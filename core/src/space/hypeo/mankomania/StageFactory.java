@@ -108,5 +108,6 @@ public class StageFactory {
         mainMenuStage.addActor(host);
         mainMenuStage.addActor(join);
 
+        return mainMenuStage;
     }
 }
