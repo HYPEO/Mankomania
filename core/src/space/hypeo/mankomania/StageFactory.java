@@ -1,11 +1,17 @@
 package space.hypeo.mankomania;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.actors.EmptyFieldActor;
@@ -27,10 +33,9 @@ public class StageFactory {
      * @param viewport The viewport the stage will be rendered in.
      * @return A stage with the map as its content.
      */
-    public static Stage getMapStage(Viewport viewport) {
+    public static Stage getMapStage(Viewport viewport, StageManager stageManager) {
         // Create stage.
         Stage mapStage = new Stage(viewport);
-
         // Create the empty field.
         FieldActor firstField = new EmptyFieldActor(MARGIN_X, MARGIN_Y);
         mapStage.addActor(firstField);
@@ -51,6 +56,20 @@ public class StageFactory {
         // Create player on first field.
         PlayerActor player = new PlayerActor("1", 1000, true, firstField);
         mapStage.addActor(player);
+
+        // Create close button.
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Button close = new TextButton("Close Game", skin);
+        close.setHeight(100);
+        close.setWidth(viewport.getWorldWidth());
+        close.setY(viewport.getWorldHeight()-close.getHeight());
+        // Add click listeners.
+        close.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                stageManager.remove(mapStage);
+            }
+        });
+        mapStage.addActor(close);
 
         return mapStage;
     }
@@ -92,21 +111,41 @@ public class StageFactory {
     }
 
 
-    public static Stage getMainMenu(Viewport viewport)
-    {
+    public static Stage getMainMenu(final Viewport viewport, final StageManager stageManager) {
         Stage mainMenuStage = new Stage(viewport);
 
         // Set up skin
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
+        // Set up buttons.
         Button launch = new TextButton("Launch Game (offline)", skin);
         Button host = new TextButton("Host Game", skin);
         Button join = new TextButton("Join Game", skin);
 
+        Label title = new Label("MANKOMANIA (insert logo here)", skin);
 
+        // Add click listeners.
+        launch.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                stageManager.push(getMapStage(viewport, stageManager));
+            }
+        });
 
-        mainMenuStage.addActor(launch);
-        mainMenuStage.addActor(host);
-        mainMenuStage.addActor(join);
+        Table table = new Table();
+        table.setWidth(mainMenuStage.getWidth());
+        table.align(Align.center);
+        table.setPosition(0, mainMenuStage.getHeight() - 200);
+        table.padTop(50);
+        table.add(title).width(300).height(100);
+        table.row();
+        table.add(launch).width(300).height(100);
+        table.row();
+        table.add(host).width(300).height(100);
+        table.row();
+        table.add(join).width(300).height(100);
+
+        // Add buttons to stage.
+        mainMenuStage.addActor(table);
 
         return mainMenuStage;
     }
