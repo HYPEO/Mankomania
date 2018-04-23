@@ -90,4 +90,23 @@ public class StageFactory {
 
         return previousField;
     }
+
+
+    public static Stage getMainMenu(Viewport viewport)
+    {
+        Stage mainMenuStage = new Stage(viewport);
+
+        // Set up skin
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Button launch = new TextButton("Launch Game (offline)", skin);
+        Button host = new TextButton("Host Game", skin);
+        Button join = new TextButton("Join Game", skin);
+
+
+
+        mainMenuStage.addActor(launch);
+        mainMenuStage.addActor(host);
+        mainMenuStage.addActor(join);
+
+    }
 }
