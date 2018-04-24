@@ -1,13 +1,10 @@
 package space.hypeo.mankomania;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import space.hypeo.mankomania.actors.BuyHouseFieldActor;
+import space.hypeo.mankomania.actors.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.EmptyFieldActor;
 import space.hypeo.mankomania.actors.FieldActor;
 import space.hypeo.mankomania.actors.PlayerActor;
@@ -40,6 +37,7 @@ public class StageFactory {
 
         // Generate all sides of the "field rectangle"
         // TODO: This needs some cleanup.
+
         previousField = generateFields(NUM_OF_FIELDS, FIELD_DISTANCE, 0, MARGIN_X, MARGIN_Y, previousField, mapStage);
         previousField = generateFields(NUM_OF_FIELDS, 0, FIELD_DISTANCE, MARGIN_X + NUM_OF_FIELDS * FIELD_DISTANCE, MARGIN_Y, previousField, mapStage);
         previousField = generateFields(NUM_OF_FIELDS, -FIELD_DISTANCE, 0, NUM_OF_FIELDS * FIELD_DISTANCE + MARGIN_X, MARGIN_Y + NUM_OF_FIELDS * FIELD_DISTANCE, previousField, mapStage);
@@ -77,8 +75,17 @@ public class StageFactory {
                                              Stage mapStage) {
         FieldActor previousField = firstField;
         for (int i = 1; i <= amount; i++) {
+            int random= (int)(Math.random() * 9);
+
             // Create new Field
-            FieldActor currentField = new EmptyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection));
+            FieldActor currentField;
+            if(random==0)
+             currentField = new BuyHouseFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection));
+            else if(random==1)
+                currentField = new LoseMoneyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection));
+            else
+                currentField = new EmptyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection));
+
             mapStage.addActor(currentField);
 
             // Reference the next field from the previous one.

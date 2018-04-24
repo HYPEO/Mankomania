@@ -19,6 +19,7 @@ public class EmptyFieldActor extends FieldActor{
         super(new Texture("wall.jpg"), x, y, FIELD_SCALE, FIELD_SCALE);
     }
 
+
     @Override
     public void trigger(PlayerActor player) {
         // Empty trigger method (placeholder)
