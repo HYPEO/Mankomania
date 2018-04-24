@@ -25,7 +25,7 @@ public class PlayerActor extends Image {
     // For dice demo
     private float xValue, yValue, zValue, gForce;
     private static final float EARTH_GRAVITY = 9.81f;
-    private static final float GRAVITY_FORCE_THRESHOLD = 2f;
+    private static final float GRAVITY_FORCE_THRESHOLD = 2.6f;
 
     /**
      * Creates a new instance of a Class that implementaion for a Player.
@@ -61,15 +61,21 @@ public class PlayerActor extends Image {
         }
         */
 
-        xValue = Gdx.input.getAccelerometerX() / EARTH_GRAVITY;
-        yValue = Gdx.input.getAccelerometerY() / EARTH_GRAVITY;
-        zValue = Gdx.input.getAccelerometerZ() / EARTH_GRAVITY;
+        timeElapsed += deltaTime;
+        if (timeElapsed >= 0.18f) {
+            timeElapsed = 0;
+            xValue = Gdx.input.getAccelerometerX() / EARTH_GRAVITY;
+            yValue = Gdx.input.getAccelerometerY() / EARTH_GRAVITY;
+            zValue = Gdx.input.getAccelerometerZ() / EARTH_GRAVITY;
 
-        gForce = (float) Math.sqrt(xValue * xValue + yValue * yValue + zValue * zValue);
+            gForce = (float) Math.sqrt(xValue * xValue + yValue * yValue + zValue * zValue);
 
-        if(gForce > GRAVITY_FORCE_THRESHOLD)
-        {
-            this.move(die.nextInt(6) + 1);
+            if (gForce > GRAVITY_FORCE_THRESHOLD) {
+                // TODO: check if it is the players turn, then move
+                this.move(die.nextInt(6) + 1);
+
+                // maybe cheat function here if other player is playing roulette
+            }
         }
 
     }
