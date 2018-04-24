@@ -1,55 +1,15 @@
-language: android
-jdk: oraclejdk8
 sudo: false
-env:
-  global:
-    - ANDROID_API=android-24            # API-version für den Emulator (android-XX)
-    - ANDROID_ABI=arm64-v8a             # das Image für den Emulator (armv7/armv8/x86/x86_64)
-    - ANDROID_BUILD_TOOLS=26.0.2        # die Version der build-tools (am besten aktuellste version)
-    - ADB_INSTALL_TIMEOUT=5             # Timeout für die Installation der App im Emulator
+language: android
 android:
   components:
-    - tools                             # to get the new `repository-11.xml`
-    - platform-tools                    # platform-tools update
-    - tools                             # SDK-update
-    - build-tools-$ANDROID_BUILD_TOOLS  # build-tools, welche die App verwendet
-    - android-$ANDROID_API              # Android SDK um die App zu kompilieren
-    - extra-android-m2repository        # evt. benötigte m2-repositories
-#    - extra-google-m2repository
-    - $ANDROID_ABI-$ANDROID_API
-
-# Emulator Management: erzeugen, starten und warten
-before_script:
-  - echo yes | $ANDROID_HOME/tools/bin/sdkmanager --update
-  - echo yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-  - echo yes | $ANDROID_HOME/tools/bin/sdkmanager "system-images;$ANDROID_API;default;$ANDROID_ABI"
-  - echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force -n test  -k "system-images;$ANDROID_API;default;$ANDROID_ABI"
-  - $ANDROID_HOME/tools/emulator -avd test -no-audio -no-window &
-  # - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-
-#script:
-#    - ./gradlew sonarqube \
-#      Dsonar.organization=hypeo-game-studios \
-#      Dsonar.host.url=https://sonarcloud.io \
-#      Dsonar.login=7dddfaf39dd06f8ea1cdaeba408d543722aa633d
-#    - sonar-scanner -X
-
-#addons:
-#  sonarcloud:
-#    organization: "hypeo-game-studios" # der key der organisation auf sonarcloud.io
-#    token:
-#      secure: $SONAR_TOKEN       # $SONAR_TOKEN -> Umgebungsvariable auf travis-ci.org
-
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-cache:
-  directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-    - $HOME/.android/build-cache
-
-# benachrichtigungen per email auszuschalten
-#notifications:
-#  email: false
+    - build-tools-27.0.3
+    - android-26
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - addon-google_apis-google-26
+    - sys-img-armeabi-v7a-android-26
+script:
+    - ./gradlew build
+    - ./gradlew test
+    - ./gradlew sonarqube -Dsonar.organization=hypeo -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
