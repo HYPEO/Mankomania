@@ -1,5 +1,6 @@
 package space.hypeo.mankomania.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -20,6 +21,11 @@ public class PlayerActor extends Image {
     // For demostration purposes only. TODO: Remove!
     private float timeElapsed = 0;
     private Random die = new Random();
+
+    // For dice demo
+    private float xValue, yValue, zValue, gForce;
+    private static final float EARTH_GRAVITY = 9.81f;
+    private static final float GRAVITY_FORCE_THRESHOLD = 2f;
 
     /**
      * Creates a new instance of a Class that implementaion for a Player.
@@ -47,11 +53,25 @@ public class PlayerActor extends Image {
     @Override
     public void act(float deltaTime)
     {
+        /*
         timeElapsed += deltaTime;
         if (timeElapsed >= 0.5f) {
             timeElapsed = 0;
             this.move(die.nextInt(6) + 1);
         }
+        */
+
+        xValue = Gdx.input.getAccelerometerX() / EARTH_GRAVITY;
+        yValue = Gdx.input.getAccelerometerY() / EARTH_GRAVITY;
+        zValue = Gdx.input.getAccelerometerZ() / EARTH_GRAVITY;
+
+        gForce = (float) Math.sqrt(xValue * xValue + yValue * yValue + zValue * zValue);
+
+        if(gForce > GRAVITY_FORCE_THRESHOLD)
+        {
+            this.move(die.nextInt(6) + 1);
+        }
+
     }
 
     /**
