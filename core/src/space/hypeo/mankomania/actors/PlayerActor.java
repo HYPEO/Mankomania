@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class PlayerActor extends Image {
     private static final float PLAYER_SCALE = 20f;
-    private FieldActor currentField;
+    protected FieldActor currentField;
 
     // Current player state.
     private int balance;
@@ -34,6 +34,7 @@ public class PlayerActor extends Image {
         this.currentField = currentField;
         this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
         this.isLocal = isLocal;
+        this.balance = balance;
     }
 
     /**
@@ -49,7 +50,7 @@ public class PlayerActor extends Image {
     public void act(float deltaTime)
     {
         timeElapsed += deltaTime;
-        if (timeElapsed >= 0.5f) {
+        if (timeElapsed >= 5f) {
             timeElapsed = 0;
             this.move(die.nextInt(6) + 1);
         }
@@ -71,5 +72,14 @@ public class PlayerActor extends Image {
      */
     private void updateBounds() {
         this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
+        System.out.println(balance);
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 }

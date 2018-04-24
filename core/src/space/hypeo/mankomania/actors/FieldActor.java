@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  */
 public abstract class FieldActor extends Image{
     FieldActor nextField;
+    private float x;
+    private  float y;
 
     /**
      * Creates a new instance of the FieldActor Class.
@@ -21,6 +23,8 @@ public abstract class FieldActor extends Image{
     {
         super(texture);
         this.setBounds(x, y, width, height);
+        this.x=x;
+        this.y=y;
     }
 
     /**
@@ -49,5 +53,25 @@ public abstract class FieldActor extends Image{
      */
     public void setNextField(FieldActor nextField) {
         this.nextField = nextField;
+    }
+
+    @Override
+    public float getX() {
+        return x;
+    }
+
+    @Override
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    @Override
+    public float getY() {
+        return y;
+    }
+
+    @Override
+    public void setY(float y) {
+        this.y = y;
     }
 }
