@@ -33,6 +33,7 @@ public class PlayerActor extends Image {
         super(new Texture("tile.png"));
         this.currentField = currentField;
         this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
+        this.isLocal = isLocal;
     }
 
     /**
