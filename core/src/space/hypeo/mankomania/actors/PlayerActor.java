@@ -33,7 +33,8 @@ public class PlayerActor extends Image {
         super(new Texture("tile.png"));
         this.currentField = currentField;
         this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
-        this.balance=balance;
+        this.isLocal = isLocal;
+        this.balance = balance;
     }
 
     /**
@@ -61,7 +62,7 @@ public class PlayerActor extends Image {
      */
     public void move(int steps) {
         currentField = currentField.getFollowingField(steps);
-       // if (this.isLocal())
+        if (this.isLocal())
             currentField.trigger(this);
         updateBounds();
     }

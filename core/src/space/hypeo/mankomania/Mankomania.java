@@ -12,21 +12,21 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
  * The GDX Game class, called from the android project.
  */
 public class Mankomania extends ApplicationAdapter {
-   protected Stage currentStage;
+    private StageManager manager;
 
     @Override
     public void create() {
         OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false,480, 800);
         ExtendViewport viewport = new ExtendViewport(480, 800, camera);
-        currentStage = StageFactory.getMapStage(viewport);
-        Gdx.input.setInputProcessor(currentStage);
+        manager = new StageManager();
+        manager.push(StageFactory.getMainMenu(viewport, manager));
     }
 
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        currentStage.act();
-        currentStage.draw();
+        manager.getCurrentStage().act();
+        manager.getCurrentStage().draw();
     }
 }
