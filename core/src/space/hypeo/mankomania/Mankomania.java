@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
  * The GDX Game class, called from the android project.
  */
 public class Mankomania extends ApplicationAdapter {
-    Stage currentStage;
+   protected Stage currentStage;
 
     @Override
     public void create() {
