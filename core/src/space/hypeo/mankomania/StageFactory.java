@@ -33,9 +33,9 @@ public class StageFactory {
      * @param viewport The viewport the stage will be rendered in.
      * @return A stage with the map as its content.
      */
-    public static Stage getMapStage(Viewport viewport, StageManager stageManager) {
+    public static Stage getMapStage(final Viewport viewport, final StageManager stageManager) {
         // Create stage.
-        Stage mapStage = new Stage(viewport);
+        final Stage mapStage = new Stage(viewport);
         // Create the empty field.
         FieldActor firstField = new EmptyFieldActor(MARGIN_X, MARGIN_Y);
         mapStage.addActor(firstField);
