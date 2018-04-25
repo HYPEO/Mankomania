@@ -20,6 +20,7 @@ import space.hypeo.mankomania.actors.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.EmptyFieldActor;
 import space.hypeo.mankomania.actors.FieldActor;
 import space.hypeo.mankomania.actors.PlayerActor;
+import space.hypeo.mankomania.stages.SplashStage;
 
 /**
  * Creates all the stages (views) for the game.
@@ -161,5 +162,10 @@ public class StageFactory {
         mainMenuStage.addActor(table);
 
         return mainMenuStage;
+    }
+
+    public static Stage getSplashStage(final Viewport viewport, final StageManager stageManager)
+    {
+        return new SplashStage(stageManager, viewport);
     }
 }
