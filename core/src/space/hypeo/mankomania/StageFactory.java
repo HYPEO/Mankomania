@@ -1,8 +1,6 @@
 package space.hypeo.mankomania;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -12,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.actors.BuyHouseFieldActor;
@@ -20,7 +17,7 @@ import space.hypeo.mankomania.actors.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.EmptyFieldActor;
 import space.hypeo.mankomania.actors.FieldActor;
 import space.hypeo.mankomania.actors.PlayerActor;
-import space.hypeo.mankomania.stages.SplashStage;
+import space.hypeo.mankomania.stages.TitleStage;
 
 /**
  * Creates all the stages (views) for the game.
@@ -164,8 +161,8 @@ public class StageFactory {
         return mainMenuStage;
     }
 
-    public static Stage getSplashStage(final Viewport viewport, final StageManager stageManager)
+    public static Stage getTitleStage(final Viewport viewport, final StageManager stageManager)
     {
-        return new SplashStage(stageManager, viewport);
+        return new TitleStage(stageManager, viewport);
     }
 }

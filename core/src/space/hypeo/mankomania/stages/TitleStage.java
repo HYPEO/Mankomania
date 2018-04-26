@@ -7,8 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import org.w3c.dom.css.Rect;
-
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.RectangleActor;
 
@@ -17,20 +15,25 @@ import space.hypeo.mankomania.actors.RectangleActor;
  */
 
 /**
- * Represents a splash screen at the beginning of the Game.
+ * Represents a title screen at the beginning of the Game.
  */
-public class SplashStage extends Stage {
+public class TitleStage extends Stage {
 
     StageManager stageManager;
 
-    public SplashStage(StageManager stageManager, Viewport viewport) {
+    public TitleStage(StageManager stageManager, Viewport viewport) {
         super(viewport);
         this.stageManager = stageManager;
 
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
-        Image title = new Image(new Texture("common/mankomania_logo_shadowed.png"));
-        Image tapScreen = new Image(new Texture("common/tap_screen.png"));
+        Texture titleTexture = new Texture("common/mankomania_logo_shadowed.png");
+        titleTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        Image title = new Image(titleTexture);
+
+        Texture tapScreenTexture = new Texture("common/tap_screen.png");
+        tapScreenTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        Image tapScreen = new Image(tapScreenTexture);
 
         // Set up title.
         title.setWidth(title.getWidth() / 2.5f);
@@ -55,7 +58,7 @@ public class SplashStage extends Stage {
         // Add listener for click events.
         this.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                stageManager.remove(SplashStage.this);
+                stageManager.remove(TitleStage.this);
             }
         });
     }
