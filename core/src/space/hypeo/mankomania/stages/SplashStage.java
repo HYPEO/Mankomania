@@ -29,7 +29,7 @@ public class SplashStage extends Stage {
 
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
-        Image title = new Image(new Texture("common/mankomania_logo.png"));
+        Image title = new Image(new Texture("common/mankomania_logo_shadowed.png"));
 
         title.setWidth(title.getWidth() / 2.5f);
         title.setHeight(title.getHeight() / 2.5f);
