@@ -58,7 +58,7 @@ public class StageFactory {
         previousField.setNextField(firstField);
 
         // Create player on first field.
-        PlayerActor player = new PlayerActor("1", 1000, true, firstField);
+        PlayerActor player = new PlayerActor("1", 1000, true, firstField, viewport, stageManager);
         mapStage.addActor(player);
 
         // Create close button.
@@ -123,6 +123,39 @@ public class StageFactory {
         return previousField;
     }
 
+
+    public static Stage getDiceResult(final Viewport viewport, final StageManager stageManager, int moveFields) {
+        Stage diceStage = new Stage(viewport);
+
+        // Set up skin
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
+        // Set up button
+        Button move = new TextButton("Move " + moveFields + "fields", skin);
+
+        Label title = new Label("You diced " + moveFields, skin);
+
+        // Add click listeners.
+        move.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                stageManager.remove(stageManager.getCurrentStage());
+            }
+        });
+
+        Table table = new Table();
+        table.setWidth(diceStage.getWidth());
+        table.align(Align.center);
+        table.setPosition(0, diceStage.getHeight() - diceStage.getHeight() + 150);
+        table.padTop(10);
+        table.add(title).width(300).height(100);
+        table.row();
+        table.add(move).width(300).height(100);
+
+        // Add buttons to stage.
+        diceStage.addActor(table);
+
+        return diceStage;
+    }
 
     public static Stage getMainMenu(final Viewport viewport, final StageManager stageManager) {
         Stage mainMenuStage = new Stage(viewport);
