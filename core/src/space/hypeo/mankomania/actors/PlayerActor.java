@@ -25,7 +25,7 @@ public class PlayerActor extends Image {
     // For dice demo
     private float xValue, yValue, zValue, gForce;
     private static final float EARTH_GRAVITY = 9.81f;
-    private static final float GRAVITY_FORCE_THRESHOLD = 2.6f;
+    private static final float GRAVITY_FORCE_THRESHOLD = 2.2f;
 
     /**
      * Creates a new instance of a Class that implementaion for a Player.
@@ -55,14 +55,6 @@ public class PlayerActor extends Image {
     @Override
     public void act(float deltaTime)
     {
-        /*
-        timeElapsed += deltaTime;
-        if (timeElapsed >= 5f) {
-            timeElapsed = 0;
-            this.move(die.nextInt(6) + 1);
-        }
-        */
-
         timeElapsed += deltaTime;
         if (timeElapsed >= 0.18f) {
             timeElapsed = 0;
@@ -79,7 +71,6 @@ public class PlayerActor extends Image {
                 // maybe cheat function here if other player is playing roulette
             }
         }
-
     }
 
     /**
