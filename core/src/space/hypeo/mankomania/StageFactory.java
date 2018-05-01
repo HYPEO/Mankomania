@@ -2,15 +2,20 @@ package space.hypeo.mankomania;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -129,14 +134,24 @@ public class StageFactory {
 
         // Set up skin
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Texture diceResult = new Texture("dice" + moveFields + ".png");
+        Drawable dice = new TextureRegionDrawable(new TextureRegion(diceResult));
 
         // Set up button
-        Button move = new TextButton("Move " + moveFields + "fields", skin);
+        Button moveButton = new TextButton("Move " + moveFields + " fields", skin);
+        ImageButton diceButton = new ImageButton(dice);
 
-        Label title = new Label("You diced " + moveFields, skin);
+        Label title = new Label("  You diced " + moveFields + " - tap dice to move", skin);
 
         // Add click listeners.
-        move.addListener(new ClickListener() {
+        /*
+        moveButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                stageManager.remove(stageManager.getCurrentStage());
+            }
+        });
+        */
+        diceButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.remove(stageManager.getCurrentStage());
             }
@@ -145,11 +160,12 @@ public class StageFactory {
         Table table = new Table();
         table.setWidth(diceStage.getWidth());
         table.align(Align.center);
-        table.setPosition(0, diceStage.getHeight() - diceStage.getHeight() + 150);
-        table.padTop(10);
+        table.setPosition(0, diceStage.getHeight() - diceStage.getHeight() / 2);
         table.add(title).width(300).height(100);
         table.row();
-        table.add(move).width(300).height(100);
+        table.add(diceButton).width(350).height(350);
+        // table.row();
+        // table.add(moveButton).width(300).height(100);
 
         // Add buttons to stage.
         diceStage.addActor(table);

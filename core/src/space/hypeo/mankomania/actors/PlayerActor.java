@@ -30,8 +30,7 @@ public class PlayerActor extends Image {
     private float xValue, yValue, zValue, gForce;
     private static final float EARTH_GRAVITY = 9.81f;
     private int moveFields;
-    // ToDo set threshold back to 2.2 (1.6 for easyer debuggin in emulator)
-    private static final float GRAVITY_FORCE_THRESHOLD = 1.6f;
+    private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
     final StageManager manager;
     final Viewport viewport;
 
