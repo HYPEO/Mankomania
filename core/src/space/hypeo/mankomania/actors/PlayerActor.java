@@ -81,7 +81,7 @@ public class PlayerActor extends Image {
                 this.move(moveFields);
                 manager.push(StageFactory.getDiceResult(viewport, manager, moveFields));
 
-                // maybe cheat function here if other player is playing roulette
+                // TODO: maybe cheat function here (for example: if other player is playing roulette)
             }
         }
     }

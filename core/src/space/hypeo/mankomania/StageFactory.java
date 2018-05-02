@@ -134,23 +134,15 @@ public class StageFactory {
 
         // Set up skin
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-        Texture diceResult = new Texture("dice" + moveFields + ".png");
+        Texture diceResult = new Texture("dices/dice" + moveFields + ".png");
         Drawable dice = new TextureRegionDrawable(new TextureRegion(diceResult));
 
         // Set up button
-        Button moveButton = new TextButton("Move " + moveFields + " fields", skin);
         ImageButton diceButton = new ImageButton(dice);
 
         Label title = new Label("  You diced " + moveFields + " - tap dice to move", skin);
 
         // Add click listeners.
-        /*
-        moveButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                stageManager.remove(stageManager.getCurrentStage());
-            }
-        });
-        */
         diceButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.remove(stageManager.getCurrentStage());
@@ -164,10 +156,8 @@ public class StageFactory {
         table.add(title).width(300).height(100);
         table.row();
         table.add(diceButton).width(350).height(350);
-        // table.row();
-        // table.add(moveButton).width(300).height(100);
 
-        // Add buttons to stage.
+        // Add dice-button to stage.
         diceStage.addActor(table);
 
         return diceStage;
