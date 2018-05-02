@@ -2,15 +2,20 @@ package space.hypeo.mankomania;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -58,7 +63,7 @@ public class StageFactory {
         previousField.setNextField(firstField);
 
         // Create player on first field.
-        PlayerActor player = new PlayerActor("1", 1000, true, firstField);
+        PlayerActor player = new PlayerActor("1", 1000, true, firstField, viewport, stageManager);
         mapStage.addActor(player);
 
         // Create close button.
@@ -123,6 +128,40 @@ public class StageFactory {
         return previousField;
     }
 
+
+    public static Stage getDiceResult(final Viewport viewport, final StageManager stageManager, int moveFields) {
+        Stage diceStage = new Stage(viewport);
+
+        // Set up skin
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Texture diceResult = new Texture("dices/dice" + moveFields + ".png");
+        Drawable dice = new TextureRegionDrawable(new TextureRegion(diceResult));
+
+        // Set up button
+        ImageButton diceButton = new ImageButton(dice);
+
+        Label title = new Label("  You diced " + moveFields + " - tap dice to move", skin);
+
+        // Add click listeners.
+        diceButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                stageManager.remove(stageManager.getCurrentStage());
+            }
+        });
+
+        Table table = new Table();
+        table.setWidth(diceStage.getWidth());
+        table.align(Align.center);
+        table.setPosition(0, diceStage.getHeight() - diceStage.getHeight() / 2);
+        table.add(title).width(300).height(100);
+        table.row();
+        table.add(diceButton).width(350).height(350);
+
+        // Add dice-button to stage.
+        diceStage.addActor(table);
+
+        return diceStage;
+    }
 
     public static Stage getMainMenu(final Viewport viewport, final StageManager stageManager) {
         Stage mainMenuStage = new Stage(viewport);
