@@ -1,5 +1,13 @@
 package space.hypeo.networking.packages;
 
 public class PingResponse {
-    public long time = System.currentTimeMillis();
+    private long time;
+
+    public PingResponse(long requestTime) {
+        time = requestTime;
+    }
+
+    public long getTime() {
+        return time;
+    }
 }

@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 import space.hypeo.networking.IClientConnector;
 import space.hypeo.networking.IPlayerConnector;
+import space.hypeo.networking.PlayerInfo;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 
@@ -18,16 +19,27 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
     private com.esotericsoftware.kryonet.Client client;
 
+    private PlayerInfo hostInfo = null;
+
+    private long lastPingRequest = 0;
+
     private class ClientListener extends Listener {
 
         @Override
         public void connected(Connection connection) {
             super.connected(connection);
+
+            hostInfo = new PlayerInfo();
+
+            hostInfo.address = connection.getRemoteAddressTCP().getAddress().toString();
+            hostInfo.hostName = connection.getRemoteAddressTCP().getHostName();
+            hostInfo.port = connection.getRemoteAddressTCP().getPort();
         }
 
         @Override
         public void disconnected(Connection connection) {
             super.disconnected(connection);
+            hostInfo = null;
         }
 
         @Override
@@ -36,7 +48,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
             if( object instanceof PingResponse) {
                 PingResponse pingResponse = (PingResponse) object;
-                System.out.println("Time " + pingResponse.time);
+                System.out.println("Ping time [ms] = " + (lastPingRequest - pingResponse.getTime()));
             }
         }
     }
@@ -64,6 +76,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
         kryo.register(PingResponse.class);
 
         PingRequest pingRequest = new PingRequest();
+        lastPingRequest = pingRequest.getTime();
 
         client.sendTCP(pingRequest);
 
@@ -103,7 +116,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
     }
 
     @Override
-    public HashMap<String, String> registeredPlayers() {
+    public HashMap<String, PlayerInfo> registeredPlayers() {
         return null;
     }
 }

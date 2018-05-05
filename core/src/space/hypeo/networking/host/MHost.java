@@ -6,6 +6,7 @@ import java.util.List;
 
 import space.hypeo.networking.IHostConnector;
 import space.hypeo.networking.IPlayerConnector;
+import space.hypeo.networking.PlayerInfo;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 
@@ -18,7 +19,9 @@ import com.esotericsoftware.kryonet.Server;
 public class MHost implements IPlayerConnector, IHostConnector {
 
     private com.esotericsoftware.kryonet.Server server;
-    private HashMap<String, String> players;
+    private HashMap<String, PlayerInfo> players;
+
+    private final int MAX_PLAYER = 5;
 
     private class ServerListener extends Listener {
 
@@ -29,10 +32,18 @@ public class MHost implements IPlayerConnector, IHostConnector {
         @Override
         public void connected(Connection connection) {
             super.connected(connection);
-            connection.getRemoteAddressTCP().getHostName();
-            connection.getRemoteAddressTCP().getAddress();
-            connection.getRemoteAddressTCP().getPort();
 
+            if( players.size() >= MAX_PLAYER ) {
+                // game is full
+                return;
+            }
+
+            PlayerInfo newPlayer = new PlayerInfo();
+            newPlayer.address = connection.getRemoteAddressTCP().getAddress().toString();
+            newPlayer.hostName = connection.getRemoteAddressTCP().getHostName();
+            newPlayer.port = connection.getRemoteAddressTCP().getPort();
+
+            players.put(newPlayer.address, newPlayer);
         }
 
         /**
@@ -54,7 +65,8 @@ public class MHost implements IPlayerConnector, IHostConnector {
             super.received(connection, object);
 
             if( object instanceof PingRequest ) {
-                PingResponse pingResponse = new PingResponse();
+                PingRequest pingRequest = (PingRequest)object;
+                PingResponse pingResponse = new PingResponse(pingRequest.getTime());
                 connection.sendTCP(pingResponse);
             }
         }
@@ -119,7 +131,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
     }
 
     @Override
-    public HashMap<String, String> registeredPlayers() {
+    public HashMap<String, PlayerInfo> registeredPlayers() {
         return players;
     }
 }

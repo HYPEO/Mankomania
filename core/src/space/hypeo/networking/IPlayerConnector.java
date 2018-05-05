@@ -54,6 +54,6 @@ public interface IPlayerConnector {
     /**
      * Gets the list of players registered for the Game.
      */
-    public HashMap<String, String> registeredPlayers();
+    public HashMap<String, PlayerInfo> registeredPlayers();
 
 }
