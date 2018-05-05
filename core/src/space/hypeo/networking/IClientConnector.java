@@ -12,4 +12,9 @@ public interface IClientConnector {
      */
     public boolean joinGame(String playerID);
 
+    /**
+     * Starts the client
+     */
+    public void startClient();
+
 }

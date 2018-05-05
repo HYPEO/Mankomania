@@ -15,4 +15,9 @@ public interface IHostConnector {
      */
     public boolean startGame();
 
+    /**
+     * Starts the server
+     */
+    public void startServer();
+
 }
