@@ -13,6 +13,7 @@ import space.hypeo.networking.IClientConnector;
 import space.hypeo.networking.IPlayerConnector;
 import space.hypeo.networking.PlayerInfo;
 import space.hypeo.networking.host.MHost;
+import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 
@@ -84,20 +85,25 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
         client.addListener(new ClientListener());
 
-        Kryo kryo = client.getKryo();
-        kryo.register(PingRequest.class);
-        kryo.register(PingResponse.class);
+        Network.register(client);
 
         // TODO: create a lobby: see each player in players + who is host
 
-        PingRequest pingRequest = new PingRequest();
-        lastPingRequest = pingRequest.getTime();
-
-        client.sendTCP(pingRequest);
+        pingServer();
 
         while( true ) {
             // wait for response
         }
+    }
+
+    /**
+     * Sends a PingRequest to server.
+     */
+    public void pingServer() {
+        PingRequest pingRequest = new PingRequest();
+        lastPingRequest = pingRequest.getTime();
+
+        client.sendTCP(pingRequest);
     }
 
     @Override

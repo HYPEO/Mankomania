@@ -7,6 +7,7 @@ import java.util.List;
 import space.hypeo.networking.IHostConnector;
 import space.hypeo.networking.IPlayerConnector;
 import space.hypeo.networking.PlayerInfo;
+import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 
@@ -21,9 +22,6 @@ public class MHost implements IPlayerConnector, IHostConnector {
     private com.esotericsoftware.kryonet.Server server;
     private HashMap<String, PlayerInfo> players;
 
-    private static final int PORT_NO = 25454;
-    private final int MAX_PLAYER = 5;
-
     private class ServerListener extends Listener {
 
         /**
@@ -34,7 +32,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
         public void connected(Connection connection) {
             super.connected(connection);
 
-            if( players.size() >= MAX_PLAYER ) {
+            if( players.size() >= Network.MAX_PLAYER ) {
                 // game is full
                 // send message to client: you can not join game, game is full
                 return;
@@ -75,13 +73,9 @@ public class MHost implements IPlayerConnector, IHostConnector {
         }
     }
 
-    public static int getPortNo() {
-        return PORT_NO;
-    }
-
     @Override
     public void advertiseGame() {
-
+        // TODO: start the lobby here
     }
 
     @Override
@@ -95,16 +89,14 @@ public class MHost implements IPlayerConnector, IHostConnector {
         server.start();
 
         try {
-            server.bind(PORT_NO);
+            server.bind(Network.PORT_NO);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         server.addListener(new ServerListener());
 
-        Kryo kryo = server.getKryo();
-        kryo.register(PingRequest.class);
-        kryo.register(PingResponse.class);
+        Network.register(server);
 
         // TODO: create a lobby: see each player in players
     }
