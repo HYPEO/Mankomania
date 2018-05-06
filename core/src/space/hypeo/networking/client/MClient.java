@@ -7,7 +7,9 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.HashMap;
+import java.util.List;
 
 import space.hypeo.networking.IClientConnector;
 import space.hypeo.networking.IPlayerConnector;
@@ -21,9 +23,9 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
     private com.esotericsoftware.kryonet.Client client;
 
-    private final int TIMEOUT_MS = 5000;
-
     private PlayerInfo hostInfo = null;
+    private List<InetAddress> discoveredHosts = null;
+    private InetAddress connectedToHost = null;
 
     private long lastPingRequest = 0;
 
@@ -37,7 +39,8 @@ public class MClient implements IPlayerConnector, IClientConnector {
         public void connected(Connection connection) {
             super.connected(connection);
 
-            hostInfo = new PlayerInfo(connection);
+            hostInfo = new PlayerInfo(connection, Network.Role.host);
+            connectedToHost = connection.getRemoteAddressTCP().getAddress();
         }
 
         /**
@@ -73,26 +76,37 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
     @Override
     public void startClient() {
+
+        String firstHostFound = "";
+
         client = new Client();
         client.start();
 
-        try {
-            // TODO: connect to which host-address?
-            client.connect(TIMEOUT_MS, "127.0.0.1", MHost.getPortNo());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        client.addListener(new ClientListener());
-
-        Network.register(client);
-
-        // TODO: create a lobby: see each player in players + who is host
-
-        pingServer();
+        // TODO: find all available hosts in WLAN
+        discoveredHosts = client.discoverHosts(Network.PORT_NO, Network.TIMEOUT_MS);
 
         while( true ) {
             // wait for response
+        }
+    }
+
+    public void connectToHost() {
+
+        // TODO: choose host from discoveredHosts
+
+        if( client != null && discoveredHosts != null ) {
+            try {
+                // TODO: connect to which host-address?
+                client.connect(Network.TIMEOUT_MS, discoveredHosts.get(0).getHostAddress(), Network.PORT_NO);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            client.addListener(new ClientListener());
+
+            Network.register(client);
+
+            pingServer();
         }
     }
 

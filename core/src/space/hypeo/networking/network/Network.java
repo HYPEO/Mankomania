@@ -18,6 +18,11 @@ public class Network {
     // maximum number of players
     public static final int MAX_PLAYER = 5;
 
+    // max time in milli-second to try to connect
+    public static final int TIMEOUT_MS = 5000;
+
+    public enum Role { host, client };
+
     /**
      * Register objects that are going to be sent over the network.
      */

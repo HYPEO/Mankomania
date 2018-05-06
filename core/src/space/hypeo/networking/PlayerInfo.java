@@ -2,6 +2,8 @@ package space.hypeo.networking;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import space.hypeo.networking.network.Network;
+
 /**
  * The class PlayerInfo holds the important network data,
  * that identifies a client or host.
@@ -12,14 +14,17 @@ public class PlayerInfo {
     private String address;
     private int port;
 
+    Network.Role role;
+
     /**
      * Creates a new instance of PlayerInfo
      * @param c kryonet.Connection Connection while has connected/disconneted/received
      */
-    public PlayerInfo(Connection c) {
+    public PlayerInfo(Connection c, Network.Role r) {
         address = c.getRemoteAddressTCP().getAddress().toString();
         hostName = c.getRemoteAddressTCP().getHostName();
         port = c.getRemoteAddressTCP().getPort();
+        role = r;
     }
 
     /**

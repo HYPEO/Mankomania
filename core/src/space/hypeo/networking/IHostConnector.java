@@ -16,6 +16,12 @@ public interface IHostConnector {
     public boolean startGame();
 
     /**
+     * Ends the game.
+     * Release all resources and close all open connections.
+     */
+    public void endGame();
+
+    /**
      * Starts the server
      */
     public void startServer();

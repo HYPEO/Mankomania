@@ -20,6 +20,12 @@ import com.esotericsoftware.kryonet.Server;
 public class MHost implements IPlayerConnector, IHostConnector {
 
     private com.esotericsoftware.kryonet.Server server;
+
+    /**
+     * The data structure that holds the player-list.
+     * String     ... Nickname of the player
+     * PlayerInfo ... Network info of the player
+     */
     private HashMap<String, PlayerInfo> players;
 
     private class ServerListener extends Listener {
@@ -38,7 +44,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
                 return;
             }
 
-            PlayerInfo newPlayer = new PlayerInfo(connection);
+            PlayerInfo newPlayer = new PlayerInfo(connection, Network.Role.client);
 
             players.put(newPlayer.getAddress(), newPlayer);
         }
@@ -51,7 +57,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            PlayerInfo leavingPlayer = new PlayerInfo(connection);
+            PlayerInfo leavingPlayer = new PlayerInfo(connection, Network.Role.client);
 
             players.remove(leavingPlayer);
         }
@@ -80,7 +86,13 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
     @Override
     public boolean startGame() {
+        //server.sendToAllTCP("game starts in 5sec...");
         return false;
+    }
+
+    @Override
+    public void endGame() {
+        //server.sendToAllTCP("game will be closed now...");
     }
 
     @Override
@@ -89,7 +101,8 @@ public class MHost implements IPlayerConnector, IHostConnector {
         server.start();
 
         try {
-            server.bind(Network.PORT_NO);
+            // opens a TCP and UDP server
+            server.bind(Network.PORT_NO, Network.PORT_NO);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,6 +110,10 @@ public class MHost implements IPlayerConnector, IHostConnector {
         server.addListener(new ServerListener());
 
         Network.register(server);
+
+        // TODO: add server itself in players
+        //PlayerInfo self = new PlayerInfo();
+        //server.getKryo().
 
         // TODO: create a lobby: see each player in players
     }
