@@ -2,7 +2,6 @@ package space.hypeo.networking.host;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 import space.hypeo.networking.IHostConnector;
 import space.hypeo.networking.IPlayerConnector;
@@ -11,9 +10,7 @@ import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
@@ -102,7 +99,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
         try {
             // opens a TCP and UDP server
-            server.bind(Network.PORT_NO, Network.PORT_NO);
+            server.bind(Network.PORT_TCP, Network.PORT_UDP);
         } catch (IOException e) {
             e.printStackTrace();
         }
