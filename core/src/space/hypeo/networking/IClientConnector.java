@@ -1,5 +1,8 @@
 package space.hypeo.networking;
 
+import java.net.InetAddress;
+import java.util.List;
+
 /**
  * Interface provides service methods for player that is game-client
  */
@@ -16,5 +19,10 @@ public interface IClientConnector {
      * Starts the client
      */
     public void startClient();
+
+    /**
+     * Discovers the network for available hosts
+     */
+    public List<InetAddress> discoverHosts();
 
 }

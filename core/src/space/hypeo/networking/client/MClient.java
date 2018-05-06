@@ -82,22 +82,24 @@ public class MClient implements IPlayerConnector, IClientConnector {
         client = new Client();
         client.start();
 
-        // TODO: find all available hosts in WLAN
-        discoveredHosts = client.discoverHosts(Network.PORT_NO, Network.TIMEOUT_MS);
+        this.discoverHosts();
 
         while( true ) {
             // wait for response
         }
     }
 
-    public void connectToHost() {
+    @Override
+    public List<InetAddress> discoverHosts() {
+        discoveredHosts = client.discoverHosts(Network.PORT_NO, Network.TIMEOUT_MS);
+        return discoveredHosts;
+    }
 
-        // TODO: choose host from discoveredHosts
+    public void connectToHost(InetAddress hostAddress) {
 
-        if( client != null && discoveredHosts != null ) {
+        if( client != null && discoveredHosts != null && discoveredHosts.contains(hostAddress) ) {
             try {
-                // TODO: connect to which host-address?
-                client.connect(Network.TIMEOUT_MS, discoveredHosts.get(0).getHostAddress(), Network.PORT_NO);
+                client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_NO);
             } catch (IOException e) {
                 e.printStackTrace();
             }
