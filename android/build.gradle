@@ -18,7 +18,7 @@ android {
     }
     defaultConfig {
         applicationId "space.hypeo.mankomania"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -29,6 +29,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildToolsVersion '27.0.3'
     productFlavors {
     }
 }
@@ -59,7 +61,6 @@ task copyAndroidNatives() {
         }
     }
 }
-
 task run(type: Exec) {
     def path
     def localProperties = project.file("../local.properties")
@@ -81,7 +82,6 @@ task run(type: Exec) {
     def adb = path + "/platform-tools/adb"
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'space.hypeo.mankomania/space.hypeo.mankomania.AndroidLauncher'
 }
-
 // sets up the Android Eclipse project, using the old Ant based build.
 eclipse {
     // need to specify Java source sets explicitly, SpringSource Gradle Eclipse plugin
@@ -112,7 +112,6 @@ eclipse {
         buildCommand "com.android.ide.eclipse.adt.ApkBuilder"
     }
 }
-
 // sets up the Android Idea project, using the old Ant based build.
 idea {
     module {
