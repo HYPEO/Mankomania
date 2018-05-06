@@ -27,7 +27,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
     private class ServerListener extends Listener {
 
         /**
-         * If connected
+         * If client has connected
          * @param connection
          */
         @Override
@@ -40,25 +40,26 @@ public class MHost implements IPlayerConnector, IHostConnector {
                 return;
             }
 
-            PlayerInfo newPlayer = new PlayerInfo();
-            newPlayer.address = connection.getRemoteAddressTCP().getAddress().toString();
-            newPlayer.hostName = connection.getRemoteAddressTCP().getHostName();
-            newPlayer.port = connection.getRemoteAddressTCP().getPort();
+            PlayerInfo newPlayer = new PlayerInfo(connection);
 
-            players.put(newPlayer.address, newPlayer);
+            players.put(newPlayer.getAddress(), newPlayer);
         }
 
         /**
-         * If disconnected
+         * If client has disconnected
          * @param connection
          */
         @Override
         public void disconnected(Connection connection) {
             super.disconnected(connection);
+
+            PlayerInfo leavingPlayer = new PlayerInfo(connection);
+
+            players.remove(leavingPlayer);
         }
 
         /**
-         * If object got received
+         * If has received a package from client
          * @param connection
          * @param object
          */

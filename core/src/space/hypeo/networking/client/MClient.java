@@ -28,23 +28,32 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
     private class ClientListener extends Listener {
 
+        /**
+         * If has connected to host
+         * @param connection
+         */
         @Override
         public void connected(Connection connection) {
             super.connected(connection);
 
-            hostInfo = new PlayerInfo();
-
-            hostInfo.address = connection.getRemoteAddressTCP().getAddress().toString();
-            hostInfo.hostName = connection.getRemoteAddressTCP().getHostName();
-            hostInfo.port = connection.getRemoteAddressTCP().getPort();
+            hostInfo = new PlayerInfo(connection);
         }
 
+        /**
+         * If has diconnected from
+         * @param connection
+         */
         @Override
         public void disconnected(Connection connection) {
             super.disconnected(connection);
             hostInfo = null;
         }
 
+        /**
+         * If has reveived a package from host
+         * @param connection
+         * @param object
+         */
         @Override
         public void received(Connection connection, Object object) {
             super.received(connection, object);
