@@ -12,8 +12,9 @@ import space.hypeo.networking.packages.PingResponse;
  */
 public class Network {
 
-    // communication port
-    public static final int PORT_NO = 54555;
+    // communication ports
+    public static final int PORT_TCP = 54555;
+    public static final int PORT_UDP = 54777;
 
     // maximum number of players
     public static final int MAX_PLAYER = 5;
