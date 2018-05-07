@@ -70,6 +70,7 @@ public class StageFactory {
 
         // Create player on first field.
         PlayerActor player = new PlayerActor("1", 1000000, true, firstField, viewport, stageManager);
+
         mapStage.addActor(player);
 
         // Create close button.

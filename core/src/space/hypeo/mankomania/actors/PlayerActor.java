@@ -1,6 +1,5 @@
 package space.hypeo.mankomania.actors;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -66,17 +65,10 @@ public class PlayerActor extends Image {
     @Override
     public void act(float deltaTime)
     {
-
-       /*timeElapsed += deltaTime;
-        if (timeElapsed >= 2f) {
-            timeElapsed = 0;
-            this.move(die.nextInt(6) + 1);
-        }*/
-
-
         timeElapsed += deltaTime;
         if (timeElapsed >= 0.18f) {
             timeElapsed = 0;
+
             xValue = Gdx.input.getAccelerometerX() / EARTH_GRAVITY;
             yValue = Gdx.input.getAccelerometerY() / EARTH_GRAVITY;
             zValue = Gdx.input.getAccelerometerZ() / EARTH_GRAVITY;

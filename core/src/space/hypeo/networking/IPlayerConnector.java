@@ -1,5 +1,6 @@
 package space.hypeo.networking;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -7,6 +8,9 @@ import java.util.List;
  * Created by pichlermarc on 07.04.2018.
  */
 
+/**
+ * Interface provides service methods to fetch data that are relevant for each player
+ */
 public interface IPlayerConnector {
     /**
      * Changes the balance of the player with the specified playerID.
@@ -50,24 +54,6 @@ public interface IPlayerConnector {
     /**
      * Gets the list of players registered for the Game.
      */
-    public List<String> registeredPlayers();
-
-    /**
-     * Advertises a new Game that other players can join.
-     */
-    public void advertiseGame();
-
-    /**
-     * Joins the game another host has set up.
-     * @param playerID
-     * @return
-     */
-    public boolean joinGame(String playerID);
-
-    /**
-     * Starts the game (requires that a game has been advertised by this player)
-     */
-    public boolean startGame();
-
+    public HashMap<String, PlayerInfo> registeredPlayers();
 
 }
