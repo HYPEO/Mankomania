@@ -26,8 +26,7 @@ public class PlayerActor extends Image {
     private float timeElapsed = 0;
     private Random die = new Random();
 
-    // For dice demo
-    private float xValue, yValue, zValue, gForce;
+    // For dice feature
     private static final float EARTH_GRAVITY = 9.81f;
     private int moveFields;
     private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
@@ -65,6 +64,11 @@ public class PlayerActor extends Image {
     @Override
     public void act(float deltaTime)
     {
+        float xValue;
+        float yValue;
+        float zValue;
+        float gForce;
+
         timeElapsed += deltaTime;
         if (timeElapsed >= 0.18f) {
             timeElapsed = 0;

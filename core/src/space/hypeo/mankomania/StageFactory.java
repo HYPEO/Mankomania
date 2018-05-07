@@ -162,6 +162,7 @@ public class StageFactory {
 
         // Add click listeners.
         diceButton.addListener(new ClickListener() {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.remove(stageManager.getCurrentStage());
             }
@@ -198,6 +199,7 @@ public class StageFactory {
 
         // Add click listeners.
         launch.addListener(new ClickListener() {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.push(getMapStage(viewport, stageManager));
             }
