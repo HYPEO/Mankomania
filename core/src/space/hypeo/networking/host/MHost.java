@@ -25,6 +25,13 @@ public class MHost implements IPlayerConnector, IHostConnector {
      */
     private HashMap<String, PlayerInfo> players;
 
+    /**
+     * Constructs instance of class MHost
+     */
+    public MHost() {
+        players = new HashMap<String, PlayerInfo>();
+    }
+
     private class ServerListener extends Listener {
 
         /**
@@ -90,6 +97,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
     @Override
     public void endGame() {
         //server.sendToAllTCP("game will be closed now...");
+        players = null;
     }
 
     @Override
