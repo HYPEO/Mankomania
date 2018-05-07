@@ -2,15 +2,23 @@ package space.hypeo.mankomania;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -29,6 +37,9 @@ public class StageFactory {
     private static final float MARGIN_X = 40f;
     private static final float MARGIN_Y = 80f;
     private static final float FIELD_DISTANCE = 40f;
+    private static Texture texture = new Texture ("badlogic.jpg");
+    private static Image fieldInfoImage;
+
 
     /**
      * Generates a map stage (view).
@@ -40,7 +51,7 @@ public class StageFactory {
         // Create stage.
         final Stage mapStage = new Stage(viewport);
         // Create the empty field.
-        FieldActor firstField = new EmptyFieldActor(MARGIN_X, MARGIN_Y);
+        FieldActor firstField = new EmptyFieldActor(MARGIN_X, MARGIN_Y, new Texture("transparent.png"), 0);
         mapStage.addActor(firstField);
 
         // Remember the first field as the previous one.
@@ -58,7 +69,7 @@ public class StageFactory {
         previousField.setNextField(firstField);
 
         // Create player on first field.
-        PlayerActor player = new PlayerActor("1", 1000, true, firstField);
+        PlayerActor player = new PlayerActor("1", 1000000, true, firstField, viewport, stageManager);
         mapStage.addActor(player);
 
         // Create close button.
@@ -66,7 +77,7 @@ public class StageFactory {
         Button close = new TextButton("Close Game", skin);
         close.setHeight(100);
         close.setWidth(viewport.getWorldWidth());
-        close.setY(viewport.getWorldHeight()-close.getHeight());
+        close.setY(viewport.getWorldHeight() - close.getHeight());
         // Add click listeners.
         close.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -74,6 +85,10 @@ public class StageFactory {
             }
         });
         mapStage.addActor(close);
+        fieldInfoImage = new Image(texture);
+        fieldInfoImage.setBounds(90, 125, 300, 300);
+        mapStage.addActor(fieldInfoImage);
+
 
         return mapStage;
     }
@@ -100,16 +115,19 @@ public class StageFactory {
                                              Stage mapStage) {
         FieldActor previousField = firstField;
         for (int i = 1; i <= amount; i++) {
-            int random= (int)(Math.random() * 9);
+            int random = (int) (Math.random() * 9);
 
             // Create new Field
             FieldActor currentField;
-            if(random==0)
-             currentField = new BuyHouseFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection));
-            else if(random==1)
-                currentField = new LoseMoneyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection));
-            else
-                currentField = new EmptyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection));
+            if(random == 0){
+                currentField = new BuyHouseFieldActor( xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("RumsBuDee.png"), (int) (Math.random() * 50 + 10));
+            }
+           else if (random ==1){
+                currentField = new LoseMoneyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture( "6dice.png"), (int) (Math.random() * 10));
+            }
+            else{
+                currentField = new EmptyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("transparent.png"), 0);
+            }
 
             mapStage.addActor(currentField);
 
@@ -123,6 +141,40 @@ public class StageFactory {
         return previousField;
     }
 
+
+    public static Stage getDiceResult(final Viewport viewport, final StageManager stageManager, int moveFields) {
+        Stage diceStage = new Stage(viewport);
+
+        // Set up skin
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Texture diceResult = new Texture("dices/dice" + moveFields + ".png");
+        Drawable dice = new TextureRegionDrawable(new TextureRegion(diceResult));
+
+        // Set up button
+        ImageButton diceButton = new ImageButton(dice);
+
+        Label title = new Label("  You diced " + moveFields + " - tap dice to move", skin);
+
+        // Add click listeners.
+        diceButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                stageManager.remove(stageManager.getCurrentStage());
+            }
+        });
+
+        Table table = new Table();
+        table.setWidth(diceStage.getWidth());
+        table.align(Align.center);
+        table.setPosition(0, diceStage.getHeight() - diceStage.getHeight() / 2);
+        table.add(title).width(300).height(100);
+        table.row();
+        table.add(diceButton).width(350).height(350);
+
+        // Add dice-button to stage.
+        diceStage.addActor(table);
+
+        return diceStage;
+    }
 
     public static Stage getMainMenu(final Viewport viewport, final StageManager stageManager) {
         Stage mainMenuStage = new Stage(viewport);
@@ -162,4 +214,10 @@ public class StageFactory {
 
         return mainMenuStage;
     }
+
+    public static void setFieldInfoImage(Texture texture){
+        fieldInfoImage.setDrawable(new SpriteDrawable(new Sprite(texture)));
+
+    }
+
 }
