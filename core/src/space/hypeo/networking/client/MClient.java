@@ -24,7 +24,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
     private List<InetAddress> discoveredHosts = null;
     private InetAddress connectedToHost = null;
 
-    private long lastPingRequest = 0;
+    private long startPingRequest = 0;
 
     private class ClientListener extends Listener {
 
@@ -62,7 +62,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
             if( object instanceof PingResponse) {
                 PingResponse pingResponse = (PingResponse) object;
-                System.out.println("Ping time [ms] = " + (lastPingRequest - pingResponse.getTime()));
+                System.out.println("Ping time [ms] = " + (startPingRequest - pingResponse.getTime()));
             }
         }
     }
@@ -80,11 +80,10 @@ public class MClient implements IPlayerConnector, IClientConnector {
         client = new Client();
         client.start();
 
-        this.discoverHosts();
+        // TODO: execute discoverHosts() from outside?
+        //this.discoverHosts();
 
-        while( true ) {
-            // wait for response
-        }
+
     }
 
     @Override
@@ -108,6 +107,10 @@ public class MClient implements IPlayerConnector, IClientConnector {
             Network.register(client);
 
             pingServer();
+
+            // TODO: wait for response
+            /*while( true ) {
+            }*/
         }
     }
 
@@ -116,7 +119,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
      */
     public void pingServer() {
         PingRequest pingRequest = new PingRequest();
-        lastPingRequest = pingRequest.getTime();
+        startPingRequest = pingRequest.getTime();
 
         client.sendTCP(pingRequest);
     }
