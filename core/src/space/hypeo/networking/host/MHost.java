@@ -1,6 +1,8 @@
 package space.hypeo.networking.host;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 
 import space.hypeo.networking.IHostConnector;
@@ -13,6 +15,7 @@ import space.hypeo.networking.packages.PingResponse;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 
 public class MHost implements IPlayerConnector, IHostConnector {
 
@@ -49,8 +52,11 @@ public class MHost implements IPlayerConnector, IHostConnector {
             }
 
             PlayerInfo newPlayer = new PlayerInfo(connection, Network.Role.client);
+            Log.info("Added new Client with: " + newPlayer.toString());
 
             players.put(newPlayer.getAddress(), newPlayer);
+
+            printPlayers();
         }
 
         /**
@@ -116,11 +122,18 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
         Network.register(server);
 
-        // TODO: add server itself in players
-        //PlayerInfo self = new PlayerInfo();
-        //server.getKryo().
+        /* attach PlayerInfo of host in players */
+        String selfAddress = "";
+        try {
+            selfAddress = InetAddress.getLocalHost().toString();
+        } catch(UnknownHostException e) {
+            e.printStackTrace();
+        }
+        PlayerInfo self = new PlayerInfo("/" + selfAddress, selfAddress, Network.PORT_TCP, Network.Role.host);
+        players.put("the_mighty_host", self);
 
-        // TODO: create a lobby: see each player in players
+        printPlayers();
+
     }
 
     @Override
@@ -156,5 +169,18 @@ public class MHost implements IPlayerConnector, IHostConnector {
     @Override
     public HashMap<String, PlayerInfo> registeredPlayers() {
         return players;
+    }
+
+    public void printPlayers() {
+        Log.info("HashMap 'players' contains:");
+
+        if( players.isEmpty() ) {
+            Log.info("NO ENTRIES");
+        }
+
+        for( HashMap.Entry<String, PlayerInfo> entry : players.entrySet() ) {
+            Log.info("  Nick = '" + entry.getKey() +"'");
+            Log.info("    " + entry.getValue().toString());
+        }
     }
 }

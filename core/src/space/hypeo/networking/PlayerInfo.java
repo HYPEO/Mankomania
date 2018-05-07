@@ -16,6 +16,10 @@ public class PlayerInfo {
 
     Network.Role role;
 
+    /**
+     * Creates a new instance of PlayerInfo
+     * Default Constructor
+     */
     public PlayerInfo() {
         hostName = "";
         address = "";
@@ -42,6 +46,20 @@ public class PlayerInfo {
     }
 
     /**
+     * Creates a new instance of PlayerInfo
+     * @param hostName
+     * @param address
+     * @param port
+     * @param role
+     */
+    public PlayerInfo(String hostName, String address, int port, Network.Role role) {
+        this.hostName = hostName;
+        this.address = address;
+        this.port = port;
+        this.role = role;
+    }
+
+    /**
      * Gets current hostname
      * @return String Hostname
      */
@@ -63,5 +81,13 @@ public class PlayerInfo {
      */
     public int getPort() {
         return port;
+    }
+
+    @Override
+    public String toString() {
+        return "Hostname: '" + hostName
+                + "', Address: '" + address
+                + "', Port: " + port
+                + "', Role: '" + (role == Network.Role.host ? "Host'" : "Client'");
     }
 }
