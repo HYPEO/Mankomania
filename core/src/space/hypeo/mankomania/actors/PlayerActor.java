@@ -68,6 +68,7 @@ public class PlayerActor extends Image {
         timeElapsed += deltaTime;
         if (timeElapsed >= 0.18f) {
             timeElapsed = 0;
+
             xValue = Gdx.input.getAccelerometerX() / EARTH_GRAVITY;
             yValue = Gdx.input.getAccelerometerY() / EARTH_GRAVITY;
             zValue = Gdx.input.getAccelerometerZ() / EARTH_GRAVITY;
@@ -84,6 +85,7 @@ public class PlayerActor extends Image {
                 // TODO: maybe cheat function here (for example: if other player is playing roulette)
             }
         }
+
     }
 
     /**

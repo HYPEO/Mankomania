@@ -10,6 +10,8 @@ public abstract class FieldActor extends Image{
     FieldActor nextField;
     private float x;
     private  float y;
+    private int price;
+    private Texture info;
 
     /**
      * Creates a new instance of the FieldActor Class.
@@ -19,12 +21,14 @@ public abstract class FieldActor extends Image{
      * @param width Width of the Actor.
      * @param height Height of the Actor.
      */
-    public FieldActor(Texture texture, float x, float y, float width, float height)
+    public FieldActor(Texture texture, float x, float y, float width, float height, Texture info, int price)
     {
         super(texture);
         this.setBounds(x, y, width, height);
         this.x=x;
         this.y=y;
+        this.info=info;
+        this.price=price;
     }
 
     /**
@@ -32,6 +36,14 @@ public abstract class FieldActor extends Image{
      * @param player
      */
     public abstract void trigger(PlayerActor player);
+
+
+
+    /**
+     * Shows the Field Picture in the middle of the map
+     */
+    public abstract void fieldInfo();
+
 
     /**
      * Gets the FieldBehavior of the field n steps from this one.
@@ -74,4 +86,22 @@ public abstract class FieldActor extends Image{
     public void setY(float y) {
         this.y = y;
     }
+
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public Texture getInfo() {
+        return info;
+    }
+
+    public void setInfo(Texture info) {
+        this.info = info;
+    }
+
 }
