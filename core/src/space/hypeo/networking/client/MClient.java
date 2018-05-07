@@ -7,7 +7,6 @@ import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.security.AccessControlException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +14,7 @@ import space.hypeo.networking.IClientConnector;
 import space.hypeo.networking.IPlayerConnector;
 import space.hypeo.networking.PlayerInfo;
 import space.hypeo.networking.network.Network;
+import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 
@@ -44,7 +44,11 @@ public class MClient implements IPlayerConnector, IClientConnector {
             super.connected(connection);
 
             hostInfo = new PlayerInfo(connection, Network.Role.host);
+            Log.info("hostInfo = " + hostInfo.toString());
             connectedToHost = connection.getRemoteAddressTCP().getAddress();
+            Log.info("connectedToHost = " + connectedToHost);
+
+            connection.sendTCP(new Notification("You accepted my connection to game."));
         }
 
         /**
@@ -69,7 +73,11 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
             if( object instanceof PingResponse) {
                 PingResponse pingResponse = (PingResponse) object;
-                System.out.println("Ping time [ms] = " + (startPingRequest - pingResponse.getTime()));
+                Log.info("Ping time [ms] = " + (startPingRequest - pingResponse.getTime()));
+
+            } else if( object instanceof Notification) {
+                Notification notification = (Notification) object;
+                Log.info("Client received: " + notification.toString());
             }
         }
     }

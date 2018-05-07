@@ -1,18 +1,22 @@
 package space.hypeo.networking.host;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 
 import space.hypeo.networking.IHostConnector;
 import space.hypeo.networking.IPlayerConnector;
 import space.hypeo.networking.PlayerInfo;
 import space.hypeo.networking.network.Network;
+import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 
 public class MHost implements IPlayerConnector, IHostConnector {
 
@@ -45,12 +49,17 @@ public class MHost implements IPlayerConnector, IHostConnector {
             if( players.size() >= Network.MAX_PLAYER ) {
                 // game is full
                 // send message to client: you can not join game, game is full
+                connection.sendTCP(new Notification("Sorry, no more space for additional player left"));
                 return;
             }
 
             PlayerInfo newPlayer = new PlayerInfo(connection, Network.Role.client);
+            Log.info("Added new Client with: " + newPlayer.toString());
 
             players.put(newPlayer.getAddress(), newPlayer);
+            connection.sendTCP(new Notification("You are connected ..."));
+
+            printPlayers();
         }
 
         /**
@@ -79,6 +88,10 @@ public class MHost implements IPlayerConnector, IHostConnector {
                 PingRequest pingRequest = (PingRequest)object;
                 PingResponse pingResponse = new PingResponse(pingRequest.getTime());
                 connection.sendTCP(pingResponse);
+
+            } else if( object instanceof Notification) {
+                Notification notification = (Notification) object;
+                Log.info("Host received: " + notification.toString());
             }
         }
     }
@@ -116,11 +129,18 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
         Network.register(server);
 
-        // TODO: add server itself in players
-        //PlayerInfo self = new PlayerInfo();
-        //server.getKryo().
+        /* attach PlayerInfo of host in players */
+        String selfAddress = "";
+        try {
+            selfAddress = InetAddress.getLocalHost().toString();
+        } catch(UnknownHostException e) {
+            e.printStackTrace();
+        }
+        PlayerInfo self = new PlayerInfo("/" + selfAddress, selfAddress, Network.PORT_TCP, Network.Role.host);
+        players.put("the_mighty_host", self);
 
-        // TODO: create a lobby: see each player in players
+        printPlayers();
+
     }
 
     @Override
@@ -156,5 +176,21 @@ public class MHost implements IPlayerConnector, IHostConnector {
     @Override
     public HashMap<String, PlayerInfo> registeredPlayers() {
         return players;
+    }
+
+    public void printPlayers() {
+        Log.info("HashMap 'players' contains:");
+
+        if( players.isEmpty() ) {
+            Log.info("NO ENTRIES");
+            return;
+        }
+
+        int index = 1;
+        for( HashMap.Entry<String, PlayerInfo> entry : players.entrySet() ) {
+            Log.info("  " + index + ". Nick = '" + entry.getKey() +"'");
+            Log.info("    " + entry.getValue().toString());
+            index++;
+        }
     }
 }

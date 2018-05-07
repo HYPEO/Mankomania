@@ -3,6 +3,7 @@ package space.hypeo.networking.network;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
+import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 
@@ -31,6 +32,7 @@ public class Network {
         Kryo kryo = endPoint.getKryo();
         kryo.register(PingRequest.class);
         kryo.register(PingResponse.class);
+        kryo.register(Notification.class);
     }
 
 }
