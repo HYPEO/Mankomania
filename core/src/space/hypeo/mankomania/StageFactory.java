@@ -189,6 +189,7 @@ public class StageFactory {
         Button launch = new TextButton("Launch Game (offline)", skin);
         Button host = new TextButton("Host Game", skin);
         Button join = new TextButton("Join Game", skin);
+        Button testSendMoney = new TextButton("Test Send money",skin);
 
         Label title = new Label("MANKOMANIA (insert logo here)", skin);
 
@@ -199,7 +200,7 @@ public class StageFactory {
             }
         });
 
-        host.addListener(new ClickListener() {
+        testSendMoney.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.push(getSendMoneyDialog(viewport, stageManager));
             }
@@ -217,6 +218,9 @@ public class StageFactory {
         table.add(host).width(300).height(100);
         table.row();
         table.add(join).width(300).height(100);
+        table.row();
+        table.add(testSendMoney).width(300).height(100);
+        table.row();
 
         // Add buttons to stage.
         mainMenuStage.addActor(table);
@@ -251,9 +255,10 @@ public class StageFactory {
                 //get Player to Send
                 String playerToSend;
                 Integer amount;
-                playerToSend = (String)playersBox.getSelected();
+                //playerToSend = (String)playersBox.getSelected();
                 //get Money
-                amount = Integer.parseInt(moneyToSend.getText());
+                //amount = Integer.parseInt(moneyToSend.getText());
+
                 //Method from class which handels logic stuff (PlayerActor etc.)
                 stageManager.remove(sendMoneyStage);
                 stageManager.push(getMapStage(viewport, stageManager));
