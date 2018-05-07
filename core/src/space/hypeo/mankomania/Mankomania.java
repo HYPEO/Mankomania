@@ -4,9 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 /**
  * The GDX Game class, called from the android project.
@@ -21,6 +19,7 @@ public class Mankomania extends ApplicationAdapter {
         ExtendViewport viewport = new ExtendViewport(480, 800, camera);
         manager = new StageManager();
         manager.push(StageFactory.getMainMenu(viewport, manager));
+        manager.push(StageFactory.getTitleStage(viewport, manager));
     }
 
     @Override
