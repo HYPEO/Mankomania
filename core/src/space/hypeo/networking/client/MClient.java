@@ -1,7 +1,5 @@
 package space.hypeo.networking.client;
 
-import com.esotericsoftware.kryo.Kryo;
-
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -14,7 +12,6 @@ import java.util.List;
 import space.hypeo.networking.IClientConnector;
 import space.hypeo.networking.IPlayerConnector;
 import space.hypeo.networking.PlayerInfo;
-import space.hypeo.networking.host.MHost;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
@@ -27,7 +24,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
     private List<InetAddress> discoveredHosts = null;
     private InetAddress connectedToHost = null;
 
-    private long lastPingRequest = 0;
+    private long startPingRequest = 0;
 
     private class ClientListener extends Listener {
 
@@ -64,7 +61,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
             if( object instanceof PingResponse) {
                 PingResponse pingResponse = (PingResponse) object;
-                System.out.println("Ping time [ms] = " + (lastPingRequest - pingResponse.getTime()));
+                System.out.println("Ping time [ms] = " + (startPingRequest - pingResponse.getTime()));
             }
         }
     }
@@ -82,11 +79,10 @@ public class MClient implements IPlayerConnector, IClientConnector {
         client = new Client();
         client.start();
 
-        this.discoverHosts();
+        // TODO: execute discoverHosts() from outside?
+        //this.discoverHosts();
 
-        while( true ) {
-            // wait for response
-        }
+
     }
 
     @Override
@@ -109,6 +105,10 @@ public class MClient implements IPlayerConnector, IClientConnector {
             Network.register(client);
 
             pingServer();
+
+            // TODO: wait for response
+            /*while( true ) {
+            }*/
         }
     }
 
@@ -117,7 +117,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
      */
     public void pingServer() {
         PingRequest pingRequest = new PingRequest();
-        lastPingRequest = pingRequest.getTime();
+        startPingRequest = pingRequest.getTime();
 
         client.sendTCP(pingRequest);
     }
