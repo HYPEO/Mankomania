@@ -3,9 +3,11 @@ package space.hypeo.networking.client;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.security.AccessControlException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +19,11 @@ import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 
 public class MClient implements IPlayerConnector, IClientConnector {
+
+    static {
+        System.setProperty("java.net.preferIPv6Addresses", "false");
+        System.setProperty("java.net.preferIPv4Stack" , "true");
+    }
 
     private com.esotericsoftware.kryonet.Client client;
 
@@ -41,13 +48,14 @@ public class MClient implements IPlayerConnector, IClientConnector {
         }
 
         /**
-         * If has diconnected from
+         * If has diconnected from host
          * @param connection
          */
         @Override
         public void disconnected(Connection connection) {
             super.disconnected(connection);
             hostInfo = null;
+            connectedToHost = null;
         }
 
         /**
@@ -74,7 +82,10 @@ public class MClient implements IPlayerConnector, IClientConnector {
     @Override
     public void startClient() {
 
-        String firstHostFound = "";
+        //String firstHostFound = "";
+
+        //System.setProperty("java.net.preferIPv6Addresses", "false");
+        //System.setProperty("java.net.preferIPv4Stack" , "true");
 
         client = new Client();
         client.start();
@@ -82,12 +93,12 @@ public class MClient implements IPlayerConnector, IClientConnector {
         // TODO: execute discoverHosts() from outside?
         //this.discoverHosts();
 
-
     }
 
     @Override
     public List<InetAddress> discoverHosts() {
-        discoveredHosts = client.discoverHosts(Network.PORT_NO, Network.TIMEOUT_MS);
+        //discoveredHosts = client.discoverHosts(Network.PORT_TCP, Network.TIMEOUT_MS);
+        discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         return discoveredHosts;
     }
 
@@ -95,7 +106,8 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
         if( client != null && discoveredHosts != null && discoveredHosts.contains(hostAddress) ) {
             try {
-                client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_NO);
+                client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_TCP, Network.PORT_UDP);
+                connectedToHost = hostAddress;
             } catch (IOException e) {
                 e.printStackTrace();
             }

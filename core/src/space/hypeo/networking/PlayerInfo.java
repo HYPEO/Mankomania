@@ -16,15 +16,29 @@ public class PlayerInfo {
 
     Network.Role role;
 
+    public PlayerInfo() {
+        hostName = "";
+        address = "";
+        port = 0;
+
+        role = null;
+    }
+
     /**
      * Creates a new instance of PlayerInfo
      * @param c kryonet.Connection Connection while has connected/disconneted/received
      */
     public PlayerInfo(Connection c, Network.Role r) {
-        address = c.getRemoteAddressTCP().getAddress().toString();
-        hostName = c.getRemoteAddressTCP().getHostName();
-        port = c.getRemoteAddressTCP().getPort();
-        role = r;
+
+        if( c == null || r == null ) {
+            new PlayerInfo();
+
+        } else {
+            address = c.getRemoteAddressTCP().getAddress().toString();
+            hostName = c.getRemoteAddressTCP().getHostName();
+            port = c.getRemoteAddressTCP().getPort();
+            role = r;
+        }
     }
 
     /**
