@@ -1,18 +1,17 @@
 package space.hypeo.mankomania;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.actors.BuyHouseFieldActor;
@@ -127,6 +126,7 @@ public class StageFactory {
     public static Stage getMainMenu(final Viewport viewport, final StageManager stageManager) {
         Stage mainMenuStage = new Stage(viewport);
 
+
         // Set up skin
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
@@ -141,6 +141,12 @@ public class StageFactory {
         launch.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.push(getMapStage(viewport, stageManager));
+            }
+        });
+
+        host.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                stageManager.push(getSendMoneyDialog(viewport, stageManager));
             }
         });
 
@@ -161,5 +167,98 @@ public class StageFactory {
         mainMenuStage.addActor(table);
 
         return mainMenuStage;
+    }
+
+    public static Stage getSendMoneyDialog(final Viewport viewport, final StageManager stageManager) {
+        //TODO: Get Current Player
+        Stage sendMoneyStage = new Stage(viewport);
+
+        // Set up skin
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
+        // Set up buttons.
+        Button send = new TextButton("Send", skin);
+        Button button10000 = new TextButton("10.000€",skin);
+        Button button30000 = new TextButton("30.000€",skin);
+        Button button50000 = new TextButton("50.000€",skin);
+        Button button100000 = new TextButton("100.000€",skin);
+        SelectBox playersBox = new SelectBox(skin);
+        TextField moneyToSend = new TextField("",skin);
+        playersBox.setItems("Player 1","Player 2","Player 3","Player 4");
+        //TODO: Remove current Player from list, Get Generated Player List from Player Actor
+        // Add click listeners.
+        send.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                //get Player to Send
+                String player;
+                player = (String)playersBox.getSelected();
+                //get Money
+                Integer money;
+                money = Integer.parseInt(moneyToSend.getText());
+                //Method from class which handels logic stuff (PlayerActor etc.)
+                stageManager.remove(sendMoneyStage);
+                stageManager.push(getMapStage(viewport, stageManager));
+
+            }
+        });
+
+        button10000.addListener(new ClickListener()
+        {
+            public void clicked(InputEvent event, float x, float y) {
+                moneyToSend.setText("10000");
+
+            }
+        });
+        button30000.addListener(new ClickListener()
+        {
+            public void clicked(InputEvent event, float x, float y) {
+                moneyToSend.setText("30000");
+
+            }
+        });
+        button50000.addListener(new ClickListener()
+        {
+            public void clicked(InputEvent event, float x, float y) {
+                moneyToSend.setText("50000");
+
+            }
+        });
+        button100000.addListener(new ClickListener()
+        {
+            public void clicked(InputEvent event, float x, float y) {
+                moneyToSend.setText("100000");
+
+            }
+        });
+        Label title = new Label("Send money", skin);
+        Label labelAmount = new Label("Amount:",skin);
+        Table table = new Table();
+        Table moneyButtonTable = new Table();
+        table.setWidth(sendMoneyStage.getWidth());
+        table.align(Align.center);
+        table.setPosition(0, sendMoneyStage.getHeight() - 200);
+        table.padTop(50);
+        table.add(title).width(300).height(100).align(Align.center);
+        table.row();
+        table.add(playersBox).width(300).height(50);
+        table.row().pad(20);
+        table.add(labelAmount).width(50).height(50).padBottom(-10);
+        table.row();
+        table.add(moneyToSend).width(300).height(50);
+        table.row();
+        table.add(moneyButtonTable);
+        moneyButtonTable.pad(20);
+        moneyButtonTable.add(button10000).width(150).height(40);
+        moneyButtonTable.add(button30000).width(150).height(40);
+        moneyButtonTable.row();
+        moneyButtonTable.add(button50000).width(150).height(40);
+        moneyButtonTable.add(button100000).width(150).height(40);
+        table.row();
+        table.row();
+        table.add(send).width(300).height(50);
+
+        sendMoneyStage.addActor(table);
+
+        return sendMoneyStage;
     }
 }
