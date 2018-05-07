@@ -44,7 +44,11 @@ public class MClient implements IPlayerConnector, IClientConnector {
             super.connected(connection);
 
             hostInfo = new PlayerInfo(connection, Network.Role.host);
+            Log.info("hostInfo = " + hostInfo.toString());
             connectedToHost = connection.getRemoteAddressTCP().getAddress();
+            Log.info("connectedToHost = " + connectedToHost);
+
+            connection.sendTCP(new Notification("You accepted my connection to game."));
         }
 
         /**
@@ -73,7 +77,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
             } else if( object instanceof Notification) {
                 Notification notification = (Notification) object;
-                Log.info("received: " + notification.toString());
+                Log.info("Client received: " + notification.toString());
             }
         }
     }

@@ -9,6 +9,7 @@ import space.hypeo.networking.IHostConnector;
 import space.hypeo.networking.IPlayerConnector;
 import space.hypeo.networking.PlayerInfo;
 import space.hypeo.networking.network.Network;
+import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 
@@ -48,6 +49,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
             if( players.size() >= Network.MAX_PLAYER ) {
                 // game is full
                 // send message to client: you can not join game, game is full
+                connection.sendTCP(new Notification("Sorry, no more space for additional player left"));
                 return;
             }
 
@@ -55,6 +57,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
             Log.info("Added new Client with: " + newPlayer.toString());
 
             players.put(newPlayer.getAddress(), newPlayer);
+            connection.sendTCP(new Notification("You are connected ..."));
 
             printPlayers();
         }
@@ -85,6 +88,10 @@ public class MHost implements IPlayerConnector, IHostConnector {
                 PingRequest pingRequest = (PingRequest)object;
                 PingResponse pingResponse = new PingResponse(pingRequest.getTime());
                 connection.sendTCP(pingResponse);
+
+            } else if( object instanceof Notification) {
+                Notification notification = (Notification) object;
+                Log.info("Host received: " + notification.toString());
             }
         }
     }
@@ -176,11 +183,14 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
         if( players.isEmpty() ) {
             Log.info("NO ENTRIES");
+            return;
         }
 
+        int index = 1;
         for( HashMap.Entry<String, PlayerInfo> entry : players.entrySet() ) {
-            Log.info("  Nick = '" + entry.getKey() +"'");
+            Log.info("  " + index + ". Nick = '" + entry.getKey() +"'");
             Log.info("    " + entry.getValue().toString());
+            index++;
         }
     }
 }
