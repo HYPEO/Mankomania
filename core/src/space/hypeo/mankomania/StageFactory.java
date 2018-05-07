@@ -35,6 +35,7 @@ import space.hypeo.mankomania.actors.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.EmptyFieldActor;
 import space.hypeo.mankomania.actors.FieldActor;
 import space.hypeo.mankomania.actors.PlayerActor;
+import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
 
@@ -381,6 +382,11 @@ public class StageFactory {
         sendMoneyStage.addActor(table);
 
         return sendMoneyStage;
+    }
+    
+    public static Stage getTitleStage(final Viewport viewport, final StageManager stageManager)
+    {
+        return new TitleStage(stageManager, viewport);
     }
   
     public static void setFieldInfoImage(Texture texture){
