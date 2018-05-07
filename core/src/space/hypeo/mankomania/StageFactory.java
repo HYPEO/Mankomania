@@ -170,6 +170,9 @@ public class StageFactory {
     }
 
     public static Stage getSendMoneyDialog(final Viewport viewport, final StageManager stageManager) {
+        String playerToSend;
+        String activePlayer;
+
         //TODO: Get Current Player
         Stage sendMoneyStage = new Stage(viewport);
 
@@ -188,13 +191,14 @@ public class StageFactory {
         //TODO: Remove current Player from list, Get Generated Player List from Player Actor
         // Add click listeners.
         send.addListener(new ClickListener() {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 //get Player to Send
-                String player;
-                player = (String)playersBox.getSelected();
+                String playerToSend;
+                Integer amount;
+                playerToSend = (String)playersBox.getSelected();
                 //get Money
-                Integer money;
-                money = Integer.parseInt(moneyToSend.getText());
+                amount = Integer.parseInt(moneyToSend.getText());
                 //Method from class which handels logic stuff (PlayerActor etc.)
                 stageManager.remove(sendMoneyStage);
                 stageManager.push(getMapStage(viewport, stageManager));
@@ -204,6 +208,7 @@ public class StageFactory {
 
         button10000.addListener(new ClickListener()
         {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 moneyToSend.setText("10000");
 
@@ -211,6 +216,7 @@ public class StageFactory {
         });
         button30000.addListener(new ClickListener()
         {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 moneyToSend.setText("30000");
 
@@ -218,6 +224,7 @@ public class StageFactory {
         });
         button50000.addListener(new ClickListener()
         {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 moneyToSend.setText("50000");
 
@@ -225,11 +232,13 @@ public class StageFactory {
         });
         button100000.addListener(new ClickListener()
         {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 moneyToSend.setText("100000");
 
             }
         });
+        //TODO: Not high prio smoother design
         Label title = new Label("Send money", skin);
         Label labelAmount = new Label("Amount:",skin);
         Table table = new Table();
@@ -242,17 +251,17 @@ public class StageFactory {
         table.row();
         table.add(playersBox).width(300).height(50);
         table.row().pad(20);
-        table.add(labelAmount).width(50).height(50).padBottom(-10);
+        table.add(labelAmount).width(300).height(50).padBottom(-10);
         table.row();
         table.add(moneyToSend).width(300).height(50);
         table.row();
         table.add(moneyButtonTable);
         moneyButtonTable.pad(20);
-        moneyButtonTable.add(button10000).width(150).height(40);
-        moneyButtonTable.add(button30000).width(150).height(40);
-        moneyButtonTable.row();
-        moneyButtonTable.add(button50000).width(150).height(40);
-        moneyButtonTable.add(button100000).width(150).height(40);
+        moneyButtonTable.add(button10000).width(147).height(40).padRight(6);
+        moneyButtonTable.add(button30000).width(147).height(40);
+        moneyButtonTable.row().padBottom(10).padTop(10);
+        moneyButtonTable.add(button50000).width(147).height(40).padRight(6);
+        moneyButtonTable.add(button100000).width(147).height(40);
         table.row();
         table.row();
         table.add(send).width(300).height(50);
