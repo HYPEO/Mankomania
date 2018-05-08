@@ -378,6 +378,14 @@ public class StageFactory {
 
     }
 
+    /**
+     * Shows the network-lobby:
+     * The lobby is a Scene in the game for players to join before playing the actual game.
+     * In the lobby, players can pick options and set themselves as ready for the game to start.
+     * @param viewport
+     * @param stageManager
+     * @return stage/view of lobby
+     */
     public static Stage getLobbyStage(final Viewport viewport, final StageManager stageManager)
     {
         Stage lobbyStage = new Stage(viewport);
@@ -389,6 +397,14 @@ public class StageFactory {
         return lobbyStage;
     }
 
+    /**
+     * Discovers hosts in WLAN after hit "Join Game" button.
+     * Shows all discovered hosts. Hosts can be chosen by button-click.
+     * That Stage can only be visited as role "cient".
+     * @param viewport
+     * @param stageManager
+     * @return stage/view of discovered hosts for client
+     */
     public static Stage getDiscoveredHostsStage(final Viewport viewport, final StageManager stageManager)
     {
         Stage discoveredHostsStage = new Stage(viewport);
