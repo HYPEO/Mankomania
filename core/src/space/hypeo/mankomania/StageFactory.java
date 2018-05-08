@@ -44,6 +44,9 @@ public class StageFactory {
     private static Texture texture = new Texture ("badlogic.jpg");
     private static Image fieldInfoImage;
 
+    private static MHost mHost = null;
+    private static MClient mClient = null;
+
 
     /**
      * Generates a map stage (view).
@@ -216,10 +219,12 @@ public class StageFactory {
 
                 Log.info("Try to start server...");
 
-                MHost mHost = new MHost();
+                mHost = new MHost();
                 mHost.startServer();
 
                 Log.info("Server has started successfully");
+
+                stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
             }
 
         });
@@ -229,31 +234,12 @@ public class StageFactory {
 
                 Log.info("Try to start client...");
 
-                MClient mClient = new MClient();
+                mClient = new MClient();
                 mClient.startClient();
 
                 Log.info("Client has started successfully");
 
-                List<InetAddress> foundHosts = mClient.discoverHosts();
-
-                if( foundHosts == null || foundHosts.isEmpty() ) {
-                    Log.info("No hosts found!");
-                    return;
-                }
-
-                Log.info("Discovered Network: Host-List contains:");
-
-                for( InetAddress iAddr : foundHosts ) {
-                    Log.info("  host: " + iAddr.toString());
-                }
-
-                InetAddress firstHost = foundHosts.get(0);
-
-                Log.info("Try to connect to first host " + firstHost.toString() + "...");
-
-                mClient.connectToHost(firstHost);
-
-
+                stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
             }
         });
 
@@ -390,6 +376,70 @@ public class StageFactory {
     public static void setFieldInfoImage(Texture texture){
         fieldInfoImage.setDrawable(new SpriteDrawable(new Sprite(texture)));
 
+    }
+
+    public static Stage getLobbyStage(final Viewport viewport, final StageManager stageManager)
+    {
+        Stage lobbyStage = new Stage(viewport);
+
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
+        // TODO: create lobby stage
+
+        return lobbyStage;
+    }
+
+    public static Stage getDiscoveredHostsStage(final Viewport viewport, final StageManager stageManager)
+    {
+        Stage discoveredHostsStage = new Stage(viewport);
+
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
+        List<InetAddress> foundHosts = mClient.discoverHosts();
+
+        if( foundHosts != null && ! foundHosts.isEmpty() ) {
+
+            Table table = new Table();
+            table.setWidth(discoveredHostsStage.getWidth());
+            table.align(Align.center);
+            table.setPosition(0, discoveredHostsStage.getHeight() - 200);
+            table.padTop(50);
+
+            Log.info("Discovered Network: Host-List contains:");
+
+            table.add(new Label("Discovered Hosts:", skin)).width(300).height(100);
+            table.row();
+
+            // TODO: create clickable, scrolable list
+            for (InetAddress iAddr : foundHosts) {
+                Log.info("  host: " + iAddr.toString());
+
+                Button button = new TextButton("Host " + iAddr.toString(), skin);
+
+                button.addListener(new ClickListener() {
+                    public void clicked(InputEvent event, float x, float y) {
+
+                        Log.info("Button Host " + iAddr.toString());
+                        Log.info("Try to connect to host " + iAddr.toString() + "...");
+
+                        // TODO: connect to chosen host
+                        mClient.connectToHost(iAddr);
+                    }
+
+                });
+
+                table.add(button).width(300).height(100);
+                table.row();
+            }
+
+            // Add buttons to stage.
+            discoveredHostsStage.addActor(table);
+
+        } else {
+            Log.info("No hosts found!");
+        }
+
+        return discoveredHostsStage;
     }
 
 }
