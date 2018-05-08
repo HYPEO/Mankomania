@@ -397,47 +397,51 @@ public class StageFactory {
 
         List<InetAddress> foundHosts = mClient.discoverHosts();
 
+        // show avaliable hosts as buttons in table
+        Table tblDiscoveredHosts = new Table();
+
+        tblDiscoveredHosts.setWidth(discoveredHostsStage.getWidth());
+        tblDiscoveredHosts.align(Align.center);
+        tblDiscoveredHosts.setPosition(0, discoveredHostsStage.getHeight() - 200);
+        tblDiscoveredHosts.padTop(50);
+
+        Log.info("Discovered Network: Host-List contains:");
+
+        tblDiscoveredHosts.add(new Label("Discovered Hosts:", skin)).width(300).height(100);
+        tblDiscoveredHosts.row();
+
         if( foundHosts != null && ! foundHosts.isEmpty() ) {
 
-            Table table = new Table();
-            table.setWidth(discoveredHostsStage.getWidth());
-            table.align(Align.center);
-            table.setPosition(0, discoveredHostsStage.getHeight() - 200);
-            table.padTop(50);
-
-            Log.info("Discovered Network: Host-List contains:");
-
-            table.add(new Label("Discovered Hosts:", skin)).width(300).height(100);
-            table.row();
-
             // TODO: create clickable, scrolable list
-            for (InetAddress iAddr : foundHosts) {
-                Log.info("  host: " + iAddr.toString());
+            for (InetAddress hostAddr : foundHosts) {
+                Log.info("  host: " + hostAddr.toString());
 
-                Button button = new TextButton("Host " + iAddr.toString(), skin);
+                Button btnHost = new TextButton("Host " + hostAddr.toString(), skin);
 
-                button.addListener(new ClickListener() {
+                btnHost.addListener(new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
 
-                        Log.info("Button Host " + iAddr.toString());
-                        Log.info("Try to connect to host " + iAddr.toString() + "...");
+                        Log.info("Try to connect to host " + hostAddr.toString() + "...");
 
-                        // TODO: connect to chosen host
-                        mClient.connectToHost(iAddr);
+                        mClient.connectToHost(hostAddr);
                     }
 
                 });
 
-                table.add(button).width(300).height(100);
-                table.row();
+                tblDiscoveredHosts.add(btnHost).width(300).height(100);
+                tblDiscoveredHosts.row();
             }
-
-            // Add buttons to stage.
-            discoveredHostsStage.addActor(table);
 
         } else {
             Log.info("No hosts found!");
+
+            Button btnNoHost = new TextButton("No Hosts found ", skin);
+            tblDiscoveredHosts.add(btnNoHost).width(300).height(100);
+            tblDiscoveredHosts.row();
         }
+
+        // Add buttons to stage.
+        discoveredHostsStage.addActor(tblDiscoveredHosts);
 
         return discoveredHostsStage;
     }
