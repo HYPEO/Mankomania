@@ -382,6 +382,9 @@ public class StageFactory {
      * Shows the network-lobby:
      * The lobby is a Scene in the game for players to join before playing the actual game.
      * In the lobby, players can pick options and set themselves as ready for the game to start.
+     *
+     * The list in the lobby creates each player - both host and clients - itself.
+     * Therefore the hashmap 'players' - a field of class MHost - contains the necessary data.
      * @param viewport
      * @param stageManager
      * @return stage/view of lobby
@@ -440,6 +443,8 @@ public class StageFactory {
                         Log.info("Try to connect to host " + hostAddr.toString() + "...");
 
                         mClient.connectToHost(hostAddr);
+
+                        stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
                     }
 
                 });

@@ -5,9 +5,11 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 
+import space.hypeo.networking.Endpoint;
 import space.hypeo.networking.IHostConnector;
 import space.hypeo.networking.IPlayerConnector;
 import space.hypeo.networking.PlayerInfo;
+import space.hypeo.networking.Players;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
@@ -18,22 +20,15 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
-public class MHost implements IPlayerConnector, IHostConnector {
+public class MHost extends Endpoint implements IPlayerConnector, IHostConnector {
 
     private com.esotericsoftware.kryonet.Server server;
-
-    /**
-     * The data structure that holds the player-list.
-     * String     ... Nickname of the player
-     * PlayerInfo ... Network info of the player
-     */
-    private HashMap<String, PlayerInfo> players;
 
     /**
      * Constructs instance of class MHost
      */
     public MHost() {
-        players = new HashMap<String, PlayerInfo>();
+        super();
     }
 
     private class ServerListener extends Listener {
@@ -59,7 +54,8 @@ public class MHost implements IPlayerConnector, IHostConnector {
             players.put(newPlayer.getAddress(), newPlayer);
             connection.sendTCP(new Notification("You are connected ..."));
 
-            printPlayers();
+            players.print();
+            // TODO: broadcast, provide current list of players
         }
 
         /**
@@ -73,6 +69,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
             PlayerInfo leavingPlayer = new PlayerInfo(connection, Network.Role.client);
 
             players.remove(leavingPlayer);
+            // TODO: broadcast, provide current list of players
         }
 
         /**
@@ -139,8 +136,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
         PlayerInfo self = new PlayerInfo("/" + selfAddress, selfAddress, Network.PORT_TCP, Network.Role.host);
         players.put("the_mighty_host", self);
 
-        printPlayers();
-
+        players.print();
     }
 
     @Override
@@ -174,23 +170,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
     }
 
     @Override
-    public HashMap<String, PlayerInfo> registeredPlayers() {
+    public Players registeredPlayers() {
         return players;
-    }
-
-    public void printPlayers() {
-        Log.info("HashMap 'players' contains:");
-
-        if( players.isEmpty() ) {
-            Log.info("NO ENTRIES");
-            return;
-        }
-
-        int index = 1;
-        for( HashMap.Entry<String, PlayerInfo> entry : players.entrySet() ) {
-            Log.info("  " + index + ". Nick = '" + entry.getKey() +"'");
-            Log.info("    " + entry.getValue().toString());
-            index++;
-        }
     }
 }

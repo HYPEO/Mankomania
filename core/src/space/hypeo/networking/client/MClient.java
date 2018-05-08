@@ -10,16 +10,19 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
 
+import space.hypeo.networking.Endpoint;
 import space.hypeo.networking.IClientConnector;
 import space.hypeo.networking.IPlayerConnector;
 import space.hypeo.networking.PlayerInfo;
+import space.hypeo.networking.Players;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 
-public class MClient implements IPlayerConnector, IClientConnector {
+public class MClient extends Endpoint implements IPlayerConnector, IClientConnector {
 
+    // TODO: next block 'static' has no effect ?!?
     static {
         System.setProperty("java.net.preferIPv6Addresses", "false");
         System.setProperty("java.net.preferIPv4Stack" , "true");
@@ -32,6 +35,13 @@ public class MClient implements IPlayerConnector, IClientConnector {
     private InetAddress connectedToHost = null;
 
     private long startPingRequest = 0;
+
+    /**
+     * Constructs instance of class MClient
+     */
+    public MClient() {
+        super();
+    }
 
     private class ClientListener extends Listener {
 
@@ -49,6 +59,8 @@ public class MClient implements IPlayerConnector, IClientConnector {
             Log.info("connectedToHost = " + connectedToHost);
 
             connection.sendTCP(new Notification("You accepted my connection to game."));
+
+
         }
 
         /**
@@ -79,6 +91,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
                 Notification notification = (Notification) object;
                 Log.info("Client received: " + notification.toString());
             }
+            // TODO: receive Players
         }
     }
 
@@ -173,7 +186,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
     }
 
     @Override
-    public HashMap<String, PlayerInfo> registeredPlayers() {
-        return null;
+    public Players registeredPlayers() {
+        return players;
     }
 }
