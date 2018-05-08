@@ -1,4 +1,4 @@
-package space.hypeo.networking;
+package space.hypeo.networking.packages;
 
 import com.esotericsoftware.minlog.Log;
 
@@ -17,23 +17,23 @@ public class Players {
      * String     ... Nickname of the player
      * PlayerInfo ... Network info of the player
      */
-    protected HashMap<String, PlayerInfo> players;
+    protected HashMap<String, Player> players;
 
     public Players() {
-        players = new HashMap<String, PlayerInfo>();
+        players = new HashMap<String, Player>();
     }
 
-    public void put(String nick, PlayerInfo pInfo) {
-        players.put(nick, pInfo);
+    public void put(String nick, Player p) {
+        players.put(nick, p);
     }
 
     public void remove(String nick) {
         players.remove(nick);
     }
 
-    public void remove(PlayerInfo pInfo) {
-        for( HashMap.Entry<String, PlayerInfo> entry : players.entrySet() ) {
-            if( entry.getValue().equals(pInfo) ) {
+    public void remove(Player p) {
+        for( HashMap.Entry<String, Player> entry : players.entrySet() ) {
+            if( entry.getValue().equals(p) ) {
                 players.remove( entry.getKey() );
             }
         }
@@ -60,7 +60,7 @@ public class Players {
         }
 
         int index = 1;
-        for( HashMap.Entry<String, PlayerInfo> entry : players.entrySet() ) {
+        for( HashMap.Entry<String, Player> entry : players.entrySet() ) {
             Log.info("  " + index + ". Nick = '" + entry.getKey() +"'");
             Log.info("    " + entry.getValue().toString());
             index++;

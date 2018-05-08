@@ -1,6 +1,6 @@
 package space.hypeo.networking;
 
-import java.util.HashMap;
+import space.hypeo.networking.packages.Players;
 
 /**
  * Class Endpoint contains fields,

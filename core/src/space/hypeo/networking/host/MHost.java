@@ -3,13 +3,12 @@ package space.hypeo.networking.host;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
 
 import space.hypeo.networking.Endpoint;
 import space.hypeo.networking.IHostConnector;
 import space.hypeo.networking.IPlayerConnector;
-import space.hypeo.networking.PlayerInfo;
-import space.hypeo.networking.Players;
+import space.hypeo.networking.packages.Player;
+import space.hypeo.networking.packages.Players;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
@@ -48,7 +47,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
                 return;
             }
 
-            PlayerInfo newPlayer = new PlayerInfo(connection, Network.Role.client);
+            Player newPlayer = new Player(connection, Network.Role.client);
             Log.info("Added new Client with: " + newPlayer.toString());
 
             players.put(newPlayer.getAddress(), newPlayer);
@@ -56,6 +55,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
 
             players.print();
             // TODO: broadcast, provide current list of players
+            server.sendToAllTCP(players);
         }
 
         /**
@@ -66,7 +66,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            PlayerInfo leavingPlayer = new PlayerInfo(connection, Network.Role.client);
+            Player leavingPlayer = new Player(connection, Network.Role.client);
 
             players.remove(leavingPlayer);
             // TODO: broadcast, provide current list of players
@@ -95,7 +95,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
 
     @Override
     public void advertiseGame() {
-        // TODO: start the lobby here
+        // TODO: start out of the lobby here
     }
 
     @Override
@@ -133,7 +133,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
         } catch(UnknownHostException e) {
             e.printStackTrace();
         }
-        PlayerInfo self = new PlayerInfo("/" + selfAddress, selfAddress, Network.PORT_TCP, Network.Role.host);
+        Player self = new Player("/" + selfAddress, selfAddress, Network.PORT_TCP, Network.Role.host);
         players.put("the_mighty_host", self);
 
         players.print();

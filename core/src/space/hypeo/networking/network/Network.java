@@ -3,10 +3,10 @@ package space.hypeo.networking.network;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
-import space.hypeo.networking.Players;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
+import space.hypeo.networking.packages.Players;
 
 /**
  * The class Network is a auxiliary class
@@ -27,7 +27,8 @@ public class Network {
     public enum Role { host, client };
 
     /**
-     * Register objects that are going to be sent over the network.
+     * Register objects for server|client that are going to be sent over the network.
+     * @param endPoint can be server or client
      */
     static public void register (EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();

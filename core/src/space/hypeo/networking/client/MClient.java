@@ -7,14 +7,13 @@ import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.HashMap;
 import java.util.List;
 
 import space.hypeo.networking.Endpoint;
 import space.hypeo.networking.IClientConnector;
 import space.hypeo.networking.IPlayerConnector;
-import space.hypeo.networking.PlayerInfo;
-import space.hypeo.networking.Players;
+import space.hypeo.networking.packages.Player;
+import space.hypeo.networking.packages.Players;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
@@ -30,7 +29,7 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
 
     private com.esotericsoftware.kryonet.Client client;
 
-    private PlayerInfo hostInfo = null;
+    private Player hostInfo = null;
     private List<InetAddress> discoveredHosts = null;
     private InetAddress connectedToHost = null;
 
@@ -53,7 +52,7 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
         public void connected(Connection connection) {
             super.connected(connection);
 
-            hostInfo = new PlayerInfo(connection, Network.Role.host);
+            hostInfo = new Player(connection, Network.Role.host);
             Log.info("hostInfo = " + hostInfo.toString());
             connectedToHost = connection.getRemoteAddressTCP().getAddress();
             Log.info("connectedToHost = " + connectedToHost);
