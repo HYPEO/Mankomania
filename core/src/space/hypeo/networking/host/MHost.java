@@ -40,9 +40,8 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
         public void connected(Connection connection) {
             super.connected(connection);
 
-            if( players.size() >= Network.MAX_PLAYER ) {
+            if( players.ifFull() ) {
                 // game is full
-                // send message to client: you can not join game, game is full
                 connection.sendTCP(new Notification("Sorry, no more space for additional player left"));
                 return;
             }
@@ -50,12 +49,13 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
             Player newPlayer = new Player(connection, Network.Role.client);
             Log.info("Added new Client with: " + newPlayer.toString());
 
-            players.put(newPlayer.getAddress(), newPlayer);
+            // TODO: get the "real" nick of recently connected player
+            players.add(newPlayer.getAddress(), newPlayer);
             connection.sendTCP(new Notification("You are connected ..."));
 
             players.print();
             // TODO: broadcast, provide current list of players
-            server.sendToAllTCP(players);
+            //server.sendToAllTCP(players);
         }
 
         /**
@@ -69,7 +69,10 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
             Player leavingPlayer = new Player(connection, Network.Role.client);
 
             players.remove(leavingPlayer);
+
+            players.print();
             // TODO: broadcast, provide current list of players
+            //server.sendToAllTCP(players);
         }
 
         /**
@@ -95,18 +98,18 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
 
     @Override
     public void advertiseGame() {
-        // TODO: start out of the lobby here
+        // TODO: start out of the lobby here if each player is ready
     }
 
     @Override
     public boolean startGame() {
-        //server.sendToAllTCP("game starts in 5sec...");
+        server.sendToAllTCP(new Notification("game starts in 5sec..."));
         return false;
     }
 
     @Override
     public void endGame() {
-        //server.sendToAllTCP("game will be closed now...");
+        server.sendToAllTCP(new Notification("game will be closed now..."));
         players = null;
     }
 
@@ -126,15 +129,17 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
 
         Network.register(server);
 
-        /* attach PlayerInfo of host in players */
+        /* attach host in players */
         String selfAddress = "";
         try {
             selfAddress = InetAddress.getLocalHost().toString();
         } catch(UnknownHostException e) {
             e.printStackTrace();
         }
-        Player self = new Player("/" + selfAddress, selfAddress, Network.PORT_TCP, Network.Role.host);
-        players.put("the_mighty_host", self);
+
+        nick = "the_mighty_host";
+        player = new Player("/" + selfAddress, selfAddress, Network.PORT_TCP, Network.Role.host);
+        players.add(nick, player);
 
         players.print();
     }
@@ -166,7 +171,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
 
     @Override
     public String getCurrentPlayerID() {
-        return null;
+        return nick;
     }
 
     @Override

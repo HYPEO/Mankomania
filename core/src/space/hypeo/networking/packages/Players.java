@@ -4,9 +4,11 @@ import com.esotericsoftware.minlog.Log;
 
 import java.util.HashMap;
 
+import space.hypeo.networking.network.Network;
+
 
 /**
- * This class represents the list of player that joined the game,
+ * The class Players represents the list of player that joined the game,
  * including the host itself.
  * This class is nesessary to send the list over the network.
  */
@@ -17,52 +19,54 @@ public class Players {
      * String     ... Nickname of the player
      * PlayerInfo ... Network info of the player
      */
-    protected HashMap<String, Player> players;
+    protected HashMap<String, Player> data;
 
     public Players() {
-        players = new HashMap<String, Player>();
+        data = new HashMap<String, Player>();
     }
 
-    public void put(String nick, Player p) {
-        players.put(nick, p);
+    public void add(String nick, Player p) {
+        data.put(nick, p);
     }
 
     public void remove(String nick) {
-        players.remove(nick);
+        data.remove(nick);
     }
 
     public void remove(Player p) {
-        for( HashMap.Entry<String, Player> entry : players.entrySet() ) {
+        for( HashMap.Entry<String, Player> entry : data.entrySet() ) {
             if( entry.getValue().equals(p) ) {
-                players.remove( entry.getKey() );
+                data.remove( entry.getKey() );
             }
         }
     }
 
     public boolean isEmpty() {
-        return players.isEmpty();
+        return data.isEmpty();
     }
 
     public int size() {
-        return players.size();
+        return data.size();
     }
 
+    public boolean ifFull() {return data.size() >= Network.MAX_PLAYER; }
+
     public void clear() {
-        players.clear();
+        data.clear();
     }
 
     public void print() {
-        Log.info("HashMap contains:");
+        Log.info("List of player contains:");
 
-        if( players.isEmpty() ) {
+        if( data.isEmpty() ) {
             Log.info("NO ENTRIES");
             return;
         }
 
         int index = 1;
-        for( HashMap.Entry<String, Player> entry : players.entrySet() ) {
+        for( HashMap.Entry<String, Player> entry : data.entrySet() ) {
             Log.info("  " + index + ". Nick = '" + entry.getKey() +"'");
-            Log.info("    " + entry.getValue().toString());
+            Log.info("     " + entry.getValue().toString());
             index++;
         }
     }

@@ -1,5 +1,6 @@
 package space.hypeo.networking;
 
+import space.hypeo.networking.packages.Player;
 import space.hypeo.networking.packages.Players;
 
 /**
@@ -8,16 +9,16 @@ import space.hypeo.networking.packages.Players;
  */
 public abstract class Endpoint {
 
-    // TODO: implement HashMap as new class and register it for host/client
-
-    /**
-     * The data structure that holds the player-list.
-     * String     ... Nickname of the player
-     * PlayerInfo ... Network info of the player
-     */
+    // The data structure that holds the player-list.
     protected Players players;
 
+    // nickname of a player
+    protected String nick;
+    // network data of player
+    protected Player player;
+
     public Endpoint() {
+        player = null;
         players = new Players();
     }
 }

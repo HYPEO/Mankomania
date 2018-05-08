@@ -5,7 +5,7 @@ import com.esotericsoftware.kryonet.Connection;
 import space.hypeo.networking.network.Network;
 
 /**
- * The class PlayerInfo holds the important network data,
+ * The class Player holds the important network data,
  * that identifies a client or host.
  */
 public class Player {

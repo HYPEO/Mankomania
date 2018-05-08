@@ -29,8 +29,10 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
 
     private com.esotericsoftware.kryonet.Client client;
 
-    private Player hostInfo = null;
     private List<InetAddress> discoveredHosts = null;
+
+    // TODO: which host info is the right one?
+    private Player hostInfo = null;
     private InetAddress connectedToHost = null;
 
     private long startPingRequest = 0;
@@ -40,6 +42,7 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
      */
     public MClient() {
         super();
+        // TODO: set nick and player
     }
 
     private class ClientListener extends Listener {
@@ -58,8 +61,6 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
             Log.info("connectedToHost = " + connectedToHost);
 
             connection.sendTCP(new Notification("You accepted my connection to game."));
-
-
         }
 
         /**
@@ -89,8 +90,15 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
             } else if( object instanceof Notification) {
                 Notification notification = (Notification) object;
                 Log.info("Client received: " + notification.toString());
+
+            } else if( object instanceof Players ) {
+                /*
+                 * receive new list of Player:
+                 * after connecting or disconnecting clients
+                 */
+                players = (Players) object;
+                Log.info("Client received updated list of player");
             }
-            // TODO: receive Players
         }
     }
 
@@ -102,22 +110,17 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
     @Override
     public void startClient() {
 
-        //String firstHostFound = "";
-
+        // TODO: next 2 stmts have no effect ?!?
         //System.setProperty("java.net.preferIPv6Addresses", "false");
         //System.setProperty("java.net.preferIPv4Stack" , "true");
 
         client = new Client();
         client.start();
-
-        // TODO: execute discoverHosts() from outside?
-        //this.discoverHosts();
-
     }
 
     @Override
     public List<InetAddress> discoverHosts() {
-        //discoveredHosts = client.discoverHosts(Network.PORT_TCP, Network.TIMEOUT_MS);
+        // use UDP port for discovering hosts
         discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         return discoveredHosts;
     }
@@ -138,7 +141,9 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
 
             pingServer();
 
-            // TODO: wait for response
+            /* TODO: wait for response?
+             *       is endless loop necessary?
+             */
             /*while( true ) {
             }*/
         }
@@ -181,7 +186,7 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
 
     @Override
     public String getCurrentPlayerID() {
-        return null;
+        return nick;
     }
 
     @Override
