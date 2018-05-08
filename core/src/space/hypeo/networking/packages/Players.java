@@ -41,6 +41,10 @@ public class Players {
         }
     }
 
+    public HashMap<String, Player> getData() {
+        return data;
+    }
+
     public boolean isEmpty() {
         return data.isEmpty();
     }
