@@ -31,7 +31,10 @@ public class MapStage extends Stage {
 
     public MapStage(Viewport viewport, StageManager stageManager) {
         super(viewport);
-        
+
+        fieldInfoImage = new Image(texture);
+        fieldInfoImage.setBounds(90, 125, 300, 300);
+
         // Create the empty field.
         FieldActor firstField = new EmptyFieldActor(MARGIN_X, MARGIN_Y, new Texture("transparent.png"), 0, fieldInfoImage);
         this.addActor(firstField);
@@ -68,8 +71,6 @@ public class MapStage extends Stage {
             }
         });
         this.addActor(close);
-        fieldInfoImage = new Image(texture);
-        fieldInfoImage.setBounds(90, 125, 300, 300);
         this.addActor(fieldInfoImage);
         
     }

@@ -28,6 +28,7 @@ public class EmptyFieldActor extends FieldActor{
         super(new Texture("wall.jpg"), x, y, FIELD_SCALE, FIELD_SCALE,texture,price);
         this.texture=texture;
         this.price=price;
+        this.fieldInfoImage = fieldInfoImage;
     }
 
 
