@@ -17,8 +17,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 
-import static space.hypeo.mankomania.StageFactory.getMapStage;
-
 /**
  * Created by pichlermarc on 09.05.2018.
  */

@@ -1,22 +1,26 @@
 package space.hypeo.mankomania.actors;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import space.hypeo.mankomania.StageFactory;
 
 public class BuyHouseFieldActor extends FieldActor {
     private static final float FIELD_SCALE = 30f;
-    Texture fieldInfoImage;
-    int x = 0;
-    Texture texture;
-    int price;
+    private Image fieldInfoImage;
+    private int x = 0;
+    private Texture texture;
+    private int price;
 
-    public BuyHouseFieldActor(float x, float y,Texture texture, int price) {
+    public BuyHouseFieldActor(float x, float y,Texture texture, int price, Image fieldInfoImage) {
         super(new Texture("forsale.jpg"), x, y, FIELD_SCALE, FIELD_SCALE,texture,price);
         this.texture=texture;
         this.price=price;
+        this.fieldInfoImage = fieldInfoImage;
     }
 
     @Override
@@ -36,10 +40,7 @@ public class BuyHouseFieldActor extends FieldActor {
 
     @Override
     public void fieldInfo() {
-        StageFactory.setFieldInfoImage(texture);
-
-
-
+        fieldInfoImage.setDrawable(new SpriteDrawable(new Sprite(texture)));
     }
 
 }
