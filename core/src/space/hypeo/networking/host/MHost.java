@@ -8,6 +8,7 @@ import space.hypeo.networking.Endpoint;
 import space.hypeo.networking.IHostConnector;
 import space.hypeo.networking.IPlayerConnector;
 import space.hypeo.networking.WhatAmI;
+import space.hypeo.networking.network.CRole;
 import space.hypeo.networking.packages.Player;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
@@ -37,7 +38,8 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
      */
     private MHost() {
         super();
-        WhatAmI.getInstance().setRole(Network.Role.HOST);
+        WhatAmI.getInstance().setRole(CRole.Role.HOST);
+        Log.info("MHost Ctor: " + WhatAmI.getInstance().getRole());
     }
 
     public static MHost getInstance() {
@@ -66,7 +68,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
                 return;
             }
 
-            Player newPlayer = new Player(connection, Network.Role.CLIENT);
+            Player newPlayer = new Player(connection, CRole.Role.CLIENT);
             Log.info("Added new Client with: " + newPlayer.toString());
 
             // TODO: get the "real" nick of recently connected player
@@ -86,7 +88,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            Player leavingPlayer = new Player(connection, Network.Role.CLIENT);
+            Player leavingPlayer = new Player(connection, CRole.Role.CLIENT);
 
             lobby.remove(leavingPlayer);
 
@@ -158,7 +160,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
         }
 
         nick = "the_mighty_host";
-        player = new Player("/" + selfAddress, selfAddress, Network.PORT_TCP, Network.Role.HOST);
+        player = new Player("/" + selfAddress, selfAddress, Network.PORT_TCP, CRole.Role.HOST);
         lobby.add(nick, player);
 
         lobby.print();

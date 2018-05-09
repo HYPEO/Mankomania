@@ -18,12 +18,11 @@ import java.util.HashMap;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.RectangleActor;
-import space.hypeo.networking.Endpoint;
 import space.hypeo.networking.WhatAmI;
 
 import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
-import space.hypeo.networking.network.Network;
+import space.hypeo.networking.network.CRole;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.packages.Player;
 
@@ -53,14 +52,23 @@ public class LobbyStage extends Stage {
         tblLobby.row();
 
         Lobby lobby = null;
-        if( WhatAmI.getInstance().getRole() == Network.Role.HOST ) {
+        CRole.Role role = WhatAmI.getInstance().getRole();
+
+        if (role == CRole.Role.HOST) {
             lobby = MHost.getInstance().registeredPlayers();
-        } else if( WhatAmI.getInstance().getRole() == Network.Role.CLIENT ) {
+            Log.info("LobbyStage: Role = HOST");
+        } else if (role == CRole.Role.CLIENT) {
             lobby = MClient.getInstance().registeredPlayers();
+            Log.info("LobbyStage: Role = CLIENT");
+        } else if (role == CRole.Role.NOT_CONNECTED) {
+            Log.info("LobbyStage: Role = NOT_CONNECTED");
+        } else if (role == null) {
+            Log.info("LobbyStage: Role = null");
         }
 
-        if( lobby == null ) {
+        if( lobby == null || role == CRole.Role.NOT_CONNECTED ) {
             Log.error("LobbyStage: lobby must not be null!");
+            stageManager.remove(LobbyStage.this);
             return;
         }
 

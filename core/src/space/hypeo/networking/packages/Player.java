@@ -2,7 +2,7 @@ package space.hypeo.networking.packages;
 
 import com.esotericsoftware.kryonet.Connection;
 
-import space.hypeo.networking.network.Network;
+import space.hypeo.networking.network.CRole;
 
 /**
  * The class Player holds the important network data,
@@ -14,7 +14,7 @@ public class Player {
     private String address;
     private int port;
 
-    Network.Role role;
+    CRole cRole;
 
     /**
      * Creates a new instance of PlayerInfo
@@ -25,14 +25,14 @@ public class Player {
         address = "";
         port = 0;
 
-        role = null;
+        cRole = null;
     }
 
     /**
      * Creates a new instance of PlayerInfo
      * @param c kryonet.Connection Connection while has connected/disconneted/received
      */
-    public Player(Connection c, Network.Role r) {
+    public Player(Connection c, CRole.Role r) {
 
         if( c == null || r == null ) {
             new Player();
@@ -41,7 +41,7 @@ public class Player {
             address = c.getRemoteAddressTCP().getAddress().toString();
             hostName = c.getRemoteAddressTCP().getHostName();
             port = c.getRemoteAddressTCP().getPort();
-            role = r;
+            cRole = new CRole(r);
         }
     }
 
@@ -50,13 +50,13 @@ public class Player {
      * @param hostName
      * @param address
      * @param port
-     * @param role
+     * @param cRole
      */
-    public Player(String hostName, String address, int port, Network.Role role) {
+    public Player(String hostName, String address, int port, CRole.Role cRole) {
         this.hostName = hostName;
         this.address = address;
         this.port = port;
-        this.role = role;
+        this.cRole = new CRole(cRole);
     }
 
     /**
@@ -88,6 +88,6 @@ public class Player {
         return "Hostname: '" + hostName
                 + "', Address: '" + address
                 + "', Port: " + port
-                + "', Role: '" + (role == Network.Role.HOST ? "Host'" : "Client'");
+                + "', Role: '" + cRole.toString();
     }
 }

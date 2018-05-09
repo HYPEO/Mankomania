@@ -12,6 +12,8 @@ import java.util.List;
 import space.hypeo.networking.Endpoint;
 import space.hypeo.networking.IClientConnector;
 import space.hypeo.networking.IPlayerConnector;
+import space.hypeo.networking.WhatAmI;
+import space.hypeo.networking.network.CRole;
 import space.hypeo.networking.packages.Player;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
@@ -50,6 +52,7 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
      */
     private MClient() {
         super();
+        WhatAmI.getInstance().setRole(CRole.Role.CLIENT);
         // TODO: set nick and player
     }
 
@@ -73,7 +76,7 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
         public void connected(Connection connection) {
             super.connected(connection);
 
-            hostInfo = new Player(connection, Network.Role.HOST);
+            hostInfo = new Player(connection, CRole.Role.HOST);
             Log.info("hostInfo = " + hostInfo.toString());
             connectedToHost = connection.getRemoteAddressTCP().getAddress();
             Log.info("connectedToHost = " + connectedToHost);

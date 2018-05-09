@@ -1,8 +1,8 @@
 package space.hypeo.networking;
 
-import space.hypeo.networking.client.MClient;
-import space.hypeo.networking.host.MHost;
-import space.hypeo.networking.network.Network;
+import com.esotericsoftware.minlog.Log;
+
+import space.hypeo.networking.network.CRole;
 
 /**
  * This class stores the role of a player in the network:
@@ -14,8 +14,8 @@ public class WhatAmI {
     // only one instance of WhatAmI
     private static WhatAmI instance;
 
-    // initial value = NOT_CONNECTED
-    private static Network.Role role = Network.Role.NOT_CONNECTED;
+    // only one role per player
+    private CRole role = new CRole();
 
     private WhatAmI() { }
 
@@ -28,21 +28,22 @@ public class WhatAmI {
 
     /**
      * Sets the current role of the current player.
-     * @param role
+     * @param r
      */
-    public void setRole(Network.Role role) {
+    public void setRole(CRole.Role r) {
         // change role only if it's NOT_CONNECTED
-        if( role == Network.Role.NOT_CONNECTED ) {
-            this.role = role;
+        if( r.equals(CRole.Role.NOT_CONNECTED) ) {
+            role.setRole(r);
         }
+        Log.info("WhatAmI: I'm a " + role.toString());
     }
 
     /**
      * Gets the current role of the current player.
      * @return HOST|CLIENT|NOT_CONNECTED
      */
-    public Network.Role getRole() {
-        return role;
+    public CRole.Role getRole() {
+        return role.getRole();
     }
 
     /**
