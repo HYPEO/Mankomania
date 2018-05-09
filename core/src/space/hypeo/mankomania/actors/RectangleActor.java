@@ -10,8 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class RectangleActor extends Actor {
     ShapeRenderer rectangleRenderer;
 
-    public RectangleActor(float x, float y, float width, float height)
-    {
+    public RectangleActor(float x, float y, float width, float height) {
         //Set up rectangle.
         rectangleRenderer = new ShapeRenderer();
         setX(x);
@@ -21,8 +20,7 @@ public class RectangleActor extends Actor {
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha)
-    {
+    public void draw(Batch batch, float parentAlpha) {
         batch.end();
 
         rectangleRenderer.begin(ShapeRenderer.ShapeType.Filled);

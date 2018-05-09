@@ -6,37 +6,37 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 /**
  * Represents a Field.
  */
-public abstract class FieldActor extends Image{
+public abstract class FieldActor extends Image {
     FieldActor nextField;
     private float x;
-    private  float y;
+    private float y;
     private int price;
     private Texture info;
 
     /**
      * Creates a new instance of the FieldActor Class.
+     *
      * @param texture Texture that represents the field on screen.
-     * @param x X position of the Actor.
-     * @param y Y position of the Actor.
-     * @param width Width of the Actor.
-     * @param height Height of the Actor.
+     * @param x       X position of the Actor.
+     * @param y       Y position of the Actor.
+     * @param width   Width of the Actor.
+     * @param height  Height of the Actor.
      */
-    public FieldActor(Texture texture, float x, float y, float width, float height, Texture info, int price)
-    {
+    public FieldActor(Texture texture, float x, float y, float width, float height, Texture info, int price) {
         super(texture);
         this.setBounds(x, y, width, height);
-        this.x=x;
-        this.y=y;
-        this.info=info;
-        this.price=price;
+        this.x = x;
+        this.y = y;
+        this.info = info;
+        this.price = price;
     }
 
     /**
      * Triggers this field for the player.
+     *
      * @param player
      */
     public abstract void trigger(PlayerActor player);
-
 
 
     /**

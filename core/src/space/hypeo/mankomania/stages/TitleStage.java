@@ -38,16 +38,16 @@ public class TitleStage extends Stage {
         // Set up title.
         title.setWidth(title.getWidth() / 2.5f);
         title.setHeight(title.getHeight() / 2.5f);
-        title.setX((viewport.getWorldWidth() / 2) - (title.getWidth() / 2f)+10f);
+        title.setX((viewport.getWorldWidth() / 2) - (title.getWidth() / 2f) + 10f);
         title.setY((viewport.getWorldHeight() * 2f / 3f) - (title.getHeight() / 2f));
 
         // Set up background.
-        background.setColor(237f/255f, 30f/255f, 121f/255f, 1f);
+        background.setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
 
         // Set up tap-screen message.
         tapScreen.setWidth(tapScreen.getWidth() * 0.5f);
         tapScreen.setHeight(tapScreen.getHeight() * 0.5f);
-        tapScreen.setX((viewport.getWorldWidth() / 2f) - (tapScreen.getWidth()/2f));
+        tapScreen.setX((viewport.getWorldWidth() / 2f) - (tapScreen.getWidth() / 2f));
         tapScreen.setY((viewport.getWorldHeight() * 1f / 3f) - (title.getHeight() / 2f));
 
         // Add actors.

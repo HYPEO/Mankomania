@@ -21,8 +21,7 @@ import space.hypeo.mankomania.StageManager;
  * Created by pichlermarc on 09.05.2018.
  */
 public class SendMoneyStage extends Stage {
-    public SendMoneyStage(Viewport viewport, StageManager stageManager)
-    {
+    public SendMoneyStage(Viewport viewport, StageManager stageManager) {
         super(viewport);
         //TODO: Get Current Player
 
@@ -31,13 +30,13 @@ public class SendMoneyStage extends Stage {
 
         // Set up buttons.
         Button send = new TextButton("Send", skin);
-        Button button10000 = new TextButton("10.000€",skin);
-        Button button30000 = new TextButton("30.000€",skin);
-        Button button50000 = new TextButton("50.000€",skin);
-        Button button100000 = new TextButton("100.000€",skin);
+        Button button10000 = new TextButton("10.000€", skin);
+        Button button30000 = new TextButton("30.000€", skin);
+        Button button50000 = new TextButton("50.000€", skin);
+        Button button100000 = new TextButton("100.000€", skin);
         SelectBox playersBox = new SelectBox(skin);
-        TextField moneyToSend = new TextField("",skin);
-        playersBox.setItems("Player 1","Player 2","Player 3","Player 4");
+        TextField moneyToSend = new TextField("", skin);
+        playersBox.setItems("Player 1", "Player 2", "Player 3", "Player 4");
         //TODO: Remove current Player from list, Get Generated Player List from Player Actor
         // Add click listeners.
         send.addListener(new ClickListener() {
@@ -57,32 +56,28 @@ public class SendMoneyStage extends Stage {
             }
         });
 
-        button10000.addListener(new ClickListener()
-        {
+        button10000.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 moneyToSend.setText("10000");
 
             }
         });
-        button30000.addListener(new ClickListener()
-        {
+        button30000.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 moneyToSend.setText("30000");
 
             }
         });
-        button50000.addListener(new ClickListener()
-        {
+        button50000.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 moneyToSend.setText("50000");
 
             }
         });
-        button100000.addListener(new ClickListener()
-        {
+        button100000.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 moneyToSend.setText("100000");
@@ -91,7 +86,7 @@ public class SendMoneyStage extends Stage {
         });
         //TODO: Not high prio smoother design
         Label title = new Label("Send money", skin);
-        Label labelAmount = new Label("Amount:",skin);
+        Label labelAmount = new Label("Amount:", skin);
         Table table = new Table();
         Table moneyButtonTable = new Table();
         table.setWidth(this.getWidth());

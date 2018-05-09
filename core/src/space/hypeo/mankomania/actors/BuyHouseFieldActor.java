@@ -16,10 +16,10 @@ public class BuyHouseFieldActor extends FieldActor {
     private Texture texture;
     private int price;
 
-    public BuyHouseFieldActor(float x, float y,Texture texture, int price, Image fieldInfoImage) {
-        super(new Texture("forsale.jpg"), x, y, FIELD_SCALE, FIELD_SCALE,texture,price);
-        this.texture=texture;
-        this.price=price;
+    public BuyHouseFieldActor(float x, float y, Texture texture, int price, Image fieldInfoImage) {
+        super(new Texture("forsale.jpg"), x, y, FIELD_SCALE, FIELD_SCALE, texture, price);
+        this.texture = texture;
+        this.price = price;
         this.fieldInfoImage = fieldInfoImage;
     }
 

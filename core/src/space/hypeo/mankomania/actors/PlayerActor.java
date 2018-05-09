@@ -62,8 +62,7 @@ public class PlayerActor extends Image {
     }
 
     @Override
-    public void act(float deltaTime)
-    {
+    public void act(float deltaTime) {
         float xValue;
         float yValue;
         float zValue;
@@ -94,6 +93,7 @@ public class PlayerActor extends Image {
 
     /**
      * Moves the player a specific amount of steps on the board.
+     *
      * @param steps The amount of steps to move.
      */
     public void move(int steps) {

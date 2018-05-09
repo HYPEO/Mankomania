@@ -35,9 +35,8 @@ public class StageFactory {
     public static Stage getSendMoneyStage(final Viewport viewport, final StageManager stageManager) {
         return new SendMoneyStage(viewport, stageManager);
     }
-    
-    public static Stage getTitleStage(final Viewport viewport, final StageManager stageManager)
-    {
+
+    public static Stage getTitleStage(final Viewport viewport, final StageManager stageManager) {
         return new TitleStage(stageManager, viewport);
     }
 }

@@ -6,12 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
-import space.hypeo.mankomania.StageFactory;
-
 /**
  * A dummy field used as a placeholder.
  */
-public class EmptyFieldActor extends FieldActor{
+public class EmptyFieldActor extends FieldActor {
     private static final float FIELD_SCALE = 30f;
     Texture texture;
     int price;
@@ -20,14 +18,14 @@ public class EmptyFieldActor extends FieldActor{
 
     /**
      * Creates a new instance of the EmptyFieldActor class.
+     *
      * @param x Position on the x-Axis.
      * @param y Position on the y-Axis.
      */
-    public EmptyFieldActor(float x, float y,Texture texture, int price, Image fieldInfoImage)
-    {
-        super(new Texture("wall.jpg"), x, y, FIELD_SCALE, FIELD_SCALE,texture,price);
-        this.texture=texture;
-        this.price=price;
+    public EmptyFieldActor(float x, float y, Texture texture, int price, Image fieldInfoImage) {
+        super(new Texture("wall.jpg"), x, y, FIELD_SCALE, FIELD_SCALE, texture, price);
+        this.texture = texture;
+        this.price = price;
         this.fieldInfoImage = fieldInfoImage;
     }
 

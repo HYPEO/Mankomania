@@ -26,7 +26,7 @@ public class MapStage extends Stage {
     private static final float MARGIN_X = 40f;
     private static final float MARGIN_Y = 80f;
     private static final float FIELD_DISTANCE = 40f;
-    private static Texture texture = new Texture ("badlogic.jpg");
+    private static Texture texture = new Texture("badlogic.jpg");
     private static Image fieldInfoImage;
 
     public MapStage(Viewport viewport, StageManager stageManager) {
@@ -72,7 +72,7 @@ public class MapStage extends Stage {
         });
         this.addActor(close);
         this.addActor(fieldInfoImage);
-        
+
     }
 
     /**
@@ -100,13 +100,11 @@ public class MapStage extends Stage {
 
             // Create new Field
             FieldActor currentField;
-            if(random == 0){
-                currentField = new BuyHouseFieldActor( xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("RumsBuDee.png"), (int) (Math.random() * 50 + 10), fieldInfoImage);
-            }
-            else if (random ==1){
-                currentField = new LoseMoneyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture( "6dice.png"), (int) (Math.random() * 10), fieldInfoImage);
-            }
-            else{
+            if (random == 0) {
+                currentField = new BuyHouseFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("RumsBuDee.png"), (int) (Math.random() * 50 + 10), fieldInfoImage);
+            } else if (random == 1) {
+                currentField = new LoseMoneyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("6dice.png"), (int) (Math.random() * 10), fieldInfoImage);
+            } else {
                 currentField = new EmptyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("transparent.png"), 0, fieldInfoImage);
             }
 
