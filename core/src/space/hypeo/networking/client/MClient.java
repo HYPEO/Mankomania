@@ -13,7 +13,7 @@ import space.hypeo.networking.Endpoint;
 import space.hypeo.networking.IClientConnector;
 import space.hypeo.networking.IPlayerConnector;
 import space.hypeo.networking.packages.Player;
-import space.hypeo.networking.packages.Players;
+import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
@@ -91,12 +91,12 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
                 Notification notification = (Notification) object;
                 Log.info("Client received: " + notification.toString());
 
-            } else if( object instanceof Players ) {
+            } else if( object instanceof Lobby ) {
                 /*
                  * receive new list of Player:
                  * after connecting or disconnecting clients
                  */
-                players = (Players) object;
+                lobby = (Lobby) object;
                 Log.info("Client received updated list of player");
             }
         }
@@ -190,7 +190,7 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
     }
 
     @Override
-    public Players registeredPlayers() {
-        return players;
+    public Lobby registeredPlayers() {
+        return lobby;
     }
 }

@@ -1,7 +1,7 @@
 package space.hypeo.networking;
 
 import space.hypeo.networking.packages.Player;
-import space.hypeo.networking.packages.Players;
+import space.hypeo.networking.packages.Lobby;
 
 /**
  * Class Endpoint contains fields,
@@ -10,7 +10,7 @@ import space.hypeo.networking.packages.Players;
 public abstract class Endpoint {
 
     // The data structure that holds the player-list.
-    protected Players players;
+    protected Lobby lobby;
 
     // nickname of a player
     protected String nick;
@@ -19,6 +19,6 @@ public abstract class Endpoint {
 
     public Endpoint() {
         player = null;
-        players = new Players();
+        lobby = new Lobby();
     }
 }

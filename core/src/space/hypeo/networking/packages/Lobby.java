@@ -8,11 +8,12 @@ import space.hypeo.networking.network.Network;
 
 
 /**
- * The class Players represents the list of player that joined the game,
+ * This class represents the list of player that joined the game,
  * including the host itself.
- * This class is nesessary to send the list over the network.
+ * This class is nesessary to send the list over the network,
+ * to keep the clients update which players joint or left the game lobby.
  */
-public class Players {
+public class Lobby {
 
     /**
      * The data structure that holds the player-list.
@@ -21,7 +22,7 @@ public class Players {
      */
     protected HashMap<String, Player> data;
 
-    public Players() {
+    public Lobby() {
         data = new HashMap<String, Player>();
     }
 

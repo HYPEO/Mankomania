@@ -8,7 +8,7 @@ import space.hypeo.networking.Endpoint;
 import space.hypeo.networking.IHostConnector;
 import space.hypeo.networking.IPlayerConnector;
 import space.hypeo.networking.packages.Player;
-import space.hypeo.networking.packages.Players;
+import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
@@ -40,7 +40,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
         public void connected(Connection connection) {
             super.connected(connection);
 
-            if( players.ifFull() ) {
+            if( lobby.ifFull() ) {
                 // game is full
                 connection.sendTCP(new Notification("Sorry, no more space for additional player left"));
                 return;
@@ -50,10 +50,10 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
             Log.info("Added new Client with: " + newPlayer.toString());
 
             // TODO: get the "real" nick of recently connected player
-            players.add(newPlayer.getAddress(), newPlayer);
+            lobby.add(newPlayer.getAddress(), newPlayer);
             connection.sendTCP(new Notification("You are connected ..."));
 
-            players.print();
+            lobby.print();
             // TODO: broadcast, provide current list of players
             //server.sendToAllTCP(players);
         }
@@ -68,9 +68,9 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
 
             Player leavingPlayer = new Player(connection, Network.Role.client);
 
-            players.remove(leavingPlayer);
+            lobby.remove(leavingPlayer);
 
-            players.print();
+            lobby.print();
             // TODO: broadcast, provide current list of players
             //server.sendToAllTCP(players);
         }
@@ -110,7 +110,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
     @Override
     public void endGame() {
         server.sendToAllTCP(new Notification("game will be closed now..."));
-        players = null;
+        lobby = null;
     }
 
     @Override
@@ -139,9 +139,9 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
 
         nick = "the_mighty_host";
         player = new Player("/" + selfAddress, selfAddress, Network.PORT_TCP, Network.Role.host);
-        players.add(nick, player);
+        lobby.add(nick, player);
 
-        players.print();
+        lobby.print();
     }
 
     @Override
@@ -175,7 +175,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
     }
 
     @Override
-    public Players registeredPlayers() {
-        return players;
+    public Lobby registeredPlayers() {
+        return lobby;
     }
 }

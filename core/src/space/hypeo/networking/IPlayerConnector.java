@@ -1,6 +1,6 @@
 package space.hypeo.networking;
 
-import space.hypeo.networking.packages.Players;
+import space.hypeo.networking.packages.Lobby;
 
 
 /**
@@ -53,6 +53,6 @@ public interface IPlayerConnector {
     /**
      * Gets the list of players registered for the Game.
      */
-    public Players registeredPlayers();
+    public Lobby registeredPlayers();
 
 }
