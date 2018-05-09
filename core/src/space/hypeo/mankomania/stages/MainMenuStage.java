@@ -22,47 +22,57 @@ import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
 
 /**
- * Created by pichlermarc on 09.05.2018.
+ * Holds all widgets on the main menu.
  */
 public class MainMenuStage extends Stage {
-    StageManager stageManager;
-    private final Button launch;
-    private final Button host;
-    private final Button join;
+    private StageManager stageManager;
+    private Button launch;
+    private Button host;
+    private Button join;
+    private Label title;
+    private Table layout;
+    private final Viewport viewport;
 
-    public MainMenuStage(StageManager stageManager, Viewport viewport)
-    {
+    public MainMenuStage(StageManager stageManager, Viewport viewport) {
         super(viewport);
-        
+
         this.stageManager = stageManager;
+        this.viewport = viewport;
+
+        setupClickListeners();
+        setupLayout();
+
+        this.addActor(layout);
+    }
+
+    private void createWidgets()
+    {
 
         // Set up skin
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
+        // Set up Title.
+        title = new Label("MANKOMANIA (insert logo here)", skin);
 
         // Set up buttons.
         launch = new TextButton("Launch Game (offline)", skin);
         host = new TextButton("Host Game", skin);
         join = new TextButton("Join Game", skin);
-        Button testSendMoney = new TextButton("Test Send money",skin); // TODO: Temporary button, remove this.
+    }
 
-
-        Label title = new Label("MANKOMANIA (insert logo here)", skin);
-
-        // Add click listeners.
-        launch.addListener(new ClickListener() {
+    private ClickListener launchClickListener()
+    {
+        return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.push(StageFactory.getMapStage(viewport, stageManager));
             }
-        });
+        };
+    }
 
-        testSendMoney.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                stageManager.push(StageFactory.getSendMoneyStage(viewport, stageManager));
-            }
-        });
-
-        host.addListener(new ClickListener() {
+    private ClickListener hostClickListener()
+    {
+        return new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 
                 Log.info("Try to start server...");
@@ -72,10 +82,12 @@ public class MainMenuStage extends Stage {
 
                 Log.info("Server has started successfully");
             }
+        };
+    }
 
-        });
-
-        join.addListener(new ClickListener() {
+    private ClickListener clientClickListener()
+    {
+        return new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 
                 Log.info("Try to start client...");
@@ -87,45 +99,45 @@ public class MainMenuStage extends Stage {
 
                 List<InetAddress> foundHosts = mClient.discoverHosts();
 
-                if( foundHosts == null || foundHosts.isEmpty() ) {
+                if (foundHosts == null || foundHosts.isEmpty()) {
                     Log.info("No hosts found!");
                     return;
                 }
 
                 Log.info("Discovered Network: Host-List contains:");
 
-                for( InetAddress iAddr : foundHosts ) {
+                for (InetAddress iAddr : foundHosts) {
                     Log.info("  host: " + iAddr.toString());
                 }
 
                 InetAddress firstHost = foundHosts.get(0);
 
                 Log.info("Try to connect to first host " + firstHost.toString() + "...");
-
                 mClient.connectToHost(firstHost);
-
-
             }
-        });
+        };
+    }
 
-        Table table = new Table();
-        table.setWidth(this.getWidth());
-        table.align(Align.center);
-        table.setPosition(0, this.getHeight() - 200);
-        table.padTop(50);
-        table.add(title).width(300).height(100);
-        table.row();
-        table.add(launch).width(300).height(100);
-        table.row();
-        table.add(host).width(300).height(100);
-        table.row();
-        table.add(join).width(300).height(100);
-        table.row();
-        table.add(testSendMoney).width(300).height(100);
-        table.row();
+    private void setupClickListeners()
+    {
+        launch.addListener(this.launchClickListener());
+        host.addListener(this.hostClickListener());
+        join.addListener(clientClickListener());
+    }
 
-        // Add buttons to stage.
-        this.addActor(table);
-
+    private void setupLayout() {
+        layout = new Table();
+        layout.setWidth(this.getWidth());
+        layout.align(Align.center);
+        layout.setPosition(0, this.getHeight() - 200);
+        layout.padTop(50);
+        layout.add(title).width(300).height(100);
+        layout.row();
+        layout.add(launch).width(300).height(100);
+        layout.row();
+        layout.add(host).width(300).height(100);
+        layout.row();
+        layout.add(join).width(300).height(100);
+        layout.row();
     }
 }
