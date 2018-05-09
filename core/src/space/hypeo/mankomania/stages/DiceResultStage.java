@@ -17,28 +17,25 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.StageManager;
 
-/**
- * Created by pichlermarc on 09.05.2018.
- */
 public class DiceResultStage extends Stage {
     public DiceResultStage(Viewport viewport, StageManager stageManager, int moveFields) {
         super(viewport);
 
         // Set up skin
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-        Texture diceResult = new Texture("dices/dice" + moveFields + ".png");
+        Texture diceResult = new Texture("dice/dice" + moveFields + ".png");
         Drawable dice = new TextureRegionDrawable(new TextureRegion(diceResult));
 
         // Set up button
         ImageButton diceButton = new ImageButton(dice);
 
-        Label title = new Label("  You diced " + moveFields + " - tap dice to move", skin);
+        Label title = new Label("  You rolled a " + moveFields + " - tap dice to move", skin);
 
         // Add click listeners.
         diceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stageManager.remove(stageManager.getCurrentStage());
+                stageManager.remove(DiceResultStage.this);
             }
         });
 
