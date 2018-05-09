@@ -21,18 +21,15 @@ public class PlayerActor extends Image {
     // Current player state.
     private int balance;
     private boolean isLocal;
-    private String playerID;
-
-    // For demostration purposes only. TODO: Remove!
-    private float timeElapsed = 0;
-    private Random die = new Random();
 
     // For dice feature
+    private float timeElapsed = 0;
+    private Random die = new Random();
     private static final float EARTH_GRAVITY = 9.81f;
-    private int moveFields;
+
     private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
-    final StageManager manager;
-    final Viewport viewport;
+    private final StageManager manager;
+    private final Viewport viewport;
 
     /**
      * Creates a new instance of a Class that implementaion for a Player.
@@ -82,7 +79,7 @@ public class PlayerActor extends Image {
             if (gForce > GRAVITY_FORCE_THRESHOLD) {
 
                 // TODO: check if it is the players turn, then move
-                moveFields = die.nextInt(6) + 1;
+                int moveFields = die.nextInt(6) + 1;
                 this.move(moveFields);
                 manager.push(StageFactory.getDiceResultStage(viewport, manager, moveFields));
 
