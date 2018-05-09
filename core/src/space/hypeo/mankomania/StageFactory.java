@@ -23,20 +23,17 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 import java.net.InetAddress;
-import java.util.HashMap;
 import java.util.List;
 import space.hypeo.mankomania.actors.BuyHouseFieldActor;
 import space.hypeo.mankomania.actors.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.EmptyFieldActor;
 import space.hypeo.mankomania.actors.FieldActor;
 import space.hypeo.mankomania.actors.PlayerActor;
+import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
-import space.hypeo.networking.packages.Lobby;
-import space.hypeo.networking.packages.Player;
-
 
 /**
  * Creates all the stages (views) for the game.
@@ -48,10 +45,6 @@ public class StageFactory {
     private static final float FIELD_DISTANCE = 40f;
     private static Texture texture = new Texture ("badlogic.jpg");
     private static Image fieldInfoImage;
-
-    private static MHost mHost = null;
-    private static MClient mClient = null;
-
 
     /**
      * Generates a map stage (view).
@@ -223,10 +216,7 @@ public class StageFactory {
             public void clicked(InputEvent event, float x, float y) {
 
                 Log.info("Try to start server...");
-
-                mHost = new MHost();
-                mHost.startServer();
-
+                MHost.getInstance().startServer();
                 Log.info("Server has started successfully");
 
                 stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
@@ -238,10 +228,7 @@ public class StageFactory {
             public void clicked(InputEvent event, float x, float y) {
 
                 Log.info("Try to start client...");
-
-                mClient = new MClient();
-                mClient.startClient();
-
+                MClient.getInstance().startClient();
                 Log.info("Client has started successfully");
 
                 stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
@@ -409,61 +396,7 @@ public class StageFactory {
      */
     public static Stage getDiscoveredHostsStage(final Viewport viewport, final StageManager stageManager)
     {
-        Stage discoveredHostsStage = new Stage(viewport);
-
-        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-
-        List<InetAddress> foundHosts = mClient.discoverHosts();
-
-        // show avaliable hosts as buttons in table
-        Table tblDiscoveredHosts = new Table();
-
-        tblDiscoveredHosts.setWidth(discoveredHostsStage.getWidth());
-        tblDiscoveredHosts.align(Align.center);
-        tblDiscoveredHosts.setPosition(0, discoveredHostsStage.getHeight() - 200);
-        tblDiscoveredHosts.padTop(50);
-
-        Log.info("Discovered Network: Host-List contains:");
-
-        tblDiscoveredHosts.add(new Label("Discovered Hosts:", skin)).width(300).height(100);
-        tblDiscoveredHosts.row();
-
-        if( foundHosts != null && ! foundHosts.isEmpty() ) {
-
-            // TODO: create clickable, scrolable list
-            for (InetAddress hostAddr : foundHosts) {
-                Log.info("  host: " + hostAddr.toString());
-
-                Button btnHost = new TextButton("Host " + hostAddr.toString(), skin);
-
-                btnHost.addListener(new ClickListener() {
-                    public void clicked(InputEvent event, float x, float y) {
-
-                        Log.info("Try to connect to host " + hostAddr.toString() + "...");
-
-                        mClient.connectToHost(hostAddr);
-
-                        stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
-                    }
-
-                });
-
-                tblDiscoveredHosts.add(btnHost).width(300).height(100);
-                tblDiscoveredHosts.row();
-            }
-
-        } else {
-            Log.info("No hosts found!");
-
-            Button btnNoHost = new TextButton("No Hosts found ", skin);
-            tblDiscoveredHosts.add(btnNoHost).width(300).height(100);
-            tblDiscoveredHosts.row();
-        }
-
-        // Add buttons to stage.
-        discoveredHostsStage.addActor(tblDiscoveredHosts);
-
-        return discoveredHostsStage;
+        return new DiscoveredHostsStage(stageManager, viewport);
     }
 
 }

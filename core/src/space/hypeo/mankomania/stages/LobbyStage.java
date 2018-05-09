@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 
 import java.util.HashMap;
 
@@ -19,25 +20,18 @@ import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.RectangleActor;
 import space.hypeo.networking.Endpoint;
 import space.hypeo.networking.WhatAmI;
+
 import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.packages.Player;
 
+import com.esotericsoftware.minlog.Log;
+
 
 public class LobbyStage extends Stage {
     StageManager stageManager;
-
-    private static MHost mHost = null;
-    private static MClient mClient = null;
-
-    
-
-    /*if( WhatAmI. ) {
-
-    }*/
-    //private static Endpoint self = WhatAmI.;
 
     public LobbyStage(StageManager stageManager, Viewport viewport) {
         super(viewport);
@@ -45,25 +39,29 @@ public class LobbyStage extends Stage {
 
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
-        //Image imgLobby = new
 
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         Label lblLobby = new Label("GAME LOBBY", skin);
 
-        Table tblPlayers = new Table();
-        tblPlayers.setWidth(this.getWidth());
-        tblPlayers.align(Align.center);
-        tblPlayers.setPosition(0, this.getHeight() - 200);
-        tblPlayers.padTop(50);
-        tblPlayers.add(lblLobby).width(300).height(100);
-        tblPlayers.row();
+        Table tblLobby = new Table();
+        tblLobby.setWidth(this.getWidth());
+        tblLobby.align(Align.center);
+        tblLobby.setPosition(0, this.getHeight() - 200);
+        tblLobby.padTop(50);
+        tblLobby.add(lblLobby).width(300).height(100);
+        tblLobby.row();
 
-        Lobby lobby;
-        if( mHost != null ) {
-            lobby = mHost.registeredPlayers();
-        } else {
-            lobby = mClient.registeredPlayers();
+        Lobby lobby = null;
+        if( WhatAmI.getInstance().getRole() == Network.Role.HOST ) {
+            lobby = MHost.getInstance().registeredPlayers();
+        } else if( WhatAmI.getInstance().getRole() == Network.Role.CLIENT ) {
+            lobby = MClient.getInstance().registeredPlayers();
+        }
+
+        if( lobby == null ) {
+            Log.error("LobbyStage: lobby must not be null!");
+            return;
         }
 
         // TODO: game losby has to be updated after changes in collection 'players'
@@ -79,8 +77,8 @@ public class LobbyStage extends Stage {
 
             });
 
-            tblPlayers.add(btnPlayer).width(300).height(100);
-            tblPlayers.row();
+            tblLobby.add(btnPlayer).width(300).height(100);
+            tblLobby.row();
 
             index++;
         }
@@ -90,7 +88,7 @@ public class LobbyStage extends Stage {
 
         // Add actors.
         this.addActor(background);
-        this.addActor(tblPlayers);
+        this.addActor(tblLobby);
 
         // Add listener for click events.
         this.addListener(new ClickListener() {

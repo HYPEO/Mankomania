@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import space.hypeo.networking.Endpoint;
 import space.hypeo.networking.IHostConnector;
 import space.hypeo.networking.IPlayerConnector;
+import space.hypeo.networking.WhatAmI;
 import space.hypeo.networking.packages.Player;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
@@ -36,6 +37,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
      */
     private MHost() {
         super();
+        WhatAmI.getInstance().setRole(Network.Role.HOST);
     }
 
     public static MHost getInstance() {
@@ -45,6 +47,9 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
         return instance;
     }
 
+    /**
+     * This class handles the connection events with the server.
+     */
     private class ServerListener extends Listener {
 
         /**

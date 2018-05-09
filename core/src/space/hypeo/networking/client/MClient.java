@@ -60,6 +60,9 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
         return instance;
     }
 
+    /**
+     * This class handles the connection events with the client.
+     */
     private class ClientListener extends Listener {
 
         /**
