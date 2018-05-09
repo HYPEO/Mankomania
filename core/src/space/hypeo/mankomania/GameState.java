@@ -1,7 +1,8 @@
 package space.hypeo.mankomania;
 
 import java.util.List;
-import space.hypeo.mankomania.actors.PlayerActor;
+
+import space.hypeo.mankomania.actors.player.PlayerActor;
 
 /**
  * Created by pichlermarc on 07.04.2018.

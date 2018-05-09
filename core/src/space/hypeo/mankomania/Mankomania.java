@@ -15,7 +15,7 @@ public class Mankomania extends ApplicationAdapter {
     @Override
     public void create() {
         OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false,480, 800);
+        camera.setToOrtho(false, 480, 800);
         ExtendViewport viewport = new ExtendViewport(480, 800, camera);
         manager = new StageManager();
         manager.push(StageFactory.getMainMenu(viewport, manager));

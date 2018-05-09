@@ -1,49 +1,56 @@
-package space.hypeo.mankomania.actors;
+package space.hypeo.mankomania.actors.fields;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+
+import space.hypeo.mankomania.actors.player.PlayerActor;
 
 /**
  * Represents a Field.
  */
-public abstract class FieldActor extends Image{
+public abstract class FieldActor extends Image {
     FieldActor nextField;
     private float x;
-    private  float y;
-    private int price;
+    private float y;
+    protected int price;
     private Texture info;
+    private Image fieldDetailImage;
 
     /**
      * Creates a new instance of the FieldActor Class.
+     *
      * @param texture Texture that represents the field on screen.
-     * @param x X position of the Actor.
-     * @param y Y position of the Actor.
-     * @param width Width of the Actor.
-     * @param height Height of the Actor.
+     * @param x       X position of the Actor.
+     * @param y       Y position of the Actor.
+     * @param width   Width of the Actor.
+     * @param height  Height of the Actor.
      */
-    public FieldActor(Texture texture, float x, float y, float width, float height, Texture info, int price)
-    {
+    public FieldActor(Texture texture, float x, float y, float width, float height, Texture info, int price, Image fieldDetailImage) {
         super(texture);
         this.setBounds(x, y, width, height);
-        this.x=x;
-        this.y=y;
-        this.info=info;
-        this.price=price;
+        this.x = x;
+        this.y = y;
+        this.info = info;
+        this.price = price;
+        this.fieldDetailImage = fieldDetailImage;
     }
 
     /**
      * Triggers this field for the player.
+     *
      * @param player
      */
     public abstract void trigger(PlayerActor player);
 
 
-
     /**
      * Shows the Field Picture in the middle of the map
      */
-    public abstract void fieldInfo();
-
+    protected void showFieldDetail() {
+        fieldDetailImage.setDrawable(new SpriteDrawable(new Sprite(info)));
+    }
 
     /**
      * Gets the FieldBehavior of the field n steps from this one.
@@ -94,14 +101,6 @@ public abstract class FieldActor extends Image{
 
     public void setPrice(int price) {
         this.price = price;
-    }
-
-    public Texture getInfo() {
-        return info;
-    }
-
-    public void setInfo(Texture info) {
-        this.info = info;
     }
 
 }
