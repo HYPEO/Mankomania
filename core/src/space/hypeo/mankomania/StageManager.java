@@ -8,38 +8,30 @@ import java.util.Stack;
 public class StageManager {
     private Stack<Stage> stages;
 
-    public StageManager()
-    {
+    public StageManager() {
         stages = new Stack<Stage>();
     }
 
-    private Stage pop()
-    {
+    private Stage pop() {
         Stage stage = stages.pop();
         Gdx.input.setInputProcessor(getCurrentStage());
         return stage;
     }
 
-    public void push(Stage stage)
-    {
+    public void push(Stage stage) {
         stages.push(stage);
         Gdx.input.setInputProcessor(getCurrentStage());
     }
 
-    public Stage getCurrentStage()
-    {
+    public Stage getCurrentStage() {
         return stages.peek();
     }
 
-    public boolean remove(Stage stage)
-    {
-        if(stage == stages.peek())
-        {
+    public boolean remove(Stage stage) {
+        if (stage == stages.peek()) {
             pop();
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
