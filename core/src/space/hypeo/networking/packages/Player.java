@@ -88,6 +88,6 @@ public class Player {
         return "Hostname: '" + hostName
                 + "', Address: '" + address
                 + "', Port: " + port
-                + "', Role: '" + (role == Network.Role.host ? "Host'" : "Client'");
+                + "', Role: '" + (role == Network.Role.HOST ? "Host'" : "Client'");
     }
 }

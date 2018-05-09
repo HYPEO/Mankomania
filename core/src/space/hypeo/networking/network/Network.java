@@ -24,7 +24,7 @@ public class Network {
     // max time in milli-second to try to connect
     public static final int TIMEOUT_MS = 5000;
 
-    public enum Role { host, client };
+    public enum Role { HOST, CLIENT, NOT_CONNECTED };
 
     /**
      * Register objects for server|client that are going to be sent over the network.

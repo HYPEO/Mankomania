@@ -21,8 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.kryonet.EndPoint;
-import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import java.net.InetAddress;
 import java.util.HashMap;
@@ -32,11 +30,13 @@ import space.hypeo.mankomania.actors.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.EmptyFieldActor;
 import space.hypeo.mankomania.actors.FieldActor;
 import space.hypeo.mankomania.actors.PlayerActor;
+import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
+import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.packages.Player;
-import space.hypeo.networking.packages.Players;
+
 
 /**
  * Creates all the stages (views) for the game.
@@ -396,50 +396,7 @@ public class StageFactory {
      */
     public static Stage getLobbyStage(final Viewport viewport, final StageManager stageManager)
     {
-        Stage lobbyStage = new Stage(viewport);
-
-        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-
-        Label lblLobby = new Label("GAME LOBBY", skin);
-
-        Table tblPlayers = new Table();
-        tblPlayers.setWidth(lobbyStage.getWidth());
-        tblPlayers.align(Align.center);
-        tblPlayers.setPosition(0, lobbyStage.getHeight() - 200);
-        tblPlayers.padTop(50);
-        tblPlayers.add(lblLobby).width(300).height(100);
-        tblPlayers.row();
-
-        Players players;
-        if( mHost != null ) {
-            players = mHost.registeredPlayers();
-        } else {
-            players = mClient.registeredPlayers();
-        }
-
-        // TODO: game losby has to be updated after changes in collection 'players'
-        int index = 1;
-        for( HashMap.Entry<String, Player> entry : players.getData().entrySet() ) {
-
-            Button btnPlayer = new TextButton(index + ". " + entry.getKey(), skin);
-
-            btnPlayer.addListener(new ClickListener() {
-                public void clicked(InputEvent event, float x, float y) {
-                    // TODO: add behavior
-                }
-
-            });
-
-            tblPlayers.add(btnPlayer).width(300).height(100);
-            tblPlayers.row();
-
-            index++;
-        }
-
-        // Add buttons to stage.
-        lobbyStage.addActor(tblPlayers);
-
-        return lobbyStage;
+        return new LobbyStage(stageManager, viewport);
     }
 
     /**

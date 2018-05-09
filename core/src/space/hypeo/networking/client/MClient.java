@@ -19,6 +19,12 @@ import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 
+/**
+ * This class represents the client process on a device.
+ * It is implemented as singleton.
+ * If you don't know, if you're client or host, call
+ * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
+ */
 public class MClient extends Endpoint implements IPlayerConnector, IClientConnector {
 
     // TODO: next block 'static' has no effect ?!?
@@ -28,6 +34,8 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
     }
 
     private com.esotericsoftware.kryonet.Client client;
+
+    private static MClient instance;
 
     private List<InetAddress> discoveredHosts = null;
 
@@ -40,9 +48,16 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
     /**
      * Constructs instance of class MClient
      */
-    public MClient() {
+    private MClient() {
         super();
         // TODO: set nick and player
+    }
+
+    public static MClient getInstance() {
+        if( instance == null ) {
+            instance = new MClient();
+        }
+        return instance;
     }
 
     private class ClientListener extends Listener {
@@ -55,7 +70,7 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
         public void connected(Connection connection) {
             super.connected(connection);
 
-            hostInfo = new Player(connection, Network.Role.host);
+            hostInfo = new Player(connection, Network.Role.HOST);
             Log.info("hostInfo = " + hostInfo.toString());
             connectedToHost = connection.getRemoteAddressTCP().getAddress();
             Log.info("connectedToHost = " + connectedToHost);

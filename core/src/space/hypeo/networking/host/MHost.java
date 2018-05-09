@@ -19,15 +19,30 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
+/**
+ * This class represents the host process on a device.
+ * It is implemented as singleton.
+ * If you don't know, if you're client or host, call
+ * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
+ */
 public class MHost extends Endpoint implements IPlayerConnector, IHostConnector {
 
     private com.esotericsoftware.kryonet.Server server;
 
+    private static MHost instance;
+
     /**
      * Constructs instance of class MHost
      */
-    public MHost() {
+    private MHost() {
         super();
+    }
+
+    public static MHost getInstance() {
+        if( instance == null ) {
+            instance = new MHost();
+        }
+        return instance;
     }
 
     private class ServerListener extends Listener {
@@ -46,7 +61,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
                 return;
             }
 
-            Player newPlayer = new Player(connection, Network.Role.client);
+            Player newPlayer = new Player(connection, Network.Role.CLIENT);
             Log.info("Added new Client with: " + newPlayer.toString());
 
             // TODO: get the "real" nick of recently connected player
@@ -66,7 +81,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            Player leavingPlayer = new Player(connection, Network.Role.client);
+            Player leavingPlayer = new Player(connection, Network.Role.CLIENT);
 
             lobby.remove(leavingPlayer);
 
@@ -138,7 +153,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
         }
 
         nick = "the_mighty_host";
-        player = new Player("/" + selfAddress, selfAddress, Network.PORT_TCP, Network.Role.host);
+        player = new Player("/" + selfAddress, selfAddress, Network.PORT_TCP, Network.Role.HOST);
         lobby.add(nick, player);
 
         lobby.print();

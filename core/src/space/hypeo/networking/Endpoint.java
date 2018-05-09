@@ -10,12 +10,12 @@ import space.hypeo.networking.packages.Lobby;
 public abstract class Endpoint {
 
     // The data structure that holds the player-list.
-    protected Lobby lobby;
+    protected static Lobby lobby;
 
     // nickname of a player
-    protected String nick;
+    protected static String nick;
     // network data of player
-    protected Player player;
+    protected static Player player;
 
     public Endpoint() {
         player = null;
