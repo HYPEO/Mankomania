@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.StageManager;
-import space.hypeo.mankomania.actors.BuyHouseFieldActor;
+import space.hypeo.mankomania.actors.BuyHotelFieldActor;
 import space.hypeo.mankomania.actors.EmptyFieldActor;
 import space.hypeo.mankomania.actors.FieldActor;
 import space.hypeo.mankomania.actors.LoseMoneyFieldActor;
@@ -101,7 +101,7 @@ public class MapStage extends Stage {
             // Create new Field
             FieldActor currentField;
             if (random == 0) {
-                currentField = new BuyHouseFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("RumsBuDee.png"), (int) (Math.random() * 50 + 10), fieldInfoImage);
+                currentField = new BuyHotelFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("RumsBuDee.png"), (int) (Math.random() * 50 + 10), fieldInfoImage);
             } else if (random == 1) {
                 currentField = new LoseMoneyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("6dice.png"), (int) (Math.random() * 10), fieldInfoImage);
             } else {
