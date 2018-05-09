@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Created by pichlermarc on 26.04.2018.
  */
 public class RectangleActor extends Actor {
-    ShapeRenderer rectangleRenderer;
+    private ShapeRenderer rectangleRenderer;
 
     public RectangleActor(float x, float y, float width, float height) {
         //Set up rectangle.

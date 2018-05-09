@@ -1,7 +1,9 @@
 package space.hypeo.mankomania.actors;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 /**
  * Represents a Field.
@@ -10,8 +12,9 @@ public abstract class FieldActor extends Image {
     FieldActor nextField;
     private float x;
     private float y;
-    private int price;
+    protected int price;
     private Texture info;
+    private Image fieldDetailImage;
 
     /**
      * Creates a new instance of the FieldActor Class.
@@ -22,13 +25,14 @@ public abstract class FieldActor extends Image {
      * @param width   Width of the Actor.
      * @param height  Height of the Actor.
      */
-    public FieldActor(Texture texture, float x, float y, float width, float height, Texture info, int price) {
+    public FieldActor(Texture texture, float x, float y, float width, float height, Texture info, int price, Image fieldDetailImage) {
         super(texture);
         this.setBounds(x, y, width, height);
         this.x = x;
         this.y = y;
         this.info = info;
         this.price = price;
+        this.fieldDetailImage = fieldDetailImage;
     }
 
     /**
@@ -42,8 +46,9 @@ public abstract class FieldActor extends Image {
     /**
      * Shows the Field Picture in the middle of the map
      */
-    public abstract void fieldInfo();
-
+    protected void showFieldDetail() {
+        fieldDetailImage.setDrawable(new SpriteDrawable(new Sprite(info)));
+    }
 
     /**
      * Gets the FieldBehavior of the field n steps from this one.
@@ -94,14 +99,6 @@ public abstract class FieldActor extends Image {
 
     public void setPrice(int price) {
         this.price = price;
-    }
-
-    public Texture getInfo() {
-        return info;
-    }
-
-    public void setInfo(Texture info) {
-        this.info = info;
     }
 
 }
