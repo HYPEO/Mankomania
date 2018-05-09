@@ -1,9 +1,11 @@
-package space.hypeo.mankomania.actors;
+package space.hypeo.mankomania.actors.fields;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+
+import space.hypeo.mankomania.actors.player.PlayerActor;
 
 /**
  * Represents a Field.

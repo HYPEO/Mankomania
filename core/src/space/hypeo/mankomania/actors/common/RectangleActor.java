@@ -1,4 +1,4 @@
-package space.hypeo.mankomania.actors;
+package space.hypeo.mankomania.actors.common;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;

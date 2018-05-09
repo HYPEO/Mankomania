@@ -12,11 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.StageManager;
-import space.hypeo.mankomania.actors.BuyHotelFieldActor;
-import space.hypeo.mankomania.actors.EmptyFieldActor;
-import space.hypeo.mankomania.actors.FieldActor;
-import space.hypeo.mankomania.actors.LoseMoneyFieldActor;
-import space.hypeo.mankomania.actors.PlayerActor;
+import space.hypeo.mankomania.actors.fields.BuyHotelFieldActor;
+import space.hypeo.mankomania.actors.fields.EmptyFieldActor;
+import space.hypeo.mankomania.actors.fields.FieldActor;
+import space.hypeo.mankomania.actors.fields.LoseMoneyFieldActor;
+import space.hypeo.mankomania.actors.player.PlayerActor;
 
 /**
  * Created by pichlermarc on 09.05.2018.

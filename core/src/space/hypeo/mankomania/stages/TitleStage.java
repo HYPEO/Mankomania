@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.StageManager;
-import space.hypeo.mankomania.actors.RectangleActor;
+import space.hypeo.mankomania.actors.common.RectangleActor;
 
 /**
  * Created by pichlermarc on 25.04.2018.

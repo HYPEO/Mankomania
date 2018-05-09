@@ -1,8 +1,10 @@
-package space.hypeo.mankomania.actors;
+package space.hypeo.mankomania.actors.fields;
 
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
+import space.hypeo.mankomania.actors.player.PlayerActor;
 
 /**
  * A dummy field used as a placeholder.

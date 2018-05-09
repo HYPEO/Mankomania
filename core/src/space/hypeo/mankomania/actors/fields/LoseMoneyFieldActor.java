@@ -1,7 +1,9 @@
-package space.hypeo.mankomania.actors;
+package space.hypeo.mankomania.actors.fields;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
+import space.hypeo.mankomania.actors.player.PlayerActor;
 
 public class LoseMoneyFieldActor extends FieldActor {
     private static final float FIELD_SCALE = 30f;

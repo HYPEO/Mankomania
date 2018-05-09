@@ -1,4 +1,4 @@
-package space.hypeo.mankomania.actors;
+package space.hypeo.mankomania.actors.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,6 +9,7 @@ import java.util.Random;
 
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
+import space.hypeo.mankomania.actors.fields.FieldActor;
 
 /**
  * Class that represents a Player.
