@@ -8,11 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class BuyHouseFieldActor extends FieldActor {
     private static final float FIELD_SCALE = 30f;
     private int x = 0;
-    private int price;
 
     public BuyHouseFieldActor(float x, float y, Texture texture, int price, Image fieldInfoImage) {
         super(new Texture("forsale.jpg"), x, y, FIELD_SCALE, FIELD_SCALE, texture, price, fieldInfoImage);
-        this.price = price;
     }
 
     @Override
