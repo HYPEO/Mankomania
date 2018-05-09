@@ -39,6 +39,7 @@ public class MainMenuStage extends Stage {
         this.stageManager = stageManager;
         this.viewport = viewport;
 
+        createWidgets();
         setupClickListeners();
         setupLayout();
 

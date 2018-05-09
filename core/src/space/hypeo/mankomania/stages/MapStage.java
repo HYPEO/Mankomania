@@ -26,12 +26,11 @@ public class MapStage extends Stage {
     private static final float MARGIN_X = 40f;
     private static final float MARGIN_Y = 80f;
     private static final float FIELD_DISTANCE = 40f;
-    private static Texture texture = new Texture("badlogic.jpg");
     private static Image fieldInfoImage;
 
     public MapStage(Viewport viewport, StageManager stageManager) {
         super(viewport);
-
+        Texture texture = new Texture("badlogic.jpg");
         fieldInfoImage = new Image(texture);
         fieldInfoImage.setBounds(90, 125, 300, 300);
 
