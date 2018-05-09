@@ -29,6 +29,7 @@ import space.hypeo.mankomania.actors.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.EmptyFieldActor;
 import space.hypeo.mankomania.actors.FieldActor;
 import space.hypeo.mankomania.actors.PlayerActor;
+import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
 import space.hypeo.mankomania.stages.TitleStage;
@@ -149,39 +150,8 @@ public class StageFactory {
     }
 
 
-    public static Stage getDiceResult(final Viewport viewport, final StageManager stageManager, int moveFields) {
-        Stage diceStage = new Stage(viewport);
-
-        // Set up skin
-        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-        Texture diceResult = new Texture("dices/dice" + moveFields + ".png");
-        Drawable dice = new TextureRegionDrawable(new TextureRegion(diceResult));
-
-        // Set up button
-        ImageButton diceButton = new ImageButton(dice);
-
-        Label title = new Label("  You diced " + moveFields + " - tap dice to move", skin);
-
-        // Add click listeners.
-        diceButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                stageManager.remove(stageManager.getCurrentStage());
-            }
-        });
-
-        Table table = new Table();
-        table.setWidth(diceStage.getWidth());
-        table.align(Align.center);
-        table.setPosition(0, diceStage.getHeight() - diceStage.getHeight() / 2);
-        table.add(title).width(300).height(100);
-        table.row();
-        table.add(diceButton).width(350).height(350);
-
-        // Add dice-button to stage.
-        diceStage.addActor(table);
-
-        return diceStage;
+    public static Stage getDiceResultStage(final Viewport viewport, final StageManager stageManager, int moveFields) {
+        return new DiceResultStage(viewport, stageManager, moveFields);
     }
 
     public static Stage getMainMenu(final Viewport viewport, final StageManager stageManager) {

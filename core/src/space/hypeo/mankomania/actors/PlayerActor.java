@@ -84,7 +84,7 @@ public class PlayerActor extends Image {
                 // TODO: check if it is the players turn, then move
                 moveFields = die.nextInt(6) + 1;
                 this.move(moveFields);
-                manager.push(StageFactory.getDiceResult(viewport, manager, moveFields));
+                manager.push(StageFactory.getDiceResultStage(viewport, manager, moveFields));
 
                 // TODO: maybe cheat function here (for example: if other player is playing roulette)
             }
