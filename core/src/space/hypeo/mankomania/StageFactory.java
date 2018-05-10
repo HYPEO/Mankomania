@@ -44,6 +44,8 @@ public class StageFactory {
     private static Texture texture = new Texture ("badlogic.jpg");
     private static Image fieldInfoImage;
 
+    public static final String PATH_UISKIN = "skin/uiskin.json";
+
     /**
      * Generates a map stage (view).
      *
@@ -77,7 +79,7 @@ public class StageFactory {
         mapStage.addActor(player);
 
         // Create close button.
-        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal(PATH_UISKIN));
         Button close = new TextButton("Close Game", skin);
         close.setHeight(100);
         close.setWidth(viewport.getWorldWidth());
@@ -150,7 +152,7 @@ public class StageFactory {
         Stage diceStage = new Stage(viewport);
 
         // Set up skin
-        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal(PATH_UISKIN));
         Texture diceResult = new Texture("dices/dice" + moveFields + ".png");
         Drawable dice = new TextureRegionDrawable(new TextureRegion(diceResult));
 
@@ -186,7 +188,7 @@ public class StageFactory {
 
 
         // Set up skin
-        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal(PATH_UISKIN));
 
         // Set up buttons.
         Button launch = new TextButton("Launch Game (offline)", skin);
@@ -269,7 +271,7 @@ public class StageFactory {
         Stage sendMoneyStage = new Stage(viewport);
 
         // Set up skin
-        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal(PATH_UISKIN));
 
         // Set up buttons.
         Button send = new TextButton("Send", skin);

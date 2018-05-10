@@ -32,7 +32,7 @@ public class DiscoveredHostsStage extends Stage {
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
 
-        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal(StageFactory.PATH_UISKIN));
 
         Label lblDiscoveredHosts = new Label("Discovered Hosts", skin);
 

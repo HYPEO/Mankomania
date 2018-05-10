@@ -15,6 +15,7 @@ import com.esotericsoftware.minlog.Log;
 
 import java.util.HashMap;
 
+import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.RectangleActor;
 import space.hypeo.networking.network.WhatAmI;
@@ -42,7 +43,7 @@ public class LobbyStage extends Stage {
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
 
-        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal(StageFactory.PATH_UISKIN));
 
         Label lblLobby = new Label("GAME LOBBY", skin);
 

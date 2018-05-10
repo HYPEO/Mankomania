@@ -3,6 +3,7 @@ package space.hypeo.networking.packages;
 import com.esotericsoftware.minlog.Log;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import space.hypeo.networking.network.Network;
 
@@ -42,7 +43,7 @@ public class Lobby {
         }
     }
 
-    public HashMap<String, Player> getData() {
+    public Map<String, Player> getData() {
         return data;
     }
 
@@ -54,7 +55,7 @@ public class Lobby {
         return data.size();
     }
 
-    public boolean ifFull() {return data.size() >= Network.MAX_PLAYER; }
+    public boolean isFull() {return data.size() >= Network.MAX_PLAYER; }
 
     public void clear() {
         data.clear();

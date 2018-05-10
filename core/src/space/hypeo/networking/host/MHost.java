@@ -42,8 +42,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
         public void connected(Connection connection) {
             super.connected(connection);
 
-            if( WhatAmI.getLobby().ifFull() ) {
-                // game is full
+            if( WhatAmI.getLobby().isFull() ) {
                 connection.sendTCP(new Notification("Sorry, no more space for additional player left"));
                 return;
             }
