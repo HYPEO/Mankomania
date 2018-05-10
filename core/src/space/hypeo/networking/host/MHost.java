@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import space.hypeo.networking.Endpoint;
-import space.hypeo.networking.IHostConnector;
-import space.hypeo.networking.IPlayerConnector;
-import space.hypeo.networking.WhatAmI;
+import space.hypeo.networking.network.IHostConnector;
+import space.hypeo.networking.network.IPlayerConnector;
+import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.CRole;
 import space.hypeo.networking.packages.Player;
 import space.hypeo.networking.packages.Lobby;
@@ -27,26 +26,14 @@ import com.esotericsoftware.minlog.Log;
  * If you don't know, if you're client or host, call
  * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
  */
-public class MHost extends Endpoint implements IPlayerConnector, IHostConnector {
+public class MHost implements IPlayerConnector, IHostConnector {
 
     private com.esotericsoftware.kryonet.Server server;
-
-    private static MHost instance;
 
     /**
      * Constructs instance of class MHost
      */
-    private MHost() {
-        super();
-        WhatAmI.getInstance().setRole(CRole.Role.HOST);
-        Log.info("MHost Ctor: " + WhatAmI.getInstance().getRole());
-    }
-
-    public static MHost getInstance() {
-        if( instance == null ) {
-            instance = new MHost();
-        }
-        return instance;
+    public MHost() {
     }
 
     /**
@@ -62,7 +49,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
         public void connected(Connection connection) {
             super.connected(connection);
 
-            if( lobby.ifFull() ) {
+            if( WhatAmI.getLobby().ifFull() ) {
                 // game is full
                 connection.sendTCP(new Notification("Sorry, no more space for additional player left"));
                 return;
@@ -72,10 +59,10 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
             Log.info("Added new Client with: " + newPlayer.toString());
 
             // TODO: get the "real" nick of recently connected player
-            lobby.add(newPlayer.getAddress(), newPlayer);
+            WhatAmI.getLobby().add(newPlayer.getAddress(), newPlayer);
             connection.sendTCP(new Notification("You are connected ..."));
 
-            lobby.print();
+            WhatAmI.getLobby().print();
             // TODO: broadcast, provide current list of players
             //server.sendToAllTCP(players);
         }
@@ -90,9 +77,9 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
 
             Player leavingPlayer = new Player(connection, CRole.Role.CLIENT);
 
-            lobby.remove(leavingPlayer);
+            WhatAmI.getLobby().remove(leavingPlayer);
 
-            lobby.print();
+            WhatAmI.getLobby().print();
             // TODO: broadcast, provide current list of players
             //server.sendToAllTCP(players);
         }
@@ -132,7 +119,7 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
     @Override
     public void endGame() {
         server.sendToAllTCP(new Notification("game will be closed now..."));
-        lobby = null;
+        WhatAmI.getLobby().clear();
     }
 
     @Override
@@ -151,7 +138,9 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
 
         Network.register(server);
 
-        /* attach host in players */
+        String playerId = "00";
+        String nick = "the_mighty_host";
+
         String selfAddress = "";
         try {
             selfAddress = InetAddress.getLocalHost().toString();
@@ -159,11 +148,17 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
             e.printStackTrace();
         }
 
-        nick = "the_mighty_host";
-        player = new Player("/" + selfAddress, selfAddress, Network.PORT_TCP, CRole.Role.HOST);
-        lobby.add(nick, player);
+        WhatAmI.setPlayer(
+                new Player(playerId, nick,
+                "/" + selfAddress, selfAddress, Network.PORT_TCP,
+                CRole.Role.HOST)
+        );
 
-        lobby.print();
+        WhatAmI.addPlayerToLobby( nick, WhatAmI.getPlayer() );
+
+        WhatAmI.getLobby().print();
+
+        Log.info("MHost-StartServer: " + WhatAmI.getRole().toString());
     }
 
     @Override
@@ -193,11 +188,12 @@ public class MHost extends Endpoint implements IPlayerConnector, IHostConnector 
 
     @Override
     public String getCurrentPlayerID() {
-        return nick;
+        return WhatAmI.getPlayer().getPlayerID();
     }
 
     @Override
     public Lobby registeredPlayers() {
-        return lobby;
+        return WhatAmI.getLobby();
     }
+
 }

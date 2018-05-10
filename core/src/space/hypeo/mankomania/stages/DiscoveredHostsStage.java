@@ -19,7 +19,7 @@ import java.util.List;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.RectangleActor;
-import space.hypeo.networking.client.MClient;
+import space.hypeo.networking.network.WhatAmI;
 
 
 public class DiscoveredHostsStage extends Stage {
@@ -51,7 +51,8 @@ public class DiscoveredHostsStage extends Stage {
         tblDiscoveredHosts.add(new Label("Discovered Hosts:", skin)).width(300).height(100);
         tblDiscoveredHosts.row();
 
-        List<InetAddress> foundHosts = MClient.getInstance().discoverHosts();
+        //List<InetAddress> foundHosts = (MClient) WhatAmI.getEndPoint().discoverHosts();
+        List<InetAddress> foundHosts = WhatAmI.getClient().discoverHosts();
 
         if( foundHosts != null && ! foundHosts.isEmpty() ) {
 
@@ -67,7 +68,8 @@ public class DiscoveredHostsStage extends Stage {
 
                         Log.info("Try to connect to host " + hostAddr.toString() + "...");
 
-                        MClient.getInstance().connectToHost(hostAddr);
+                        //MClient.getInstance().connectToHost(hostAddr);
+                        WhatAmI.getClient().connectToHost(hostAddr);
 
                         stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
                     }

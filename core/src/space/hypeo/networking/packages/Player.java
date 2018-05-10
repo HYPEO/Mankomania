@@ -5,11 +5,13 @@ import com.esotericsoftware.kryonet.Connection;
 import space.hypeo.networking.network.CRole;
 
 /**
- * The class Player holds the important network data,
- * that identifies a client or host.
+ * This class holds the important network data,
+ * that identifies a player in the network.
  */
 public class Player {
 
+    private String playerID;
+    private String nick;
     private String hostName;
     private String address;
     private int port;
@@ -21,6 +23,10 @@ public class Player {
      * Default Constructor
      */
     public Player() {
+
+        playerID = "";
+        nick = "";
+
         hostName = "";
         address = "";
         port = 0;
@@ -38,6 +44,8 @@ public class Player {
             new Player();
 
         } else {
+            playerID = "";
+            nick = "";
             address = c.getRemoteAddressTCP().getAddress().toString();
             hostName = c.getRemoteAddressTCP().getHostName();
             port = c.getRemoteAddressTCP().getPort();
@@ -52,11 +60,31 @@ public class Player {
      * @param port
      * @param cRole
      */
-    public Player(String hostName, String address, int port, CRole.Role cRole) {
+    public Player(String playerID, String nick,
+                  String hostName, String address, int port,
+                  CRole.Role cRole) {
+        this.playerID = "";
+        this.nick = "";
         this.hostName = hostName;
         this.address = address;
         this.port = port;
         this.cRole = new CRole(cRole);
+    }
+
+    public String getPlayerID() {
+        return playerID;
+    }
+
+    public void setPlayerID(String playerID) {
+        this.playerID = playerID;
+    }
+
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 
     /**
@@ -83,11 +111,17 @@ public class Player {
         return port;
     }
 
+    public CRole getCRole() {
+        return cRole;
+    }
+
     @Override
     public String toString() {
-        return "Hostname: '" + hostName
-                + "', Address: '" + address
-                + "', Port: " + port
-                + "', Role: '" + cRole.toString();
+        return "PlayerID: " + playerID
+                + ", Nick: " + nick
+                + ", Hostname: " + hostName
+                + ", Address: " + address
+                + ", Port: " + port
+                + ", Role: " + cRole.toString();
     }
 }

@@ -41,12 +41,17 @@ public class CRole {
     @Override
     public boolean equals(Object o) {
         if( o == null) { return false; }
-        // TODO: add CRole
-        if( ! (o instanceof Role) ) { return false; }
         if( o == this) { return true; }
 
-        Role other = (Role)o;
-        return role == other;
+        if( o instanceof Role ) {
+            Role other = (Role) o;
+            return role == other;
+        } else if( o instanceof CRole ) {
+            CRole other = (CRole) o;
+            return role.equals( other.getRole() );
+        } else {
+            return false;
+        }
     }
 
     @Override

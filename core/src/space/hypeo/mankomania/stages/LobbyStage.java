@@ -1,7 +1,6 @@
 package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -18,15 +17,11 @@ import java.util.HashMap;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.RectangleActor;
-import space.hypeo.networking.WhatAmI;
+import space.hypeo.networking.network.WhatAmI;
 
-import space.hypeo.networking.client.MClient;
-import space.hypeo.networking.host.MHost;
 import space.hypeo.networking.network.CRole;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.packages.Player;
-
-import com.esotericsoftware.minlog.Log;
 
 
 public class LobbyStage extends Stage {
@@ -51,22 +46,22 @@ public class LobbyStage extends Stage {
         tblLobby.add(lblLobby).width(300).height(100);
         tblLobby.row();
 
-        Lobby lobby = null;
-        CRole.Role role = WhatAmI.getInstance().getRole();
+        Lobby lobby = WhatAmI.getLobby();
+        CRole role = WhatAmI.getRole();
 
-        if (role == CRole.Role.HOST) {
+        /*if (role.equals(CRole.Role.HOST) ) {
             lobby = MHost.getInstance().registeredPlayers();
             Log.info("LobbyStage: Role = HOST");
-        } else if (role == CRole.Role.CLIENT) {
+        } else if (role.equals( CRole.Role.CLIENT) ) {
             lobby = MClient.getInstance().registeredPlayers();
             Log.info("LobbyStage: Role = CLIENT");
-        } else if (role == CRole.Role.NOT_CONNECTED) {
+        } else if (role.equals(CRole.Role.NOT_CONNECTED) ) {
             Log.info("LobbyStage: Role = NOT_CONNECTED");
         } else if (role == null) {
             Log.info("LobbyStage: Role = null");
-        }
+        }*/
 
-        if( lobby == null || role == CRole.Role.NOT_CONNECTED ) {
+        if( lobby == null || role.equals(CRole.Role.NOT_CONNECTED) ) {
             Log.error("LobbyStage: lobby must not be null!");
             stageManager.remove(LobbyStage.this);
             return;

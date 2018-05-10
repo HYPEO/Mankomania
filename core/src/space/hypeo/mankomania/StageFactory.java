@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import java.net.InetAddress;
 import java.util.List;
@@ -34,6 +35,8 @@ import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
+import space.hypeo.networking.network.CRole;
+import space.hypeo.networking.network.WhatAmI;
 
 /**
  * Creates all the stages (views) for the game.
@@ -216,7 +219,10 @@ public class StageFactory {
             public void clicked(InputEvent event, float x, float y) {
 
                 Log.info("Try to start server...");
-                MHost.getInstance().startServer();
+                // TODO: set endpoint to server
+                WhatAmI.setRole(CRole.Role.HOST);
+                WhatAmI.setHost();
+                WhatAmI.getHost().startServer();
                 Log.info("Server has started successfully");
 
                 stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
@@ -228,7 +234,9 @@ public class StageFactory {
             public void clicked(InputEvent event, float x, float y) {
 
                 Log.info("Try to start client...");
-                MClient.getInstance().startClient();
+                WhatAmI.setRole(CRole.Role.CLIENT);
+                WhatAmI.setClient();
+                WhatAmI.getClient().startClient();
                 Log.info("Client has started successfully");
 
                 stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));

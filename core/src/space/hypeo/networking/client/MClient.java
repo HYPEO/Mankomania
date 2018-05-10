@@ -7,12 +7,12 @@ import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
-import space.hypeo.networking.Endpoint;
-import space.hypeo.networking.IClientConnector;
-import space.hypeo.networking.IPlayerConnector;
-import space.hypeo.networking.WhatAmI;
+import space.hypeo.networking.network.IClientConnector;
+import space.hypeo.networking.network.IPlayerConnector;
+import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.CRole;
 import space.hypeo.networking.packages.Player;
 import space.hypeo.networking.packages.Lobby;
@@ -27,7 +27,7 @@ import space.hypeo.networking.packages.PingResponse;
  * If you don't know, if you're client or host, call
  * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
  */
-public class MClient extends Endpoint implements IPlayerConnector, IClientConnector {
+public class MClient implements IPlayerConnector, IClientConnector {
 
     // TODO: next block 'static' has no effect ?!?
     static {
@@ -36,8 +36,6 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
     }
 
     private com.esotericsoftware.kryonet.Client client;
-
-    private static MClient instance;
 
     private List<InetAddress> discoveredHosts = null;
 
@@ -50,17 +48,9 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
     /**
      * Constructs instance of class MClient
      */
-    private MClient() {
+    public MClient() {
         super();
-        WhatAmI.getInstance().setRole(CRole.Role.CLIENT);
         // TODO: set nick and player
-    }
-
-    public static MClient getInstance() {
-        if( instance == null ) {
-            instance = new MClient();
-        }
-        return instance;
     }
 
     /**
@@ -117,7 +107,7 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
                  * receive new list of Player:
                  * after connecting or disconnecting clients
                  */
-                lobby = (Lobby) object;
+                WhatAmI.setLobby( (Lobby) object );
                 Log.info("Client received updated list of player");
             }
         }
@@ -162,11 +152,27 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
 
             pingServer();
 
-            /* TODO: wait for response?
-             *       is endless loop necessary?
-             */
-            /*while( true ) {
-            }*/
+            String playerId = "01";
+            String nick = "the_c_client";
+
+            String selfAddress = "";
+            try {
+                selfAddress = InetAddress.getLocalHost().toString();
+            } catch(UnknownHostException e) {
+                e.printStackTrace();
+            }
+
+            WhatAmI.setPlayer(
+                    new Player(playerId, nick,
+                            "/" + selfAddress, selfAddress, Network.PORT_TCP,
+                            CRole.Role.CLIENT)
+            );
+
+            WhatAmI.addPlayerToLobby( nick, WhatAmI.getPlayer() );
+
+            WhatAmI.getLobby().print();
+
+            Log.info("MClient-connectToHost: " + WhatAmI.getRole().toString());
         }
     }
 
@@ -207,11 +213,11 @@ public class MClient extends Endpoint implements IPlayerConnector, IClientConnec
 
     @Override
     public String getCurrentPlayerID() {
-        return nick;
+        return WhatAmI.getPlayer().getPlayerID();
     }
 
     @Override
     public Lobby registeredPlayers() {
-        return lobby;
+        return WhatAmI.getLobby();
     }
 }
