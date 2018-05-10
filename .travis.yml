@@ -10,6 +10,7 @@ android:
     - addon-google_apis-google-26
     - sys-img-armeabi-v7a-android-26
 script:
+    - ./gradlew clean
     - ./gradlew build
     - ./gradlew test
     - ./gradlew sonarqube -Dsonar.organization=hypeo -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dsonar.branch.name=$TRAVIS_BRANCH -Dsonar.jacoco.reportPaths=./core/build/jacoco/test.exec
