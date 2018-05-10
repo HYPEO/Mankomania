@@ -10,6 +10,7 @@ android:
     - addon-google_apis-google-26
     - sys-img-armeabi-v7a-android-26
 script:
+    - ./gradlew build
     - ./gradlew test
     - ./gradlew jacocoTestReport
     - ls -al core/build/
