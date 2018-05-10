@@ -15,12 +15,14 @@ import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
-import space.hypeo.networking.packages.DisconnectPlayer;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
+import space.hypeo.networking.packages.PlayerConnect;
+import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.PlayerHost;
 
 /**
  * This class represents the client process on a device.
@@ -61,7 +63,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            connection.sendTCP( new DisconnectPlayer(WhatAmI.getPlayer()) );
+            connection.sendTCP( new PlayerDisconnect(WhatAmI.getPlayer()) );
 
             hostInfo = null;
             connection.close();
@@ -96,10 +98,10 @@ public class MClient implements IPlayerConnector, IClientConnector {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: " + ack);
 
-                connection.sendTCP( WhatAmI.getPlayer() );
+                connection.sendTCP( new PlayerConnect(WhatAmI.getPlayer()) );
 
-            } else if( object instanceof Player ) {
-                hostInfo = (Player) object;
+            } else if( object instanceof PlayerHost) {
+                hostInfo = (PlayerHost) object;
                 Log.info("Client: Got connection to host " + hostInfo);
             }
         }

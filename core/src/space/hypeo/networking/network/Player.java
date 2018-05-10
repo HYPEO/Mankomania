@@ -8,9 +8,9 @@ import com.esotericsoftware.kryonet.Connection;
  */
 public class Player {
 
-    private String playerID;
-    private String nick;
-    private String address;
+    protected String playerID;
+    protected String nick;
+    protected String address;
 
     // TODO: role is redundant in WhatAmI too!
     Role role;
@@ -40,6 +40,13 @@ public class Player {
         this.nick = nick;
         this.address = address;
         this.role =role;
+    }
+
+    public Player(Player p) {
+        this.playerID = p.playerID;
+        this.nick = p.nick;
+        this.address = p.address;
+        this.role = p.role;
     }
 
     public String getPlayerID() {

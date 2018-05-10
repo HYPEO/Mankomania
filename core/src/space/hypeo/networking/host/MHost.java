@@ -6,16 +6,17 @@ import java.net.UnknownHostException;
 
 import space.hypeo.networking.network.IHostConnector;
 import space.hypeo.networking.network.IPlayerConnector;
-import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
-import space.hypeo.networking.packages.DisconnectPlayer;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
+import space.hypeo.networking.packages.PlayerConnect;
+import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.PlayerHost;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -56,7 +57,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
             // send host info
             Log.info("Host: Send info of myself to client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP(WhatAmI.getPlayer());
+            connection.sendTCP( new PlayerHost(WhatAmI.getPlayer()) );
         }
 
         /**
@@ -86,8 +87,8 @@ public class MHost implements IPlayerConnector, IHostConnector {
                 Notification notification = (Notification) object;
                 Log.info("Host received: " + notification.toString());
 
-            } else if( object instanceof Player ) {
-                Player newPlayer = (Player) object;
+            } else if( object instanceof PlayerConnect) {
+                Player newPlayer = (PlayerConnect) object;
                 WhatAmI.addPlayerToLobby(newPlayer.getPlayerID(), newPlayer);
 
                 Log.info("Host: received new player, add to lobby");
@@ -95,8 +96,8 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
                 server.sendToAllTCP(WhatAmI.getLobby());
 
-            } else if( object instanceof DisconnectPlayer ) {
-                Player leavingPlayer = (Player) object;
+            } else if( object instanceof PlayerDisconnect) {
+                Player leavingPlayer = (PlayerDisconnect) object;
                 WhatAmI.removePlayerFromLobby(leavingPlayer.getPlayerID());
 
                 Log.info("Host: player has been disconnected, removed from lobby");

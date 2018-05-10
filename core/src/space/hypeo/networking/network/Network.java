@@ -4,11 +4,13 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
 import space.hypeo.networking.packages.Acknowledge;
-import space.hypeo.networking.packages.DisconnectPlayer;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
+import space.hypeo.networking.packages.PlayerConnect;
+import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.PlayerHost;
 
 /**
  * The class Network is a auxiliary class
@@ -47,7 +49,9 @@ public class Network {
         kryo.register(space.hypeo.networking.network.Role.class);
 
         kryo.register(Acknowledge.class);
-        kryo.register(DisconnectPlayer.class);
+        kryo.register(PlayerConnect.class);
+        kryo.register(PlayerDisconnect.class);
+        kryo.register(PlayerHost.class);
 
     }
 
