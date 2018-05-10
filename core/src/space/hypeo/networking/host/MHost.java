@@ -1,41 +1,38 @@
 package space.hypeo.networking.host;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.HashMap;
 
-import space.hypeo.networking.IHostConnector;
-import space.hypeo.networking.IPlayerConnector;
-import space.hypeo.networking.PlayerInfo;
+import space.hypeo.networking.network.IHostConnector;
+import space.hypeo.networking.network.IPlayerConnector;
+import space.hypeo.networking.network.WhatAmI;
+import space.hypeo.networking.network.Player;
+import space.hypeo.networking.packages.Acknowledge;
+import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
+import space.hypeo.networking.packages.PlayerConnect;
+import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.PlayerHost;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
+/**
+ * This class represents the host process on a device.
+ * If you don't know, if you're client or host, call
+ * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
+ */
 public class MHost implements IPlayerConnector, IHostConnector {
 
     private com.esotericsoftware.kryonet.Server server;
 
     /**
-     * The data structure that holds the player-list.
-     * String     ... Nickname of the player
-     * PlayerInfo ... Network info of the player
+     * This class handles the connection events with the server.
      */
-    private HashMap<String, PlayerInfo> players;
-
-    /**
-     * Constructs instance of class MHost
-     */
-    public MHost() {
-        players = new HashMap<String, PlayerInfo>();
-    }
-
     private class ServerListener extends Listener {
 
         /**
@@ -46,20 +43,19 @@ public class MHost implements IPlayerConnector, IHostConnector {
         public void connected(Connection connection) {
             super.connected(connection);
 
-            if( players.size() >= Network.MAX_PLAYER ) {
-                // game is full
-                // send message to client: you can not join game, game is full
-                connection.sendTCP(new Notification("Sorry, no more space for additional player left"));
+            if( WhatAmI.getLobby().isFull() ) {
+                connection.sendTCP(new Notification("Host: Sorry, no more space for additional player left"));
+                connection.close();
                 return;
             }
 
-            PlayerInfo newPlayer = new PlayerInfo(connection, Network.Role.client);
-            Log.info("Added new Client with: " + newPlayer.toString());
+            // send ack
+            Log.info("Host: Send ack to requested client ip " + connection.getRemoteAddressTCP().toString());
+            connection.sendTCP( new Acknowledge(WhatAmI.getPlayer().getAddress().toString()) );
 
-            players.put(newPlayer.getAddress(), newPlayer);
-            connection.sendTCP(new Notification("You are connected ..."));
-
-            printPlayers();
+            // send host info
+            Log.info("Host: Send info of myself to client ip " + connection.getRemoteAddressTCP().toString());
+            connection.sendTCP( new PlayerHost(WhatAmI.getPlayer()) );
         }
 
         /**
@@ -69,10 +65,6 @@ public class MHost implements IPlayerConnector, IHostConnector {
         @Override
         public void disconnected(Connection connection) {
             super.disconnected(connection);
-
-            PlayerInfo leavingPlayer = new PlayerInfo(connection, Network.Role.client);
-
-            players.remove(leavingPlayer);
         }
 
         /**
@@ -89,58 +81,70 @@ public class MHost implements IPlayerConnector, IHostConnector {
                 PingResponse pingResponse = new PingResponse(pingRequest.getTime());
                 connection.sendTCP(pingResponse);
 
-            } else if( object instanceof Notification) {
+            } else if( object instanceof Notification ) {
                 Notification notification = (Notification) object;
                 Log.info("Host received: " + notification.toString());
+
+            } else if( object instanceof PlayerConnect) {
+                Player newPlayer = (PlayerConnect) object;
+                WhatAmI.addPlayerToLobby(newPlayer.getPlayerID(), newPlayer);
+
+                Log.info("Host: received new player, add to lobby");
+                WhatAmI.getLobby().print();
+
+                server.sendToAllTCP(WhatAmI.getLobby());
+
+            } else if( object instanceof PlayerDisconnect) {
+                Player leavingPlayer = (PlayerDisconnect) object;
+                WhatAmI.removePlayerFromLobby(leavingPlayer.getPlayerID());
+
+                Log.info("Host: player has been disconnected, removed from lobby");
+                WhatAmI.getLobby().print();
+
+                server.sendToAllTCP(WhatAmI.getLobby());
             }
         }
     }
 
     @Override
-    public void advertiseGame() {
-        // TODO: start the lobby here
-    }
-
-    @Override
-    public boolean startGame() {
-        //server.sendToAllTCP("game starts in 5sec...");
-        return false;
-    }
-
-    @Override
-    public void endGame() {
-        //server.sendToAllTCP("game will be closed now...");
-        players = null;
-    }
-
-    @Override
     public void startServer() {
         server = new Server();
-        server.start();
+
+        Network.register(server);
 
         try {
             // opens a TCP and UDP server
             server.bind(Network.PORT_TCP, Network.PORT_UDP);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.error(e.getMessage());
         }
 
         server.addListener(new ServerListener());
 
-        Network.register(server);
+        WhatAmI.addPlayerToLobby( WhatAmI.getPlayer().getPlayerID(), WhatAmI.getPlayer() );
 
-        /* attach PlayerInfo of host in players */
-        String selfAddress = "";
-        try {
-            selfAddress = InetAddress.getLocalHost().toString();
-        } catch(UnknownHostException e) {
-            e.printStackTrace();
-        }
-        PlayerInfo self = new PlayerInfo("/" + selfAddress, selfAddress, Network.PORT_TCP, Network.Role.host);
-        players.put("the_mighty_host", self);
+        WhatAmI.getLobby().print();
 
-        printPlayers();
+        server.start();
 
+        Log.info("MHost-StartServer: " + WhatAmI.getRole());
+    }
+
+    @Override
+    public void advertiseGame() {
+        // TODO: start out of the lobby here if each player is ready
+    }
+
+    @Override
+    public boolean startGame() {
+        server.sendToAllTCP(new Notification("game starts in 5sec..."));
+        return false;
+    }
+
+    @Override
+    public void endGame() {
+        server.sendToAllTCP(new Notification("game will be closed now..."));
+        WhatAmI.getLobby().clear();
     }
 
     @Override
@@ -170,27 +174,12 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
     @Override
     public String getCurrentPlayerID() {
-        return null;
+        return WhatAmI.getPlayer().getPlayerID();
     }
 
     @Override
-    public HashMap<String, PlayerInfo> registeredPlayers() {
-        return players;
+    public Lobby registeredPlayers() {
+        return WhatAmI.getLobby();
     }
 
-    public void printPlayers() {
-        Log.info("HashMap 'players' contains:");
-
-        if( players.isEmpty() ) {
-            Log.info("NO ENTRIES");
-            return;
-        }
-
-        int index = 1;
-        for( HashMap.Entry<String, PlayerInfo> entry : players.entrySet() ) {
-            Log.info("  " + index + ". Nick = '" + entry.getKey() +"'");
-            Log.info("    " + entry.getValue().toString());
-            index++;
-        }
-    }
 }

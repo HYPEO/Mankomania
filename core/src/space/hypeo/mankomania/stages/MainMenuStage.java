@@ -20,6 +20,8 @@ import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
+import space.hypeo.networking.network.Role;
+import space.hypeo.networking.network.WhatAmI;
 
 /**
  * Holds all widgets on the main menu.
@@ -75,13 +77,14 @@ public class MainMenuStage extends Stage {
     {
         return new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-
                 Log.info("Try to start server...");
-
-                MHost mHost = new MHost();
-                mHost.startServer();
-
+                // initialize device as host
+                WhatAmI.init("the_mighty_host", Role.HOST);
+                // start server process
+                WhatAmI.getHost().startServer();
                 Log.info("Server has started successfully");
+
+                stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
             }
         };
     }
@@ -90,31 +93,14 @@ public class MainMenuStage extends Stage {
     {
         return new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-
                 Log.info("Try to start client...");
-
-                MClient mClient = new MClient();
-                mClient.startClient();
-
+                // initialize device as client
+                WhatAmI.init("another_client", Role.CLIENT);
+                // start client process
+                WhatAmI.getClient().startClient();
                 Log.info("Client has started successfully");
 
-                List<InetAddress> foundHosts = mClient.discoverHosts();
-
-                if (foundHosts == null || foundHosts.isEmpty()) {
-                    Log.info("No hosts found!");
-                    return;
-                }
-
-                Log.info("Discovered Network: Host-List contains:");
-
-                for (InetAddress iAddr : foundHosts) {
-                    Log.info("  host: " + iAddr.toString());
-                }
-
-                InetAddress firstHost = foundHosts.get(0);
-
-                Log.info("Try to connect to first host " + firstHost.toString() + "...");
-                mClient.connectToHost(firstHost);
+                stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
             }
         };
     }

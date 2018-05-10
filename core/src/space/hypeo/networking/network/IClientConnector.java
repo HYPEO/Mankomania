@@ -1,4 +1,4 @@
-package space.hypeo.networking;
+package space.hypeo.networking.network;
 
 import java.net.InetAddress;
 import java.util.List;
@@ -21,7 +21,8 @@ public interface IClientConnector {
     public void startClient();
 
     /**
-     * Discovers the network for available hosts
+     * LAN server discovery.
+     * broadcast a UDP message on the LAN to discover any servers (hosts) running.
      */
     public List<InetAddress> discoverHosts();
 

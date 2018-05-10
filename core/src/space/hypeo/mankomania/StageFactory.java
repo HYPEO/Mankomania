@@ -2,7 +2,12 @@ package space.hypeo.mankomania;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
+import com.esotericsoftware.minlog.Log;
+import space.hypeo.mankomania.stages.DiscoveredHostsStage;
+import space.hypeo.mankomania.stages.LobbyStage;
+import space.hypeo.mankomania.stages.TitleStage;
+import space.hypeo.networking.network.Role;
+import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.mankomania.stages.MapStage;
@@ -13,16 +18,9 @@ import space.hypeo.mankomania.stages.TitleStage;
  * Creates all the stages (views) for the game.
  */
 public class StageFactory {
-    /**
-     * Generates a map stage (view).
-     *
-     * @param viewport The viewport the stage will be rendered in.
-     * @return A stage with the map as its content.
-     */
-    public static Stage getMapStage(final Viewport viewport, final StageManager stageManager) {
+    public static Stage getMapStage(final Viewport viewport, final StageManager stageManager){
         return new MapStage(viewport, stageManager);
     }
-
 
     public static Stage getDiceResultStage(final Viewport viewport, final StageManager stageManager, int moveFields) {
         return new DiceResultStage(viewport, stageManager, moveFields);
@@ -39,4 +37,29 @@ public class StageFactory {
     public static Stage getTitleStage(final Viewport viewport, final StageManager stageManager) {
         return new TitleStage(stageManager, viewport);
     }
+
+    /**
+     * Shows the network-lobby.
+     * @param viewport
+     * @param stageManager
+     * @return stage/view of lobby
+     */
+    public static Stage getLobbyStage(final Viewport viewport, final StageManager stageManager)
+    {
+        return new LobbyStage(stageManager, viewport);
+    }
+
+    /**
+     * Discovers hosts in WLAN after hit "Join Game" button.
+     * Shows all discovered hosts. Hosts can be chosen by button-click.
+     * That Stage can only be visited as role "cient".
+     * @param viewport
+     * @param stageManager
+     * @return stage/view of discovered hosts for client
+     */
+    public static Stage getDiscoveredHostsStage(final Viewport viewport, final StageManager stageManager)
+    {
+        return new DiscoveredHostsStage(stageManager, viewport);
+    }
+
 }
