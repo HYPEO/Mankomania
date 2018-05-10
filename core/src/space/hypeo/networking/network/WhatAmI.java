@@ -1,5 +1,9 @@
 package space.hypeo.networking.network;
 
+import com.esotericsoftware.minlog.Log;
+
+import java.net.SocketException;
+
 import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
 import space.hypeo.networking.packages.Lobby;
@@ -33,7 +37,18 @@ public class WhatAmI {
     }*/
 
     public static void setRole(Role role) {
+        // TODO: instantiate host or client after assign role!
         WhatAmI.role = role;
+        Log.info("====================");
+        Log.info("I'm a " + role);
+        Log.info("That are all my available network addresses:");
+        Log.info("====================");
+        try {
+            Log.info( NetworkAddress.getNetworkAddress() );
+        } catch (SocketException e) {
+            Log.info(e.getMessage());
+        }
+        Log.info("====================");
     }
 
     public static Role getRole() {
