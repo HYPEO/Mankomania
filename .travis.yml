@@ -11,5 +11,6 @@ android:
     - sys-img-armeabi-v7a-android-26
 script:
     - ./gradlew test
+    - ./gradlew jacocoTestReport
     - ls -al core/build/
     - ./gradlew sonarqube -Dsonar.organization=hypeo -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dsonar.branch.name=$TRAVIS_BRANCH -Dsonar.jacoco.reportPaths=./core/build/jacoco/test.exec
