@@ -68,7 +68,9 @@ public class LobbyStage extends Stage {
         int index = 1;
         for( HashMap.Entry<String, Player> entry : lobby.getData().entrySet() ) {
 
-            Button btnPlayer = new TextButton(index + ". " + entry.getKey(), skin);
+            Button btnPlayer = new TextButton(
+                    index + ": " + entry.getKey() + ", " + entry.getValue().getAddress().toString(),
+                    skin);
 
             btnPlayer.addListener(new ClickListener() {
                 @Override

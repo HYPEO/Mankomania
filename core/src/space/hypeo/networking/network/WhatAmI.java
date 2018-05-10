@@ -20,11 +20,14 @@ public class WhatAmI {
     // the local end point of a connection (host or client)
     //private static Object endPoint;
 
+    // varialbe holds the current player id (compare to primary key, autoincrement)
+    private static int currentPlayerId = 1;
+
     // role of current player
     private static Role role;
 
     // network info a player
-    private static Player player = new Player();
+    private static Player player;
 
     // contains a list of all player, that are connected to the host of game
     private static Lobby lobby = new Lobby();
@@ -36,19 +39,37 @@ public class WhatAmI {
         return endPoint;
     }*/
 
-    public static void setRole(Role role) {
-        // TODO: instantiate host or client after assign role!
+    public static void init(String nickname, Role role) {
+
         WhatAmI.role = role;
+
         Log.info("====================");
         Log.info("I'm a " + role);
-        Log.info("That are all my available network addresses:");
+        //Log.info("That are all my available network addresses:");
         Log.info("====================");
+
+        String currentIp = "";
         try {
-            Log.info( NetworkAddress.getNetworkAddress() );
-        } catch (SocketException e) {
+            currentIp = NetworkAddress.getNetworkAddress();
+            Log.info( "current IP address: " + currentIp );
+        } catch(SocketException e) {
             Log.info(e.getMessage());
         }
         Log.info("====================");
+
+        WhatAmI.player = new Player(
+                Integer.toString(getCurrentPlayerId()), nickname, currentIp, role
+        );
+
+        if( role == Role.HOST ) {
+            WhatAmI.setHost();
+        } else if( role == Role.CLIENT ) {
+            WhatAmI.setClient();
+        }
+    }
+
+    private static int getCurrentPlayerId() {
+        return currentPlayerId++;
     }
 
     public static Role getRole() {
@@ -95,12 +116,12 @@ public class WhatAmI {
         return lobby;
     }
 
-    public static void addPlayerToLobby(String nick, Player player) {
-        WhatAmI.lobby.add(nick, player);
+    public static void addPlayerToLobby(String id, Player player) {
+        WhatAmI.lobby.add(id, player);
     }
 
-    public static void removePlayerFromLobby(String nick) {
-        WhatAmI.lobby.remove(nick);
+    public static void removePlayerFromLobby(String id) {
+        WhatAmI.lobby.remove(id);
     }
 
     public static void removePlayerFromLobby(Player player) {

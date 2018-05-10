@@ -60,7 +60,7 @@ public class DiscoveredHostsStage extends Stage {
             for (InetAddress hostAddr : foundHosts) {
                 Log.info("  host: " + hostAddr.toString());
 
-                Button btnHost = new TextButton(index + ". Host " + hostAddr.toString(), skin);
+                Button btnHost = new TextButton(index + ". " + hostAddr.toString(), skin);
 
                 btnHost.addListener(new ClickListener() {
                     @Override

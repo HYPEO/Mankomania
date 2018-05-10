@@ -7,15 +7,14 @@ import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.List;
 
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.IPlayerConnector;
-import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.Player;
+import space.hypeo.networking.packages.Acknowledge;
+import space.hypeo.networking.packages.DisconnectPlayer;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
@@ -33,9 +32,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
     private List<InetAddress> discoveredHosts = null;
 
-    // TODO: which host info is the right one?
     private Player hostInfo = null;
-    private InetAddress connectedToHost = null;
 
     private long startPingRequest = 0;
 
@@ -52,11 +49,6 @@ public class MClient implements IPlayerConnector, IClientConnector {
         public void connected(Connection connection) {
             super.connected(connection);
 
-            hostInfo = new Player(connection, Role.HOST);
-            Log.info("hostInfo = " + hostInfo.toString());
-            connectedToHost = connection.getRemoteAddressTCP().getAddress();
-            Log.info("connectedToHost = " + connectedToHost);
-
             connection.sendTCP(new Notification("You accepted my connection to game."));
         }
 
@@ -67,8 +59,11 @@ public class MClient implements IPlayerConnector, IClientConnector {
         @Override
         public void disconnected(Connection connection) {
             super.disconnected(connection);
+
+            connection.sendTCP( new DisconnectPlayer(WhatAmI.getPlayer()) );
+
             hostInfo = null;
-            connectedToHost = null;
+            connection.close();
         }
 
         /**
@@ -95,9 +90,16 @@ public class MClient implements IPlayerConnector, IClientConnector {
                  */
                 WhatAmI.setLobby( (Lobby) object );
                 Log.info("Client received updated list of player");
-            } else if( object instanceof HashMap ) {
-                Lobby lobby = new Lobby( (HashMap<String, Player>) object);
-                WhatAmI.setLobby( lobby );
+
+            } else if( object instanceof Acknowledge ) {
+                Acknowledge ack = (Acknowledge) object;
+                Log.info("Client: " + ack);
+
+                connection.sendTCP( WhatAmI.getPlayer() );
+
+            } else if( object instanceof Player ) {
+                hostInfo = (Player) object;
+                Log.info("Client: Got connection to host " + hostInfo);
             }
         }
     }
@@ -113,6 +115,8 @@ public class MClient implements IPlayerConnector, IClientConnector {
     @Override
     public List<InetAddress> discoverHosts() {
         // use UDP port for discovering hosts
+
+        // TODO: remove loop-addresses
         discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         return discoveredHosts;
     }
@@ -122,7 +126,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
         if( client != null && discoveredHosts != null && discoveredHosts.contains(hostAddress) ) {
             try {
                 client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_TCP, Network.PORT_UDP);
-                connectedToHost = hostAddress;
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -131,24 +135,6 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
             //pingServer();
 
-            // TODO: create function to find out address and name
-
-            String playerId = "01";
-            String nick = "the_c_client";
-
-            String selfAddress = "";
-            try {
-                selfAddress = InetAddress.getLocalHost().toString();
-            } catch(UnknownHostException e) {
-                Log.error(e.getMessage().toString());
-            }
-
-            Player self = new Player(playerId, nick,
-                            "/" + selfAddress, selfAddress, Network.PORT_TCP,
-                            Role.CLIENT);
-
-            WhatAmI.setPlayer(self);
-            WhatAmI.addPlayerToLobby( nick, self );
             WhatAmI.getLobby().print();
 
             Log.info("MClient-connectToHost: " + WhatAmI.getRole());
@@ -169,8 +155,6 @@ public class MClient implements IPlayerConnector, IClientConnector {
     public boolean joinGame(String playerID) {
         return false;
     }
-
-
 
     @Override
     public void changeBalance(String playerID, int amount) {

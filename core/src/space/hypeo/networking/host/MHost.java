@@ -9,6 +9,8 @@ import space.hypeo.networking.network.IPlayerConnector;
 import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.Player;
+import space.hypeo.networking.packages.Acknowledge;
+import space.hypeo.networking.packages.DisconnectPlayer;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
@@ -43,20 +45,18 @@ public class MHost implements IPlayerConnector, IHostConnector {
             super.connected(connection);
 
             if( WhatAmI.getLobby().isFull() ) {
-                connection.sendTCP(new Notification("Sorry, no more space for additional player left"));
+                connection.sendTCP(new Notification("Host: Sorry, no more space for additional player left"));
+                connection.close();
                 return;
             }
 
-            Player newPlayer = new Player(connection, Role.CLIENT);
-            Log.info("Added new Client with: " + newPlayer.toString());
+            // send ack
+            Log.info("Host: Send ack to requested client ip " + connection.getRemoteAddressTCP().toString());
+            connection.sendTCP( new Acknowledge(WhatAmI.getPlayer().getAddress().toString()) );
 
-            // TODO: get the "real" nick of recently connected player
-            WhatAmI.addPlayerToLobby(newPlayer.getNick(), newPlayer);
-            connection.sendTCP(new Notification("You are connected ..."));
-
-            WhatAmI.getLobby().print();
-            // TODO: broadcast, provide current list of players
-            server.sendToAllTCP(WhatAmI.getLobby().getData());
+            // send host info
+            Log.info("Host: Send info of myself to client ip " + connection.getRemoteAddressTCP().toString());
+            connection.sendTCP(WhatAmI.getPlayer());
         }
 
         /**
@@ -66,14 +66,6 @@ public class MHost implements IPlayerConnector, IHostConnector {
         @Override
         public void disconnected(Connection connection) {
             super.disconnected(connection);
-
-            Player leavingPlayer = new Player(connection, Role.CLIENT);
-
-            WhatAmI.removePlayerFromLobby(leavingPlayer);
-
-            WhatAmI.getLobby().print();
-            // TODO: broadcast, provide current list of players
-            server.sendToAllTCP(WhatAmI.getLobby().getData());
         }
 
         /**
@@ -90,14 +82,30 @@ public class MHost implements IPlayerConnector, IHostConnector {
                 PingResponse pingResponse = new PingResponse(pingRequest.getTime());
                 connection.sendTCP(pingResponse);
 
-            } else if( object instanceof Notification) {
+            } else if( object instanceof Notification ) {
                 Notification notification = (Notification) object;
                 Log.info("Host received: " + notification.toString());
+
+            } else if( object instanceof Player ) {
+                Player newPlayer = (Player) object;
+                WhatAmI.addPlayerToLobby(newPlayer.getPlayerID(), newPlayer);
+
+                Log.info("Host: received new player, add to lobby");
+                WhatAmI.getLobby().print();
+
+                server.sendToAllTCP(WhatAmI.getLobby());
+
+            } else if( object instanceof DisconnectPlayer ) {
+                Player leavingPlayer = (Player) object;
+                WhatAmI.removePlayerFromLobby(leavingPlayer.getPlayerID());
+
+                Log.info("Host: player has been disconnected, removed from lobby");
+                WhatAmI.getLobby().print();
+
+                server.sendToAllTCP(WhatAmI.getLobby());
             }
         }
     }
-
-
 
     @Override
     public void startServer() {
@@ -114,22 +122,8 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
         server.addListener(new ServerListener());
 
-        String playerId = "00";
-        String nick = "the_mighty_host";
+        WhatAmI.addPlayerToLobby( WhatAmI.getPlayer().getPlayerID(), WhatAmI.getPlayer() );
 
-        String selfAddress = "";
-        try {
-            selfAddress = InetAddress.getLocalHost().toString();
-        } catch(UnknownHostException e) {
-            e.printStackTrace();
-        }
-
-        Player self = new Player(playerId, nick,
-                        "/" + selfAddress, selfAddress, Network.PORT_TCP,
-                        Role.HOST);
-
-        WhatAmI.setPlayer(self);
-        WhatAmI.addPlayerToLobby( nick, self );
         WhatAmI.getLobby().print();
 
         server.start();

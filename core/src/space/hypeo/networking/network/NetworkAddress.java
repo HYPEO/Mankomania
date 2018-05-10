@@ -41,7 +41,7 @@ public final class NetworkAddress {
                 while( addresses.hasMoreElements() ) {
                     InetAddress addr = addresses.nextElement();
                     ip = addr.getHostAddress();
-                    Log.info(iface.getDisplayName() + " " + ip);
+                    //Log.info(iface.getDisplayName() + " " + ip);
 
                     availableAddresses.add(addr);
                 }

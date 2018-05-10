@@ -19,7 +19,7 @@ public class Lobby {
 
     /**
      * The data structure that holds the player-list.
-     * String     ... Nickname of the player
+     * String     ... PlayerId of the player
      * PlayerInfo ... Network info of the player
      */
     protected HashMap<String, Player> data;
@@ -31,12 +31,12 @@ public class Lobby {
         this.data = data;
     }
 
-    public void add(String nick, Player p) {
-        data.put(nick, p);
+    public void add(String id, Player p) {
+        data.put(id, p);
     }
 
-    public void remove(String nick) {
-        data.remove(nick);
+    public void remove(String id) {
+        data.remove(id);
     }
 
     public void remove(Player p) {
@@ -75,8 +75,8 @@ public class Lobby {
 
         int index = 1;
         for( HashMap.Entry<String, Player> entry : data.entrySet() ) {
-            Log.info("  " + index + ". Nick = '" + entry.getKey() +"'");
-            Log.info("     " + entry.getValue().toString());
+            Log.info("  " + index + ". ID = '" + entry.getKey() +"'");
+            Log.info("     " + entry.getValue());
             index++;
         }
     }

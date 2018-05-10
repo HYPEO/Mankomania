@@ -217,8 +217,9 @@ public class StageFactory {
             public void clicked(InputEvent event, float x, float y) {
 
                 Log.info("Try to start server...");
-                WhatAmI.setRole(Role.HOST);
-                WhatAmI.setHost();
+                // initialize device as host
+                WhatAmI.init("the_mighty_host", Role.HOST);
+                // start server process
                 WhatAmI.getHost().startServer();
                 Log.info("Server has started successfully");
 
@@ -232,8 +233,9 @@ public class StageFactory {
             public void clicked(InputEvent event, float x, float y) {
 
                 Log.info("Try to start client...");
-                WhatAmI.setRole(Role.CLIENT);
-                WhatAmI.setClient();
+                // initialize device as client
+                WhatAmI.init("another_client", Role.CLIENT);
+                // start client process
                 WhatAmI.getClient().startClient();
                 Log.info("Client has started successfully");
 
