@@ -18,11 +18,11 @@ import java.util.HashMap;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.RectangleActor;
+import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.WhatAmI;
 
-import space.hypeo.networking.network.CRole;
 import space.hypeo.networking.packages.Lobby;
-import space.hypeo.networking.packages.Player;
+import space.hypeo.networking.network.Player;
 
 
 /**
@@ -56,9 +56,9 @@ public class LobbyStage extends Stage {
         tblLobby.row();
 
         Lobby lobby = WhatAmI.getLobby();
-        CRole role = WhatAmI.getRole();
+        Role role = WhatAmI.getRole();
 
-        if( lobby == null || role.equals(CRole.Role.NOT_CONNECTED) ) {
+        if( lobby == null || role == Role.NOT_CONNECTED ) {
             Log.error("LobbyStage: lobby must not be null!");
             stageManager.remove(LobbyStage.this);
             return;

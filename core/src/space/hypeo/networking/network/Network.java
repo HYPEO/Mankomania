@@ -3,6 +3,8 @@ package space.hypeo.networking.network;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
+import java.util.HashMap;
+
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
@@ -29,6 +31,7 @@ public class Network {
 
     /**
      * Register objects for server|client that are going to be sent over the network.
+     * NOTE: all classes that are used in classes, have to be registered too!
      * @param endPoint can be server or client
      */
     public static void register (EndPoint endPoint) {
@@ -36,7 +39,13 @@ public class Network {
         kryo.register(PingRequest.class);
         kryo.register(PingResponse.class);
         kryo.register(Notification.class);
+        kryo.register(java.util.HashMap.class);
+
         kryo.register(Lobby.class);
+        kryo.register(space.hypeo.networking.network.Player.class);
+        kryo.register(String.class);
+        kryo.register(space.hypeo.networking.network.Role.class);
+
     }
 
 }

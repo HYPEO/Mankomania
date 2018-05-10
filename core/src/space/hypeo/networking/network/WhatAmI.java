@@ -3,7 +3,6 @@ package space.hypeo.networking.network;
 import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
 import space.hypeo.networking.packages.Lobby;
-import space.hypeo.networking.packages.Player;
 
 /**
  * This class stores the role of a player in the network:
@@ -18,7 +17,7 @@ public class WhatAmI {
     //private static Object endPoint;
 
     // role of current player
-    private static CRole role = new CRole(CRole.Role.NOT_CONNECTED);
+    private static Role role;
 
     // network info a player
     private static Player player = new Player();
@@ -33,12 +32,12 @@ public class WhatAmI {
         return endPoint;
     }*/
 
-    public static void setRole(CRole.Role r) {
-        WhatAmI.role.setRole(r);
+    public static void setRole(Role role) {
+        WhatAmI.role = role;
     }
 
-    public static CRole getRole() {
-        return WhatAmI.player.getCRole();
+    public static Role getRole() {
+        return WhatAmI.role;
     }
 
     public static void setHost() {
@@ -73,21 +72,24 @@ public class WhatAmI {
         WhatAmI.player = player;
     }
 
-    public static Lobby getLobby() {
-        return lobby;
-    }
-
     public static void setLobby(Lobby lobby) {
         WhatAmI.lobby = lobby;
+    }
+
+    public static Lobby getLobby() {
+        return lobby;
     }
 
     public static void addPlayerToLobby(String nick, Player player) {
         WhatAmI.lobby.add(nick, player);
     }
 
-    public static void removePlayerFromLobby(String nick, Player player) {
-        WhatAmI.lobby.add(nick, player);
+    public static void removePlayerFromLobby(String nick) {
+        WhatAmI.lobby.remove(nick);
     }
 
+    public static void removePlayerFromLobby(Player player) {
+        WhatAmI.lobby.remove(player);
+    }
 
 }

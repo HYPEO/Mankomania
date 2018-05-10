@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import space.hypeo.networking.network.Network;
+import space.hypeo.networking.network.Player;
 
 
 /**
@@ -25,6 +26,9 @@ public class Lobby {
 
     public Lobby() {
         data = new HashMap<String, Player>();
+    }
+    public Lobby(HashMap<String, Player> data) {
+        this.data = data;
     }
 
     public void add(String nick, Player p) {

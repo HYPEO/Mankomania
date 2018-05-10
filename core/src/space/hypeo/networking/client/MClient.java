@@ -8,13 +8,14 @@ import com.esotericsoftware.minlog.Log;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.List;
 
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.IPlayerConnector;
+import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.WhatAmI;
-import space.hypeo.networking.network.CRole;
-import space.hypeo.networking.packages.Player;
+import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
@@ -51,7 +52,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
         public void connected(Connection connection) {
             super.connected(connection);
 
-            hostInfo = new Player(connection, CRole.Role.HOST);
+            hostInfo = new Player(connection, Role.HOST);
             Log.info("hostInfo = " + hostInfo.toString());
             connectedToHost = connection.getRemoteAddressTCP().getAddress();
             Log.info("connectedToHost = " + connectedToHost);
@@ -94,20 +95,19 @@ public class MClient implements IPlayerConnector, IClientConnector {
                  */
                 WhatAmI.setLobby( (Lobby) object );
                 Log.info("Client received updated list of player");
+            } else if( object instanceof HashMap ) {
+                Lobby lobby = new Lobby( (HashMap<String, Player>) object);
+                WhatAmI.setLobby( lobby );
             }
         }
-    }
-
-    @Override
-    public boolean joinGame(String playerID) {
-        return false;
     }
 
     @Override
     public void startClient() {
 
         client = new Client();
-        client.start();
+        new Thread(client).start();
+        Network.register(client);
     }
 
     @Override
@@ -129,9 +129,9 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
             client.addListener(new ClientListener());
 
-            Network.register(client);
+            //pingServer();
 
-            pingServer();
+            // TODO: create function to find out address and name
 
             String playerId = "01";
             String nick = "the_c_client";
@@ -143,17 +143,15 @@ public class MClient implements IPlayerConnector, IClientConnector {
                 Log.error(e.getMessage().toString());
             }
 
-            WhatAmI.setPlayer(
-                    new Player(playerId, nick,
+            Player self = new Player(playerId, nick,
                             "/" + selfAddress, selfAddress, Network.PORT_TCP,
-                            CRole.Role.CLIENT)
-            );
+                            Role.CLIENT);
 
-            WhatAmI.addPlayerToLobby( nick, WhatAmI.getPlayer() );
-
+            WhatAmI.setPlayer(self);
+            WhatAmI.addPlayerToLobby( nick, self );
             WhatAmI.getLobby().print();
 
-            Log.info("MClient-connectToHost: " + WhatAmI.getRole().toString());
+            Log.info("MClient-connectToHost: " + WhatAmI.getRole());
         }
     }
 
@@ -166,6 +164,13 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
         client.sendTCP(pingRequest);
     }
+
+    @Override
+    public boolean joinGame(String playerID) {
+        return false;
+    }
+
+
 
     @Override
     public void changeBalance(String playerID, int amount) {

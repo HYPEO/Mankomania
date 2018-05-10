@@ -1,8 +1,6 @@
-package space.hypeo.networking.packages;
+package space.hypeo.networking.network;
 
 import com.esotericsoftware.kryonet.Connection;
-
-import space.hypeo.networking.network.CRole;
 
 /**
  * This class holds the important network data,
@@ -16,7 +14,7 @@ public class Player {
     private String address;
     private int port;
 
-    CRole cRole;
+    Role role;
 
     /**
      * Creates a new instance of PlayerInfo
@@ -31,14 +29,14 @@ public class Player {
         address = "";
         port = 0;
 
-        cRole = null;
+        role = null;
     }
 
     /**
      * Creates a new instance of PlayerInfo
      * @param c kryonet.Connection Connection while has connected/disconneted/received
      */
-    public Player(Connection c, CRole.Role r) {
+    public Player(Connection c, Role r) {
 
         if( c == null || r == null ) {
             new Player();
@@ -49,26 +47,28 @@ public class Player {
             address = c.getRemoteAddressTCP().getAddress().toString();
             hostName = c.getRemoteAddressTCP().getHostName();
             port = c.getRemoteAddressTCP().getPort();
-            cRole = new CRole(r);
+            role = r;
         }
     }
 
     /**
      * Creates a new instance of PlayerInfo
+     * @param playerID
+     * @param nick
      * @param hostName
      * @param address
      * @param port
-     * @param cRole
+     * @param role
      */
     public Player(String playerID, String nick,
                   String hostName, String address, int port,
-                  CRole.Role cRole) {
+                  Role role) {
         this.playerID = "";
         this.nick = "";
         this.hostName = hostName;
         this.address = address;
         this.port = port;
-        this.cRole = new CRole(cRole);
+        this.role =role;
     }
 
     public String getPlayerID() {
@@ -111,8 +111,8 @@ public class Player {
         return port;
     }
 
-    public CRole getCRole() {
-        return cRole;
+    public Role getRole() {
+        return role;
     }
 
     @Override
@@ -122,6 +122,6 @@ public class Player {
                 + ", Hostname: " + hostName
                 + ", Address: " + address
                 + ", Port: " + port
-                + ", Role: " + cRole.toString();
+                + ", Role: " + role;
     }
 }

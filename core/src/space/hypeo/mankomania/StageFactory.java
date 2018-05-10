@@ -30,7 +30,7 @@ import space.hypeo.mankomania.actors.PlayerActor;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.TitleStage;
-import space.hypeo.networking.network.CRole;
+import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.WhatAmI;
 
 /**
@@ -217,7 +217,7 @@ public class StageFactory {
             public void clicked(InputEvent event, float x, float y) {
 
                 Log.info("Try to start server...");
-                WhatAmI.setRole(CRole.Role.HOST);
+                WhatAmI.setRole(Role.HOST);
                 WhatAmI.setHost();
                 WhatAmI.getHost().startServer();
                 Log.info("Server has started successfully");
@@ -232,7 +232,7 @@ public class StageFactory {
             public void clicked(InputEvent event, float x, float y) {
 
                 Log.info("Try to start client...");
-                WhatAmI.setRole(CRole.Role.CLIENT);
+                WhatAmI.setRole(Role.CLIENT);
                 WhatAmI.setClient();
                 WhatAmI.getClient().startClient();
                 Log.info("Client has started successfully");
