@@ -11,6 +11,7 @@ import java.util.List;
 
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.IPlayerConnector;
+import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
@@ -115,9 +116,8 @@ public class MClient implements IPlayerConnector, IClientConnector {
     @Override
     public List<InetAddress> discoverHosts() {
         // use UDP port for discovering hosts
-
-        // TODO: remove loop-addresses
         discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
+        discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
         return discoveredHosts;
     }
 

@@ -7,21 +7,31 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 /**
- * This class searches for all available network addresses for an endpoint.
+ * This class provides methods to work with network addresses for an endpoint.
  * https://stackoverflow.com/questions/8083479/java-getting-my-ip-address
  */
 public final class NetworkAddress {
 
+    /**
+     * regex that matches network addresses
+     */
     public static final String IPADDRESS_PATTERN =
             "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
 
-    public static List<InetAddress> showAllMyNetworkAddresses() throws SocketException {
+    /**
+     * Gets all available network addresses for a device.
+     * Filters loopback and inactive addresses out.
+     * @return List of available network addresses.
+     * @throws SocketException
+     */
+    public static List<InetAddress> getAllAvailableNetworkAddresses() throws SocketException {
 
         List<InetAddress> availableAddresses = new ArrayList<InetAddress>();
 
@@ -53,6 +63,11 @@ public final class NetworkAddress {
         return availableAddresses;
     }
 
+    /**
+     * Gets the current IP address of device.
+     * @return String IP address.
+     * @throws SocketException
+     */
     public static String getNetworkAddress() throws SocketException {
 
         String ip = "";
@@ -60,7 +75,7 @@ public final class NetworkAddress {
         Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
 
         try {
-            List<InetAddress> ipAddresses = NetworkAddress.showAllMyNetworkAddresses();
+            List<InetAddress> ipAddresses = NetworkAddress.getAllAvailableNetworkAddresses();
 
             for( InetAddress addr : ipAddresses ) {
                 Matcher matcher = pattern.matcher(addr.getHostAddress());
@@ -75,5 +90,22 @@ public final class NetworkAddress {
         }
 
         return ip;
+    }
+
+    /**
+     * Filters loopback and inactive addresses out of given list of addresses.
+     * @param addresses list to filter on.
+     * @return addresses without loopback.
+     */
+    public static List<InetAddress> filterLoopback( List<InetAddress> addresses ) {
+
+        for( Iterator<InetAddress> addr = addresses.listIterator(); addr.hasNext(); ) {
+            InetAddress a = addr.next();
+            if( a.isLoopbackAddress() ) {
+                addr.remove();
+            }
+        }
+
+        return addresses;
     }
 }
