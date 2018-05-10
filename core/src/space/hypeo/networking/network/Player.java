@@ -44,10 +44,12 @@ public class Player {
      * @param p
      */
     public Player(Player p) {
-        this.playerID = p.playerID;
-        this.nick = p.nick;
-        this.address = p.address;
-        this.role = p.role;
+        if( p != null && p != this) {
+            this.playerID = new String(p.playerID);
+            this.nick = new String(p.nick);
+            this.address = new String(p.address);
+            this.role = p.role;
+        }
     }
 
     /**
