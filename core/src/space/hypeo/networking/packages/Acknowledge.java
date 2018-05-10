@@ -7,8 +7,15 @@ package space.hypeo.networking.packages;
 public class Acknowledge {
     private String msg = "Connection accepted from host ";
 
+    /**
+     * Default constructor.
+     */
     public Acknowledge() {}
 
+    /**
+     * Creates a new instance of Acknowledge with given host IP address.
+     * @param hostIp
+     */
     public Acknowledge(String hostIp) {
         msg += hostIp;
     }

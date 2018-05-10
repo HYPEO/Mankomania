@@ -1,8 +1,6 @@
 package space.hypeo.networking.host;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import space.hypeo.networking.network.IHostConnector;
 import space.hypeo.networking.network.IPlayerConnector;

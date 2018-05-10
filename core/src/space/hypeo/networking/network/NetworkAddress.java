@@ -19,6 +19,9 @@ import java.util.regex.Pattern;
  */
 public final class NetworkAddress {
 
+    // this class is not instantiable!
+    private NetworkAddress() {}
+
     /**
      * regex that matches network addresses
      */
@@ -33,7 +36,7 @@ public final class NetworkAddress {
      */
     public static List<InetAddress> getAllAvailableNetworkAddresses() throws SocketException {
 
-        List<InetAddress> availableAddresses = new ArrayList<InetAddress>();
+        List<InetAddress> availableAddresses = new ArrayList<>();
 
         String ip;
 
@@ -57,7 +60,8 @@ public final class NetworkAddress {
                 }
             }
         } catch( SocketException e ) {
-            throw new RuntimeException(e);
+            Log.error(e.getMessage());
+            throw e;
         }
 
         return availableAddresses;
@@ -86,7 +90,8 @@ public final class NetworkAddress {
             }
 
         } catch( SocketException e ) {
-            throw new RuntimeException(e);
+            Log.error(e.getMessage());
+            throw e;
         }
 
         return ip;

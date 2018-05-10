@@ -1,23 +1,20 @@
 package space.hypeo.networking.network;
 
-import com.esotericsoftware.kryonet.Connection;
-
 /**
  * This class holds the important network data,
  * that identifies a player in the network.
  */
 public class Player {
 
-    protected String playerID;
-    protected String nick;
-    protected String address;
+    protected String playerID;  // player ID
+    protected String nick;      // nickname
+    protected String address;   // IP address in W/LAN
 
-    // TODO: role is redundant in WhatAmI too!
+    // The current role in the network connection.
     Role role;
 
     /**
-     * Creates a new instance of PlayerInfo
-     * Default Constructor
+     * Default Constructor, creates a new instance of Player with empty attributes.
      */
     public Player() {
 
@@ -28,7 +25,7 @@ public class Player {
     }
 
     /**
-     * Creates a new instance of PlayerInfo
+     * Creates a new instance of Player.
      * @param playerID
      * @param nick
      * @param address
@@ -42,6 +39,10 @@ public class Player {
         this.role =role;
     }
 
+    /**
+     * Copy constructor, creates a new instance of Player.
+     * @param p
+     */
     public Player(Player p) {
         this.playerID = p.playerID;
         this.nick = p.nick;
@@ -49,34 +50,58 @@ public class Player {
         this.role = p.role;
     }
 
+    /**
+     * Returns ID of current player.
+     * @return String ID.
+     */
     public String getPlayerID() {
         return playerID;
     }
 
+    /**
+     * Sets the ID of the current player.
+     * @param playerID
+     */
     public void setPlayerID(String playerID) {
         this.playerID = playerID;
     }
 
+    /**
+     * Gets the nickname of the current player.
+     * @return String nickname.
+     */
     public String getNick() {
         return nick;
     }
 
+    /**
+     * Sets the nickname of the current player.
+     * @param nick
+     */
     public void setNick(String nick) {
         this.nick = nick;
     }
 
     /**
-     * Gets current address
+     * Gets current address.
      * @return String IP Address
      */
     public String getAddress() {
         return address;
     }
 
+    /**
+     * Gets the role of the current player.
+     * @return Role.
+     */
     public Role getRole() {
         return role;
     }
 
+    /**
+     * Returns the string representation of current player.
+     * @return String representation
+     */
     @Override
     public String toString() {
         return "PlayerID: " + playerID
