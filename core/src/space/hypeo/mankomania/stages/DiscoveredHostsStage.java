@@ -18,7 +18,7 @@ import java.util.List;
 
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
-import space.hypeo.mankomania.actors.RectangleActor;
+import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.networking.network.WhatAmI;
 
 
@@ -32,7 +32,7 @@ public class DiscoveredHostsStage extends Stage {
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
 
-        Skin skin = new Skin(Gdx.files.internal(StageFactory.PATH_UISKIN));
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         Label lblDiscoveredHosts = new Label("Discovered Hosts", skin);
 
