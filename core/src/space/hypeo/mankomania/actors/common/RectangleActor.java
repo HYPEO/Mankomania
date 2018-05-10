@@ -1,4 +1,4 @@
-package space.hypeo.mankomania.actors;
+package space.hypeo.mankomania.actors.common;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -8,10 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Created by pichlermarc on 26.04.2018.
  */
 public class RectangleActor extends Actor {
-    ShapeRenderer rectangleRenderer;
+    private ShapeRenderer rectangleRenderer;
 
-    public RectangleActor(float x, float y, float width, float height)
-    {
+    public RectangleActor(float x, float y, float width, float height) {
         //Set up rectangle.
         rectangleRenderer = new ShapeRenderer();
         setX(x);
@@ -21,8 +20,7 @@ public class RectangleActor extends Actor {
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha)
-    {
+    public void draw(Batch batch, float parentAlpha) {
         batch.end();
 
         rectangleRenderer.begin(ShapeRenderer.ShapeType.Filled);
