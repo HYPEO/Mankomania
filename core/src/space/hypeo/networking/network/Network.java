@@ -14,6 +14,9 @@ import space.hypeo.networking.packages.PingResponse;
  */
 public class Network {
 
+    // this class is not instantiable!
+    private Network() {}
+
     // communication ports
     public static final int PORT_TCP = 54555;
     public static final int PORT_UDP = 54777;
@@ -28,7 +31,7 @@ public class Network {
      * Register objects for server|client that are going to be sent over the network.
      * @param endPoint can be server or client
      */
-    static public void register (EndPoint endPoint) {
+    public static void register (EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
         kryo.register(PingRequest.class);
         kryo.register(PingResponse.class);

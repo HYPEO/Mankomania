@@ -51,7 +51,6 @@ public class DiscoveredHostsStage extends Stage {
         tblDiscoveredHosts.add(new Label("Discovered Hosts:", skin)).width(300).height(100);
         tblDiscoveredHosts.row();
 
-        //List<InetAddress> foundHosts = (MClient) WhatAmI.getEndPoint().discoverHosts();
         List<InetAddress> foundHosts = WhatAmI.getClient().discoverHosts();
 
         if( foundHosts != null && ! foundHosts.isEmpty() ) {
@@ -64,11 +63,11 @@ public class DiscoveredHostsStage extends Stage {
                 Button btnHost = new TextButton(index + ". Host " + hostAddr.toString(), skin);
 
                 btnHost.addListener(new ClickListener() {
+                    @Override
                     public void clicked(InputEvent event, float x, float y) {
 
                         Log.info("Try to connect to host " + hostAddr.toString() + "...");
 
-                        //MClient.getInstance().connectToHost(hostAddr);
                         WhatAmI.getClient().connectToHost(hostAddr);
 
                         stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
@@ -99,6 +98,7 @@ public class DiscoveredHostsStage extends Stage {
 
         // Add listener for click events.
         this.addListener(new ClickListener() {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.remove(DiscoveredHostsStage.this);
             }

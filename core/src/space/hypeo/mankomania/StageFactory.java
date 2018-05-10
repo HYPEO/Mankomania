@@ -21,10 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
-import java.net.InetAddress;
-import java.util.List;
 import space.hypeo.mankomania.actors.BuyHouseFieldActor;
 import space.hypeo.mankomania.actors.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.EmptyFieldActor;
@@ -33,8 +30,6 @@ import space.hypeo.mankomania.actors.PlayerActor;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.TitleStage;
-import space.hypeo.networking.client.MClient;
-import space.hypeo.networking.host.MHost;
 import space.hypeo.networking.network.CRole;
 import space.hypeo.networking.network.WhatAmI;
 
@@ -216,10 +211,10 @@ public class StageFactory {
                                   });
 
         host.addListener(new ClickListener() {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
 
                 Log.info("Try to start server...");
-                // TODO: set endpoint to server
                 WhatAmI.setRole(CRole.Role.HOST);
                 WhatAmI.setHost();
                 WhatAmI.getHost().startServer();
@@ -231,6 +226,7 @@ public class StageFactory {
         });
 
         join.addListener(new ClickListener() {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
 
                 Log.info("Try to start client...");
@@ -379,12 +375,7 @@ public class StageFactory {
     }
 
     /**
-     * Shows the network-lobby:
-     * The lobby is a Scene in the game for players to join before playing the actual game.
-     * In the lobby, players can pick options and set themselves as ready for the game to start.
-     *
-     * The list in the lobby creates each player - both host and clients - itself.
-     * Therefore the hashmap 'players' - a field of class MHost - contains the necessary data.
+     * Shows the network-lobby.
      * @param viewport
      * @param stageManager
      * @return stage/view of lobby

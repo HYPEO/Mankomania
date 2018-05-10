@@ -24,6 +24,14 @@ import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.packages.Player;
 
 
+/**
+ * Shows the network-lobby:
+ * The lobby is a Scene in the game for players to join before playing the actual game.
+ * In the lobby, players can pick options and set themselves as ready for the game to start.
+ *
+ * The list in the lobby creates each player - both host and clients - itself.
+ * Therefore the hashmap 'players' - a field of class MHost - contains the necessary data.
+ */
 public class LobbyStage extends Stage {
     StageManager stageManager;
 
@@ -49,33 +57,22 @@ public class LobbyStage extends Stage {
         Lobby lobby = WhatAmI.getLobby();
         CRole role = WhatAmI.getRole();
 
-        /*if (role.equals(CRole.Role.HOST) ) {
-            lobby = MHost.getInstance().registeredPlayers();
-            Log.info("LobbyStage: Role = HOST");
-        } else if (role.equals( CRole.Role.CLIENT) ) {
-            lobby = MClient.getInstance().registeredPlayers();
-            Log.info("LobbyStage: Role = CLIENT");
-        } else if (role.equals(CRole.Role.NOT_CONNECTED) ) {
-            Log.info("LobbyStage: Role = NOT_CONNECTED");
-        } else if (role == null) {
-            Log.info("LobbyStage: Role = null");
-        }*/
-
         if( lobby == null || role.equals(CRole.Role.NOT_CONNECTED) ) {
             Log.error("LobbyStage: lobby must not be null!");
             stageManager.remove(LobbyStage.this);
             return;
         }
 
-        // TODO: game losby has to be updated after changes in collection 'players'
+        // TODO: game lobby has to be updated after changes in collection 'players'
         int index = 1;
         for( HashMap.Entry<String, Player> entry : lobby.getData().entrySet() ) {
 
             Button btnPlayer = new TextButton(index + ". " + entry.getKey(), skin);
 
             btnPlayer.addListener(new ClickListener() {
+                @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    // TODO: add behavior
+                    // TODO: set status read to start game
                 }
 
             });
@@ -95,6 +92,7 @@ public class LobbyStage extends Stage {
 
         // Add listener for click events.
         this.addListener(new ClickListener() {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.remove(LobbyStage.this);
             }

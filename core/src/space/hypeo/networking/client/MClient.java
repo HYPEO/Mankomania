@@ -23,17 +23,10 @@ import space.hypeo.networking.packages.PingResponse;
 
 /**
  * This class represents the client process on a device.
- * It is implemented as singleton.
  * If you don't know, if you're client or host, call
  * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
  */
 public class MClient implements IPlayerConnector, IClientConnector {
-
-    // TODO: next block 'static' has no effect ?!?
-    static {
-        System.setProperty("java.net.preferIPv6Addresses", "false");
-        System.setProperty("java.net.preferIPv4Stack" , "true");
-    }
 
     private com.esotericsoftware.kryonet.Client client;
 
@@ -44,14 +37,6 @@ public class MClient implements IPlayerConnector, IClientConnector {
     private InetAddress connectedToHost = null;
 
     private long startPingRequest = 0;
-
-    /**
-     * Constructs instance of class MClient
-     */
-    public MClient() {
-        super();
-        // TODO: set nick and player
-    }
 
     /**
      * This class handles the connection events with the client.
@@ -121,10 +106,6 @@ public class MClient implements IPlayerConnector, IClientConnector {
     @Override
     public void startClient() {
 
-        // TODO: next 2 stmts have no effect ?!?
-        //System.setProperty("java.net.preferIPv6Addresses", "false");
-        //System.setProperty("java.net.preferIPv4Stack" , "true");
-
         client = new Client();
         client.start();
     }
@@ -159,7 +140,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
             try {
                 selfAddress = InetAddress.getLocalHost().toString();
             } catch(UnknownHostException e) {
-                e.printStackTrace();
+                Log.error(e.getMessage().toString());
             }
 
             WhatAmI.setPlayer(

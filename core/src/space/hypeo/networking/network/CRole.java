@@ -1,7 +1,5 @@
 package space.hypeo.networking.network;
 
-import space.hypeo.networking.packages.PingRequest;
-
 import static space.hypeo.networking.network.CRole.Role.CLIENT;
 import static space.hypeo.networking.network.CRole.Role.HOST;
 import static space.hypeo.networking.network.CRole.Role.NOT_CONNECTED;
@@ -11,13 +9,14 @@ import static space.hypeo.networking.network.CRole.Role.NOT_CONNECTED;
  */
 public class CRole {
 
-    private final String STR_CLIENT = "CLIENT";
-    private final String STR_HOST = "HOST";
-    private final String STR_NOT_CONNECTED = "NOT_CONNECTED";
-    private final String STR_UNKNOWN_ROLE = "UNKNOWN_ROLE";
+    // TODO: set up an other data structure for constants + string representations
 
-    public enum Role { HOST, CLIENT, NOT_CONNECTED;
-    };
+    private static final String STR_CLIENT = "CLIENT";
+    private static final String STR_HOST = "HOST";
+    private static final String STR_NOT_CONNECTED = "NOT_CONNECTED";
+    private static final String STR_UNKNOWN_ROLE = "UNKNOWN_ROLE";
+
+    public enum Role { HOST, CLIENT, NOT_CONNECTED; };
 
     // current Role of current P
     private Role role;
@@ -51,6 +50,19 @@ public class CRole {
             return role.equals( other.getRole() );
         } else {
             return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        if( role == Role.HOST ) {
+            return STR_HOST.hashCode();
+        } else if( role == Role.CLIENT ) {
+            return STR_CLIENT.hashCode();
+        } else if( role == Role.NOT_CONNECTED ) {
+            return STR_NOT_CONNECTED.hashCode();
+        } else {
+            return STR_UNKNOWN_ROLE.hashCode();
         }
     }
 

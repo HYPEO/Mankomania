@@ -1,12 +1,5 @@
 package space.hypeo.networking.network;
 
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.EndPoint;
-import com.esotericsoftware.kryonet.Server;
-import com.esotericsoftware.minlog.Log;
-
-import java.nio.file.Watchable;
-
 import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
 import space.hypeo.networking.packages.Lobby;
@@ -17,6 +10,9 @@ import space.hypeo.networking.packages.Player;
  * The end point in a network connection could be host or client.
  */
 public class WhatAmI {
+
+    // this class is not instantiable!
+    private WhatAmI() {}
 
     // the local end point of a connection (host or client)
     //private static Object endPoint;
@@ -63,11 +59,9 @@ public class WhatAmI {
 
     /*public static void setEndPoint(EndPoint endPoint) {
         if( endPoint instanceof Server ) {
-
-            WhatAmI.client = null;
+            WhatAmI.endpoint = new MHost();
         } else if( endPoint instanceof Client ) {
-
-            WhatAmI.host = null;
+            WhatAmI.endpoint = new MClient();
         }
     }*/
 

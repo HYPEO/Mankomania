@@ -22,19 +22,12 @@ import com.esotericsoftware.minlog.Log;
 
 /**
  * This class represents the host process on a device.
- * It is implemented as singleton.
  * If you don't know, if you're client or host, call
  * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
  */
 public class MHost implements IPlayerConnector, IHostConnector {
 
     private com.esotericsoftware.kryonet.Server server;
-
-    /**
-     * Constructs instance of class MHost
-     */
-    public MHost() {
-    }
 
     /**
      * This class handles the connection events with the server.
