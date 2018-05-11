@@ -13,7 +13,7 @@ public class BuyHotelFieldActor extends FieldActor {
     private boolean bought = false;
 
     public BuyHotelFieldActor(float x, float y, Texture texture, int price, Image fieldInfoImage) {
-        super(new Texture(TEXTURE_PATH), x, y, FIELD_SCALE, FIELD_SCALE, texture, price, fieldInfoImage);
+        super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, fieldInfoImage);
     }
 
     @Override
