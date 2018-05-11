@@ -7,32 +7,41 @@ import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.HashMap;
 import java.util.List;
 
-import space.hypeo.networking.IClientConnector;
-import space.hypeo.networking.IPlayerConnector;
-import space.hypeo.networking.PlayerInfo;
+import space.hypeo.networking.network.IClientConnector;
+import space.hypeo.networking.network.IPlayerConnector;
+import space.hypeo.networking.network.NetworkAddress;
+import space.hypeo.networking.network.WhatAmI;
+import space.hypeo.networking.network.Player;
+import space.hypeo.networking.packages.Acknowledge;
+import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
+import space.hypeo.networking.packages.PlayerConnect;
+import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.PlayerHost;
 
+/**
+ * This class represents the client process on a device.
+ * If you don't know, if you're client or host, call
+ * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
+ */
 public class MClient implements IPlayerConnector, IClientConnector {
-
-    static {
-        System.setProperty("java.net.preferIPv6Addresses", "false");
-        System.setProperty("java.net.preferIPv4Stack" , "true");
-    }
 
     private com.esotericsoftware.kryonet.Client client;
 
-    private PlayerInfo hostInfo = null;
     private List<InetAddress> discoveredHosts = null;
-    private InetAddress connectedToHost = null;
+
+    private Player hostInfo = null;
 
     private long startPingRequest = 0;
 
+    /**
+     * This class handles the connection events with the client.
+     */
     private class ClientListener extends Listener {
 
         /**
@@ -42,11 +51,6 @@ public class MClient implements IPlayerConnector, IClientConnector {
         @Override
         public void connected(Connection connection) {
             super.connected(connection);
-
-            hostInfo = new PlayerInfo(connection, Network.Role.host);
-            Log.info("hostInfo = " + hostInfo.toString());
-            connectedToHost = connection.getRemoteAddressTCP().getAddress();
-            Log.info("connectedToHost = " + connectedToHost);
 
             connection.sendTCP(new Notification("You accepted my connection to game."));
         }
@@ -58,8 +62,11 @@ public class MClient implements IPlayerConnector, IClientConnector {
         @Override
         public void disconnected(Connection connection) {
             super.disconnected(connection);
+
+            connection.sendTCP( new PlayerDisconnect(WhatAmI.getPlayer()) );
+
             hostInfo = null;
-            connectedToHost = null;
+            connection.close();
         }
 
         /**
@@ -78,35 +85,41 @@ public class MClient implements IPlayerConnector, IClientConnector {
             } else if( object instanceof Notification) {
                 Notification notification = (Notification) object;
                 Log.info("Client received: " + notification.toString());
+
+            } else if( object instanceof Lobby ) {
+                /*
+                 * receive new list of Player:
+                 * after connecting or disconnecting clients
+                 */
+                WhatAmI.setLobby( (Lobby) object );
+                Log.info("Client received updated list of player");
+
+            } else if( object instanceof Acknowledge ) {
+                Acknowledge ack = (Acknowledge) object;
+                Log.info("Client: " + ack);
+
+                connection.sendTCP( new PlayerConnect(WhatAmI.getPlayer()) );
+
+            } else if( object instanceof PlayerHost) {
+                hostInfo = (PlayerHost) object;
+                Log.info("Client: Got connection to host " + hostInfo);
             }
         }
     }
 
     @Override
-    public boolean joinGame(String playerID) {
-        return false;
-    }
-
-    @Override
     public void startClient() {
 
-        //String firstHostFound = "";
-
-        //System.setProperty("java.net.preferIPv6Addresses", "false");
-        //System.setProperty("java.net.preferIPv4Stack" , "true");
-
         client = new Client();
-        client.start();
-
-        // TODO: execute discoverHosts() from outside?
-        //this.discoverHosts();
-
+        new Thread(client).start();
+        Network.register(client);
     }
 
     @Override
     public List<InetAddress> discoverHosts() {
-        //discoveredHosts = client.discoverHosts(Network.PORT_TCP, Network.TIMEOUT_MS);
+        // use UDP port for discovering hosts
         discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
+        discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
         return discoveredHosts;
     }
 
@@ -115,20 +128,18 @@ public class MClient implements IPlayerConnector, IClientConnector {
         if( client != null && discoveredHosts != null && discoveredHosts.contains(hostAddress) ) {
             try {
                 client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_TCP, Network.PORT_UDP);
-                connectedToHost = hostAddress;
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             client.addListener(new ClientListener());
 
-            Network.register(client);
+            //pingServer();
 
-            pingServer();
+            WhatAmI.getLobby().print();
 
-            // TODO: wait for response
-            /*while( true ) {
-            }*/
+            Log.info("MClient-connectToHost: " + WhatAmI.getRole());
         }
     }
 
@@ -140,6 +151,11 @@ public class MClient implements IPlayerConnector, IClientConnector {
         startPingRequest = pingRequest.getTime();
 
         client.sendTCP(pingRequest);
+    }
+
+    @Override
+    public boolean joinGame(String playerID) {
+        return false;
     }
 
     @Override
@@ -169,11 +185,11 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
     @Override
     public String getCurrentPlayerID() {
-        return null;
+        return WhatAmI.getPlayer().getPlayerID();
     }
 
     @Override
-    public HashMap<String, PlayerInfo> registeredPlayers() {
-        return null;
+    public Lobby registeredPlayers() {
+        return WhatAmI.getLobby();
     }
 }

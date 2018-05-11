@@ -1,7 +1,6 @@
-package space.hypeo.networking;
+package space.hypeo.networking.network;
 
-import java.util.HashMap;
-import java.util.List;
+import space.hypeo.networking.packages.Lobby;
 
 
 /**
@@ -54,6 +53,6 @@ public interface IPlayerConnector {
     /**
      * Gets the list of players registered for the Game.
      */
-    public HashMap<String, PlayerInfo> registeredPlayers();
+    public Lobby registeredPlayers();
 
 }
