@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.Random;
+
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.BuyHotelFieldActor;
 import space.hypeo.mankomania.actors.fields.EmptyFieldActor;
@@ -26,7 +28,7 @@ public class MapStage extends Stage {
     private static final float MARGIN_X = 40f;
     private static final float MARGIN_Y = 80f;
     private static final float FIELD_DISTANCE = 40f;
-    private static Image fieldInfoImage;
+    private Image fieldInfoImage;
 
     public MapStage(Viewport viewport, StageManager stageManager) {
         super(viewport);
@@ -65,6 +67,7 @@ public class MapStage extends Stage {
         close.setY(viewport.getWorldHeight() - close.getHeight());
         // Add click listeners.
         close.addListener(new ClickListener() {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.remove(MapStage.this);
             }
@@ -86,7 +89,7 @@ public class MapStage extends Stage {
      * @param mapStage   The stage to create the map on.
      * @return The last field on this list of fields (to use for linking).
      */
-    private static FieldActor generateFields(int amount,
+    private FieldActor generateFields(int amount,
                                              float xDirection,
                                              float yDirection,
                                              float xMargin,
@@ -94,15 +97,16 @@ public class MapStage extends Stage {
                                              FieldActor firstField,
                                              Stage mapStage) {
         FieldActor previousField = firstField;
+        Random randomGenerator = new Random();
         for (int i = 1; i <= amount; i++) {
-            int random = (int) (Math.random() * 9);
+            int random = randomGenerator.nextInt(9);
 
             // Create new Field
             FieldActor currentField;
             if (random == 0) {
-                currentField = new BuyHotelFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("RumsBuDee.png"), (int) (Math.random() * 50 + 10), fieldInfoImage);
+                currentField = new BuyHotelFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("RumsBuDee.png"), randomGenerator.nextInt(5) + 10, fieldInfoImage);
             } else if (random == 1) {
-                currentField = new LoseMoneyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("6dice.png"), (int) (Math.random() * 10), fieldInfoImage);
+                currentField = new LoseMoneyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("6dice.png"), randomGenerator.nextInt(10), fieldInfoImage);
             } else {
                 currentField = new EmptyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("transparent.png"), 0, fieldInfoImage);
             }

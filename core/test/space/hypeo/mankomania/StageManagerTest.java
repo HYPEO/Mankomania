@@ -17,12 +17,12 @@ import static org.junit.Assert.*;
  * Created by pichlermarc on 10.05.2018.
  */
 public class StageManagerTest extends GameTest {
-    StageManager stageManager;
+    private StageManager stageManager;
 
     @Mock
-    Stage firstStage;
+    private Stage firstStage;
     @Mock
-    Stage secondStage;
+    private Stage secondStage;
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -51,7 +51,7 @@ public class StageManagerTest extends GameTest {
         try {
             stageManager.remove(firstStage);
             fail();
-        } catch (EmptyStackException exception) {
+        } catch (EmptyStackException ignored) {
         }
     }
 

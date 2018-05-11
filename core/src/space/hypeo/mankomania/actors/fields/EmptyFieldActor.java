@@ -12,6 +12,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 public class EmptyFieldActor extends FieldActor {
     private static final float FIELD_SCALE = 30f;
     private static final String TEXTURE_PATH = "wall.jpg";
+
     /**
      * Creates a new instance of the EmptyFieldActor class.
      *
@@ -19,7 +20,7 @@ public class EmptyFieldActor extends FieldActor {
      * @param y Position on the y-Axis.
      */
     public EmptyFieldActor(float x, float y, Texture texture, int price, Image fieldInfoImage) {
-        super(new Texture(TEXTURE_PATH), x, y, FIELD_SCALE, FIELD_SCALE, texture, price, fieldInfoImage);
+        super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, fieldInfoImage);
     }
 
 

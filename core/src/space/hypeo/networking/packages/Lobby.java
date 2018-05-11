@@ -22,12 +22,12 @@ public class Lobby {
      * String     ... PlayerId of the player
      * PlayerInfo ... Network info of the player
      */
-    protected HashMap<String, Player> data;
+    protected Map<String, Player> data;
 
     public Lobby() {
-        data = new HashMap<String, Player>();
+        data = new HashMap<>();
     }
-    public Lobby(HashMap<String, Player> data) {
+    public Lobby(Map<String, Player> data) {
         this.data = data;
     }
 

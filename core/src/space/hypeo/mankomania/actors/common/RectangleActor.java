@@ -10,14 +10,21 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class RectangleActor extends Actor {
     private ShapeRenderer rectangleRenderer;
 
-    public RectangleActor(float x, float y, float width, float height) {
-        //Set up rectangle.
-        rectangleRenderer = new ShapeRenderer();
+    public RectangleActor(float x, float y, float width, float height, ShapeRenderer shapeRenderer) {
+        if (shapeRenderer == null)
+            throw new IllegalArgumentException("shapeRenderer must not be null");
+
+        this.rectangleRenderer = shapeRenderer;
         setX(x);
         setY(y);
         setWidth(width);
         setHeight(height);
     }
+
+    public RectangleActor(float x, float y, float width, float height) {
+        this(x, y, width, height, new ShapeRenderer());
+    }
+
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
