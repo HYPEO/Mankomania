@@ -3,6 +3,7 @@ package space.hypeo.networking.network;
 import com.esotericsoftware.minlog.Log;
 
 import java.net.SocketException;
+import java.util.UUID;
 
 import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
@@ -18,7 +19,7 @@ public class WhatAmI {
     private WhatAmI() {}
 
     // varialbe holds the current player id (compare to primary key, autoincrement)
-    private static int currentPlayerId = 1;
+    //private static int currentPlayerId = 1;
 
     // role of current player
     private static Role role;
@@ -42,11 +43,13 @@ public class WhatAmI {
      */
     public static void init(String nickname, Role role) {
 
+        // TODO: check if WLAN connection is ON and connected to hotspot
+
         // set Role of current end point
         WhatAmI.role = role;
         Log.info("I'm a " + role);
 
-        // fetch IP in LAN
+        // fetch IP in W/LAN
         String currentIp = "";
         try {
             currentIp = NetworkAddress.getNetworkAddress();
@@ -56,9 +59,7 @@ public class WhatAmI {
         }
 
         // store data of current player
-        WhatAmI.player = new Player(
-                Integer.toString(getCurrentPlayerId()), nickname, currentIp, role
-        );
+        WhatAmI.player = new Player( generatePlayerID(), nickname, currentIp, role );
 
         // set role for that endpoint
         if( role == Role.HOST ) {
@@ -70,10 +71,12 @@ public class WhatAmI {
 
     /**
      * Gets ID for current player.
-     * @return ID
+     * Take from UUID the last 4 characters.
+     * @return String PlayerID
      */
-    private static int getCurrentPlayerId() {
-        return currentPlayerId++;
+    public static String generatePlayerID() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString().substring(uuid.toString().length() - 4);
     }
 
     /**

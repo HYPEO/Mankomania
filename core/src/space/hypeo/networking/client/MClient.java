@@ -33,9 +33,6 @@ public class MClient implements IPlayerConnector, IClientConnector {
     // instance of the client
     private com.esotericsoftware.kryonet.Client client;
 
-    // list is filled and returned after call discoverHosts()
-    private List<InetAddress> discoveredHosts = null;
-
     // host, that the client is connected to
     private Player hostInfo = null;
 
@@ -113,7 +110,8 @@ public class MClient implements IPlayerConnector, IClientConnector {
     public void startClient() {
 
         client = new Client();
-        new Thread(client).start();
+        //new Thread(client).start();
+        client.start();
         // register classes that can be sent/received by client
         Network.register(client);
     }
@@ -121,7 +119,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
     @Override
     public List<InetAddress> discoverHosts() {
         // use UDP port for discovering hosts
-        discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
+        List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
         return discoveredHosts;
     }
@@ -132,8 +130,9 @@ public class MClient implements IPlayerConnector, IClientConnector {
      */
     public void connectToHost(InetAddress hostAddress) {
 
-        if( client != null && discoveredHosts != null && discoveredHosts.contains(hostAddress) ) {
+        if( client != null && hostAddress != null ) {
             try {
+                Log.info("Client: Try to connect to " + hostAddress.toString());
                 client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_TCP, Network.PORT_UDP);
 
             } catch (IOException e) {
@@ -146,7 +145,10 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
             WhatAmI.getLobby().log();
 
-            Log.info("MClient-connectToHost: " + WhatAmI.getRole());
+            Log.info("Client-connectToHost: " + WhatAmI.getRole());
+
+        } else {
+            Log.info("Client has NOT been initialized yet!");
         }
     }
 

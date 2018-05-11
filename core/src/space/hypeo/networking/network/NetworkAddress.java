@@ -41,6 +41,8 @@ public final class NetworkAddress {
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 
+            Log.info("Available Network-Addresses:");
+
             while( interfaces.hasMoreElements() ) {
                 NetworkInterface iface = interfaces.nextElement();
                 // filters out 127.0.0.1 and inactive interfaces
@@ -51,6 +53,8 @@ public final class NetworkAddress {
                 Enumeration<InetAddress> addresses = iface.getInetAddresses();
                 while( addresses.hasMoreElements() ) {
                     InetAddress addr = addresses.nextElement();
+
+                    Log.info("  " + addr.getHostAddress() );
 
                     availableAddresses.add(addr);
                 }

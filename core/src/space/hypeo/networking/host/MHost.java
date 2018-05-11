@@ -128,7 +128,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
         server.start();
 
-        Log.info("MHost-StartServer: " + WhatAmI.getRole());
+        Log.info("Host-StartServer: " + WhatAmI.getRole());
     }
 
     @Override
