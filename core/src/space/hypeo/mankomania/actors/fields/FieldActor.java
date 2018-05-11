@@ -11,28 +11,27 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
  * Represents a Field.
  */
 public abstract class FieldActor extends Image {
-    FieldActor nextField;
-    private float x;
-    private float y;
-    protected int price;
-    private Texture info;
+    private FieldActor nextField;
+    private int price;
+    private Texture detailTexture;
     private Image fieldDetailImage;
 
     /**
-     * Creates a new instance of the FieldActor Class.
-     *
-     * @param texture Texture that represents the field on screen.
-     * @param x       X position of the Actor.
-     * @param y       Y position of the Actor.
-     * @param width   Width of the Actor.
-     * @param height  Height of the Actor.
+     * @param x                X position of the Actor.
+     * @param y                Y position of the Actor.
+     * @param width            Width of the Actor
+     * @param height           Height of the Actor
+     * @param price            Price of this field.
+     * @param texture          Texture that represents the field on screen.
+     * @param detailTexture    Detail texture of this field.
+     * @param fieldDetailImage The image is shown inside, and replaced by detailTexture.
      */
-    public FieldActor(Texture texture, float x, float y, float width, float height, Texture info, int price, Image fieldDetailImage) {
+    public FieldActor(float x, float y, float width, float height, int price, Texture texture,
+                      Texture detailTexture,
+                      Image fieldDetailImage) {
         super(texture);
         this.setBounds(x, y, width, height);
-        this.x = x;
-        this.y = y;
-        this.info = info;
+        this.detailTexture = detailTexture;
         this.price = price;
         this.fieldDetailImage = fieldDetailImage;
     }
@@ -49,7 +48,7 @@ public abstract class FieldActor extends Image {
      * Shows the Field Picture in the middle of the map
      */
     protected void showFieldDetail() {
-        fieldDetailImage.setDrawable(new SpriteDrawable(new Sprite(info)));
+        fieldDetailImage.setDrawable(new SpriteDrawable(new Sprite(detailTexture)));
     }
 
     /**
@@ -73,27 +72,6 @@ public abstract class FieldActor extends Image {
     public void setNextField(FieldActor nextField) {
         this.nextField = nextField;
     }
-
-    @Override
-    public float getX() {
-        return x;
-    }
-
-    @Override
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    @Override
-    public float getY() {
-        return y;
-    }
-
-    @Override
-    public void setY(float y) {
-        this.y = y;
-    }
-
 
     public int getPrice() {
         return price;
