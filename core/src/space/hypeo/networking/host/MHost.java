@@ -28,7 +28,7 @@ import com.esotericsoftware.minlog.Log;
 public class MHost implements IPlayerConnector, IHostConnector {
 
     // instance of the host
-    private com.esotericsoftware.kryonet.Server server;
+    private com.esotericsoftware.kryonet.Server server = null;
 
     /**
      * This class handles the connection events with the server.
@@ -109,6 +109,13 @@ public class MHost implements IPlayerConnector, IHostConnector {
     @Override
     public void startServer() {
 
+        Log.info("Try to start server...");
+
+        if( server != null ) {
+            Log.warn("Server is still running - nothing to do!");
+            return;
+        }
+
         server = new Server();
         // register classes that can be sent/received by server
         Network.register(server);
@@ -128,7 +135,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
         server.start();
 
-        Log.info("Host-StartServer: " + WhatAmI.getRole());
+        Log.info("Server has started successfully");
     }
 
     @Override

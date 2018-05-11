@@ -31,7 +31,7 @@ import space.hypeo.networking.packages.PlayerHost;
 public class MClient implements IPlayerConnector, IClientConnector {
 
     // instance of the client
-    private com.esotericsoftware.kryonet.Client client;
+    private com.esotericsoftware.kryonet.Client client = null;
 
     // host, that the client is connected to
     private Player hostInfo = null;
@@ -109,11 +109,20 @@ public class MClient implements IPlayerConnector, IClientConnector {
     @Override
     public void startClient() {
 
+        Log.info("Try to start client...");
+
+        if( client != null ) {
+            Log.warn("Client is still running - nothing to do!");
+            return;
+        }
+
         client = new Client();
-        //new Thread(client).start();
+        //new Thread(client).start(); // TODO: do NOT know which one is the right client-start?
         client.start();
         // register classes that can be sent/received by client
         Network.register(client);
+
+        Log.info("Client has started successfully");
     }
 
     @Override
@@ -144,8 +153,6 @@ public class MClient implements IPlayerConnector, IClientConnector {
             // the client will be added to lobby after network handshake by server!
 
             WhatAmI.getLobby().log();
-
-            Log.info("Client-connectToHost: " + WhatAmI.getRole());
 
         } else {
             Log.info("Client has NOT been initialized yet!");

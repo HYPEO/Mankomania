@@ -22,7 +22,7 @@ public class WhatAmI {
     //private static int currentPlayerId = 1;
 
     // role of current player
-    private static Role role;
+    private static Role role = Role.NOT_CONNECTED;
 
     // network info a player
     private static Player player;
@@ -44,6 +44,21 @@ public class WhatAmI {
     public static void init(String nickname, Role role) {
 
         // TODO: check if WLAN connection is ON and connected to hotspot
+
+        if( WhatAmI.role != Role.NOT_CONNECTED ) {
+            Log.warn("WhatAmI-init: There is already an open connection as " + WhatAmI.role);
+
+            if( host == null ) {
+                Log.info("WhatAmI-init: Host is null");
+            }
+
+            if( client == null ) {
+                Log.info("WhatAmI-init: Client is null");
+            }
+            return;
+        }
+
+        Log.warn("WhatAmI-init: WhatAmI.role=" + WhatAmI.role + ", role-argument=" + role);
 
         // set Role of current end point
         WhatAmI.role = role;

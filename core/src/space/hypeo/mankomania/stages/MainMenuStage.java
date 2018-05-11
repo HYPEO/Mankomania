@@ -77,12 +77,9 @@ public class MainMenuStage extends Stage {
     {
         return new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Log.info("Try to start server...");
-                // initialize device as host
+
                 WhatAmI.init("the_mighty_host", Role.HOST);
-                // start server process
                 WhatAmI.getHost().startServer();
-                Log.info("Server has started successfully");
 
                 stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
             }
@@ -93,12 +90,9 @@ public class MainMenuStage extends Stage {
     {
         return new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Log.info("Try to start client...");
-                // initialize device as client
+
                 WhatAmI.init("another_client", Role.CLIENT);
-                // start client process
                 WhatAmI.getClient().startClient();
-                Log.info("Client has started successfully");
 
                 stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
             }
