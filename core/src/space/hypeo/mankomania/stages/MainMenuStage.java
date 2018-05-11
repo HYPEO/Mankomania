@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -35,6 +34,12 @@ public class MainMenuStage extends Stage {
     private Table layout;
     private final Viewport viewport;
 
+    /**
+     * Creates the Main Menu
+     *
+     * @param stageManager StageManager needed to switch between stages, create new ones, etc.
+     * @param viewport     Viewport needed by Stage class.
+     */
     public MainMenuStage(StageManager stageManager, Viewport viewport) {
         super(viewport);
 
@@ -61,8 +66,7 @@ public class MainMenuStage extends Stage {
         host = createButton("menu_buttons/host_game.png", "menu_buttons/host_game_clicked.png");
     }
 
-    private Button createButton(String upTexture, String downTexture)
-    {
+    private Button createButton(String upTexture, String downTexture) {
         Texture hostTextureUp = new Texture(Gdx.files.internal(upTexture));
         hostTextureUp.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
@@ -147,8 +151,7 @@ public class MainMenuStage extends Stage {
         layout.row();
     }
 
-    private void setUpBackground()
-    {
+    private void setUpBackground() {
         RectangleActor background = new RectangleActor(0, 0, this.getViewport().getWorldWidth(), this.getViewport().getWorldHeight());
         // Set up background.
         background.setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
