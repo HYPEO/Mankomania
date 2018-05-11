@@ -16,8 +16,7 @@ public class DetailActor extends Group {
     private float detailImageSize;
     private float detailBoardSize;
 
-    public DetailActor() {
-        Texture detailBoardTexture = new Texture("map_assets/detail_board.png");
+    public DetailActor(Texture detailBoardTexture) {
         detailBoardTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         detailBoard = new Image(detailBoardTexture);
         this.addActor(detailBoard);

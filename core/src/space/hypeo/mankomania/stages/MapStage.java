@@ -14,6 +14,7 @@ import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.fields.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
+import space.hypeo.mankomania.factories.ActorFactory;
 
 /**
  * Created by pichlermarc on 09.05.2018.
@@ -28,7 +29,7 @@ public class MapStage extends Stage {
     public MapStage(Viewport viewport, StageManager stageManager) {
         super(viewport);
         setUpBackground();
-        detailActor = new DetailActor();
+        detailActor = ActorFactory.getDetailActor();
         this.addActor(detailActor);
         detailActor.positionActor(320);
 
