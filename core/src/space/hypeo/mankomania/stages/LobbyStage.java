@@ -15,7 +15,6 @@ import com.esotericsoftware.minlog.Log;
 
 import java.util.HashMap;
 
-import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.networking.network.Role;
@@ -69,7 +68,7 @@ public class LobbyStage extends Stage {
         for( HashMap.Entry<String, Player> entry : lobby.getData().entrySet() ) {
 
             Button btnPlayer = new TextButton(
-                    index + ": " + entry.getKey() + ", " + entry.getValue().getAddress().toString(),
+                    index + ": " + entry.getKey() + ", " + entry.getValue().getAddress(),
                     skin);
 
             btnPlayer.addListener(new ClickListener() {
