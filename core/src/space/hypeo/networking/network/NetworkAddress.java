@@ -38,8 +38,6 @@ public final class NetworkAddress {
 
         List<InetAddress> availableAddresses = new ArrayList<>();
 
-        String ip;
-
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 
@@ -53,8 +51,6 @@ public final class NetworkAddress {
                 Enumeration<InetAddress> addresses = iface.getInetAddresses();
                 while( addresses.hasMoreElements() ) {
                     InetAddress addr = addresses.nextElement();
-                    ip = addr.getHostAddress();
-                    //Log.info(iface.getDisplayName() + " " + ip);
 
                     availableAddresses.add(addr);
                 }

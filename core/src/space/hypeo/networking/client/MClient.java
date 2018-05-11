@@ -25,16 +25,18 @@ import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
 
 /**
- * This class represents the client process on a device.
- * If you don't know, if you're client or host, call
- * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
+ * This class represents the client process for an endpoint on a device.
+ * If you don't know, if you're client or host, call WhatAmI.getRole().
  */
 public class MClient implements IPlayerConnector, IClientConnector {
 
+    // instance of the client
     private com.esotericsoftware.kryonet.Client client;
 
+    // list is filled and returned after call discoverHosts()
     private List<InetAddress> discoveredHosts = null;
 
+    // host, that the client is connected to
     private Player hostInfo = null;
 
     private long startPingRequest = 0;
@@ -45,7 +47,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
     private class ClientListener extends Listener {
 
         /**
-         * If has connected to host
+         * If has connected to host.
          * @param connection
          */
         @Override
@@ -56,7 +58,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
         }
 
         /**
-         * If has diconnected from host
+         * If has diconnected from host.
          * @param connection
          */
         @Override
@@ -70,7 +72,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
         }
 
         /**
-         * If has reveived a package from host
+         * If has reveived a package from host.
          * @param connection
          * @param object
          */
@@ -112,6 +114,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
         client = new Client();
         new Thread(client).start();
+        // register classes that can be sent/received by client
         Network.register(client);
     }
 
@@ -123,6 +126,10 @@ public class MClient implements IPlayerConnector, IClientConnector {
         return discoveredHosts;
     }
 
+    /**
+     * Establishes a connection to given host.
+     * @param hostAddress host to connect to
+     */
     public void connectToHost(InetAddress hostAddress) {
 
         if( client != null && discoveredHosts != null && discoveredHosts.contains(hostAddress) ) {
@@ -130,14 +137,14 @@ public class MClient implements IPlayerConnector, IClientConnector {
                 client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_TCP, Network.PORT_UDP);
 
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.error(e.getMessage());
             }
 
             client.addListener(new ClientListener());
 
-            //pingServer();
+            // the client will be added to lobby after network handshake by server!
 
-            WhatAmI.getLobby().print();
+            WhatAmI.getLobby().log();
 
             Log.info("MClient-connectToHost: " + WhatAmI.getRole());
         }

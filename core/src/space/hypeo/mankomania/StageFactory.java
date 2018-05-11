@@ -2,22 +2,22 @@ package space.hypeo.mankomania;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.minlog.Log;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.TitleStage;
-import space.hypeo.networking.network.Role;
-import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.mankomania.stages.MapStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
-import space.hypeo.mankomania.stages.TitleStage;
 
 /**
  * Creates all the stages (views) for the game.
  */
 public class StageFactory {
+
+    // this class is not instantiable!
+    private StageFactory() {}
+
     public static Stage getMapStage(final Viewport viewport, final StageManager stageManager){
         return new MapStage(viewport, stageManager);
     }
@@ -39,7 +39,7 @@ public class StageFactory {
     }
 
     /**
-     * Shows the network-lobby.
+     * Shows the network-lobby for client and host.
      * @param viewport
      * @param stageManager
      * @return stage/view of lobby
@@ -50,9 +50,8 @@ public class StageFactory {
     }
 
     /**
-     * Discovers hosts in WLAN after hit "Join Game" button.
-     * Shows all discovered hosts. Hosts can be chosen by button-click.
-     * That Stage can only be visited as role "cient".
+     * Shows all discovered hosts for a client.
+     * Client can choose a host to connect with.
      * @param viewport
      * @param stageManager
      * @return stage/view of discovered hosts for client

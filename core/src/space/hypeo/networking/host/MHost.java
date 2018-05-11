@@ -23,11 +23,11 @@ import com.esotericsoftware.minlog.Log;
 
 /**
  * This class represents the host process on a device.
- * If you don't know, if you're client or host, call
- * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
+ * If you don't know, if you're client or host, call WhatAmI.getRole().
  */
 public class MHost implements IPlayerConnector, IHostConnector {
 
+    // instance of the host
     private com.esotericsoftware.kryonet.Server server;
 
     /**
@@ -36,7 +36,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
     private class ServerListener extends Listener {
 
         /**
-         * If client has connected
+         * If client has connected.
          * @param connection
          */
         @Override
@@ -51,7 +51,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
             // send ack
             Log.info("Host: Send ack to requested client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new Acknowledge(WhatAmI.getPlayer().getAddress().toString()) );
+            connection.sendTCP( new Acknowledge(WhatAmI.getPlayer().getAddress()) );
 
             // send host info
             Log.info("Host: Send info of myself to client ip " + connection.getRemoteAddressTCP().toString());
@@ -59,7 +59,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
         }
 
         /**
-         * If client has disconnected
+         * If client has disconnected.
          * @param connection
          */
         @Override
@@ -68,7 +68,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
         }
 
         /**
-         * If has received a package from client
+         * If has received a package from client.
          * @param connection
          * @param object
          */
@@ -90,7 +90,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
                 WhatAmI.addPlayerToLobby(newPlayer.getPlayerID(), newPlayer);
 
                 Log.info("Host: received new player, add to lobby");
-                WhatAmI.getLobby().print();
+                WhatAmI.getLobby().log();
 
                 server.sendToAllTCP(WhatAmI.getLobby());
 
@@ -99,7 +99,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
                 WhatAmI.removePlayerFromLobby(leavingPlayer.getPlayerID());
 
                 Log.info("Host: player has been disconnected, removed from lobby");
-                WhatAmI.getLobby().print();
+                WhatAmI.getLobby().log();
 
                 server.sendToAllTCP(WhatAmI.getLobby());
             }
@@ -108,8 +108,9 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
     @Override
     public void startServer() {
-        server = new Server();
 
+        server = new Server();
+        // register classes that can be sent/received by server
         Network.register(server);
 
         try {
@@ -121,9 +122,9 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
         server.addListener(new ServerListener());
 
+        // add network data of server to lobby
         WhatAmI.addPlayerToLobby( WhatAmI.getPlayer().getPlayerID(), WhatAmI.getPlayer() );
-
-        WhatAmI.getLobby().print();
+        WhatAmI.getLobby().log();
 
         server.start();
 
