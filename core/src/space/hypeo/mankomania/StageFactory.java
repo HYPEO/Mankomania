@@ -5,10 +5,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
+import space.hypeo.mankomania.stages.MapStage;
 import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
-import space.hypeo.mankomania.stages.MapStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
 
 /**
