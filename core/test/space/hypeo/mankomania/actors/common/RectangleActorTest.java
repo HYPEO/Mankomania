@@ -49,10 +49,10 @@ public class RectangleActorTest extends GameTest {
 
     @Test
     public void createRectangleActor() {
-        assertEquals(rectangleActor.getX(), X_POS, FUZZ_FACTOR);
-        assertEquals(rectangleActor.getY(), Y_POS, FUZZ_FACTOR);
-        assertEquals(rectangleActor.getWidth(), WIDTH, FUZZ_FACTOR);
-        assertEquals(rectangleActor.getHeight(), HEIGHT, FUZZ_FACTOR);
+        assertEquals(X_POS, rectangleActor.getX(), FUZZ_FACTOR);
+        assertEquals(Y_POS, rectangleActor.getY(), FUZZ_FACTOR);
+        assertEquals(WIDTH, rectangleActor.getWidth(), FUZZ_FACTOR);
+        assertEquals(HEIGHT, rectangleActor.getHeight(), FUZZ_FACTOR);
     }
 
     @Test
@@ -65,9 +65,8 @@ public class RectangleActorTest extends GameTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void shapeRendererNullThrowsException()
-    {
-        new RectangleActor(X_POS, Y_POS, WIDTH, HEIGHT,null);
+    public void shapeRendererNullThrowsException() {
+        new RectangleActor(X_POS, Y_POS, WIDTH, HEIGHT, null);
     }
 
     @Test

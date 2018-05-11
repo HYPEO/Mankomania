@@ -9,7 +9,7 @@ public class StageManager {
     private Stack<Stage> stages;
 
     public StageManager() {
-        stages = new Stack<Stage>();
+        stages = new Stack<>();
     }
 
     private Stage pop() {

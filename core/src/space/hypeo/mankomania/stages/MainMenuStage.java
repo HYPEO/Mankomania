@@ -13,13 +13,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
-import java.net.InetAddress;
-import java.util.List;
 
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
-import space.hypeo.networking.client.MClient;
-import space.hypeo.networking.host.MHost;
 import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.WhatAmI;
 
@@ -48,8 +44,7 @@ public class MainMenuStage extends Stage {
         this.addActor(layout);
     }
 
-    private void createWidgets()
-    {
+    private void createWidgets() {
 
         // Set up skin
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
@@ -63,8 +58,7 @@ public class MainMenuStage extends Stage {
         join = new TextButton("Join Game", skin);
     }
 
-    private ClickListener launchClickListener()
-    {
+    private ClickListener launchClickListener() {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -73,9 +67,9 @@ public class MainMenuStage extends Stage {
         };
     }
 
-    private ClickListener hostClickListener()
-    {
+    private ClickListener hostClickListener() {
         return new ClickListener() {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 Log.info("Try to start server...");
                 // initialize device as host
@@ -89,9 +83,9 @@ public class MainMenuStage extends Stage {
         };
     }
 
-    private ClickListener clientClickListener()
-    {
+    private ClickListener clientClickListener() {
         return new ClickListener() {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 Log.info("Try to start client...");
                 // initialize device as client
@@ -105,8 +99,7 @@ public class MainMenuStage extends Stage {
         };
     }
 
-    private void setupClickListeners()
-    {
+    private void setupClickListeners() {
         launch.addListener(this.launchClickListener());
         host.addListener(this.hostClickListener());
         join.addListener(clientClickListener());

@@ -58,11 +58,11 @@ public class FieldActorTest extends GameTest {
 
     @Test
     public void createFieldActor() {
-        assertEquals(fieldActors.get(0).getX(), X_POS, FUZZ_FACTOR);
-        assertEquals(fieldActors.get(0).getY(), Y_POS, FUZZ_FACTOR);
-        assertEquals(fieldActors.get(0).getWidth(), WIDTH, FUZZ_FACTOR);
-        assertEquals(fieldActors.get(0).getHeight(), HEIGHT, FUZZ_FACTOR);
-        assertEquals(fieldActors.get(0).getPrice(), PRICE);
+        assertEquals(X_POS, fieldActors.get(0).getX(), FUZZ_FACTOR);
+        assertEquals(Y_POS, fieldActors.get(0).getY(), FUZZ_FACTOR);
+        assertEquals(WIDTH, fieldActors.get(0).getWidth(), FUZZ_FACTOR);
+        assertEquals(HEIGHT, fieldActors.get(0).getHeight(), FUZZ_FACTOR);
+        assertEquals(PRICE, fieldActors.get(0).getPrice());
     }
 
     @Test
@@ -82,6 +82,6 @@ public class FieldActorTest extends GameTest {
     @Test
     public void setPrice() {
         fieldActors.get(0).setPrice(200);
-        assertEquals(fieldActors.get(0).getPrice(), 200);
+        assertEquals(200, fieldActors.get(0).getPrice());
     }
 }
