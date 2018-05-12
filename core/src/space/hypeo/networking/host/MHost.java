@@ -2,6 +2,8 @@ package space.hypeo.networking.host;
 
 import java.io.IOException;
 
+import space.hypeo.mankomania.StageManager;
+import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.IHostConnector;
 import space.hypeo.networking.network.IPlayerConnector;
 import space.hypeo.networking.network.WhatAmI;
@@ -16,6 +18,8 @@ import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -23,12 +27,12 @@ import com.esotericsoftware.minlog.Log;
 
 /**
  * This class represents the host process on a device.
- * If you don't know, if you're client or host, call
- * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
+ * If you don't know, if you're client or host, call WhatAmI.getRole().
  */
 public class MHost implements IPlayerConnector, IHostConnector {
 
-    private com.esotericsoftware.kryonet.Server server;
+    // instance of the host
+    private com.esotericsoftware.kryonet.Server server = null;
 
     /**
      * This class handles the connection events with the server.
@@ -36,7 +40,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
     private class ServerListener extends Listener {
 
         /**
-         * If client has connected
+         * If client has connected.
          * @param connection
          */
         @Override
@@ -51,7 +55,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
             // send ack
             Log.info("Host: Send ack to requested client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new Acknowledge(WhatAmI.getPlayer().getAddress().toString()) );
+            connection.sendTCP( new Acknowledge(WhatAmI.getPlayer().getAddress()) );
 
             // send host info
             Log.info("Host: Send info of myself to client ip " + connection.getRemoteAddressTCP().toString());
@@ -59,7 +63,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
         }
 
         /**
-         * If client has disconnected
+         * If client has disconnected.
          * @param connection
          */
         @Override
@@ -68,7 +72,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
         }
 
         /**
-         * If has received a package from client
+         * If has received a package from client.
          * @param connection
          * @param object
          */
@@ -90,26 +94,38 @@ public class MHost implements IPlayerConnector, IHostConnector {
                 WhatAmI.addPlayerToLobby(newPlayer.getPlayerID(), newPlayer);
 
                 Log.info("Host: received new player, add to lobby");
-                WhatAmI.getLobby().print();
+                WhatAmI.getLobby().log();
 
                 server.sendToAllTCP(WhatAmI.getLobby());
+
+                updateStageLobby();
 
             } else if( object instanceof PlayerDisconnect) {
                 Player leavingPlayer = (PlayerDisconnect) object;
                 WhatAmI.removePlayerFromLobby(leavingPlayer.getPlayerID());
 
                 Log.info("Host: player has been disconnected, removed from lobby");
-                WhatAmI.getLobby().print();
+                WhatAmI.getLobby().log();
 
                 server.sendToAllTCP(WhatAmI.getLobby());
+
+                updateStageLobby();
             }
         }
     }
 
     @Override
     public void startServer() {
-        server = new Server();
 
+        Log.info("Try to start server...");
+
+        if( server != null ) {
+            Log.warn("Server is still running - nothing to do!");
+            return;
+        }
+
+        server = new Server();
+        // register classes that can be sent/received by server
         Network.register(server);
 
         try {
@@ -121,13 +137,13 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
         server.addListener(new ServerListener());
 
+        // add network data of server to lobby
         WhatAmI.addPlayerToLobby( WhatAmI.getPlayer().getPlayerID(), WhatAmI.getPlayer() );
-
-        WhatAmI.getLobby().print();
+        WhatAmI.getLobby().log();
 
         server.start();
 
-        Log.info("MHost-StartServer: " + WhatAmI.getRole());
+        Log.info("Server has started successfully");
     }
 
     @Override
@@ -182,4 +198,24 @@ public class MHost implements IPlayerConnector, IHostConnector {
         return WhatAmI.getLobby();
     }
 
+    @Override
+    public void updateStageLobby() {
+        // TODO: refactor duplicated code into parent class
+
+        StageManager stageManager = WhatAmI.getStageManager();
+
+        Stage currentStage = stageManager.getCurrentStage();
+        Viewport viewport = currentStage.getViewport();
+
+        if( viewport == null ) {
+            Log.error("Host: viewport must not be null!");
+            return;
+        }
+
+        if( currentStage instanceof LobbyStage) {
+            stageManager.remove(currentStage);
+        }
+
+        stageManager.push(new LobbyStage(stageManager, viewport));
+    }
 }

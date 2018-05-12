@@ -21,8 +21,13 @@ public interface IClientConnector {
     public void startClient();
 
     /**
-     * LAN server discovery.
+     * discover host (run as server) in LAN and WLAN.
      * broadcast a UDP message on the LAN to discover any servers (hosts) running.
+     *
+     * NOTE:
+     *  + router problems: Some routers block broadcasts.
+     *  + LAN: discovery only works on a LAN with the same subnet.
+     *  + WLAN: discovery not possible if client-isolation-settings of the hotspot.
      */
     public List<InetAddress> discoverHosts();
 

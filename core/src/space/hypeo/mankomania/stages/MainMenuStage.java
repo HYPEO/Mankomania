@@ -95,12 +95,10 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Log.info("Try to start server...");
-                // initialize device as host
-                WhatAmI.init("the_mighty_host", Role.HOST);
-                // start server process
+
+                // TODO: only want to do: start host with nick
+                WhatAmI.init("the_mighty_host", Role.HOST, stageManager);
                 WhatAmI.getHost().startServer();
-                Log.info("Server has started successfully");
 
                 stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
             }
@@ -111,12 +109,10 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Log.info("Try to start client...");
-                // initialize device as client
-                WhatAmI.init("another_client", Role.CLIENT);
-                // start client process
+
+                // TODO: only want to do: start client with nick
+                WhatAmI.init("another_client", Role.CLIENT, stageManager);
                 WhatAmI.getClient().startClient();
-                Log.info("Client has started successfully");
 
                 stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
             }

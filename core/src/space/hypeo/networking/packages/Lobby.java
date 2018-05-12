@@ -28,7 +28,7 @@ public class Lobby {
         data = new HashMap<>();
     }
     public Lobby(Map<String, Player> data) {
-        this.data = data;
+        this.data = new HashMap<>(data);
     }
 
     public void add(String id, Player p) {
@@ -65,7 +65,7 @@ public class Lobby {
         data.clear();
     }
 
-    public void print() {
+    public void log() {
         Log.info("List of player contains:");
 
         if( data.isEmpty() ) {

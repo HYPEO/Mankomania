@@ -1,5 +1,7 @@
 package space.hypeo.networking.client;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -9,6 +11,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
+import space.hypeo.mankomania.StageManager;
+import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.IPlayerConnector;
 import space.hypeo.networking.network.NetworkAddress;
@@ -25,16 +29,15 @@ import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
 
 /**
- * This class represents the client process on a device.
- * If you don't know, if you're client or host, call
- * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
+ * This class represents the client process for an endpoint on a device.
+ * If you don't know, if you're client or host, call WhatAmI.getRole().
  */
 public class MClient implements IPlayerConnector, IClientConnector {
 
-    private com.esotericsoftware.kryonet.Client client;
+    // instance of the client
+    private com.esotericsoftware.kryonet.Client client = null;
 
-    private List<InetAddress> discoveredHosts = null;
-
+    // host, that the client is connected to
     private Player hostInfo = null;
 
     private long startPingRequest = 0;
@@ -45,7 +48,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
     private class ClientListener extends Listener {
 
         /**
-         * If has connected to host
+         * If has connected to host.
          * @param connection
          */
         @Override
@@ -56,7 +59,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
         }
 
         /**
-         * If has diconnected from host
+         * If has diconnected from host.
          * @param connection
          */
         @Override
@@ -70,7 +73,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
         }
 
         /**
-         * If has reveived a package from host
+         * If has reveived a package from host.
          * @param connection
          * @param object
          */
@@ -94,6 +97,8 @@ public class MClient implements IPlayerConnector, IClientConnector {
                 WhatAmI.setLobby( (Lobby) object );
                 Log.info("Client received updated list of player");
 
+                updateStageLobby();
+
             } else if( object instanceof Acknowledge ) {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: " + ack);
@@ -110,36 +115,53 @@ public class MClient implements IPlayerConnector, IClientConnector {
     @Override
     public void startClient() {
 
+        Log.info("Try to start client...");
+
+        if( client != null ) {
+            Log.warn("Client is still running - nothing to do!");
+            return;
+        }
+
         client = new Client();
-        new Thread(client).start();
+        //new Thread(client).start(); // TODO: do NOT know which one is the right client-start?
+        client.start();
+        // register classes that can be sent/received by client
         Network.register(client);
+
+        Log.info("Client has started successfully");
     }
 
     @Override
     public List<InetAddress> discoverHosts() {
         // use UDP port for discovering hosts
-        discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
+        List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
         return discoveredHosts;
     }
 
+    /**
+     * Establishes a connection to given host.
+     * @param hostAddress host to connect to
+     */
     public void connectToHost(InetAddress hostAddress) {
 
-        if( client != null && discoveredHosts != null && discoveredHosts.contains(hostAddress) ) {
+        if( client != null && hostAddress != null ) {
             try {
+                Log.info("Client: Try to connect to " + hostAddress.toString());
                 client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_TCP, Network.PORT_UDP);
 
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.error(e.getMessage());
             }
 
             client.addListener(new ClientListener());
 
-            //pingServer();
+            // the client will be added to lobby after network handshake by server!
 
-            WhatAmI.getLobby().print();
+            WhatAmI.getLobby().log();
 
-            Log.info("MClient-connectToHost: " + WhatAmI.getRole());
+        } else {
+            Log.info("Client has NOT been initialized yet!");
         }
     }
 
@@ -191,5 +213,26 @@ public class MClient implements IPlayerConnector, IClientConnector {
     @Override
     public Lobby registeredPlayers() {
         return WhatAmI.getLobby();
+    }
+
+    @Override
+    public void updateStageLobby() {
+        // TODO: refactor duplicated code into parent class
+
+        StageManager stageManager = WhatAmI.getStageManager();
+
+        Stage currentStage = stageManager.getCurrentStage();
+        Viewport viewport = currentStage.getViewport();
+
+        if( viewport == null ) {
+            Log.error("Client: viewport must not be null!");
+            return;
+        }
+
+        if( currentStage instanceof LobbyStage ) {
+            stageManager.remove(currentStage);
+        }
+
+        stageManager.push(new LobbyStage(stageManager, viewport));
     }
 }
