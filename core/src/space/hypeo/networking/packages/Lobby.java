@@ -22,7 +22,7 @@ public class Lobby {
      * String     ... PlayerId of the player
      * PlayerInfo ... Network info of the player
      */
-    protected HashMap<String, Player> data;
+    protected Map<String, Player> data;
 
     public Lobby() {
         data = new HashMap<>();

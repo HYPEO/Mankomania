@@ -29,6 +29,7 @@ public class TitleStage extends Stage {
 
         // Add listener for click events.
         this.addListener(new ClickListener() {
+            @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.remove(TitleStage.this);
             }
