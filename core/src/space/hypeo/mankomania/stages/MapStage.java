@@ -13,6 +13,7 @@ import space.hypeo.mankomania.actors.fields.EmptyFieldActor;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.fields.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
+import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
 
@@ -25,7 +26,7 @@ public class MapStage extends Stage {
     private static final float MARGIN_Y = 205f;
     private static final float FIELD_DISTANCE = 40f;
     private DetailActor detailActor;
-
+    private PlayerDetailActor playerDetailActor;
     public MapStage(Viewport viewport, StageManager stageManager) {
         super(viewport);
         setUpBackground();
@@ -33,6 +34,9 @@ public class MapStage extends Stage {
         this.addActor(detailActor);
         detailActor.positionActor(320);
 
+        playerDetailActor = new PlayerDetailActor(new Texture("map_assets/player_1.png"));
+        playerDetailActor.positionActor();
+        this.addActor(playerDetailActor);
         // Create the empty field.
         FieldActor firstField = new EmptyFieldActor(MARGIN_X, MARGIN_Y, new Texture("transparent.png"), 0, detailActor);
         this.addActor(firstField);
