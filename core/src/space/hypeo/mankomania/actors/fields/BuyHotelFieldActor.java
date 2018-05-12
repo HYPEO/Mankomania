@@ -9,7 +9,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 
 public class BuyHotelFieldActor extends FieldActor {
     private static final float FIELD_SCALE = 40f;
-    private static final String TEXTURE_PATH = "forsale.jpg";
+    private static final String TEXTURE_PATH = "fields/hotel.png";
     private boolean bought = false;
 
     public BuyHotelFieldActor(float x, float y, Texture texture, int price, DetailActor detailActor) {
@@ -19,7 +19,7 @@ public class BuyHotelFieldActor extends FieldActor {
     @Override
     public void trigger(PlayerActor player) {
         if (!bought) {
-            BuyHotelFieldActor.this.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("bought.jpg"))));
+            BuyHotelFieldActor.this.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("fields/hotel_bought.png"))));
             player.setBalance(player.getBalance() - 100000);
             System.out.println("Bought House");
             bought = true;
