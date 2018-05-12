@@ -16,6 +16,7 @@ import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
+import space.hypeo.networking.network.Player;
 
 /**
  * Created by pichlermarc on 09.05.2018.
@@ -35,8 +36,23 @@ public class MapStage extends Stage {
         detailActor.positionActor(340);
 
         PlayerDetailActor playerDetailActor = new PlayerDetailActor(new Texture("map_assets/player_1.png"));
-        playerDetailActor.positionActor();
+        playerDetailActor.positionActor(PlayerDetailActor.ScreenPosition.BOTTOM_LEFT);
         this.addActor(playerDetailActor);
+
+
+        PlayerDetailActor secondDetailActor = new PlayerDetailActor(new Texture("map_assets/player_2.png"));
+        secondDetailActor.positionActor(PlayerDetailActor.ScreenPosition.BOTTOM_RIGHT);
+        this.addActor(secondDetailActor);
+
+        PlayerDetailActor thirdDetailActor = new PlayerDetailActor(new Texture("map_assets/player_3.png"));
+        thirdDetailActor.positionActor(PlayerDetailActor.ScreenPosition.TOP_LEFT);
+        this.addActor(thirdDetailActor);
+
+        PlayerDetailActor fourthDetailActor = new PlayerDetailActor(new Texture("map_assets/player_4.png"));
+        fourthDetailActor.positionActor(PlayerDetailActor.ScreenPosition.TOP_RIGHT);
+        this.addActor(fourthDetailActor);
+
+
         // Create the empty field.
         FieldActor firstField = new EmptyFieldActor(MARGIN_X, MARGIN_Y, new Texture("transparent.png"), 0, detailActor);
         this.addActor(firstField);
