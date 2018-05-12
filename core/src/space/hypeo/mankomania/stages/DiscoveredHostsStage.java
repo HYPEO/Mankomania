@@ -26,10 +26,14 @@ public class DiscoveredHostsStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
 
+    private List<InetAddress> foundHosts = null;
+
     public DiscoveredHostsStage(StageManager stageManager, Viewport viewport) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
+
+        this.foundHosts = WhatAmI.getClient().discoverHosts();
 
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
@@ -52,8 +56,6 @@ public class DiscoveredHostsStage extends Stage {
 
         layout.add(new Label("Discovered Hosts:", skin)).width(300).height(100);
         layout.row();
-
-        List<InetAddress> foundHosts = WhatAmI.getClient().discoverHosts();
 
         if( foundHosts != null && ! foundHosts.isEmpty() ) {
 

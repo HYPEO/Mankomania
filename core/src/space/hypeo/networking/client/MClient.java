@@ -250,9 +250,9 @@ public class MClient implements IPlayerConnector, IClientConnector {
         }
 
         if( currentStage instanceof LobbyStage ) {
-            stageManager.remove(currentStage);
+            ((LobbyStage) currentStage).updateLobby();
+        } else {
+            stageManager.push(new LobbyStage(stageManager, viewport));
         }
-
-        stageManager.push(new LobbyStage(stageManager, viewport));
     }
 }
