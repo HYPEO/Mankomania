@@ -10,6 +10,8 @@ import java.util.Random;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.FieldActor;
+import space.hypeo.mankomania.actors.map.DetailActor;
+import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
 /**
  * Class that represents a Player.
@@ -30,6 +32,7 @@ public class PlayerActor extends Image {
     private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
     private final StageManager manager;
     private final Viewport viewport;
+    private final PlayerDetailActor playerDetailActor;
 
     /**
      * Creates a new instance of a Class that implementaion for a Player.
@@ -39,12 +42,13 @@ public class PlayerActor extends Image {
      * @param isLocal      Defines whether this player is the local one (i.e the one controlled with this device)
      * @param currentField Defines the players current position.
      */
-    public PlayerActor(String playerID, int balance, boolean isLocal, FieldActor currentField, final Viewport viewport, final StageManager stageManager) {
+    public PlayerActor(String playerID, int balance, boolean isLocal, FieldActor currentField, final Viewport viewport, final StageManager stageManager, PlayerDetailActor playerDetailActor) {
         super(new Texture("tile.png"));
         this.currentField = currentField;
         this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
         this.isLocal = isLocal;
         this.balance = balance;
+        this.playerDetailActor = playerDetailActor;
 
         this.manager = stageManager;
         this.viewport = viewport;
@@ -115,5 +119,6 @@ public class PlayerActor extends Image {
 
     public void setBalance(int balance) {
         this.balance = balance;
+        this.playerDetailActor.updateBalance(balance);
     }
 }

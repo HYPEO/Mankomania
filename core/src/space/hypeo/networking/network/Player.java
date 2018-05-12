@@ -26,34 +26,37 @@ public class Player {
 
     /**
      * Creates a new instance of Player.
+     *
      * @param playerID
      * @param nick
      * @param address
      * @param role
      */
     public Player(String playerID, String nick,
-                  String address,Role role) {
+                  String address, Role role) {
         this.playerID = playerID;
         this.nick = nick;
         this.address = address;
-        this.role =role;
+        this.role = role;
     }
 
     /**
      * Copy constructor, creates a new instance of Player.
+     *
      * @param p
      */
     public Player(Player p) {
-        if( p != null && p != this) {
-            this.playerID = new String(p.playerID);
-            this.nick = new String(p.nick);
-            this.address = new String(p.address);
+        if (p != null && p != this) {
+            this.playerID = p.playerID;
+            this.nick = p.nick;
+            this.address = p.address;
             this.role = p.role;
         }
     }
 
     /**
      * Returns ID of current player.
+     *
      * @return String ID.
      */
     public String getPlayerID() {
@@ -62,6 +65,7 @@ public class Player {
 
     /**
      * Sets the ID of the current player.
+     *
      * @param playerID
      */
     public void setPlayerID(String playerID) {
@@ -70,6 +74,7 @@ public class Player {
 
     /**
      * Gets the nickname of the current player.
+     *
      * @return String nickname.
      */
     public String getNick() {
@@ -78,6 +83,7 @@ public class Player {
 
     /**
      * Sets the nickname of the current player.
+     *
      * @param nick
      */
     public void setNick(String nick) {
@@ -86,6 +92,7 @@ public class Player {
 
     /**
      * Gets current address.
+     *
      * @return String IP Address
      */
     public String getAddress() {
@@ -94,6 +101,7 @@ public class Player {
 
     /**
      * Gets the role of the current player.
+     *
      * @return Role.
      */
     public Role getRole() {
@@ -102,6 +110,7 @@ public class Player {
 
     /**
      * Returns the string representation of current player.
+     *
      * @return String representation
      */
     @Override
