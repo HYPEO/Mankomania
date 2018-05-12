@@ -26,7 +26,7 @@ public class MapStage extends Stage {
     private static final float MARGIN_Y = 175;
     private static final float FIELD_DISTANCE = 45f;
     private DetailActor detailActor;
-    private PlayerDetailActor playerDetailActor;
+
     public MapStage(Viewport viewport, StageManager stageManager) {
         super(viewport);
         setUpBackground();
@@ -34,7 +34,7 @@ public class MapStage extends Stage {
         this.addActor(detailActor);
         detailActor.positionActor(340);
 
-        playerDetailActor = new PlayerDetailActor(new Texture("map_assets/player_1.png"));
+        PlayerDetailActor playerDetailActor = new PlayerDetailActor(new Texture("map_assets/player_1.png"));
         playerDetailActor.positionActor();
         this.addActor(playerDetailActor);
         // Create the empty field.
@@ -54,7 +54,7 @@ public class MapStage extends Stage {
         previousField.setNextField(firstField);
 
         // Create player on first field.
-        PlayerActor player = new PlayerActor("1", 1000000, true, firstField, viewport, stageManager);
+        PlayerActor player = new PlayerActor("1", 1000000, true, firstField, viewport, stageManager, playerDetailActor);
         this.addActor(player);
 
 
