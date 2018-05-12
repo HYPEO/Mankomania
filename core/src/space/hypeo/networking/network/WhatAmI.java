@@ -5,13 +5,13 @@ import com.esotericsoftware.minlog.Log;
 import java.net.SocketException;
 import java.util.UUID;
 
+import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.client.MClient;
 import space.hypeo.networking.host.MHost;
 import space.hypeo.networking.packages.Lobby;
 
 /**
- * This class stores the role of a player in the network:
- * The end point in a network connection could be host or client.
+ * This class is a global auxiliary class that provides different references among the game.
  */
 public class WhatAmI {
 
@@ -35,13 +35,14 @@ public class WhatAmI {
     private static MHost host;
     private static MClient client;
 
+    private static StageManager stageManager = null;
 
     /**
      * Initialize that static class on the device.
      * @param nickname Nickname of the player.
      * @param role Role of the endpoint in the connection.
      */
-    public static void init(String nickname, Role role) {
+    public static void init(String nickname, Role role, StageManager sm) {
 
         // TODO: check if WLAN connection is ON and connected to hotspot
 
@@ -82,6 +83,8 @@ public class WhatAmI {
         } else if( role == Role.CLIENT ) {
             WhatAmI.setClient();
         }
+
+        WhatAmI.stageManager = sm;
     }
 
     /**
@@ -189,4 +192,11 @@ public class WhatAmI {
         WhatAmI.lobby.remove(player);
     }
 
+    /**
+     * Gets the reference to the StageManager.
+     * @return stageManager
+     */
+    public static StageManager getStageManager() {
+        return stageManager;
+    }
 }

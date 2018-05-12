@@ -1,5 +1,7 @@
 package space.hypeo.networking.client;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -9,6 +11,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
+import space.hypeo.mankomania.StageManager;
+import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.IPlayerConnector;
 import space.hypeo.networking.network.NetworkAddress;
@@ -92,6 +96,8 @@ public class MClient implements IPlayerConnector, IClientConnector {
                  */
                 WhatAmI.setLobby( (Lobby) object );
                 Log.info("Client received updated list of player");
+
+                updateStageLobby();
 
             } else if( object instanceof Acknowledge ) {
                 Acknowledge ack = (Acknowledge) object;
@@ -207,5 +213,26 @@ public class MClient implements IPlayerConnector, IClientConnector {
     @Override
     public Lobby registeredPlayers() {
         return WhatAmI.getLobby();
+    }
+
+    @Override
+    public void updateStageLobby() {
+        // TODO: refactor duplicated code into parent class
+
+        StageManager stageManager = WhatAmI.getStageManager();
+
+        Stage currentStage = stageManager.getCurrentStage();
+        Viewport viewport = currentStage.getViewport();
+
+        if( viewport == null ) {
+            Log.error("Client: viewport must not be null!");
+            return;
+        }
+
+        if( currentStage instanceof LobbyStage ) {
+            stageManager.remove(currentStage);
+        }
+
+        stageManager.push(new LobbyStage(stageManager, viewport));
     }
 }

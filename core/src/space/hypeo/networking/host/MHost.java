@@ -2,6 +2,8 @@ package space.hypeo.networking.host;
 
 import java.io.IOException;
 
+import space.hypeo.mankomania.StageManager;
+import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.IHostConnector;
 import space.hypeo.networking.network.IPlayerConnector;
 import space.hypeo.networking.network.WhatAmI;
@@ -16,6 +18,8 @@ import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -94,6 +98,8 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
                 server.sendToAllTCP(WhatAmI.getLobby());
 
+                updateStageLobby();
+
             } else if( object instanceof PlayerDisconnect) {
                 Player leavingPlayer = (PlayerDisconnect) object;
                 WhatAmI.removePlayerFromLobby(leavingPlayer.getPlayerID());
@@ -102,6 +108,8 @@ public class MHost implements IPlayerConnector, IHostConnector {
                 WhatAmI.getLobby().log();
 
                 server.sendToAllTCP(WhatAmI.getLobby());
+
+                updateStageLobby();
             }
         }
     }
@@ -190,4 +198,24 @@ public class MHost implements IPlayerConnector, IHostConnector {
         return WhatAmI.getLobby();
     }
 
+    @Override
+    public void updateStageLobby() {
+        // TODO: refactor duplicated code into parent class
+
+        StageManager stageManager = WhatAmI.getStageManager();
+
+        Stage currentStage = stageManager.getCurrentStage();
+        Viewport viewport = currentStage.getViewport();
+
+        if( viewport == null ) {
+            Log.error("Host: viewport must not be null!");
+            return;
+        }
+
+        if( currentStage instanceof LobbyStage) {
+            stageManager.remove(currentStage);
+        }
+
+        stageManager.push(new LobbyStage(stageManager, viewport));
+    }
 }

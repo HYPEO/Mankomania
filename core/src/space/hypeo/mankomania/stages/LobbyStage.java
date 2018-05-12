@@ -33,26 +33,28 @@ import space.hypeo.networking.network.Player;
  * Therefore the hashmap 'players' - a field of class MHost - contains the necessary data.
  */
 public class LobbyStage extends Stage {
-    StageManager stageManager;
+    private StageManager stageManager;
+    private final Viewport viewport;
 
     public LobbyStage(StageManager stageManager, Viewport viewport) {
         super(viewport);
         this.stageManager = stageManager;
+        this.viewport = viewport;
 
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
 
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
-        Label lblLobby = new Label("GAME LOBBY", skin);
+        Label title = new Label("GAME LOBBY", skin);
 
-        Table tblLobby = new Table();
-        tblLobby.setWidth(this.getWidth());
-        tblLobby.align(Align.center);
-        tblLobby.setPosition(0, this.getHeight() - 200);
-        tblLobby.padTop(50);
-        tblLobby.add(lblLobby).width(300).height(100);
-        tblLobby.row();
+        Table layout = new Table();
+        layout.setWidth(this.getWidth());
+        layout.align(Align.center);
+        layout.setPosition(0, this.getHeight() - 200);
+        layout.padTop(50);
+        layout.add(title).width(300).height(100);
+        layout.row();
 
         Lobby lobby = WhatAmI.getLobby();
         Role role = WhatAmI.getRole();
@@ -79,8 +81,8 @@ public class LobbyStage extends Stage {
 
             });
 
-            tblLobby.add(btnPlayer).width(300).height(100);
-            tblLobby.row();
+            layout.add(btnPlayer).width(300).height(100);
+            layout.row();
 
             index++;
         }
@@ -90,9 +92,9 @@ public class LobbyStage extends Stage {
 
         // Add actors.
         this.addActor(background);
-        this.addActor(tblLobby);
+        this.addActor(layout);
 
-        // Add listener for click events.
+        // Add listener for click on background events.
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

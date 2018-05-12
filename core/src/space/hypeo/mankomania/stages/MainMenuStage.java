@@ -78,7 +78,8 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 
-                WhatAmI.init("the_mighty_host", Role.HOST);
+                // TODO: only want to do: start host with nick
+                WhatAmI.init("the_mighty_host", Role.HOST, stageManager);
                 WhatAmI.getHost().startServer();
 
                 stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
@@ -91,7 +92,8 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 
-                WhatAmI.init("another_client", Role.CLIENT);
+                // TODO: only want to do: start client with nick
+                WhatAmI.init("another_client", Role.CLIENT, stageManager);
                 WhatAmI.getClient().startClient();
 
                 stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
