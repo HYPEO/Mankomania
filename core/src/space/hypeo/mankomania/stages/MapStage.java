@@ -22,9 +22,9 @@ import space.hypeo.mankomania.factories.ActorFactory;
  */
 public class MapStage extends Stage {
     private static final int NUM_OF_FIELDS = 9;
-    private static final float MARGIN_X = 47.5f;
-    private static final float MARGIN_Y = 205f;
-    private static final float FIELD_DISTANCE = 40f;
+    private static final float MARGIN_X = 20f;
+    private static final float MARGIN_Y = 175;
+    private static final float FIELD_DISTANCE = 45f;
     private DetailActor detailActor;
     private PlayerDetailActor playerDetailActor;
     public MapStage(Viewport viewport, StageManager stageManager) {
@@ -32,7 +32,7 @@ public class MapStage extends Stage {
         setUpBackground();
         detailActor = ActorFactory.getDetailActor();
         this.addActor(detailActor);
-        detailActor.positionActor(320);
+        detailActor.positionActor(340);
 
         playerDetailActor = new PlayerDetailActor(new Texture("map_assets/player_1.png"));
         playerDetailActor.positionActor();

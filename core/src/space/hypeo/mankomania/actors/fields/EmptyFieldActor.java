@@ -10,7 +10,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
  * A dummy field used as a placeholder.
  */
 public class EmptyFieldActor extends FieldActor {
-    private static final float FIELD_SCALE = 30f;
+    private static final float FIELD_SCALE = 40f;
     private static final String TEXTURE_PATH = "wall.jpg";
 
     /**

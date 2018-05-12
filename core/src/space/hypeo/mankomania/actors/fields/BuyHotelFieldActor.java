@@ -8,7 +8,7 @@ import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 
 public class BuyHotelFieldActor extends FieldActor {
-    private static final float FIELD_SCALE = 30f;
+    private static final float FIELD_SCALE = 40f;
     private static final String TEXTURE_PATH = "forsale.jpg";
     private boolean bought = false;
 

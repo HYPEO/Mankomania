@@ -6,7 +6,7 @@ import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 
 public class LoseMoneyFieldActor extends FieldActor {
-    private static final float FIELD_SCALE = 30f;
+    private static final float FIELD_SCALE = 40f;
     private static final String TEXTURE_PATH = "lose.jpg";
 
     public LoseMoneyFieldActor(float x, float y, Texture texture, int price, DetailActor fieldDetail) {
