@@ -11,7 +11,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
  */
 public class EmptyFieldActor extends FieldActor {
     private static final float FIELD_SCALE = 40f;
-    private static final String TEXTURE_PATH = "wall.jpg";
+    private static final String TEXTURE_PATH = "fields/empty.png";
 
     /**
      * Creates a new instance of the EmptyFieldActor class.
