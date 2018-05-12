@@ -46,6 +46,7 @@ public class PlayerActor extends Image {
         super(new Texture("tile.png"));
         this.currentField = currentField;
         this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
+        updateBounds();
         this.isLocal = isLocal;
         this.balance = balance;
         this.playerDetailActor = playerDetailActor;
@@ -109,7 +110,10 @@ public class PlayerActor extends Image {
      * Updates the object bounds to the current field.
      */
     private void updateBounds() {
-        this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
+        this.setBounds(currentField.getX()+(currentField.getWidth()/2f)-(this.getWidth()/2f),
+                currentField.getY()+(currentField.getHeight()/2f)-(this.getHeight()/2f),
+                PLAYER_SCALE,
+                PLAYER_SCALE);
         System.out.println(balance);
     }
 
