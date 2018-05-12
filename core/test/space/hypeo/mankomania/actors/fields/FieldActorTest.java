@@ -1,7 +1,6 @@
 package space.hypeo.mankomania.actors.fields;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import org.junit.Before;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import space.hypeo.mankomania.GameTest;
+import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 
 import static org.junit.Assert.*;
@@ -39,7 +39,7 @@ public class FieldActorTest extends GameTest {
     @Mock
     private Texture detailTexture;
     @Mock
-    private Image detailImage;
+    private DetailActor detailActor;
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -48,7 +48,7 @@ public class FieldActorTest extends GameTest {
     public void setUp() {
         fieldActors = new ArrayList<>();
         for (int count = 0; count < 10; count++) {
-            fieldActors.add(new FieldActor(X_POS, Y_POS, WIDTH, HEIGHT, PRICE, texture, detailTexture, detailImage) {
+            fieldActors.add(new FieldActor(X_POS, Y_POS, WIDTH, HEIGHT, PRICE, texture, detailTexture, detailActor) {
                 @Override
                 public void trigger(PlayerActor player) {
                 }
@@ -63,12 +63,7 @@ public class FieldActorTest extends GameTest {
         assertEquals(WIDTH, fieldActors.get(0).getWidth(), FUZZ_FACTOR);
         assertEquals(HEIGHT, fieldActors.get(0).getHeight(), FUZZ_FACTOR);
         assertEquals(PRICE, fieldActors.get(0).getPrice());
-    }
-
-    @Test
-    public void showFieldDetail() {
-        fieldActors.get(0).showFieldDetail();
-        verify(detailImage).setDrawable(any(SpriteDrawable.class));
+        assertEquals(detailTexture, fieldActors.get(0).getDetailTexture());
     }
 
     @Test
