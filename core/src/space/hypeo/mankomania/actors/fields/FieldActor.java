@@ -1,6 +1,8 @@
 package space.hypeo.mankomania.actors.fields;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import space.hypeo.mankomania.actors.map.DetailActor;
@@ -33,6 +35,14 @@ public abstract class FieldActor extends Image {
         this.detailTexture = detailTexture;
         this.price = price;
         this.detailActor = detailActor;
+
+        this.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                detailActor.showDetail(FieldActor.this);
+                return true;
+            }
+        });
     }
 
     /**
