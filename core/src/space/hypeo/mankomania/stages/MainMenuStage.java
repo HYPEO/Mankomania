@@ -92,6 +92,7 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
 
+                Log.info("Try to init as client and start client");
                 // TODO: only want to do: start client with nick
                 WhatAmI.init("another_client", Role.CLIENT, stageManager);
                 WhatAmI.getClient().startClient();

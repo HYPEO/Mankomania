@@ -16,7 +16,7 @@ import space.hypeo.networking.packages.PlayerHost;
  * The class Network is a auxiliary class
  * to keep things common to both the client and server.
  */
-public class Network {
+public final class Network {
 
     // this class is not instantiable!
     private Network() {}

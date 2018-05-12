@@ -13,7 +13,7 @@ import space.hypeo.networking.packages.Lobby;
 /**
  * This class is a global auxiliary class that provides different references among the game.
  */
-public class WhatAmI {
+public final class WhatAmI {
 
     // this class is not instantiable!
     private WhatAmI() {}
@@ -50,11 +50,11 @@ public class WhatAmI {
             Log.warn("WhatAmI-init: There is already an open connection as " + WhatAmI.role);
 
             if( host == null ) {
-                Log.info("WhatAmI-init: Host is null");
+                Log.info("WhatAmI-init: Host is null.");
             }
 
             if( client == null ) {
-                Log.info("WhatAmI-init: Client is null");
+                Log.info("WhatAmI-init: Client is null.");
             }
             return;
         }
@@ -198,5 +198,27 @@ public class WhatAmI {
      */
     public static StageManager getStageManager() {
         return stageManager;
+    }
+
+    public static void stopEndpoint() {
+
+        if( role == Role.HOST ) {
+            WhatAmI.host.stopServer();
+        } else if( role == Role.CLIENT) {
+            WhatAmI.client.stopClient();
+        } else if( role == Role.NOT_CONNECTED ) {
+            Log.info("No process running - nothing to do.");
+        }
+    }
+
+    public static void closeEndpoint() {
+
+        if( role == Role.HOST ) {
+            WhatAmI.host.closeServer();
+        } else if( role == Role.CLIENT) {
+            WhatAmI.client.closeClient();
+        } else if( role == Role.NOT_CONNECTED ) {
+            Log.info("No process running - nothing to do.");
+        }
     }
 }

@@ -115,7 +115,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
     @Override
     public void startClient() {
 
-        Log.info("Try to start client...");
+        Log.info("Client will be started.");
 
         if( client != null ) {
             Log.warn("Client is still running - nothing to do!");
@@ -123,12 +123,31 @@ public class MClient implements IPlayerConnector, IClientConnector {
         }
 
         client = new Client();
-        //new Thread(client).start(); // TODO: do NOT know which one is the right client-start?
         client.start();
         // register classes that can be sent/received by client
         Network.register(client);
 
-        Log.info("Client has started successfully");
+        Log.info("Client has started successfully.");
+    }
+
+    @Override
+    public void stopClient() {
+        Log.info("Client will be stopped.");
+
+        try {
+            client.close();
+            client.stop();
+
+        } catch( NullPointerException e ) {
+            Log.warn("Client was NOT running - nothing to do!");
+            Log.error(e.getMessage());
+        }
+    }
+
+    @Override
+    public void closeClient() {
+        Log.info("Client will be closed.");
+
     }
 
     @Override
@@ -146,9 +165,12 @@ public class MClient implements IPlayerConnector, IClientConnector {
     public void connectToHost(InetAddress hostAddress) {
 
         if( client != null && hostAddress != null ) {
+
+            Log.info("Client: Try to connect to " + hostAddress.toString());
+
             try {
-                Log.info("Client: Try to connect to " + hostAddress.toString());
                 client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_TCP, Network.PORT_UDP);
+                Log.info("Client: Connection to host " + hostAddress + " established");
 
             } catch (IOException e) {
                 Log.error(e.getMessage());
@@ -157,8 +179,6 @@ public class MClient implements IPlayerConnector, IClientConnector {
             client.addListener(new ClientListener());
 
             // the client will be added to lobby after network handshake by server!
-
-            WhatAmI.getLobby().log();
 
         } else {
             Log.info("Client has NOT been initialized yet!");

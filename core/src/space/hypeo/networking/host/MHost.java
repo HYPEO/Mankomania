@@ -117,7 +117,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
     @Override
     public void startServer() {
 
-        Log.info("Try to start server...");
+        Log.info("Server will be started.");
 
         if( server != null ) {
             Log.warn("Server is still running - nothing to do!");
@@ -143,7 +143,26 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
         server.start();
 
-        Log.info("Server has started successfully");
+        Log.info("Server has started successfully.");
+    }
+
+    @Override
+    public void stopServer() {
+        closeServer();
+    }
+
+    @Override
+    public void closeServer() {
+        Log.info("Server will be closed.");
+
+        try {
+            server.stop();
+            server.close();
+
+        } catch( NullPointerException e ) {
+            Log.warn("Server was NOT running - nothing to do!");
+            Log.error(e.getMessage());
+        }
     }
 
     @Override

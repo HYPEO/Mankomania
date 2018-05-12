@@ -28,4 +28,6 @@ public class Mankomania extends ApplicationAdapter {
         manager.getCurrentStage().act();
         manager.getCurrentStage().draw();
     }
+
+
 }
