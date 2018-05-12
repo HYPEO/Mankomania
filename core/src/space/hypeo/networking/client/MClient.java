@@ -87,7 +87,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
             } else if( object instanceof Notification) {
                 Notification notification = (Notification) object;
-                Log.info("Client received: " + notification.toString());
+                Log.info("Client: Received notification: " + notification.toString());
 
             } else if( object instanceof Lobby ) {
                 /*
@@ -95,19 +95,19 @@ public class MClient implements IPlayerConnector, IClientConnector {
                  * after connecting or disconnecting clients
                  */
                 WhatAmI.setLobby( (Lobby) object );
-                Log.info("Client received updated list of player");
+                Log.info("Client: Received updated list of player");
 
                 updateStageLobby();
 
             } else if( object instanceof Acknowledge ) {
                 Acknowledge ack = (Acknowledge) object;
-                Log.info("Client: " + ack);
+                Log.info("Client: Received ACK from " + ack);
 
                 connection.sendTCP( new PlayerConnect(WhatAmI.getPlayer()) );
 
             } else if( object instanceof PlayerHost) {
                 hostInfo = (PlayerHost) object;
-                Log.info("Client: Got connection to host " + hostInfo);
+                Log.info("Client: Received Player info of host, to be connected with: " + hostInfo);
             }
         }
     }
@@ -239,6 +239,8 @@ public class MClient implements IPlayerConnector, IClientConnector {
     public void updateStageLobby() {
         // TODO: refactor duplicated code into parent class
 
+        Log.info("Client: updateStageLobby");
+
         StageManager stageManager = WhatAmI.getStageManager();
 
         Stage currentStage = stageManager.getCurrentStage();
@@ -251,8 +253,6 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
         if( currentStage instanceof LobbyStage ) {
             ((LobbyStage) currentStage).updateLobby();
-        } else {
-            stageManager.push(new LobbyStage(stageManager, viewport));
         }
     }
 }

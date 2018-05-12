@@ -87,13 +87,13 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
             } else if( object instanceof Notification ) {
                 Notification notification = (Notification) object;
-                Log.info("Host received: " + notification.toString());
+                Log.info("Host received Notification: " + notification.toString());
 
             } else if( object instanceof PlayerConnect) {
                 Player newPlayer = (PlayerConnect) object;
                 WhatAmI.addPlayerToLobby(newPlayer.getPlayerID(), newPlayer);
 
-                Log.info("Host: received new player, add to lobby");
+                Log.info("Host: player has been connected, add to lobby");
                 WhatAmI.getLobby().log();
 
                 server.sendToAllTCP(WhatAmI.getLobby());
@@ -221,6 +221,8 @@ public class MHost implements IPlayerConnector, IHostConnector {
     public void updateStageLobby() {
         // TODO: refactor duplicated code into parent class
 
+        Log.info("Host: updateStageLobby");
+
         StageManager stageManager = WhatAmI.getStageManager();
 
         Stage currentStage = stageManager.getCurrentStage();
@@ -232,9 +234,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
         }
 
         if( currentStage instanceof LobbyStage) {
-            stageManager.remove(currentStage);
+            ((LobbyStage) currentStage).updateLobby();
         }
-
-        stageManager.push(new LobbyStage(stageManager, viewport));
     }
 }
