@@ -11,6 +11,7 @@ import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
+import space.hypeo.networking.packages.MoneyAmount;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
@@ -110,6 +111,20 @@ public class MHost implements IPlayerConnector, IHostConnector {
                 server.sendToAllTCP(WhatAmI.getLobby());
 
                 updateStageLobby();
+
+            } else if( object instanceof MoneyAmount ) {
+
+                MoneyAmount moneyAmount = (MoneyAmount) object;
+
+                /* is the reveiced money for me? */
+                if( WhatAmI.getPlayer().getPlayerID().equals( moneyAmount.getReceiverId() ) ) {
+                    // yes
+                    // TODO: change my own balance
+
+                } else {
+                    changeBalance(moneyAmount);
+                }
+
             }
         }
     }
@@ -184,7 +199,19 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
     @Override
     public void changeBalance(String playerID, int amount) {
+        int connectionID = getConnectionID(playerID);
 
+        MoneyAmount moneyAmount = new MoneyAmount(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
+
+        server.sendToTCP(connectionID, moneyAmount);
+    }
+
+    /**
+     * Resends a received MoneyAmount from player to another player.
+     * @param moneyAmount
+     */
+    public void changeBalance(MoneyAmount moneyAmount) {
+        changeBalance( moneyAmount.getReceiverId(), moneyAmount.getMoneyAmount() );
     }
 
     @Override
@@ -244,9 +271,27 @@ public class MHost implements IPlayerConnector, IHostConnector {
         return WhatAmI.getPlayer().toString();
     }
 
-    @Override
-    public void sendMoney2(String playerId) {
-        Player receiver = registeredPlayers().get(playerId);
 
+
+    public int getConnectionID(String playerId) throws IndexOutOfBoundsException {
+
+        Player player = WhatAmI.getLobby().get(playerId);
+        int connectionID = 0;
+
+        if( player == null ) {
+            Log.warn("Could not find player with ID '" + playerId + "' in lobby!");
+            throw new IndexOutOfBoundsException("Could not find player with ID '" + playerId + "' in lobby!");
+        }
+
+        String connectionIP = player.getAddress();
+
+        for( Connection connection : server.getConnections() ) {
+            Log.info(connection.toString());
+            if( connection.getRemoteAddressTCP().toString().equals(connectionIP) ) {
+                connectionID = connection.getID();
+            }
+        }
+
+        return connectionID;
     }
 }

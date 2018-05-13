@@ -263,7 +263,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
     }
 
     @Override
-    public void sendMoney2(String playerId) {
+    public void sendMoney2(String playerId, double amount) {
 
     }
 }

@@ -2,22 +2,32 @@ package space.hypeo.networking.packages;
 
 public class MoneyAmount {
 
-    private double moneyAmount;
+    private int amount;
+    private String senderId;
+    private String receiverId;
 
-    public MoneyAmount() {
-        this(0);
+    public MoneyAmount() {}
+
+    public MoneyAmount(String senderId, String receiverId, int amount) {
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.amount = amount;
     }
 
-    public MoneyAmount(double moneyAmount) {
-        this.moneyAmount = moneyAmount;
+    public int getMoneyAmount() {
+        return amount;
     }
 
-    public double getMoneyAmount() {
-        return moneyAmount;
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public String getReceiverId() {
+        return receiverId;
     }
 
     @Override
     public String toString() {
-        return new Double(moneyAmount).toString();
+        return "From " + senderId + ", to " + receiverId + ", amount " + amount;
     }
 }
