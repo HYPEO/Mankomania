@@ -17,7 +17,7 @@ import space.hypeo.mankomania.actors.map.PlayerDetailActor;
  * Class that represents a Player.
  */
 public class PlayerActor extends Image {
-    private static final float PLAYER_SCALE = 20f;
+    private static final float PLAYER_SCALE = 60f;
     protected FieldActor currentField;
 
     // Current player state.
@@ -43,9 +43,10 @@ public class PlayerActor extends Image {
      * @param currentField Defines the players current position.
      */
     public PlayerActor(String playerID, int balance, boolean isLocal, FieldActor currentField, final Viewport viewport, final StageManager stageManager, PlayerDetailActor playerDetailActor) {
-        super(new Texture("tile.png"));
+        super(new Texture("players/player_1.png"));
         this.currentField = currentField;
         this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
+        updateBounds();
         this.isLocal = isLocal;
         this.balance = balance;
         this.playerDetailActor = playerDetailActor;
@@ -109,7 +110,10 @@ public class PlayerActor extends Image {
      * Updates the object bounds to the current field.
      */
     private void updateBounds() {
-        this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
+        this.setBounds(currentField.getX()+(currentField.getWidth()/2f)-(this.getWidth()/2f),
+                currentField.getY()+(currentField.getHeight()/2f)-(this.getHeight()/2f)+8f,
+                PLAYER_SCALE,
+                PLAYER_SCALE);
         System.out.println(balance);
     }
 
