@@ -122,6 +122,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
                     // TODO: change my own balance
 
                 } else {
+                    // no: send money to client
                     changeBalance(moneyAmount);
                 }
 

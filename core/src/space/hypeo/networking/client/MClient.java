@@ -21,6 +21,7 @@ import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
+import space.hypeo.networking.packages.MoneyAmount;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
@@ -108,6 +109,19 @@ public class MClient implements IPlayerConnector, IClientConnector {
             } else if( object instanceof PlayerHost) {
                 hostInfo = (PlayerHost) object;
                 Log.info("Client: Received Player info of host, to be connected with: " + hostInfo);
+
+            } else if( object instanceof MoneyAmount) {
+                MoneyAmount moneyAmount = (MoneyAmount) object;
+
+                /* is the reveiced money for me? */
+                if( WhatAmI.getPlayer().getPlayerID().equals( moneyAmount.getReceiverId() ) ) {
+                    // yes
+                    // TODO: change my own balance
+
+                } else {
+                    // TODO: raise error
+
+                }
             }
         }
     }
@@ -262,8 +276,4 @@ public class MClient implements IPlayerConnector, IClientConnector {
         return WhatAmI.getPlayer().toString();
     }
 
-    @Override
-    public void sendMoney2(String playerId, double amount) {
-
-    }
 }
