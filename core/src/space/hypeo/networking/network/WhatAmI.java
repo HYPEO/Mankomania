@@ -30,6 +30,8 @@ public final class WhatAmI {
 
     private static StageManager stageManager = null;
 
+    private static boolean gameRunning = false;
+
     /**
      * Initialize that static class on the device.
      * @param nickname Nickname of the player.
@@ -77,6 +79,9 @@ public final class WhatAmI {
      * @return Role
      */
     public static Role getRole() {
+        if( endpoint == null ) {
+            return Role.NOT_CONNECTED;
+        }
         return endpoint.getRole();
     }
 
@@ -114,6 +119,7 @@ public final class WhatAmI {
 
         if( endpoint != null ) {
             endpoint.close();
+            endpoint = null;
         } else {
             Log.info("No process running - nothing to do.");
         }
@@ -184,5 +190,7 @@ public final class WhatAmI {
         return stageManager;
     }
 
-
+    public static boolean isGameRunning() {
+        return gameRunning;
+    }
 }

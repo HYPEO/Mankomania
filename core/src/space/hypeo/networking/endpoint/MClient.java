@@ -270,4 +270,5 @@ public class MClient extends Endpoint implements IClientConnector {
     public void updateStageLobby() {
         super.updateStageLobby();
     }
+
 }

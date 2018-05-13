@@ -96,7 +96,17 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                WhatAmI.init("the_mighty_host", Role.HOST, stageManager);
+                Log.info("hostClickListener: " + WhatAmI.getRole());
+
+                if( WhatAmI.getRole() == Role.CLIENT ) {
+                    WhatAmI.closeEndpoint();
+                }
+
+                Log.info("hostClickListener: " + WhatAmI.getRole());
+
+                if( WhatAmI.getRole() == Role.NOT_CONNECTED ) {
+                    WhatAmI.init("the_mighty_host", Role.HOST, stageManager);
+                }
 
                 stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
             }
@@ -108,9 +118,26 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                WhatAmI.init("another_client", Role.CLIENT, stageManager);
+                Log.info("clientClickListener: " + WhatAmI.getRole());
 
-                stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
+                if( WhatAmI.getRole() == Role.HOST ) {
+                    WhatAmI.closeEndpoint();
+                }
+
+                Log.info("clientClickListener: " + WhatAmI.getRole());
+
+                if( WhatAmI.getRole() == Role.NOT_CONNECTED ) {
+                    Log.info("clientClickListener: start DiscoveredHostsStage");
+                    WhatAmI.init("another_client", Role.CLIENT, stageManager);
+                    stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
+                }
+
+                else if( WhatAmI.getRole() == Role.CLIENT ) {
+                    Log.info("clientClickListener: start LobbyStage");
+                    stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
+                }
+
+
             }
         };
     }
