@@ -1,11 +1,11 @@
-package space.hypeo.networking.host;
+package space.hypeo.networking.endpoint;
 
 import java.io.IOException;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.IHostConnector;
-import space.hypeo.networking.network.IPlayerConnector;
+import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
@@ -30,10 +30,14 @@ import com.esotericsoftware.minlog.Log;
  * This class represents the host process on a device.
  * If you don't know, if you're client or host, call WhatAmI.getRole().
  */
-public class MHost implements IPlayerConnector, IHostConnector {
+public class MHost extends Endpoint implements IHostConnector {
 
     // instance of the host
     private com.esotericsoftware.kryonet.Server server = null;
+
+    public MHost() {
+        super(Role.HOST);
+    }
 
     /**
      * This class handles the connection events with the server.
@@ -131,8 +135,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
     }
 
     @Override
-    public void startServer() {
-
+    public void start() {
         Log.info("Server will be started.");
 
         if( server != null ) {
@@ -163,12 +166,12 @@ public class MHost implements IPlayerConnector, IHostConnector {
     }
 
     @Override
-    public void stopServer() {
-        closeServer();
+    public void stop() {
+        close();
     }
 
     @Override
-    public void closeServer() {
+    public void close() {
         Log.info("Server will be closed.");
 
         try {
@@ -247,32 +250,13 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
     @Override
     public void updateStageLobby() {
-        // TODO: refactor duplicated code into parent class
-
-        Log.info("Host: updateStageLobby");
-
-        StageManager stageManager = WhatAmI.getStageManager();
-
-        Stage currentStage = stageManager.getCurrentStage();
-        Viewport viewport = currentStage.getViewport();
-
-        if( viewport == null ) {
-            Log.error("Host: viewport must not be null!");
-            return;
-        }
-
-        if( currentStage instanceof LobbyStage) {
-            ((LobbyStage) currentStage).updateLobby();
-            currentStage.act();
-        }
+        super.updateStageLobby();
     }
 
     @Override
     public String toString() {
         return WhatAmI.getPlayer().toString();
     }
-
-
 
     public int getConnectionID(String playerId) throws IndexOutOfBoundsException {
 

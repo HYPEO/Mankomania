@@ -21,13 +21,4 @@ public interface IHostConnector {
      */
     public void endGame();
 
-    /**
-     * Starts the server network thread.
-     */
-    public void startServer();
-
-    public void stopServer();
-
-    public void closeServer();
-
 }

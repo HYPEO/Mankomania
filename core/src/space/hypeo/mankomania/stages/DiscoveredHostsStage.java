@@ -19,6 +19,7 @@ import java.util.List;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.networking.endpoint.MClient;
 import space.hypeo.networking.network.WhatAmI;
 
 
@@ -33,7 +34,7 @@ public class DiscoveredHostsStage extends Stage {
         this.stageManager = stageManager;
         this.viewport = viewport;
 
-        this.foundHosts = WhatAmI.getClient().discoverHosts();
+        this.foundHosts = ((MClient) WhatAmI.getEndpoint()).discoverHosts();
 
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
@@ -72,7 +73,7 @@ public class DiscoveredHostsStage extends Stage {
 
                         Log.info("Try to connect to host " + hostAddr + "...");
 
-                        WhatAmI.getClient().connectToHost(hostAddr);
+                        ((MClient) WhatAmI.getEndpoint()).connectToHost(hostAddr);
 
                         stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
                     }

@@ -6,8 +6,9 @@ import java.net.SocketException;
 import java.util.UUID;
 
 import space.hypeo.mankomania.StageManager;
-import space.hypeo.networking.client.MClient;
-import space.hypeo.networking.host.MHost;
+import space.hypeo.networking.endpoint.Endpoint;
+import space.hypeo.networking.endpoint.MClient;
+import space.hypeo.networking.endpoint.MHost;
 import space.hypeo.networking.packages.Lobby;
 
 /**
@@ -18,22 +19,14 @@ public final class WhatAmI {
     // this class is not instantiable!
     private WhatAmI() {}
 
-    // varialbe holds the current player id (compare to primary key, autoincrement)
-    //private static int currentPlayerId = 1;
-
-    // role of current player
-    private static Role role = Role.NOT_CONNECTED;
-
     // network info a player
-    private static Player player;
+    private static Player player = null;
 
     // contains a list of all player, that are connected to the host of game
     private static Lobby lobby = new Lobby();
 
-    // instances for client and host
-    // TODO: better -> one instance as endpoint
-    private static MHost host;
-    private static MClient client;
+    // reference to client or host
+    private static Endpoint endpoint = null;
 
     private static StageManager stageManager = null;
 
@@ -46,24 +39,10 @@ public final class WhatAmI {
 
         // TODO: check if WLAN connection is ON and connected to hotspot
 
-        if( WhatAmI.role != Role.NOT_CONNECTED ) {
-            Log.warn("WhatAmI-init: There is already an open connection as " + WhatAmI.role);
-
-            if( host == null ) {
-                Log.info("WhatAmI-init: Host is null.");
-            }
-
-            if( client == null ) {
-                Log.info("WhatAmI-init: Client is null.");
-            }
+        if( endpoint != null ) {
+            Log.warn("init: There is already an open connection!");
             return;
         }
-
-        Log.warn("WhatAmI-init: WhatAmI.role=" + WhatAmI.role + ", role-argument=" + role);
-
-        // set Role of current end point
-        WhatAmI.role = role;
-        Log.info("I'm a " + role);
 
         // fetch IP in W/LAN
         String currentIp = "";
@@ -77,12 +56,8 @@ public final class WhatAmI {
         // store data of current player
         WhatAmI.player = new Player( generatePlayerID(), nickname, currentIp, role );
 
-        // set role for that endpoint
-        if( role == Role.HOST ) {
-            WhatAmI.setHost();
-        } else if( role == Role.CLIENT ) {
-            WhatAmI.setClient();
-        }
+        // sets endpoint + start process
+        setEndpoint(role);
 
         WhatAmI.stageManager = sm;
     }
@@ -102,37 +77,46 @@ public final class WhatAmI {
      * @return Role
      */
     public static Role getRole() {
-        return WhatAmI.role;
+        return endpoint.getRole();
     }
 
     /**
-     * Registers the endpoint as host connection.
+     * Sets the endpoint by given role and starts process.
+     * @param role HOST or CLIENT
      */
-    private static void setHost() {
-        WhatAmI.host = new MHost();
+    private static void setEndpoint(Role role) {
+
+        if( role == Role.HOST ) {
+            endpoint = new MHost();
+            endpoint.start();
+        } else if( role == Role.CLIENT ) {
+            endpoint = new MClient();
+            endpoint.start();
+        } else {
+            Log.info("Enpoint could not be initialized for given Role: " + role);
+        }
     }
 
-    /**
-     * Gets the host of the current connection.
-     * @return current host if role = HOST, else null
-     */
-    public static MHost getHost() {
-        return WhatAmI.host;
+    public static Endpoint getEndpoint() {
+        return endpoint;
     }
 
-    /**
-     * Registers the endpoint as client connection.
-     */
-    private static void setClient() {
-        WhatAmI.client = new MClient();
+    public static void stopEndpoint() {
+
+        if( endpoint != null ) {
+            endpoint.stop();
+        } else {
+            Log.info("No process running - nothing to do.");
+        }
     }
 
-    /**
-     * Gets the client of the current connection.
-     * @return current client if role = CLIENT, else null
-     */
-    public static MClient getClient() {
-        return WhatAmI.client;
+    public static void closeEndpoint() {
+
+        if( endpoint != null ) {
+            endpoint.close();
+        } else {
+            Log.info("No process running - nothing to do.");
+        }
     }
 
     /**
@@ -200,25 +184,5 @@ public final class WhatAmI {
         return stageManager;
     }
 
-    public static void stopEndpoint() {
 
-        if( role == Role.HOST ) {
-            WhatAmI.host.stopServer();
-        } else if( role == Role.CLIENT) {
-            WhatAmI.client.stopClient();
-        } else if( role == Role.NOT_CONNECTED ) {
-            Log.info("No process running - nothing to do.");
-        }
-    }
-
-    public static void closeEndpoint() {
-
-        if( role == Role.HOST ) {
-            WhatAmI.host.closeServer();
-        } else if( role == Role.CLIENT) {
-            WhatAmI.client.closeClient();
-        } else if( role == Role.NOT_CONNECTED ) {
-            Log.info("No process running - nothing to do.");
-        }
-    }
 }

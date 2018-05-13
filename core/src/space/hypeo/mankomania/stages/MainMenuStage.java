@@ -96,9 +96,7 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                // TODO: only want to do: start host with nick
                 WhatAmI.init("the_mighty_host", Role.HOST, stageManager);
-                WhatAmI.getHost().startServer();
 
                 stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
             }
@@ -110,10 +108,7 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                Log.info("Try to init as client and start client");
-                // TODO: only want to do: start client with nick
                 WhatAmI.init("another_client", Role.CLIENT, stageManager);
-                WhatAmI.getClient().startClient();
 
                 stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
             }

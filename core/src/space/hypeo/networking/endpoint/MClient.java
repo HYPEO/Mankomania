@@ -1,4 +1,4 @@
-package space.hypeo.networking.client;
+package space.hypeo.networking.endpoint;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -14,8 +14,8 @@ import java.util.List;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.IClientConnector;
-import space.hypeo.networking.network.IPlayerConnector;
 import space.hypeo.networking.network.NetworkAddress;
+import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
@@ -33,7 +33,7 @@ import space.hypeo.networking.packages.PlayerHost;
  * This class represents the client process for an endpoint on a device.
  * If you don't know, if you're client or host, call WhatAmI.getRole().
  */
-public class MClient implements IPlayerConnector, IClientConnector {
+public class MClient extends Endpoint implements IClientConnector {
 
     // instance of the client
     private com.esotericsoftware.kryonet.Client client = null;
@@ -42,6 +42,10 @@ public class MClient implements IPlayerConnector, IClientConnector {
     private Player hostInfo = null;
 
     private long startPingRequest = 0;
+
+    public MClient() {
+        super(Role.CLIENT);
+    }
 
     /**
      * This class handles the connection events with the client.
@@ -126,9 +130,12 @@ public class MClient implements IPlayerConnector, IClientConnector {
         }
     }
 
+    /**
+     * Starts the client network thread.
+     * This thread is what receives (and sometimes sends) data over the network
+     */
     @Override
-    public void startClient() {
-
+    public void start() {
         Log.info("Client will be started.");
 
         if( client != null ) {
@@ -144,8 +151,11 @@ public class MClient implements IPlayerConnector, IClientConnector {
         Log.info("Client has started successfully.");
     }
 
+    /**
+     * Closes any network connection AND stops the client network thread.
+     */
     @Override
-    public void stopClient() {
+    public void stop() {
         Log.info("Client will be stopped.");
 
         try {
@@ -158,10 +168,14 @@ public class MClient implements IPlayerConnector, IClientConnector {
         }
     }
 
+    /**
+     * Closes the network connection BUT does NOT stop the client network thread.
+     * Client can reconnect or connect to a different server.
+     */
     @Override
-    public void closeClient() {
+    public void close() {
         Log.info("Client will be closed.");
-
+        client.close();
     }
 
     @Override
@@ -217,6 +231,9 @@ public class MClient implements IPlayerConnector, IClientConnector {
     @Override
     public void changeBalance(String playerID, int amount) {
 
+        MoneyAmount moneyAmount = new MoneyAmount(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
+
+        client.sendTCP(moneyAmount);
     }
 
     @Override
@@ -251,29 +268,6 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
     @Override
     public void updateStageLobby() {
-        // TODO: refactor duplicated code into parent class
-
-        Log.info("Client: updateStageLobby");
-
-        StageManager stageManager = WhatAmI.getStageManager();
-
-        Stage currentStage = stageManager.getCurrentStage();
-        Viewport viewport = currentStage.getViewport();
-
-        if( viewport == null ) {
-            Log.error("Client: viewport must not be null!");
-            return;
-        }
-
-        if( currentStage instanceof LobbyStage ) {
-            ((LobbyStage) currentStage).updateLobby();
-            currentStage.act();
-        }
+        super.updateStageLobby();
     }
-
-    @Override
-    public String toString() {
-        return WhatAmI.getPlayer().toString();
-    }
-
 }

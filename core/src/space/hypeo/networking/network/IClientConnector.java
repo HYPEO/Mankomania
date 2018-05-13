@@ -16,23 +16,6 @@ public interface IClientConnector {
     public boolean joinGame(String playerID);
 
     /**
-     * Starts the client network thread.
-     * This thread is what receives (and sometimes sends) data over the network
-     */
-    public void startClient();
-
-    /**
-     * Closes any network connection AND stops the client network thread.
-     */
-    public void stopClient();
-
-    /**
-     * Closes the network connection BUT does NOT stop the client network thread.
-     * Client can reconnect or connect to a different server.
-     */
-    public void closeClient();
-
-    /**
      * discover host (run as server) in LAN and WLAN.
      * broadcast a UDP message on the LAN to discover any servers (hosts) running.
      *
