@@ -45,13 +45,17 @@ public class LobbyStage extends Stage {
         this.stageManager = stageManager;
         this.viewport = viewport;
 
-        setupBackground();
         updateLobby();
     }
 
     public void updateLobby() {
+
+        setupBackground();
         setupLayout();
         setupLobby();
+
+        this.addActor(background);
+        this.addActor(layout);
     }
 
 
@@ -68,7 +72,7 @@ public class LobbyStage extends Stage {
             }
         });
 
-        this.addActor(background);
+
     }
 
     private void setupLayout() {
@@ -117,6 +121,6 @@ public class LobbyStage extends Stage {
             index++;
         }
 
-        this.addActor(layout);
+
     }
 }
