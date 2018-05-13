@@ -36,9 +36,6 @@ public class LobbyStage extends Stage {
     private Skin skin;
     private RectangleActor background;
     private Table layout;
-    private Label title;
-
-    private Lobby lobby;
 
     public LobbyStage(StageManager stageManager, Viewport viewport) {
         super(viewport);
@@ -78,7 +75,7 @@ public class LobbyStage extends Stage {
     private void setupLayout() {
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
-        title = new Label("GAME LOBBY", skin);
+        Label title = new Label("GAME LOBBY", skin);
 
         layout = new Table();
         layout.setWidth(this.getWidth());
@@ -91,7 +88,7 @@ public class LobbyStage extends Stage {
 
     private void setupLobby() {
 
-        lobby = WhatAmI.getLobby();
+        Lobby lobby = WhatAmI.getLobby();
         Role role = WhatAmI.getRole();
 
         if( lobby == null || role == Role.NOT_CONNECTED ) {
