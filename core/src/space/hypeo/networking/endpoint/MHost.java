@@ -253,11 +253,6 @@ public class MHost extends Endpoint implements IHostConnector {
         super.updateStageLobby();
     }
 
-    @Override
-    public String toString() {
-        return WhatAmI.getPlayer().toString();
-    }
-
     public int getConnectionID(String playerId) throws IndexOutOfBoundsException {
 
         Player player = WhatAmI.getLobby().get(playerId);
