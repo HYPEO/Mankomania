@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.EndPoint;
 
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Lobby;
+import space.hypeo.networking.packages.MoneyAmount;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
@@ -53,6 +54,7 @@ public final class Network {
         kryo.register(PlayerDisconnect.class);
         kryo.register(PlayerHost.class);
 
+        kryo.register(MoneyAmount.class);
     }
 
 }

@@ -60,4 +60,10 @@ public interface IPlayerConnector {
      */
     public void updateStageLobby();
 
+    /**
+     * Sends money to player playerID and increases own balance.
+     * @param playerId ID of player that receives the money
+     */
+    public void sendMoney2(String playerId);
+
 }

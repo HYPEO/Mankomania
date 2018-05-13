@@ -173,7 +173,7 @@ public final class WhatAmI {
      * @param player network data of player
      */
     public static void addPlayerToLobby(String id, Player player) {
-        WhatAmI.lobby.add(id, player);
+        WhatAmI.lobby.put(id, player);
     }
 
     /**

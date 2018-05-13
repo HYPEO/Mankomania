@@ -253,6 +253,17 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
         if( currentStage instanceof LobbyStage ) {
             ((LobbyStage) currentStage).updateLobby();
+            currentStage.act();
         }
+    }
+
+    @Override
+    public String toString() {
+        return WhatAmI.getPlayer().toString();
+    }
+
+    @Override
+    public void sendMoney2(String playerId) {
+
     }
 }

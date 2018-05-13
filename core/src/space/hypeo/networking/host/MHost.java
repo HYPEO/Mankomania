@@ -235,6 +235,18 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
         if( currentStage instanceof LobbyStage) {
             ((LobbyStage) currentStage).updateLobby();
+            currentStage.act();
         }
+    }
+
+    @Override
+    public String toString() {
+        return WhatAmI.getPlayer().toString();
+    }
+
+    @Override
+    public void sendMoney2(String playerId) {
+        Player receiver = registeredPlayers().get(playerId);
+
     }
 }
