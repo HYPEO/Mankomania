@@ -16,11 +16,6 @@ public interface IClientConnector {
     public boolean joinGame(String playerID);
 
     /**
-     * Starts the client
-     */
-    public void startClient();
-
-    /**
      * discover host (run as server) in LAN and WLAN.
      * broadcast a UDP message on the LAN to discover any servers (hosts) running.
      *

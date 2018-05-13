@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.EndPoint;
 
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Lobby;
+import space.hypeo.networking.packages.MoneyAmount;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
@@ -16,7 +17,7 @@ import space.hypeo.networking.packages.PlayerHost;
  * The class Network is a auxiliary class
  * to keep things common to both the client and server.
  */
-public class Network {
+public final class Network {
 
     // this class is not instantiable!
     private Network() {}
@@ -53,6 +54,7 @@ public class Network {
         kryo.register(PlayerDisconnect.class);
         kryo.register(PlayerHost.class);
 
+        kryo.register(MoneyAmount.class);
     }
 
 }

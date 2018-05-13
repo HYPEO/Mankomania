@@ -28,35 +28,70 @@ import space.hypeo.networking.network.Player;
  * Shows the network-lobby:
  * The lobby is a Scene in the game for players to join before playing the actual game.
  * In the lobby, players can pick options and set themselves as ready for the game to start.
- *
- * The list in the lobby creates each player - both host and clients - itself.
- * Therefore the hashmap 'players' - a field of class MHost - contains the necessary data.
  */
 public class LobbyStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
+
+    private Skin skin;
+    private RectangleActor background;
+    private Table layout;
+    private Label title;
+
+    private Lobby lobby;
 
     public LobbyStage(StageManager stageManager, Viewport viewport) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
 
-        // Create actors.
-        RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+        updateLobby();
+    }
 
-        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+    public void updateLobby() {
 
-        Label title = new Label("GAME LOBBY", skin);
+        setupBackground();
+        setupLayout();
+        setupLobby();
 
-        Table layout = new Table();
+        this.addActor(background);
+        this.addActor(layout);
+    }
+
+
+    private void setupBackground() {
+        background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+        // Set up background.
+        background.setColor(237f/255f, 30f/255f, 121f/255f, 1f);
+
+        // Add listener for click on background events.
+        background.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageManager.remove(LobbyStage.this);
+            }
+        });
+
+
+    }
+
+    private void setupLayout() {
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
+        title = new Label("GAME LOBBY", skin);
+
+        layout = new Table();
         layout.setWidth(this.getWidth());
         layout.align(Align.center);
         layout.setPosition(0, this.getHeight() - 200);
         layout.padTop(50);
         layout.add(title).width(300).height(100);
         layout.row();
+    }
 
-        Lobby lobby = WhatAmI.getLobby();
+    private void setupLobby() {
+
+        lobby = WhatAmI.getLobby();
         Role role = WhatAmI.getRole();
 
         if( lobby == null || role == Role.NOT_CONNECTED ) {
@@ -65,7 +100,6 @@ public class LobbyStage extends Stage {
             return;
         }
 
-        // TODO: game lobby has to be updated after changes in collection 'players'
         int index = 1;
         for( HashMap.Entry<String, Player> entry : lobby.getData().entrySet() ) {
 
@@ -87,19 +121,6 @@ public class LobbyStage extends Stage {
             index++;
         }
 
-        // Set up background.
-        background.setColor(237f/255f, 30f/255f, 121f/255f, 1f);
 
-        // Add actors.
-        this.addActor(background);
-        this.addActor(layout);
-
-        // Add listener for click on background events.
-        this.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                stageManager.remove(LobbyStage.this);
-            }
-        });
     }
 }
