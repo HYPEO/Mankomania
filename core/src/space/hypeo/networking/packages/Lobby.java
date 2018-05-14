@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import space.hypeo.networking.network.Network;
-import space.hypeo.networking.network.Player;
+import space.hypeo.networking.network.NetworkPlayer;
 
 
 /**
@@ -24,7 +24,7 @@ public class Lobby {
      * String     ... PlayerId of the player
      * PlayerInfo ... Network info of the player
      */
-    protected Map<String, Player> data;
+    protected Map<String, NetworkPlayer> data;
 
     /**
      * Creates a new instance from type class Lobby.
@@ -32,16 +32,16 @@ public class Lobby {
     public Lobby() {
         data = new HashMap<>();
     }
-    public Lobby(Map<String, Player> data) {
+    public Lobby(Map<String, NetworkPlayer> data) {
         this.data = new HashMap<>(data);
     }
 
     /**
      * Associates the specified value with the specified key in this map.
      * @param id key, player ID
-     * @param p value, Player
+     * @param p value, NetworkPlayer
      */
-    public void put(String id, Player p) {
+    public void put(String id, NetworkPlayer p) {
         data.put(id, p);
     }
 
@@ -55,10 +55,10 @@ public class Lobby {
 
     /**
      * Removes the mapping for the specified value from this map if present.
-     * @param p value, Player
+     * @param p value, NetworkPlayer
      */
-    public void remove(Player p) {
-        for( HashMap.Entry<String, Player> entry : data.entrySet() ) {
+    public void remove(NetworkPlayer p) {
+        for( HashMap.Entry<String, NetworkPlayer> entry : data.entrySet() ) {
             if( entry.getValue().equals(p) ) {
                 data.remove( entry.getKey() );
             }
@@ -69,7 +69,7 @@ public class Lobby {
      * Returns the raw data of that instance.
      * @return data HashMap
      */
-    public Map<String, Player> getData() {
+    public Map<String, NetworkPlayer> getData() {
         return data;
     }
 
@@ -114,7 +114,7 @@ public class Lobby {
         }
 
         int index = 1;
-        for( HashMap.Entry<String, Player> entry : data.entrySet() ) {
+        for( HashMap.Entry<String, NetworkPlayer> entry : data.entrySet() ) {
             Log.info("  " + index + ". ID = '" + entry.getKey() +"'");
             Log.info("     " + entry.getValue());
             index++;
@@ -125,9 +125,9 @@ public class Lobby {
      * Returns the value to which the specified key is mapped,
      * or null if this map contains no mapping for the key.
      * @param playerId key in the map
-     * @return Player value to given key
+     * @return NetworkPlayer value to given key
      */
-    public Player get(String playerId) {
+    public NetworkPlayer get(String playerId) {
         return data.get(playerId);
     }
 
@@ -141,9 +141,9 @@ public class Lobby {
 
     /**
      * Returns a Collection view of the values contained in this map.
-     * @return collection of Player in data
+     * @return collection of NetworkPlayer in data
      */
-    public Collection<Player> values() {
+    public Collection<NetworkPlayer> values() {
         return data.values();
     }
 }

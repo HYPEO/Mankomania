@@ -13,12 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.minlog.Log;
 
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.networking.network.Player;
+import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.Role;
 
 /**
@@ -95,7 +94,7 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                Player host = new Player("the_mighty_host", Role.HOST);
+                NetworkPlayer host = new NetworkPlayer("the_mighty_host", Role.HOST);
                 stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, host));
             }
         };
@@ -106,7 +105,7 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                Player client = new Player("another_client", Role.CLIENT);
+                NetworkPlayer client = new NetworkPlayer("another_client", Role.CLIENT);
                 stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, client));
             }
         };

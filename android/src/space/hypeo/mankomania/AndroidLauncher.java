@@ -5,14 +5,14 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
-import space.hypeo.networking.network.Player;
+import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.Role;
 
 public class AndroidLauncher extends AndroidApplication {
 
 	Mankomania mankomania = null;
 
-	private Player player = null;
+	private NetworkPlayer player = null;
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {

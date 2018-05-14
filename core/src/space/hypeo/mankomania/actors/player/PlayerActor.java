@@ -13,7 +13,7 @@ import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
 /**
- * Class that represents a Player.
+ * Class that represents a NetworkPlayer.
  */
 public class PlayerActor extends Image {
     private static final float PLAYER_SCALE = 60f;
@@ -34,7 +34,7 @@ public class PlayerActor extends Image {
     private final PlayerDetailActor playerDetailActor;
 
     /**
-     * Creates a new instance of a Class that implementaion for a Player.
+     * Creates a new instance of a Class that implementaion for a NetworkPlayer.
      *
      * @param playerID     The player's ID (useful for communications)
      * @param balance      The player's current balance (starting balance)

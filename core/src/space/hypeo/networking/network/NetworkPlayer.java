@@ -13,29 +13,29 @@ import space.hypeo.networking.packages.Lobby;
  * This class holds the important network data,
  * that identifies a player in the network.
  */
-public class Player extends RawPlayer implements IPlayerConnector {
+public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
 
     private String address;   // IP address in W/LAN
 
     // The reference to the host or client.
     private Endpoint endpoint;
 
-    /* contains a list of all Player objects,
+    /* contains a list of all NetworkPlayer objects,
      * that are connected to the host of the game.
-     * even the own Player object itself.
+     * even the own NetworkPlayer object itself.
      */
     private Lobby lobby;
 
-    public Player () {
+    public NetworkPlayer() {
         super();
     }
 
     /**
-     * Creates a new instance of Player.
+     * Creates a new instance of NetworkPlayer.
      * @param nickname
      * @param role
      */
-    public Player(String nickname, Role role) {
+    public NetworkPlayer(String nickname, Role role) {
 
         super(nickname);
 
@@ -166,7 +166,7 @@ public class Player extends RawPlayer implements IPlayerConnector {
     }
 
     /**
-     * Returns the string representation of current Player object.
+     * Returns the string representation of current NetworkPlayer object.
      * @return String representation
      */
     @Override

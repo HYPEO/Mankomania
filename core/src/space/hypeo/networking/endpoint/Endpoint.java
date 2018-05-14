@@ -1,12 +1,6 @@
 package space.hypeo.networking.endpoint;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.minlog.Log;
-
-import space.hypeo.mankomania.StageManager;
-import space.hypeo.mankomania.stages.LobbyStage;
-import space.hypeo.networking.network.Player;
+import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.Role;
 
 
@@ -16,12 +10,12 @@ import space.hypeo.networking.network.Role;
 public abstract class Endpoint  {
 
     // a reference to the corresponding player
-    Player player;
+    NetworkPlayer player;
 
     // identifies the endpoint due to its role in the connection
     private Role role;
 
-    public Endpoint(Player player, Role role) {
+    public Endpoint(NetworkPlayer player, Role role) {
         this.role = role;
         this.player = player;
     }

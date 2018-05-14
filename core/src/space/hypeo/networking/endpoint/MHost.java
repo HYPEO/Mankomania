@@ -3,8 +3,8 @@ package space.hypeo.networking.endpoint;
 import java.io.IOException;
 
 import space.hypeo.networking.network.IHostConnector;
+import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
@@ -29,7 +29,7 @@ public class MHost extends Endpoint implements IHostConnector {
     // instance of the host
     private com.esotericsoftware.kryonet.Server server = null;
 
-    public MHost(Player player) {
+    public MHost(NetworkPlayer player) {
         super(player, Role.HOST);
     }
 
@@ -89,7 +89,7 @@ public class MHost extends Endpoint implements IHostConnector {
                 Log.info("Host received Notification: " + notification.toString());
 
             } else if( object instanceof PlayerConnect) {
-                Player newPlayer = (PlayerConnect) object;
+                NetworkPlayer newPlayer = (PlayerConnect) object;
                 player.registeredPlayers().put(newPlayer.getPlayerID(), newPlayer);
 
                 Log.info("Host: player has been connected, add to lobby");
@@ -100,7 +100,7 @@ public class MHost extends Endpoint implements IHostConnector {
                 updateStageLobby();
 
             } else if( object instanceof PlayerDisconnect) {
-                Player leavingPlayer = (PlayerDisconnect) object;
+                NetworkPlayer leavingPlayer = (PlayerDisconnect) object;
                 player.registeredPlayers().remove(leavingPlayer);
 
                 Log.info("Host: player has been disconnected, removed from lobby");
@@ -202,7 +202,7 @@ public class MHost extends Endpoint implements IHostConnector {
 
     public int getConnectionID(String playerId) throws IndexOutOfBoundsException {
 
-        Player needle = player.registeredPlayers().get(playerId);
+        NetworkPlayer needle = player.registeredPlayers().get(playerId);
         int connectionID = 0;
 
         if( player == null ) {

@@ -1,18 +1,17 @@
 package space.hypeo.networking.packages;
 
-import space.hypeo.networking.network.Player;
-import space.hypeo.networking.network.Role;
+import space.hypeo.networking.network.RawPlayer;
 
 /**
  * This class is only a wrapper class for player to send over the network and invoke right action.
  */
-public class PlayerHost extends Player {
+public class PlayerHost extends RawPlayer {
 
     public PlayerHost() {
         super();
     }
 
-    public PlayerHost(Player p) {
+    public PlayerHost(RawPlayer p) {
         super(p);
     }
 }

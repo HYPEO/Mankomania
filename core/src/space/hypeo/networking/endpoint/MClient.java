@@ -11,8 +11,8 @@ import java.util.List;
 
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.NetworkAddress;
+import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
@@ -34,11 +34,11 @@ public class MClient extends Endpoint implements IClientConnector {
     private com.esotericsoftware.kryonet.Client client = null;
 
     // host, that the client is connected to
-    private Player hostInfo = null;
+    private NetworkPlayer hostInfo = null;
 
     private long startPingRequest = 0;
 
-    public MClient(Player player) {
+    public MClient(NetworkPlayer player) {
         super(player, Role.CLIENT);
     }
 
@@ -91,7 +91,7 @@ public class MClient extends Endpoint implements IClientConnector {
 
             } else if( object instanceof Lobby ) {
                 /*
-                 * receive new list of Player:
+                 * receive new list of NetworkPlayer:
                  * after connecting or disconnecting clients
                  */
                 player.setLobby( (Lobby) object );
@@ -107,7 +107,7 @@ public class MClient extends Endpoint implements IClientConnector {
 
             } else if( object instanceof PlayerHost) {
                 hostInfo = (PlayerHost) object;
-                Log.info("Client: Received Player info of host, to be connected with: " + hostInfo);
+                Log.info("Client: Received NetworkPlayer info of host, to be connected with: " + hostInfo);
 
             } else if( object instanceof Remittances) {
                 Remittances remittances = (Remittances) object;
