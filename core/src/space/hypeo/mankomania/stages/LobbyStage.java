@@ -13,12 +13,10 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
-import java.util.HashMap;
-
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.networking.network.RawPlayer;
 import space.hypeo.networking.network.Role;
-
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.NetworkPlayer;
 
@@ -103,11 +101,10 @@ public class LobbyStage extends Stage {
         }
 
         int index = 1;
-        for( HashMap.Entry<String, NetworkPlayer> entry : lobby.getData().entrySet() ) {
+        for( RawPlayer rawPlayer : lobby.getData() ) {
 
             Button btnPlayer = new TextButton(
-                    index + ": " + entry.getKey() + ", " + entry.getValue().getAddress(),
-                    skin);
+                    index + ": " + rawPlayer, skin);
 
             btnPlayer.addListener(new ClickListener() {
                 @Override
