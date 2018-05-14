@@ -2,8 +2,6 @@ package space.hypeo.networking.endpoint;
 
 import java.io.IOException;
 
-import space.hypeo.mankomania.StageManager;
-import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.IHostConnector;
 import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.WhatAmI;
@@ -11,16 +9,14 @@ import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
-import space.hypeo.networking.packages.MoneyAmount;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.Remittances;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -116,20 +112,8 @@ public class MHost extends Endpoint implements IHostConnector {
 
                 updateStageLobby();
 
-            } else if( object instanceof MoneyAmount ) {
-
-                MoneyAmount moneyAmount = (MoneyAmount) object;
-
-                /* is the reveiced money for me? */
-                if( WhatAmI.getPlayer().getPlayerID().equals( moneyAmount.getReceiverId() ) ) {
-                    // yes
-                    // TODO: change my own balance
-
-                } else {
-                    // no: send money to client
-                    changeBalance(moneyAmount);
-                }
-
+            } else if( object instanceof Remittances ) {
+                changeBalance((Remittances) object);
             }
         }
     }
@@ -182,6 +166,8 @@ public class MHost extends Endpoint implements IHostConnector {
             Log.warn("Server was NOT running - nothing to do!");
             Log.error(e.getMessage());
         }
+
+        Log.info("Server closed.");
     }
 
     @Override
@@ -203,19 +189,22 @@ public class MHost extends Endpoint implements IHostConnector {
 
     @Override
     public void changeBalance(String playerID, int amount) {
+
+        // TODO: check if playerID == self.playerID
         int connectionID = getConnectionID(playerID);
 
-        MoneyAmount moneyAmount = new MoneyAmount(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
-
-        server.sendToTCP(connectionID, moneyAmount);
+        Remittances remittances = new Remittances(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
+        server.sendToTCP(connectionID, remittances);
     }
 
     /**
      * Resends a received MoneyAmount from player to another player.
-     * @param moneyAmount
+     * @param remittances
      */
-    public void changeBalance(MoneyAmount moneyAmount) {
-        changeBalance( moneyAmount.getReceiverId(), moneyAmount.getMoneyAmount() );
+    private void changeBalance(Remittances remittances) {
+
+        int connectionID = getConnectionID(remittances.getReceiverId());
+        server.sendToTCP(connectionID, remittances);
     }
 
     @Override
@@ -246,11 +235,6 @@ public class MHost extends Endpoint implements IHostConnector {
     @Override
     public Lobby registeredPlayers() {
         return WhatAmI.getLobby();
-    }
-
-    @Override
-    public void updateStageLobby() {
-        super.updateStageLobby();
     }
 
     public int getConnectionID(String playerId) throws IndexOutOfBoundsException {

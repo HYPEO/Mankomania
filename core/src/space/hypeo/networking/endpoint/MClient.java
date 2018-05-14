@@ -1,7 +1,5 @@
 package space.hypeo.networking.endpoint;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -11,8 +9,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
-import space.hypeo.mankomania.StageManager;
-import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.network.Role;
@@ -21,13 +17,13 @@ import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
-import space.hypeo.networking.packages.MoneyAmount;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.Remittances;
 
 /**
  * This class represents the client process for an endpoint on a device.
@@ -114,18 +110,9 @@ public class MClient extends Endpoint implements IClientConnector {
                 hostInfo = (PlayerHost) object;
                 Log.info("Client: Received Player info of host, to be connected with: " + hostInfo);
 
-            } else if( object instanceof MoneyAmount) {
-                MoneyAmount moneyAmount = (MoneyAmount) object;
-
-                /* is the reveiced money for me? */
-                if( WhatAmI.getPlayer().getPlayerID().equals( moneyAmount.getReceiverId() ) ) {
-                    // yes
-                    // TODO: change my own balance
-
-                } else {
-                    // TODO: raise error
-
-                }
+            } else if( object instanceof Remittances) {
+                Remittances remittances = (Remittances) object;
+                // TODO: change my own balance
             }
         }
     }
@@ -231,8 +218,8 @@ public class MClient extends Endpoint implements IClientConnector {
     @Override
     public void changeBalance(String playerID, int amount) {
 
-        MoneyAmount moneyAmount = new MoneyAmount(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
-
+        // TODO: check if playerID == self.playerID
+        Remittances moneyAmount = new Remittances(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
         client.sendTCP(moneyAmount);
     }
 
@@ -264,11 +251,6 @@ public class MClient extends Endpoint implements IClientConnector {
     @Override
     public Lobby registeredPlayers() {
         return WhatAmI.getLobby();
-    }
-
-    @Override
-    public void updateStageLobby() {
-        super.updateStageLobby();
     }
 
 }

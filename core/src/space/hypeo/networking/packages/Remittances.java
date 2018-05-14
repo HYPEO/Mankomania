@@ -1,14 +1,14 @@
 package space.hypeo.networking.packages;
 
-public class MoneyAmount {
+public class Remittances {
 
     private int amount;
     private String senderId;
     private String receiverId;
 
-    public MoneyAmount() {}
+    public Remittances() {}
 
-    public MoneyAmount(String senderId, String receiverId, int amount) {
+    public Remittances(String senderId, String receiverId, int amount) {
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.amount = amount;

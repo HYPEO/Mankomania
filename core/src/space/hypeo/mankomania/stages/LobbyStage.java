@@ -36,26 +36,24 @@ public class LobbyStage extends Stage {
     private Skin skin;
     private RectangleActor background;
     private Table layout;
-    private Label title;
 
-    private Lobby lobby;
+    private boolean updateLobby;
+    private float timeSinceLastUpdate;
 
     public LobbyStage(StageManager stageManager, Viewport viewport) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
+        this.updateLobby = false;
+        this.timeSinceLastUpdate = 0f;
 
         updateLobby();
     }
 
     public void updateLobby() {
-
-        setupBackground();
-        setupLayout();
-        setupLobby();
-
-        this.addActor(background);
-        this.addActor(layout);
+        synchronized (this){
+            updateLobby = true;
+        }
     }
 
 
@@ -78,7 +76,7 @@ public class LobbyStage extends Stage {
     private void setupLayout() {
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
-        title = new Label("GAME LOBBY", skin);
+        Label title = new Label("GAME LOBBY", skin);
 
         layout = new Table();
         layout.setWidth(this.getWidth());
@@ -91,7 +89,7 @@ public class LobbyStage extends Stage {
 
     private void setupLobby() {
 
-        lobby = WhatAmI.getLobby();
+        Lobby lobby = WhatAmI.getLobby();
         Role role = WhatAmI.getRole();
 
         if( lobby == null || role == Role.NOT_CONNECTED ) {
@@ -122,5 +120,28 @@ public class LobbyStage extends Stage {
         }
 
 
+    }
+
+    @Override
+    public void act(float delta)
+    {
+        timeSinceLastUpdate += delta;
+
+        if(timeSinceLastUpdate > 1f) {
+            synchronized (this) {
+                if (updateLobby) {
+                    setupBackground();
+                    setupLayout();
+                    setupLobby();
+
+                    this.addActor(background);
+                    this.addActor(layout);
+                }
+                updateLobby = false;
+            }
+            timeSinceLastUpdate = 0f;
+        }
+
+        super.act(delta);
     }
 }
