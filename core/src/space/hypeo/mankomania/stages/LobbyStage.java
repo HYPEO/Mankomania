@@ -37,22 +37,23 @@ public class LobbyStage extends Stage {
     private RectangleActor background;
     private Table layout;
 
+    private boolean updateLobby;
+    private float timeSinceLastUpdate;
+
     public LobbyStage(StageManager stageManager, Viewport viewport) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
+        this.updateLobby = false;
+        this.timeSinceLastUpdate = 0f;
 
         updateLobby();
     }
 
     public void updateLobby() {
-
-        setupBackground();
-        setupLayout();
-        setupLobby();
-
-        this.addActor(background);
-        this.addActor(layout);
+        synchronized (this){
+            updateLobby = true;
+        }
     }
 
 
@@ -119,5 +120,28 @@ public class LobbyStage extends Stage {
         }
 
 
+    }
+
+    @Override
+    public void act(float delta)
+    {
+        timeSinceLastUpdate += delta;
+
+        if(timeSinceLastUpdate > 1f) {
+            synchronized (this) {
+                if (updateLobby) {
+                    setupBackground();
+                    setupLayout();
+                    setupLobby();
+
+                    this.addActor(background);
+                    this.addActor(layout);
+                }
+                updateLobby = false;
+            }
+            timeSinceLastUpdate = 0f;
+        }
+
+        super.act(delta);
     }
 }
