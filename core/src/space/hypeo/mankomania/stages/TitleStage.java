@@ -20,7 +20,7 @@ import space.hypeo.mankomania.actors.common.RectangleActor;
 public class TitleStage extends Stage {
     private Image title;
 
-    public TitleStage(StageManager stageManager, Viewport viewport) {
+    public TitleStage(final StageManager stageManager, Viewport viewport) {
         super(viewport);
 
         setUpBackground();
