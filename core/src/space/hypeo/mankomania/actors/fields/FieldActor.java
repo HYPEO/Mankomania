@@ -15,7 +15,7 @@ public abstract class FieldActor extends Image {
     private FieldActor nextField;
     private int price;
     private Texture detailTexture;
-    protected DetailActor detailActor;
+    protected final DetailActor detailActor;
 
     /**
      * @param x             X position of the Actor.
@@ -39,7 +39,7 @@ public abstract class FieldActor extends Image {
         this.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                detailActor.showDetail(FieldActor.this);
+                FieldActor.this.detailActor.showDetail(FieldActor.this);
                 return true;
             }
         });
