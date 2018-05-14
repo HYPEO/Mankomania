@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import space.hypeo.networking.network.IHostConnector;
 import space.hypeo.networking.network.NetworkPlayer;
+import space.hypeo.networking.network.RawPlayer;
 import space.hypeo.networking.network.Role;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.network.Network;
@@ -89,8 +90,8 @@ public class MHost extends Endpoint implements IHostConnector {
                 Log.info("Host received Notification: " + notification.toString());
 
             } else if( object instanceof PlayerConnect) {
-                NetworkPlayer newPlayer = (PlayerConnect) object;
-                player.registeredPlayers().put(newPlayer.getPlayerID(), newPlayer);
+                RawPlayer newPlayer = (PlayerConnect) object;
+                player.registeredPlayers().add(newPlayer);
 
                 Log.info("Host: player has been connected, add to lobby");
                 player.registeredPlayers().log();
@@ -100,7 +101,7 @@ public class MHost extends Endpoint implements IHostConnector {
                 updateStageLobby();
 
             } else if( object instanceof PlayerDisconnect) {
-                NetworkPlayer leavingPlayer = (PlayerDisconnect) object;
+                RawPlayer leavingPlayer = (PlayerDisconnect) object;
                 player.registeredPlayers().remove(leavingPlayer);
 
                 Log.info("Host: player has been disconnected, removed from lobby");
@@ -202,10 +203,10 @@ public class MHost extends Endpoint implements IHostConnector {
 
     public int getConnectionID(String playerId) throws IndexOutOfBoundsException {
 
-        NetworkPlayer needle = player.registeredPlayers().get(playerId);
+        boolean lobbyContainsPlayer = player.registeredPlayers().contains(playerId);
         int connectionID = 0;
 
-        if( player == null ) {
+        if( ! lobbyContainsPlayer ) {
             Log.warn("Could not find player with ID '" + playerId + "' in lobby!");
             throw new IndexOutOfBoundsException("Could not find player with ID '" + playerId + "' in lobby!");
         }

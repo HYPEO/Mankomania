@@ -12,6 +12,7 @@ import java.util.List;
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.network.NetworkPlayer;
+import space.hypeo.networking.network.RawPlayer;
 import space.hypeo.networking.network.Role;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Lobby;
@@ -34,7 +35,7 @@ public class MClient extends Endpoint implements IClientConnector {
     private com.esotericsoftware.kryonet.Client client = null;
 
     // host, that the client is connected to
-    private NetworkPlayer hostInfo = null;
+    private RawPlayer hostInfo = null;
 
     private long startPingRequest = 0;
 
@@ -66,7 +67,7 @@ public class MClient extends Endpoint implements IClientConnector {
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            connection.sendTCP( new PlayerDisconnect(player) );
+            connection.sendTCP( new PlayerDisconnect(player.getRawPlayer()) );
 
             hostInfo = null;
             connection.close();
@@ -103,7 +104,7 @@ public class MClient extends Endpoint implements IClientConnector {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: Received ACK from " + ack);
 
-                connection.sendTCP( new PlayerConnect(player) );
+                connection.sendTCP( new PlayerConnect(player.getRawPlayer()) );
 
             } else if( object instanceof PlayerHost) {
                 hostInfo = (PlayerHost) object;

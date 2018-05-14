@@ -1,6 +1,8 @@
 package space.hypeo.networking.network;
 
+import com.esotericsoftware.minlog.Log;
 
+import java.net.SocketException;
 import java.util.UUID;
 
 /**
@@ -11,12 +13,23 @@ public class RawPlayer {
 
     protected String playerID;      // player ID
     protected String nickname;      // nickname
+    protected String address;       // IP address in W/LAN
 
     public RawPlayer() {}
 
     public RawPlayer(String nickname) {
         this.playerID = generatePlayerID();
         this.nickname = nickname;
+
+        // fetch IP in W/LAN
+        String currentIpAddr = "";
+        try {
+            currentIpAddr = NetworkAddress.getNetworkAddress();
+            Log.info( "current IP address: " + currentIpAddr );
+        } catch(SocketException e) {
+            Log.info(e.getMessage());
+        }
+        this.address = currentIpAddr;
     }
 
     /**
@@ -36,6 +49,14 @@ public class RawPlayer {
 
     public String getNickname() {
         return nickname;
+    }
+
+    /**
+     * Gets current address.
+     * @return String IP Address
+     */
+    public String getAddress() {
+        return address;
     }
 
     /**

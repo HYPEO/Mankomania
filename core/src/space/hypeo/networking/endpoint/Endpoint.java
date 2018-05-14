@@ -10,10 +10,10 @@ import space.hypeo.networking.network.Role;
 public abstract class Endpoint  {
 
     // a reference to the corresponding player
-    NetworkPlayer player;
+    protected NetworkPlayer player;
 
     // identifies the endpoint due to its role in the connection
-    private Role role;
+    protected Role role;
 
     public Endpoint(NetworkPlayer player, Role role) {
         this.role = role;

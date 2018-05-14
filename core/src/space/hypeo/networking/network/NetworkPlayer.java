@@ -15,8 +15,6 @@ import space.hypeo.networking.packages.Lobby;
  */
 public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
 
-    private String address;   // IP address in W/LAN
-
     // The reference to the host or client.
     private Endpoint endpoint;
 
@@ -28,6 +26,10 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
 
     public NetworkPlayer() {
         super();
+    }
+
+    public RawPlayer getRawPlayer() {
+        return new RawPlayer(this);
     }
 
     /**
@@ -46,16 +48,6 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
             return;
         }
 
-        // fetch IP in W/LAN
-        String currentIpAddr = "";
-        try {
-            currentIpAddr = NetworkAddress.getNetworkAddress();
-            Log.info( "current IP address: " + currentIpAddr );
-        } catch(SocketException e) {
-            Log.info(e.getMessage());
-        }
-        this.address = currentIpAddr;
-
         // init endpoint + start process (depends on role)
         if( role == Role.HOST ) {
             endpoint = new MHost(this);
@@ -69,7 +61,7 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
 
         // insert that player in lobby
         lobby = new Lobby();
-        lobby.put(playerID, this);
+        lobby.add(this.getRawPlayer());
     }
 
     /**
@@ -79,22 +71,6 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
     @Override
     public String getPlayerID() {
         return super.getPlayerID();
-    }
-
-    /**
-     * Gets the nickname of the current player.
-     * @return String nickname.
-     */
-    public String getNickname() {
-        return nickname;
-    }
-
-    /**
-     * Gets current address.
-     * @return String IP Address
-     */
-    public String getAddress() {
-        return address;
     }
 
     /**

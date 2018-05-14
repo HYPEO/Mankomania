@@ -55,6 +55,19 @@ public class Lobby {
         }
     }
 
+    public boolean contains(RawPlayer player) {
+        return data.contains(player);
+    }
+
+    public boolean contains(String playerId) {
+        for( RawPlayer p : data ) {
+            if( p.equals(playerId) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Removes a player from the lobby.
      * @param player RawPlayer to remove
