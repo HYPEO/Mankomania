@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
+import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.network.NetworkPlayer;
@@ -39,8 +40,8 @@ public class MClient extends Endpoint implements IClientConnector {
 
     private long startPingRequest = 0;
 
-    public MClient(NetworkPlayer player) {
-        super(player, Role.CLIENT);
+    public MClient(NetworkPlayer player, StageManager stageManager) {
+        super(player, Role.CLIENT, stageManager);
     }
 
     /**

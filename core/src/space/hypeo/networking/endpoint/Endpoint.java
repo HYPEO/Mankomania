@@ -1,5 +1,10 @@
 package space.hypeo.networking.endpoint;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.esotericsoftware.minlog.Log;
+
+import space.hypeo.mankomania.StageManager;
+import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.Role;
 
@@ -15,9 +20,12 @@ public abstract class Endpoint  {
     // identifies the endpoint due to its role in the connection
     protected Role role;
 
-    public Endpoint(NetworkPlayer player, Role role) {
+    protected StageManager stageManager;
+
+    public Endpoint(NetworkPlayer player, Role role, StageManager stageManager) {
         this.role = role;
         this.player = player;
+        this.stageManager = stageManager;
     }
 
     public Role getRole() {
@@ -34,23 +42,13 @@ public abstract class Endpoint  {
      * Update view of game lobby.
      */
     public void updateStageLobby() {
-        /*Log.info(role + ": updateStageLobby");
-
-        StageManager stageManager = WhatAmI.getStageManager();
+        Log.info(role + ": updateStageLobby");
 
         Stage currentStage = stageManager.getCurrentStage();
-        Viewport viewport = currentStage.getViewport();
-
-        if( viewport == null ) {
-            Log.error(role + ": viewport must not be null!");
-            return;
-        }
 
         if( currentStage instanceof LobbyStage) {
             ((LobbyStage) currentStage).updateLobby();
             currentStage.act();
         }
-        */
     }
-
 }

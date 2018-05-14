@@ -94,7 +94,7 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                NetworkPlayer host = new NetworkPlayer("the_mighty_host", Role.HOST);
+                NetworkPlayer host = new NetworkPlayer("the_mighty_host", Role.HOST, stageManager);
                 stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, host));
             }
         };
@@ -105,7 +105,7 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                NetworkPlayer client = new NetworkPlayer("another_client", Role.CLIENT);
+                NetworkPlayer client = new NetworkPlayer("another_client", Role.CLIENT, stageManager);
                 stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, client));
             }
         };

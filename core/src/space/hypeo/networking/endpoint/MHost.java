@@ -2,6 +2,7 @@ package space.hypeo.networking.endpoint;
 
 import java.io.IOException;
 
+import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.network.IHostConnector;
 import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.RawPlayer;
@@ -30,8 +31,8 @@ public class MHost extends Endpoint implements IHostConnector {
     // instance of the host
     private com.esotericsoftware.kryonet.Server server = null;
 
-    public MHost(NetworkPlayer player) {
-        super(player, Role.HOST);
+    public MHost(NetworkPlayer player, StageManager stageManager) {
+        super(player, Role.HOST, stageManager);
     }
 
     /**
@@ -53,7 +54,7 @@ public class MHost extends Endpoint implements IHostConnector {
                 return;
             }
 
-            // send ack
+            // send ack to client
             Log.info("Host: Send ack to requested client ip " + connection.getRemoteAddressTCP().toString());
             connection.sendTCP( new Acknowledge(player) );
 

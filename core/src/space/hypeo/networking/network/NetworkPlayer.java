@@ -1,9 +1,11 @@
 package space.hypeo.networking.network;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.esotericsoftware.minlog.Log;
 
 import java.net.SocketException;
 
+import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.endpoint.Endpoint;
 import space.hypeo.networking.endpoint.MClient;
 import space.hypeo.networking.endpoint.MHost;
@@ -28,16 +30,12 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
         super();
     }
 
-    public RawPlayer getRawPlayer() {
-        return new RawPlayer(this);
-    }
-
     /**
      * Creates a new instance of NetworkPlayer.
      * @param nickname
      * @param role
      */
-    public NetworkPlayer(String nickname, Role role) {
+    public NetworkPlayer(String nickname, Role role, StageManager stageManager) {
 
         super(nickname);
 
@@ -50,10 +48,10 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
 
         // init endpoint + start process (depends on role)
         if( role == Role.HOST ) {
-            endpoint = new MHost(this);
+            endpoint = new MHost(this, stageManager);
             endpoint.start();
         } else if( role == Role.CLIENT ) {
-            endpoint = new MClient(this);
+            endpoint = new MClient(this, stageManager);
             endpoint.start();
         } else {
             Log.info("Enpoint could not be initialized for given Role: " + role);
@@ -62,6 +60,10 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
         // insert that player in lobby
         lobby = new Lobby();
         lobby.add(this.getRawPlayer());
+    }
+
+    public RawPlayer getRawPlayer() {
+        return new RawPlayer(this);
     }
 
     /**
