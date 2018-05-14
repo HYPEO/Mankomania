@@ -12,7 +12,6 @@ import java.util.List;
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Lobby;
@@ -39,8 +38,8 @@ public class MClient extends Endpoint implements IClientConnector {
 
     private long startPingRequest = 0;
 
-    public MClient() {
-        super(Role.CLIENT);
+    public MClient(Player player) {
+        super(player, Role.CLIENT);
     }
 
     /**
@@ -67,7 +66,7 @@ public class MClient extends Endpoint implements IClientConnector {
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            connection.sendTCP( new PlayerDisconnect(WhatAmI.getPlayer()) );
+            connection.sendTCP( new PlayerDisconnect(player) );
 
             hostInfo = null;
             connection.close();
@@ -95,7 +94,7 @@ public class MClient extends Endpoint implements IClientConnector {
                  * receive new list of Player:
                  * after connecting or disconnecting clients
                  */
-                WhatAmI.setLobby( (Lobby) object );
+                player.setLobby( (Lobby) object );
                 Log.info("Client: Received updated list of player");
 
                 updateStageLobby();
@@ -104,7 +103,7 @@ public class MClient extends Endpoint implements IClientConnector {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: Received ACK from " + ack);
 
-                connection.sendTCP( new PlayerConnect(WhatAmI.getPlayer()) );
+                connection.sendTCP( new PlayerConnect(player) );
 
             } else if( object instanceof PlayerHost) {
                 hostInfo = (PlayerHost) object;
@@ -215,42 +214,11 @@ public class MClient extends Endpoint implements IClientConnector {
         return false;
     }
 
-    @Override
+
     public void changeBalance(String playerID, int amount) {
-
-        // TODO: check if playerID == self.playerID
-        Remittances moneyAmount = new Remittances(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
-        client.sendTCP(moneyAmount);
+        // change the balance of myself
+        player.changeBalance(playerID, amount);
+        //Remittances moneyAmount = new Remittances(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
+        //client.sendTCP(moneyAmount);
     }
-
-    @Override
-    public void movePlayer(String playerID, int position) {
-
-    }
-
-    @Override
-    public void endTurn() {
-
-    }
-
-    @Override
-    public int getPlayerBalance(String playerID) {
-        return 0;
-    }
-
-    @Override
-    public int getPlayerPosition(String playerID) {
-        return 0;
-    }
-
-    @Override
-    public String getCurrentPlayerID() {
-        return WhatAmI.getPlayer().getPlayerID();
-    }
-
-    @Override
-    public Lobby registeredPlayers() {
-        return WhatAmI.getLobby();
-    }
-
 }

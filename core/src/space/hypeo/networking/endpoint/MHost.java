@@ -4,10 +4,8 @@ import java.io.IOException;
 
 import space.hypeo.networking.network.IHostConnector;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
-import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
@@ -31,8 +29,8 @@ public class MHost extends Endpoint implements IHostConnector {
     // instance of the host
     private com.esotericsoftware.kryonet.Server server = null;
 
-    public MHost() {
-        super(Role.HOST);
+    public MHost(Player player) {
+        super(player, Role.HOST);
     }
 
     /**
@@ -48,7 +46,7 @@ public class MHost extends Endpoint implements IHostConnector {
         public void connected(Connection connection) {
             super.connected(connection);
 
-            if( WhatAmI.getLobby().isFull() ) {
+            if( player.registeredPlayers().isFull() ) {
                 connection.sendTCP(new Notification("Host: Sorry, no more space for additional player left"));
                 connection.close();
                 return;
@@ -56,11 +54,11 @@ public class MHost extends Endpoint implements IHostConnector {
 
             // send ack
             Log.info("Host: Send ack to requested client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new Acknowledge(WhatAmI.getPlayer().getAddress()) );
+            connection.sendTCP( new Acknowledge(player) );
 
             // send host info
             Log.info("Host: Send info of myself to client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new PlayerHost(WhatAmI.getPlayer()) );
+            connection.sendTCP( new PlayerHost(player) );
         }
 
         /**
@@ -92,23 +90,23 @@ public class MHost extends Endpoint implements IHostConnector {
 
             } else if( object instanceof PlayerConnect) {
                 Player newPlayer = (PlayerConnect) object;
-                WhatAmI.addPlayerToLobby(newPlayer.getPlayerID(), newPlayer);
+                player.registeredPlayers().put(newPlayer.getPlayerID(), newPlayer);
 
                 Log.info("Host: player has been connected, add to lobby");
-                WhatAmI.getLobby().log();
+                player.registeredPlayers().log();
 
-                server.sendToAllTCP(WhatAmI.getLobby());
+                server.sendToAllTCP(player.registeredPlayers());
 
                 updateStageLobby();
 
             } else if( object instanceof PlayerDisconnect) {
                 Player leavingPlayer = (PlayerDisconnect) object;
-                WhatAmI.removePlayerFromLobby(leavingPlayer.getPlayerID());
+                player.registeredPlayers().remove(leavingPlayer);
 
                 Log.info("Host: player has been disconnected, removed from lobby");
-                WhatAmI.getLobby().log();
+                player.registeredPlayers().log();
 
-                server.sendToAllTCP(WhatAmI.getLobby());
+                server.sendToAllTCP(player.registeredPlayers());
 
                 updateStageLobby();
 
@@ -139,10 +137,6 @@ public class MHost extends Endpoint implements IHostConnector {
         }
 
         server.addListener(new ServerListener());
-
-        // add network data of server to lobby
-        WhatAmI.addPlayerToLobby( WhatAmI.getPlayer().getPlayerID(), WhatAmI.getPlayer() );
-        WhatAmI.getLobby().log();
 
         server.start();
 
@@ -184,17 +178,15 @@ public class MHost extends Endpoint implements IHostConnector {
     @Override
     public void endGame() {
         server.sendToAllTCP(new Notification("game will be closed now..."));
-        WhatAmI.getLobby().clear();
     }
 
-    @Override
     public void changeBalance(String playerID, int amount) {
 
         // TODO: check if playerID == self.playerID
-        int connectionID = getConnectionID(playerID);
+        //int connectionID = getConnectionID(playerID);
 
-        Remittances remittances = new Remittances(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
-        server.sendToTCP(connectionID, remittances);
+        //Remittances remittances = new Remittances(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
+        //server.sendToTCP(connectionID, remittances);
     }
 
     /**
@@ -207,39 +199,10 @@ public class MHost extends Endpoint implements IHostConnector {
         server.sendToTCP(connectionID, remittances);
     }
 
-    @Override
-    public void movePlayer(String playerID, int position) {
-
-    }
-
-    @Override
-    public void endTurn() {
-
-    }
-
-    @Override
-    public int getPlayerBalance(String playerID) {
-        return 0;
-    }
-
-    @Override
-    public int getPlayerPosition(String playerID) {
-        return 0;
-    }
-
-    @Override
-    public String getCurrentPlayerID() {
-        return WhatAmI.getPlayer().getPlayerID();
-    }
-
-    @Override
-    public Lobby registeredPlayers() {
-        return WhatAmI.getLobby();
-    }
 
     public int getConnectionID(String playerId) throws IndexOutOfBoundsException {
 
-        Player player = WhatAmI.getLobby().get(playerId);
+        Player needle = player.registeredPlayers().get(playerId);
         int connectionID = 0;
 
         if( player == null ) {

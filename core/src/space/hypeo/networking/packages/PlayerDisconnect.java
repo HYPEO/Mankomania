@@ -10,10 +10,6 @@ public class PlayerDisconnect extends Player {
 
     public PlayerDisconnect() { super(); }
 
-    public PlayerDisconnect(String playerID, String nick, String address, Role role) {
-        super(playerID, nick, address, role);
-    }
-
     public PlayerDisconnect(Player p) {
         super(p);
     }

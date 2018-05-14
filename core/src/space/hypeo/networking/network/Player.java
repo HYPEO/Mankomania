@@ -1,48 +1,81 @@
 package space.hypeo.networking.network;
 
+import com.esotericsoftware.minlog.Log;
+
+import java.net.SocketException;
+import java.util.UUID;
+
+import space.hypeo.networking.endpoint.Endpoint;
+import space.hypeo.networking.endpoint.MClient;
+import space.hypeo.networking.endpoint.MHost;
+import space.hypeo.networking.packages.Lobby;
+
 /**
  * This class holds the important network data,
  * that identifies a player in the network.
  */
-public class Player {
+public class Player implements IPlayerConnector {
 
     protected String playerID;  // player ID
     protected String nick;      // nickname
     protected String address;   // IP address in W/LAN
 
-    // The current role in the network connection.
-    Role role;
+    // The reference to the host or client.
+    private Endpoint endpoint;
 
-    /**
-     * Default Constructor, creates a new instance of Player with empty attributes.
+    /* contains a list of all Player objects,
+     * that are connected to the host of the game.
+     * even the own Player object itself.
      */
-    public Player() {
+    private Lobby lobby;
 
-        playerID = "";
-        nick = "";
-        address = "";
-        role = Role.NOT_CONNECTED;
-    }
+    public Player () {}
 
     /**
      * Creates a new instance of Player.
-     *
-     * @param playerID
-     * @param nick
-     * @param address
+     * @param nickname
      * @param role
      */
-    public Player(String playerID, String nick,
-                  String address, Role role) {
-        this.playerID = playerID;
-        this.nick = nick;
-        this.address = address;
-        this.role = role;
+    public Player(String nickname, Role role) {
+
+        this.playerID = generatePlayerID();
+        this.nick = nickname;
+
+        // TODO: check if WLAN connection is ON and connected to hotspot
+
+        if( endpoint != null ) {
+            Log.warn("init: There is already an open connection!");
+            return;
+        }
+
+        // fetch IP in W/LAN
+        String currentIpAddr = "";
+        try {
+            currentIpAddr = NetworkAddress.getNetworkAddress();
+            Log.info( "current IP address: " + currentIpAddr );
+        } catch(SocketException e) {
+            Log.info(e.getMessage());
+        }
+        this.address = currentIpAddr;
+
+        // init endpoint + start process (depends on role)
+        if( role == Role.HOST ) {
+            endpoint = new MHost(this);
+            endpoint.start();
+        } else if( role == Role.CLIENT ) {
+            endpoint = new MClient(this);
+            endpoint.start();
+        } else {
+            Log.info("Enpoint could not be initialized for given Role: " + role);
+        }
+
+        // insert that player in lobby
+        lobby = new Lobby();
+        lobby.put(playerID, this);
     }
 
     /**
-     * Copy constructor, creates a new instance of Player.
-     *
+     * Copy constructor.
      * @param p
      */
     public Player(Player p) {
@@ -50,31 +83,22 @@ public class Player {
             this.playerID = p.playerID;
             this.nick = p.nick;
             this.address = p.address;
-            this.role = p.role;
+            this.endpoint = p.endpoint;
+            this.lobby = p.lobby;
         }
     }
 
     /**
      * Returns ID of current player.
-     *
      * @return String ID.
      */
+    @Override
     public String getPlayerID() {
         return playerID;
     }
 
     /**
-     * Sets the ID of the current player.
-     *
-     * @param playerID
-     */
-    public void setPlayerID(String playerID) {
-        this.playerID = playerID;
-    }
-
-    /**
      * Gets the nickname of the current player.
-     *
      * @return String nickname.
      */
     public String getNick() {
@@ -82,17 +106,7 @@ public class Player {
     }
 
     /**
-     * Sets the nickname of the current player.
-     *
-     * @param nick
-     */
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
-
-    /**
      * Gets current address.
-     *
      * @return String IP Address
      */
     public String getAddress() {
@@ -100,12 +114,81 @@ public class Player {
     }
 
     /**
-     * Gets the role of the current player.
-     *
+     * Gets the role in the network.
      * @return Role.
      */
     public Role getRole() {
-        return role;
+        if( endpoint == null ) {
+            return Role.NOT_CONNECTED;
+        }
+        return endpoint.getRole();
+    }
+
+    public Endpoint getEndpoint() {
+        return endpoint;
+    }
+
+    public void stopEndpoint() {
+
+        if( endpoint != null ) {
+            endpoint.stop();
+        } else {
+            Log.info("No process running - nothing to do.");
+        }
+    }
+
+    public void closeEndpoint() {
+
+        if( endpoint != null ) {
+            endpoint.close();
+            endpoint = null;
+        } else {
+            Log.info("No process running - nothing to do.");
+        }
+    }
+
+    /**
+     * Gets ID for current player.
+     * Take from UUID the last 4 characters.
+     * @return String PlayerID
+     */
+    public static String generatePlayerID() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString().substring(uuid.toString().length() - 4);
+    }
+
+    @Override
+    public void changeBalance(String playerID, int amount) {
+
+    }
+
+    @Override
+    public void movePlayer(String playerID, int position) {
+
+    }
+
+    @Override
+    public void endTurn() {
+
+    }
+
+    @Override
+    public int getPlayerBalance(String playerID) {
+        return 0;
+    }
+
+    @Override
+    public int getPlayerPosition(String playerID) {
+        return 0;
+    }
+
+    @Override
+    public Lobby registeredPlayers() {
+        return lobby;
+    }
+
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
     }
 
     /**
@@ -118,6 +201,24 @@ public class Player {
         return "PlayerID: " + playerID
                 + ", Nick: " + nick
                 + ", Address: " + address
-                + ", Role: " + role;
+                + ", Role: " + endpoint.getRole();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if( o == null) { return false; }
+        if( o == this) { return true; }
+
+        if( o instanceof Player ) {
+            Player other = (Player) o;
+            return this.playerID.equals(other.playerID);
+
+        } else if( o instanceof String ) {
+            String otherPlayerID = (String) o;
+            return this.playerID.equals(otherPlayerID);
+
+        } else {
+            return false;
+        }
     }
 }

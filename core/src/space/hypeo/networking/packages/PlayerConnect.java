@@ -12,10 +12,6 @@ public class PlayerConnect extends Player {
         super();
     }
 
-    public PlayerConnect(String playerID, String nick, String address, Role role) {
-        super(playerID, nick, address, role);
-    }
-
     public PlayerConnect(Player p) {
         super(p);
     }

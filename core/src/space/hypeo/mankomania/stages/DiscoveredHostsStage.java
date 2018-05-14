@@ -20,19 +20,23 @@ import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.networking.endpoint.MClient;
-import space.hypeo.networking.network.WhatAmI;
+import space.hypeo.networking.network.Player;
 
 
 public class DiscoveredHostsStage extends Stage {
     private final Viewport viewport;
 
+    private Player player;
+
     private List<InetAddress> foundHosts = null;
 
-    public DiscoveredHostsStage(StageManager stageManager, Viewport viewport) {
+    public DiscoveredHostsStage(StageManager stageManager, Viewport viewport, Player player) {
         super(viewport);
         this.viewport = viewport;
 
-        this.foundHosts = ((MClient) WhatAmI.getEndpoint()).discoverHosts();
+        this.player = player;
+
+        this.foundHosts = ((MClient) player.getEndpoint()).discoverHosts();
 
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
@@ -71,9 +75,9 @@ public class DiscoveredHostsStage extends Stage {
 
                         Log.info("Try to connect to host " + hostAddr + "...");
 
-                        ((MClient) WhatAmI.getEndpoint()).connectToHost(hostAddr);
+                        ((MClient) player.getEndpoint()).connectToHost(hostAddr);
 
-                        stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
+                        stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, player));
                     }
 
                 });
@@ -94,7 +98,7 @@ public class DiscoveredHostsStage extends Stage {
                 public void clicked(InputEvent event, float x, float y) {
 
                     stageManager.remove(DiscoveredHostsStage.this);
-                    stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
+                    stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, player));
                 }
 
             });

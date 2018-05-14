@@ -12,10 +12,6 @@ public class PlayerHost extends Player {
         super();
     }
 
-    public PlayerHost(String playerID, String nick, String address, Role role) {
-        super(playerID, nick, address, role);
-    }
-
     public PlayerHost(Player p) {
         super(p);
     }

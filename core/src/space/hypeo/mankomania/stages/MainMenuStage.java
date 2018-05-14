@@ -15,12 +15,11 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
-
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.networking.network.Player;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.network.WhatAmI;
 
 /**
  * Holds all widgets on the main menu.
@@ -96,19 +95,8 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                Log.info("hostClickListener: " + WhatAmI.getRole());
-
-                if( WhatAmI.getRole() == Role.CLIENT ) {
-                    WhatAmI.closeEndpoint();
-                }
-
-                Log.info("hostClickListener: " + WhatAmI.getRole());
-
-                if( WhatAmI.getRole() == Role.NOT_CONNECTED ) {
-                    WhatAmI.init("the_mighty_host", Role.HOST, stageManager);
-                }
-
-                stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
+                Player host = new Player("the_mighty_host", Role.HOST);
+                stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, host));
             }
         };
     }
@@ -118,26 +106,8 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                Log.info("clientClickListener: " + WhatAmI.getRole());
-
-                if( WhatAmI.getRole() == Role.HOST ) {
-                    WhatAmI.closeEndpoint();
-                }
-
-                Log.info("clientClickListener: " + WhatAmI.getRole());
-
-                if( WhatAmI.getRole() == Role.NOT_CONNECTED ) {
-                    Log.info("clientClickListener: start DiscoveredHostsStage");
-                    WhatAmI.init("another_client", Role.CLIENT, stageManager);
-                    stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
-                }
-
-                else if( WhatAmI.getRole() == Role.CLIENT ) {
-                    Log.info("clientClickListener: start LobbyStage");
-                    stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
-                }
-
-
+                Player client = new Player("another_client", Role.CLIENT);
+                stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, client));
             }
         };
     }

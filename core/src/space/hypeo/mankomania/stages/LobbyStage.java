@@ -18,7 +18,6 @@ import java.util.HashMap;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.network.WhatAmI;
 
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Player;
@@ -33,6 +32,8 @@ public class LobbyStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
 
+    private Player player;
+
     private Skin skin;
     private RectangleActor background;
     private Table layout;
@@ -40,10 +41,13 @@ public class LobbyStage extends Stage {
     private boolean updateLobby;
     private float timeSinceLastUpdate;
 
-    public LobbyStage(StageManager stageManager, Viewport viewport) {
+    public LobbyStage(StageManager stageManager, Viewport viewport, Player player) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
+
+        this.player = player;
+
         this.updateLobby = false;
         this.timeSinceLastUpdate = 0f;
 
@@ -89,8 +93,8 @@ public class LobbyStage extends Stage {
 
     private void setupLobby() {
 
-        Lobby lobby = WhatAmI.getLobby();
-        Role role = WhatAmI.getRole();
+        Lobby lobby = player.registeredPlayers();
+        Role role = player.getRole();
 
         if( lobby == null || role == Role.NOT_CONNECTED ) {
             Log.error("LobbyStage: lobby must not be null!");
@@ -118,8 +122,6 @@ public class LobbyStage extends Stage {
 
             index++;
         }
-
-
     }
 
     @Override

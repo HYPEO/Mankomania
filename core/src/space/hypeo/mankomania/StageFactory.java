@@ -10,6 +10,7 @@ import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
+import space.hypeo.networking.network.Player;
 
 /**
  * Creates all the stages (views) for the game.
@@ -43,8 +44,8 @@ public class StageFactory {
      * @param stageManager
      * @return stage/view of lobby
      */
-    public static Stage getLobbyStage(final Viewport viewport, final StageManager stageManager) {
-        return new LobbyStage(stageManager, viewport);
+    public static Stage getLobbyStage(final Viewport viewport, final StageManager stageManager, Player player) {
+        return new LobbyStage(stageManager, viewport, player);
     }
 
     /**
@@ -54,8 +55,8 @@ public class StageFactory {
      * @param stageManager
      * @return stage/view of discovered hosts for client
      */
-    public static Stage getDiscoveredHostsStage(final Viewport viewport, final StageManager stageManager) {
-        return new DiscoveredHostsStage(stageManager, viewport);
+    public static Stage getDiscoveredHostsStage(final Viewport viewport, final StageManager stageManager, Player player) {
+        return new DiscoveredHostsStage(stageManager, viewport, player);
     }
 
 }
