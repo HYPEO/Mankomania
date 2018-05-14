@@ -21,7 +21,6 @@ public class BuyHotelFieldActor extends FieldActor {
         if (!bought) {
             BuyHotelFieldActor.this.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("fields/hotel_bought.png"))));
             player.setBalance(player.getBalance() - 100000);
-            System.out.println("Bought House");
             bought = true;
         }
         detailActor.showDetail(this);
