@@ -1,14 +1,11 @@
 package space.hypeo.mankomania.actors.map;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
-import space.hypeo.mankomania.actors.fields.FieldActor;
 
 /**
  * Created by pichlermarc on 12.05.2018.

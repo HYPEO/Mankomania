@@ -16,7 +16,6 @@ import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
-import space.hypeo.networking.network.Player;
 
 /**
  * Created by pichlermarc on 09.05.2018.
