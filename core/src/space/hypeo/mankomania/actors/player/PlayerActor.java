@@ -10,7 +10,6 @@ import java.util.Random;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.FieldActor;
-import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
 /**
@@ -114,7 +113,6 @@ public class PlayerActor extends Image {
                 currentField.getY()+(currentField.getHeight()/2f)-(this.getHeight()/2f)+8f,
                 PLAYER_SCALE,
                 PLAYER_SCALE);
-        System.out.println(balance);
     }
 
     public int getBalance() {
