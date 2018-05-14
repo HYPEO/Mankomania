@@ -3,6 +3,8 @@ package space.hypeo.networking.network;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
+import space.hypeo.networking.endpoint.MClient;
+import space.hypeo.networking.endpoint.MHost;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.packages.Notification;
@@ -55,6 +57,7 @@ public final class Network {
         kryo.register(PlayerHost.class);
 
         kryo.register(Remittances.class);
+
     }
 
 }

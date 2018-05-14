@@ -3,7 +3,6 @@ package space.hypeo.networking.network;
 import com.esotericsoftware.minlog.Log;
 
 import java.net.SocketException;
-import java.util.UUID;
 
 import space.hypeo.networking.endpoint.Endpoint;
 import space.hypeo.networking.endpoint.MClient;
@@ -14,11 +13,9 @@ import space.hypeo.networking.packages.Lobby;
  * This class holds the important network data,
  * that identifies a player in the network.
  */
-public class Player implements IPlayerConnector {
+public class Player extends RawPlayer implements IPlayerConnector {
 
-    protected String playerID;  // player ID
-    protected String nick;      // nickname
-    protected String address;   // IP address in W/LAN
+    private String address;   // IP address in W/LAN
 
     // The reference to the host or client.
     private Endpoint endpoint;
@@ -29,7 +26,9 @@ public class Player implements IPlayerConnector {
      */
     private Lobby lobby;
 
-    public Player () {}
+    public Player () {
+        super();
+    }
 
     /**
      * Creates a new instance of Player.
@@ -38,8 +37,7 @@ public class Player implements IPlayerConnector {
      */
     public Player(String nickname, Role role) {
 
-        this.playerID = generatePlayerID();
-        this.nick = nickname;
+        super(nickname);
 
         // TODO: check if WLAN connection is ON and connected to hotspot
 
@@ -75,34 +73,20 @@ public class Player implements IPlayerConnector {
     }
 
     /**
-     * Copy constructor.
-     * @param p
-     */
-    public Player(Player p) {
-        if (p != null && p != this) {
-            this.playerID = p.playerID;
-            this.nick = p.nick;
-            this.address = p.address;
-            this.endpoint = p.endpoint;
-            this.lobby = p.lobby;
-        }
-    }
-
-    /**
      * Returns ID of current player.
      * @return String ID.
      */
     @Override
     public String getPlayerID() {
-        return playerID;
+        return super.getPlayerID();
     }
 
     /**
      * Gets the nickname of the current player.
      * @return String nickname.
      */
-    public String getNick() {
-        return nick;
+    public String getNickname() {
+        return nickname;
     }
 
     /**
@@ -147,16 +131,6 @@ public class Player implements IPlayerConnector {
         }
     }
 
-    /**
-     * Gets ID for current player.
-     * Take from UUID the last 4 characters.
-     * @return String PlayerID
-     */
-    public static String generatePlayerID() {
-        UUID uuid = UUID.randomUUID();
-        return uuid.toString().substring(uuid.toString().length() - 4);
-    }
-
     @Override
     public void changeBalance(String playerID, int amount) {
 
@@ -192,33 +166,14 @@ public class Player implements IPlayerConnector {
     }
 
     /**
-     * Returns the string representation of current player.
-     *
+     * Returns the string representation of current Player object.
      * @return String representation
      */
     @Override
     public String toString() {
-        return "PlayerID: " + playerID
-                + ", Nick: " + nick
+        return super.toString()
                 + ", Address: " + address
                 + ", Role: " + endpoint.getRole();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if( o == null) { return false; }
-        if( o == this) { return true; }
-
-        if( o instanceof Player ) {
-            Player other = (Player) o;
-            return this.playerID.equals(other.playerID);
-
-        } else if( o instanceof String ) {
-            String otherPlayerID = (String) o;
-            return this.playerID.equals(otherPlayerID);
-
-        } else {
-            return false;
-        }
-    }
 }
