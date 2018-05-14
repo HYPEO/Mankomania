@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 
 public class BuyHotelFieldActor extends FieldActor {
@@ -12,8 +12,8 @@ public class BuyHotelFieldActor extends FieldActor {
     private static final String TEXTURE_PATH = "forsale.jpg";
     private boolean bought = false;
 
-    public BuyHotelFieldActor(float x, float y, Texture texture, int price, Image fieldInfoImage) {
-        super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, fieldInfoImage);
+    public BuyHotelFieldActor(float x, float y, Texture texture, int price, Image fieldInfoImage, Stage stage) {
+        super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, stage, fieldInfoImage);
     }
 
     @Override

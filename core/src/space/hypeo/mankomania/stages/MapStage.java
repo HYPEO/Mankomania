@@ -10,15 +10,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
+import com.badlogic.gdx.Input;
 import java.util.Random;
-
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.BuyHotelFieldActor;
 import space.hypeo.mankomania.actors.fields.EmptyFieldActor;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.fields.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
+import space.hypeo.mankomania.actors.fields.BuildHotel;
 
 /**
  * Created by pichlermarc on 09.05.2018.
@@ -29,6 +30,8 @@ public class MapStage extends Stage {
     private static final float MARGIN_Y = 80f;
     private static final float FIELD_DISTANCE = 40f;
     private Image fieldInfoImage;
+    Stage stage;
+    Skin skin;
 
     public MapStage(Viewport viewport, StageManager stageManager) {
         super(viewport);
@@ -37,7 +40,7 @@ public class MapStage extends Stage {
         fieldInfoImage.setBounds(90, 125, 300, 300);
 
         // Create the empty field.
-        FieldActor firstField = new EmptyFieldActor(MARGIN_X, MARGIN_Y, new Texture("transparent.png"), 0, fieldInfoImage);
+        FieldActor firstField = new EmptyFieldActor(MARGIN_X, MARGIN_Y, new Texture("transparent.png"), 0, fieldInfoImage, this);
         this.addActor(firstField);
 
         // Remember the first field as the previous one.
@@ -99,16 +102,19 @@ public class MapStage extends Stage {
         FieldActor previousField = firstField;
         Random randomGenerator = new Random();
         for (int i = 1; i <= amount; i++) {
-            int random = randomGenerator.nextInt(9);
+            int random = randomGenerator.nextInt(5);
 
             // Create new Field
             FieldActor currentField;
             if (random == 0) {
-                currentField = new BuyHotelFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("RumsBuDee.png"), randomGenerator.nextInt(5) + 10, fieldInfoImage);
+                currentField = new BuyHotelFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("RumsBuDee.png"), randomGenerator.nextInt(5) + 10, fieldInfoImage, mapStage);
             } else if (random == 1) {
-                currentField = new LoseMoneyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("6dice.png"), randomGenerator.nextInt(10), fieldInfoImage);
+                currentField = new LoseMoneyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("6dice.png"), randomGenerator.nextInt(10), fieldInfoImage, mapStage);
+            } else if (random == 2) {
+                currentField = new BuildHotel(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), fieldInfoImage, mapStage);
+
             } else {
-                currentField = new EmptyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("transparent.png"), 0, fieldInfoImage);
+                currentField = new EmptyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("transparent.png"), 0, fieldInfoImage, mapStage);
             }
 
             mapStage.addActor(currentField);

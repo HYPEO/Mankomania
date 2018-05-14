@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 
 /**
@@ -27,7 +27,7 @@ public abstract class FieldActor extends Image {
      * @param fieldDetailImage The image is shown inside, and replaced by detailTexture.
      */
     public FieldActor(float x, float y, float width, float height, int price, Texture texture,
-                      Texture detailTexture,
+                      Texture detailTexture, Stage stage,
                       Image fieldDetailImage) {
         super(texture);
         this.setBounds(x, y, width, height);
