@@ -203,15 +203,15 @@ public class MHost extends Endpoint implements IHostConnector {
 
     public int getConnectionID(String playerId) throws IndexOutOfBoundsException {
 
-        boolean lobbyContainsPlayer = player.registeredPlayers().contains(playerId);
+        RawPlayer needle = player.registeredPlayers().contains(playerId);
         int connectionID = 0;
 
-        if( ! lobbyContainsPlayer ) {
+        if( needle == null ) {
             Log.warn("Could not find player with ID '" + playerId + "' in lobby!");
             throw new IndexOutOfBoundsException("Could not find player with ID '" + playerId + "' in lobby!");
         }
 
-        String connectionIP = player.getAddress();
+        String connectionIP = needle.getAddress();
 
         for( Connection connection : server.getConnections() ) {
             Log.info(connection.toString());

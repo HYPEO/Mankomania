@@ -59,13 +59,13 @@ public class Lobby {
         return data.contains(player);
     }
 
-    public boolean contains(String playerId) {
+    public RawPlayer contains(String playerId) {
         for( RawPlayer p : data ) {
             if( p.equals(playerId) ) {
-                return true;
+                return p;
             }
         }
-        return false;
+        return null;
     }
 
     /**
