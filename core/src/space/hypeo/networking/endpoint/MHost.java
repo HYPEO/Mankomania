@@ -166,6 +166,8 @@ public class MHost extends Endpoint implements IHostConnector {
             Log.warn("Server was NOT running - nothing to do!");
             Log.error(e.getMessage());
         }
+
+        Log.info("Server closed.");
     }
 
     @Override
