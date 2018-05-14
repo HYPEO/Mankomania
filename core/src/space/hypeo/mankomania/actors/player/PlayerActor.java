@@ -63,13 +63,7 @@ public class PlayerActor extends Image {
     public void act(float deltaTime) {
 
 
-        timeElapsed += deltaTime;
-        if (timeElapsed >= 2f) {
-            timeElapsed = 0;
-            this.move(die.nextInt(6) + 1);
-        }
-
-        /*float xValue;
+        float xValue;
         float yValue;
         float zValue;
         float gForce;
@@ -93,7 +87,7 @@ public class PlayerActor extends Image {
 
                 // TODO: maybe cheat function here (for example: if other player is playing roulette)
             }
-        }*/
+        }
 
     }
 
