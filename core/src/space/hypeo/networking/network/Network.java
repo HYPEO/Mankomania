@@ -56,6 +56,7 @@ public final class Network {
 
         kryo.register(Remittances.class);
 
+        kryo.register(RawPlayer.class);
     }
 
 }

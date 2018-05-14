@@ -9,7 +9,7 @@ import java.util.UUID;
  */
 public class RawPlayer {
 
-    protected String playerID;  // player ID
+    protected String playerID;      // player ID
     protected String nickname;      // nickname
 
     public RawPlayer() {}
@@ -73,5 +73,10 @@ public class RawPlayer {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return playerID.hashCode();
     }
 }
