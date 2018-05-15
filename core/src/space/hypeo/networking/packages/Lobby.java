@@ -49,23 +49,10 @@ public class Lobby {
         Iterator<RawPlayer> it = data.iterator();
         while( it.hasNext() ) {
             RawPlayer p = it.next();
-            if( p.equals(playerID) ) {
+            if( p.getPlayerID().equals(playerID) ) {
                 it.remove();
             }
         }
-    }
-
-    public boolean contains(RawPlayer player) {
-        return data.contains(player);
-    }
-
-    public RawPlayer contains(String playerId) {
-        for( RawPlayer p : data ) {
-            if( p.equals(playerId) ) {
-                return p;
-            }
-        }
-        return null;
     }
 
     /**
@@ -74,6 +61,19 @@ public class Lobby {
      */
     public void remove(RawPlayer player) {
         data.remove(player);
+    }
+
+    public boolean contains(RawPlayer player) {
+        return data.contains(player);
+    }
+
+    public RawPlayer contains(String playerId) {
+        for( RawPlayer p : data ) {
+            if( p.getPlayerID().equals(playerId) ) {
+                return p;
+            }
+        }
+        return null;
     }
 
     /**

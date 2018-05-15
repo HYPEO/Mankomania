@@ -9,7 +9,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class RawPlayerTest {
 
-    RawPlayer rawPlayer;
+    private RawPlayer rawPlayer;
 
     @Before
     public void setup() {
