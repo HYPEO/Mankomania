@@ -89,7 +89,7 @@ public class LobbyStage extends Stage {
         layout.row();
     }
 
-    private void setupLobby() {
+    private void buildListWidgetFromLobby() {
 
         Lobby lobby = networkPlayer.registeredPlayers();
         Role role = networkPlayer.getRole();
@@ -131,7 +131,7 @@ public class LobbyStage extends Stage {
                 if (updateLobby) {
                     setupBackground();
                     setupLayout();
-                    setupLobby();
+                    buildListWidgetFromLobby();
 
                     this.addActor(background);
                     this.addActor(layout);
