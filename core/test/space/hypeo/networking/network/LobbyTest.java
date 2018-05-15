@@ -1,4 +1,4 @@
-package space.hypeo.networking.packages;
+package space.hypeo.networking.network;
 
 import org.junit.After;
 import org.junit.Before;
@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import space.hypeo.networking.network.Lobby;
 import space.hypeo.networking.network.RawPlayer;
 
 import static org.junit.Assert.*;

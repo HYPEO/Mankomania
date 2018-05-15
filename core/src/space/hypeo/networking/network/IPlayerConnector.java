@@ -1,7 +1,5 @@
 package space.hypeo.networking.network;
 
-import space.hypeo.networking.packages.Lobby;
-
 
 /**
  * Created by pichlermarc on 07.04.2018.

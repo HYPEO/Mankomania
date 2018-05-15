@@ -6,7 +6,6 @@ import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.endpoint.Endpoint;
 import space.hypeo.networking.endpoint.MClient;
 import space.hypeo.networking.endpoint.MHost;
-import space.hypeo.networking.packages.Lobby;
 
 /**
  * This class holds the important network data,

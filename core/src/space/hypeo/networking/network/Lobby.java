@@ -1,4 +1,4 @@
-package space.hypeo.networking.packages;
+package space.hypeo.networking.network;
 
 import com.esotericsoftware.minlog.Log;
 

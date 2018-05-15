@@ -17,7 +17,7 @@ import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.networking.network.RawPlayer;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.packages.Lobby;
+import space.hypeo.networking.network.Lobby;
 import space.hypeo.networking.network.NetworkPlayer;
 
 

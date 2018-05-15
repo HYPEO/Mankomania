@@ -16,7 +16,7 @@ import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.RawPlayer;
 import space.hypeo.networking.network.Role;
 import space.hypeo.networking.packages.Acknowledge;
-import space.hypeo.networking.packages.Lobby;
+import space.hypeo.networking.network.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
@@ -24,7 +24,6 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
-import space.hypeo.networking.packages.Remittances;
 
 /**
  * This class represents the client process for an endpoint on a device.
