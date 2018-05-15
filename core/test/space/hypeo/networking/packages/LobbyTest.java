@@ -56,7 +56,7 @@ public class LobbyTest {
 
 
     @Test
-    public void test_isNotEmpty() {
+    public void test_isEmpty_not() {
         assertThat(!lobby.isEmpty(), is(false));
     }
 
@@ -111,7 +111,7 @@ public class LobbyTest {
     }
 
     @Test
-    public void test_contains_object_fails() {
+    public void test_contains_object_not() {
         assertThat(lobby.contains(rawPlayer), not(rawPlayer));
     }
 
@@ -122,7 +122,7 @@ public class LobbyTest {
     }
 
     @Test
-    public void test_contains_playerID_fails() {
+    public void test_contains_playerID_not() {
         assertThat(lobby.contains(PLAYER_ID), not(rawPlayer));
     }
 
