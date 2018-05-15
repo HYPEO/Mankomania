@@ -21,7 +21,7 @@ public class BuildHotel extends FieldActor {
         String playerID="";
 
         public BuildHotel(float x, float y, Texture texture, int price, Image fieldInfoImage, Stage stage) {
-            super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, stage, fieldInfoImage);
+            super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, fieldInfoImage);
             this.stage=stage;
         }
 

@@ -9,8 +9,8 @@ public class LoseMoneyFieldActor extends FieldActor {
     private static final float FIELD_SCALE = 30f;
     private static final String TEXTURE_PATH = "lose.jpg";
 
-    public LoseMoneyFieldActor(float x, float y, Texture texture, int price, Image fieldInfoImage, Stage stage) {
-        super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, stage, fieldInfoImage);
+    public LoseMoneyFieldActor(float x, float y, Texture texture, int price, Image fieldInfoImage) {
+        super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, fieldInfoImage);
     }
 
     @Override

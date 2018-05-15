@@ -40,7 +40,7 @@ public class MapStage extends Stage {
         fieldInfoImage.setBounds(90, 125, 300, 300);
 
         // Create the empty field.
-        FieldActor firstField = new EmptyFieldActor(MARGIN_X, MARGIN_Y, new Texture("transparent.png"), 0, fieldInfoImage, this);
+        FieldActor firstField = new EmptyFieldActor(MARGIN_X, MARGIN_Y, new Texture("transparent.png"), 0, fieldInfoImage);
         this.addActor(firstField);
 
         // Remember the first field as the previous one.
@@ -107,14 +107,14 @@ public class MapStage extends Stage {
             // Create new Field
             FieldActor currentField;
             if (random == 0) {
-                currentField = new BuyHotelFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("RumsBuDee.png"), randomGenerator.nextInt(5) + 10, fieldInfoImage, mapStage);
+                currentField = new BuyHotelFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("RumsBuDee.png"), randomGenerator.nextInt(5) + 10, fieldInfoImage);
             } else if (random == 1) {
-                currentField = new LoseMoneyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("6dice.png"), randomGenerator.nextInt(10), fieldInfoImage, mapStage);
+                currentField = new LoseMoneyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("6dice.png"), randomGenerator.nextInt(10), fieldInfoImage);
             } else if (random == 2) {
                 currentField = new BuildHotel(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), fieldInfoImage, mapStage);
 
             } else {
-                currentField = new EmptyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("transparent.png"), 0, fieldInfoImage, mapStage);
+                currentField = new EmptyFieldActor(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("transparent.png"), 0, fieldInfoImage);
             }
 
             mapStage.addActor(currentField);

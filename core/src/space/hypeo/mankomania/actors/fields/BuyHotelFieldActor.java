@@ -12,8 +12,8 @@ public class BuyHotelFieldActor extends FieldActor {
     private static final String TEXTURE_PATH = "forsale.jpg";
     private boolean bought = false;
 
-    public BuyHotelFieldActor(float x, float y, Texture texture, int price, Image fieldInfoImage, Stage stage) {
-        super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, stage, fieldInfoImage);
+    public BuyHotelFieldActor(float x, float y, Texture texture, int price, Image fieldInfoImage) {
+        super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, fieldInfoImage);
     }
 
     @Override
