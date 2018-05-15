@@ -10,19 +10,42 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.mockito.Mockito;
 
-public class GameTest {
+public abstract class GameTest {
     private static Application application;
 
     @BeforeClass
     public static void init() {
         // Note that we don't need to implement any of the listener's methods
         application = new HeadlessApplication(new ApplicationListener() {
-            @Override public void create() {}
-            @Override public void resize(int width, int height) {}
-            @Override public void render() {}
-            @Override public void pause() {}
-            @Override public void resume() {}
-            @Override public void dispose() {}
+            @Override
+            public void create() {
+                //Emtpy method, application should run Headless.
+            }
+
+            @Override
+            public void resize(int width, int height) {
+                //Emtpy method, application should run Headless.
+            }
+
+            @Override
+            public void render() {
+                //Emtpy method, application should run Headless.
+            }
+
+            @Override
+            public void pause() {
+                //Emtpy method, application should run Headless.
+            }
+
+            @Override
+            public void resume() {
+                //Emtpy method, application should run Headless.
+            }
+
+            @Override
+            public void dispose() {
+                //Emtpy method, application should run Headless.
+            }
         });
 
         Gdx.gl20 = Mockito.mock(GL20.class);

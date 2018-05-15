@@ -4,19 +4,19 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
 import space.hypeo.networking.packages.Acknowledge;
-import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.Remittances;
 
 /**
  * The class Network is a auxiliary class
  * to keep things common to both the client and server.
  */
-public class Network {
+public final class Network {
 
     // this class is not instantiable!
     private Network() {}
@@ -41,10 +41,10 @@ public class Network {
         kryo.register(PingRequest.class);
         kryo.register(PingResponse.class);
         kryo.register(Notification.class);
-        kryo.register(java.util.HashMap.class);
+        kryo.register(java.util.HashSet.class);
 
         kryo.register(Lobby.class);
-        kryo.register(space.hypeo.networking.network.Player.class);
+        kryo.register(NetworkPlayer.class);
         kryo.register(String.class);
         kryo.register(space.hypeo.networking.network.Role.class);
 
@@ -53,6 +53,9 @@ public class Network {
         kryo.register(PlayerDisconnect.class);
         kryo.register(PlayerHost.class);
 
+        kryo.register(Remittances.class);
+
+        kryo.register(RawPlayer.class);
     }
 
 }

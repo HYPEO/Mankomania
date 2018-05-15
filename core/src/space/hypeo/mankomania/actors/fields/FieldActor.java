@@ -1,10 +1,10 @@
 package space.hypeo.mankomania.actors.fields;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-
+import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 
 /**
@@ -14,26 +14,34 @@ public abstract class FieldActor extends Image {
     private FieldActor nextField;
     private int price;
     private Texture detailTexture;
-    private Image fieldDetailImage;
+    protected final DetailActor detailActor;
 
     /**
-     * @param x                X position of the Actor.
-     * @param y                Y position of the Actor.
-     * @param width            Width of the Actor
-     * @param height           Height of the Actor
-     * @param price            Price of this field.
-     * @param texture          Texture that represents the field on screen.
-     * @param detailTexture    Detail texture of this field.
-     * @param fieldDetailImage The image is shown inside, and replaced by detailTexture.
+     * @param x             X position of the Actor.
+     * @param y             Y position of the Actor.
+     * @param width         Width of the Actor
+     * @param height        Height of the Actor
+     * @param price         Price of this field.
+     * @param texture       Texture that represents the field on screen.
+     * @param detailTexture Detail texture of this field.
+     * @param detailActor   The image is shown inside, and replaced by detailTexture.
      */
     public FieldActor(float x, float y, float width, float height, int price, Texture texture,
                       Texture detailTexture,
-                      Image fieldDetailImage) {
+                      DetailActor detailActor) {
         super(texture);
         this.setBounds(x, y, width, height);
         this.detailTexture = detailTexture;
         this.price = price;
-        this.fieldDetailImage = fieldDetailImage;
+        this.detailActor = detailActor;
+
+        this.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                FieldActor.this.detailActor.showDetail(FieldActor.this);
+                return true;
+            }
+        });
     }
 
     /**
@@ -42,14 +50,6 @@ public abstract class FieldActor extends Image {
      * @param player
      */
     public abstract void trigger(PlayerActor player);
-
-
-    /**
-     * Shows the Field Picture in the middle of the map
-     */
-    protected void showFieldDetail() {
-        fieldDetailImage.setDrawable(new SpriteDrawable(new Sprite(detailTexture)));
-    }
 
     /**
      * Gets the FieldBehavior of the field n steps from this one.
@@ -79,6 +79,10 @@ public abstract class FieldActor extends Image {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public Texture getDetailTexture() {
+        return detailTexture;
     }
 
 }

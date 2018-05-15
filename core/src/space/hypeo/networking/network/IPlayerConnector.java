@@ -1,7 +1,5 @@
 package space.hypeo.networking.network;
 
-import space.hypeo.networking.packages.Lobby;
-
 
 /**
  * Created by pichlermarc on 07.04.2018.
@@ -48,11 +46,10 @@ public interface IPlayerConnector {
      * Returns the current player's ID.
      * @return
      */
-    public String getCurrentPlayerID();
+    public String getPlayerID();
 
     /**
      * Gets the list of players registered for the Game.
      */
     public Lobby registeredPlayers();
-
 }

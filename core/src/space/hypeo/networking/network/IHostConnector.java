@@ -21,9 +21,4 @@ public interface IHostConnector {
      */
     public void endGame();
 
-    /**
-     * Starts the server
-     */
-    public void startServer();
-
 }

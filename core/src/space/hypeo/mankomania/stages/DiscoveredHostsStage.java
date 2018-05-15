@@ -19,64 +19,67 @@ import java.util.List;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.networking.network.WhatAmI;
+import space.hypeo.networking.endpoint.MClient;
+import space.hypeo.networking.network.NetworkPlayer;
 
 
 public class DiscoveredHostsStage extends Stage {
-    StageManager stageManager;
+    private final Viewport viewport;
 
-    public DiscoveredHostsStage(StageManager stageManager, Viewport viewport) {
+    private List<InetAddress> foundHosts = null;
+
+    public DiscoveredHostsStage(StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer) {
         super(viewport);
-        this.stageManager = stageManager;
+        this.viewport = viewport;
+
+        this.foundHosts = ((MClient) networkPlayer.getEndpoint()).discoverHosts();
 
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
 
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
-        Label lblDiscoveredHosts = new Label("Discovered Hosts", skin);
+        Label title = new Label("Discovered Hosts", skin);
 
         // show avaliable hosts as buttons in table
-        Table tblDiscoveredHosts = new Table();
+        Table layout = new Table();
 
-        tblDiscoveredHosts.setWidth(this.getWidth());
-        tblDiscoveredHosts.align(Align.center);
-        tblDiscoveredHosts.setPosition(0, this.getHeight() - 200);
-        tblDiscoveredHosts.padTop(50);
-        tblDiscoveredHosts.add(lblDiscoveredHosts).width(300).height(100);
-        tblDiscoveredHosts.row();
+        layout.setWidth(this.getWidth());
+        layout.align(Align.center);
+        layout.setPosition(0, this.getHeight() - 200);
+        layout.padTop(50);
+        layout.add(title).width(300).height(100);
+        layout.row();
 
         Log.info("Discovered Network: Host-List contains:");
 
-        tblDiscoveredHosts.add(new Label("Discovered Hosts:", skin)).width(300).height(100);
-        tblDiscoveredHosts.row();
-
-        List<InetAddress> foundHosts = WhatAmI.getClient().discoverHosts();
+        layout.add(new Label("Discovered Hosts:", skin)).width(300).height(100);
+        layout.row();
 
         if( foundHosts != null && ! foundHosts.isEmpty() ) {
 
             // TODO: create clickable, scrolable list
             int index = 1;
             for (InetAddress hostAddr : foundHosts) {
-                Log.info("  host: " + hostAddr.toString());
+                Log.info("  " + index + ". host: " + hostAddr);
 
-                Button btnHost = new TextButton(index + ". " + hostAddr.toString(), skin);
+                Button btnHost = new TextButton(index + ". " + hostAddr, skin);
 
                 btnHost.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
 
-                        Log.info("Try to connect to host " + hostAddr.toString() + "...");
+                        Log.info("Try to connect to host " + hostAddr + "...");
 
-                        WhatAmI.getClient().connectToHost(hostAddr);
+                        ((MClient) networkPlayer.getEndpoint()).connectToHost(hostAddr);
 
-                        stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
+                        stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, networkPlayer));
                     }
 
                 });
 
-                tblDiscoveredHosts.add(btnHost).width(300).height(100);
-                tblDiscoveredHosts.row();
+                layout.add(btnHost).width(300).height(100);
+                layout.row();
 
                 index++;
             }
@@ -84,9 +87,20 @@ public class DiscoveredHostsStage extends Stage {
         } else {
             Log.info("No hosts found!");
 
-            Button btnNoHost = new TextButton("No Hosts found ", skin);
-            tblDiscoveredHosts.add(btnNoHost).width(300).height(100);
-            tblDiscoveredHosts.row();
+            Button btnNoHost = new TextButton("No Hosts found", skin);
+
+            btnNoHost.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+
+                    stageManager.remove(DiscoveredHostsStage.this);
+                    stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, networkPlayer));
+                }
+
+            });
+
+            layout.add(btnNoHost).width(300).height(100);
+            layout.row();
         }
 
         // Set up background.
@@ -94,7 +108,7 @@ public class DiscoveredHostsStage extends Stage {
 
         // Add actors.
         this.addActor(background);
-        this.addActor(tblDiscoveredHosts);
+        this.addActor(layout);
 
         // Add listener for click events.
         this.addListener(new ClickListener() {

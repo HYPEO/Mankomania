@@ -10,12 +10,13 @@ import java.util.Random;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.FieldActor;
+import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
 /**
- * Class that represents a Player.
+ * Class that represents a NetworkPlayer.
  */
 public class PlayerActor extends Image {
-    private static final float PLAYER_SCALE = 20f;
+    private static final float PLAYER_SCALE = 60f;
     protected FieldActor currentField;
 
     // Current player state.
@@ -30,21 +31,24 @@ public class PlayerActor extends Image {
     private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
     private final StageManager manager;
     private final Viewport viewport;
+    private final PlayerDetailActor playerDetailActor;
 
     /**
-     * Creates a new instance of a Class that implementaion for a Player.
+     * Creates a new instance of a Class that implementaion for a NetworkPlayer.
      *
      * @param playerID     The player's ID (useful for communications)
      * @param balance      The player's current balance (starting balance)
      * @param isLocal      Defines whether this player is the local one (i.e the one controlled with this device)
      * @param currentField Defines the players current position.
      */
-    public PlayerActor(String playerID, int balance, boolean isLocal, FieldActor currentField, final Viewport viewport, final StageManager stageManager) {
-        super(new Texture("tile.png"));
+    public PlayerActor(String playerID, int balance, boolean isLocal, FieldActor currentField, final Viewport viewport, final StageManager stageManager, PlayerDetailActor playerDetailActor) {
+        super(new Texture("players/player_1.png"));
         this.currentField = currentField;
         this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
+        updateBounds();
         this.isLocal = isLocal;
         this.balance = balance;
+        this.playerDetailActor = playerDetailActor;
 
         this.manager = stageManager;
         this.viewport = viewport;
@@ -61,6 +65,8 @@ public class PlayerActor extends Image {
 
     @Override
     public void act(float deltaTime) {
+
+
         float xValue;
         float yValue;
         float zValue;
@@ -105,8 +111,10 @@ public class PlayerActor extends Image {
      * Updates the object bounds to the current field.
      */
     private void updateBounds() {
-        this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
-        System.out.println(balance);
+        this.setBounds(currentField.getX()+(currentField.getWidth()/2f)-(this.getWidth()/2f),
+                currentField.getY()+(currentField.getHeight()/2f)-(this.getHeight()/2f)+8f,
+                PLAYER_SCALE,
+                PLAYER_SCALE);
     }
 
     public int getBalance() {
@@ -115,5 +123,6 @@ public class PlayerActor extends Image {
 
     public void setBalance(int balance) {
         this.balance = balance;
+        this.playerDetailActor.updateBalance(balance);
     }
 }

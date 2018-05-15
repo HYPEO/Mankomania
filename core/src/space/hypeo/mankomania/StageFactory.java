@@ -5,19 +5,20 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
+import space.hypeo.mankomania.stages.MapStage;
 import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
-import space.hypeo.mankomania.stages.MapStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
+import space.hypeo.networking.network.NetworkPlayer;
 
 /**
  * Creates all the stages (views) for the game.
  */
 public class StageFactory {
-    private StageFactory(){}
+    private StageFactory() {}
 
-    public static Stage getMapStage(final Viewport viewport, final StageManager stageManager) {
+    public static Stage getMapStage(final Viewport viewport, final StageManager stageManager){
         return new MapStage(viewport, stageManager);
     }
 
@@ -38,27 +39,24 @@ public class StageFactory {
     }
 
     /**
-     * Shows the network-lobby.
-     *
+     * Shows the network-lobby for client and host.
      * @param viewport
      * @param stageManager
      * @return stage/view of lobby
      */
-    public static Stage getLobbyStage(final Viewport viewport, final StageManager stageManager) {
-        return new LobbyStage(stageManager, viewport);
+    public static Stage getLobbyStage(final Viewport viewport, final StageManager stageManager, NetworkPlayer player) {
+        return new LobbyStage(stageManager, viewport, player);
     }
 
     /**
-     * Discovers hosts in WLAN after hit "Join Game" button.
-     * Shows all discovered hosts. Hosts can be chosen by button-click.
-     * That Stage can only be visited as role "cient".
-     *
+     * Shows all discovered hosts for a client.
+     * Client can choose a host to connect with.
      * @param viewport
      * @param stageManager
      * @return stage/view of discovered hosts for client
      */
-    public static Stage getDiscoveredHostsStage(final Viewport viewport, final StageManager stageManager) {
-        return new DiscoveredHostsStage(stageManager, viewport);
+    public static Stage getDiscoveredHostsStage(final Viewport viewport, final StageManager stageManager, NetworkPlayer player) {
+        return new DiscoveredHostsStage(stageManager, viewport, player);
     }
 
 }

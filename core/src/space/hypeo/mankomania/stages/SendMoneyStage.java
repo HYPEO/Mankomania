@@ -23,7 +23,7 @@ import space.hypeo.mankomania.StageManager;
 public class SendMoneyStage extends Stage {
     public SendMoneyStage(Viewport viewport, StageManager stageManager) {
         super(viewport);
-        //TODO: Get Current Player
+        //TODO: Get Current NetworkPlayer
 
         // Set up skin
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
@@ -36,13 +36,13 @@ public class SendMoneyStage extends Stage {
         Button button100000 = new TextButton("100.000€", skin);
         SelectBox playersBox = new SelectBox(skin);
         TextField moneyToSend = new TextField("", skin);
-        playersBox.setItems("Player 1", "Player 2", "Player 3", "Player 4");
-        //TODO: Remove current Player from list, Get Generated Player List from Player Actor
+        playersBox.setItems("NetworkPlayer 1", "NetworkPlayer 2", "NetworkPlayer 3", "NetworkPlayer 4");
+        //TODO: Remove current NetworkPlayer from list, Get Generated NetworkPlayer List from NetworkPlayer Actor
         // Add click listeners.
         send.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //get Player to Send
+                //get NetworkPlayer to Send
                 String playerToSend;
                 Integer amount;
                 //playerToSend = (String)playersBox.getSelected();
