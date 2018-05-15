@@ -48,16 +48,10 @@ public interface IPlayerConnector {
      * Returns the current player's ID.
      * @return
      */
-    public String getCurrentPlayerID();
+    public String getPlayerID();
 
     /**
      * Gets the list of players registered for the Game.
      */
     public Lobby registeredPlayers();
-
-    /**
-     * Update view of game lobby.
-     */
-    public void updateStageLobby();
-
 }

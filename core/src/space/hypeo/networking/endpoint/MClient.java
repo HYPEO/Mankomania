@@ -9,11 +9,12 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
+import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.NetworkAddress;
+import space.hypeo.networking.network.NetworkPlayer;
+import space.hypeo.networking.network.RawPlayer;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.network.WhatAmI;
-import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Lobby;
 import space.hypeo.networking.network.Network;
@@ -35,12 +36,12 @@ public class MClient extends Endpoint implements IClientConnector {
     private com.esotericsoftware.kryonet.Client client = null;
 
     // host, that the client is connected to
-    private Player hostInfo = null;
+    private RawPlayer hostInfo = null;
 
     private long startPingRequest = 0;
 
-    public MClient() {
-        super(Role.CLIENT);
+    public MClient(NetworkPlayer player, StageManager stageManager) {
+        super(player, Role.CLIENT, stageManager);
     }
 
     /**
@@ -67,7 +68,7 @@ public class MClient extends Endpoint implements IClientConnector {
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            connection.sendTCP( new PlayerDisconnect(WhatAmI.getPlayer()) );
+            connection.sendTCP( new PlayerDisconnect(player.getRawPlayer()) );
 
             hostInfo = null;
             connection.close();
@@ -92,10 +93,10 @@ public class MClient extends Endpoint implements IClientConnector {
 
             } else if( object instanceof Lobby ) {
                 /*
-                 * receive new list of Player:
+                 * receive new list of NetworkPlayer:
                  * after connecting or disconnecting clients
                  */
-                WhatAmI.setLobby( (Lobby) object );
+                player.setLobby( (Lobby) object );
                 Log.info("Client: Received updated list of player");
 
                 updateStageLobby();
@@ -104,15 +105,12 @@ public class MClient extends Endpoint implements IClientConnector {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: Received ACK from " + ack);
 
-                connection.sendTCP( new PlayerConnect(WhatAmI.getPlayer()) );
+                connection.sendTCP( new PlayerConnect(player.getRawPlayer()) );
 
             } else if( object instanceof PlayerHost) {
                 hostInfo = (PlayerHost) object;
-                Log.info("Client: Received Player info of host, to be connected with: " + hostInfo);
+                Log.info("Client: Received NetworkPlayer info of host, to be connected with: " + hostInfo);
 
-            } else if( object instanceof Remittances) {
-                Remittances remittances = (Remittances) object;
-                // TODO: change my own balance
             }
         }
     }
@@ -167,6 +165,7 @@ public class MClient extends Endpoint implements IClientConnector {
 
     @Override
     public List<InetAddress> discoverHosts() {
+        // TODO: check if WLAN has "Wireless Isolation" enabled => no discovery possible
         // use UDP port for discovering hosts
         List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
@@ -213,44 +212,6 @@ public class MClient extends Endpoint implements IClientConnector {
     @Override
     public boolean joinGame(String playerID) {
         return false;
-    }
-
-    @Override
-    public void changeBalance(String playerID, int amount) {
-
-        // TODO: check if playerID == self.playerID
-        Remittances moneyAmount = new Remittances(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
-        client.sendTCP(moneyAmount);
-    }
-
-    @Override
-    public void movePlayer(String playerID, int position) {
-
-    }
-
-    @Override
-    public void endTurn() {
-
-    }
-
-    @Override
-    public int getPlayerBalance(String playerID) {
-        return 0;
-    }
-
-    @Override
-    public int getPlayerPosition(String playerID) {
-        return 0;
-    }
-
-    @Override
-    public String getCurrentPlayerID() {
-        return WhatAmI.getPlayer().getPlayerID();
-    }
-
-    @Override
-    public Lobby registeredPlayers() {
-        return WhatAmI.getLobby();
     }
 
 }

@@ -13,15 +13,12 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
-import java.util.HashMap;
-
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.networking.network.RawPlayer;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.network.WhatAmI;
-
 import space.hypeo.networking.packages.Lobby;
-import space.hypeo.networking.network.Player;
+import space.hypeo.networking.network.NetworkPlayer;
 
 
 /**
@@ -33,6 +30,8 @@ public class LobbyStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
 
+    private NetworkPlayer networkPlayer;
+
     private Skin skin;
     private RectangleActor background;
     private Table layout;
@@ -40,10 +39,13 @@ public class LobbyStage extends Stage {
     private boolean updateLobby;
     private float timeSinceLastUpdate;
 
-    public LobbyStage(StageManager stageManager, Viewport viewport) {
+    public LobbyStage(StageManager stageManager, Viewport viewport, NetworkPlayer player) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
+
+        this.networkPlayer = player;
+
         this.updateLobby = false;
         this.timeSinceLastUpdate = 0f;
 
@@ -89,8 +91,8 @@ public class LobbyStage extends Stage {
 
     private void setupLobby() {
 
-        Lobby lobby = WhatAmI.getLobby();
-        Role role = WhatAmI.getRole();
+        Lobby lobby = networkPlayer.registeredPlayers();
+        Role role = networkPlayer.getRole();
 
         if( lobby == null || role == Role.NOT_CONNECTED ) {
             Log.error("LobbyStage: lobby must not be null!");
@@ -99,11 +101,10 @@ public class LobbyStage extends Stage {
         }
 
         int index = 1;
-        for( HashMap.Entry<String, Player> entry : lobby.getData().entrySet() ) {
+        for( RawPlayer rawPlayer : lobby.getData() ) {
 
             Button btnPlayer = new TextButton(
-                    index + ": " + entry.getKey() + ", " + entry.getValue().getAddress(),
-                    skin);
+                    index + ": " + rawPlayer, skin);
 
             btnPlayer.addListener(new ClickListener() {
                 @Override
@@ -118,8 +119,6 @@ public class LobbyStage extends Stage {
 
             index++;
         }
-
-
     }
 
     @Override
