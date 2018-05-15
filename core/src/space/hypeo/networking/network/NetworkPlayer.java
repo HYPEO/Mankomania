@@ -1,9 +1,6 @@
 package space.hypeo.networking.network;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.esotericsoftware.minlog.Log;
-
-import java.net.SocketException;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.endpoint.Endpoint;
@@ -64,15 +61,6 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
 
     public RawPlayer getRawPlayer() {
         return new RawPlayer(this);
-    }
-
-    /**
-     * Returns ID of current player.
-     * @return String ID.
-     */
-    @Override
-    public String getPlayerID() {
-        return super.getPlayerID();
     }
 
     /**
@@ -154,4 +142,13 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
                 + ", Role: " + endpoint.getRole();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

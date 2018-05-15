@@ -111,9 +111,6 @@ public class MClient extends Endpoint implements IClientConnector {
                 hostInfo = (PlayerHost) object;
                 Log.info("Client: Received NetworkPlayer info of host, to be connected with: " + hostInfo);
 
-            } else if( object instanceof Remittances) {
-                Remittances remittances = (Remittances) object;
-                // TODO: change my own balance
             }
         }
     }
@@ -168,6 +165,7 @@ public class MClient extends Endpoint implements IClientConnector {
 
     @Override
     public List<InetAddress> discoverHosts() {
+        // TODO: check if WLAN has "Wireless Isolation" enabled => no discovery possible
         // use UDP port for discovering hosts
         List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
@@ -216,11 +214,4 @@ public class MClient extends Endpoint implements IClientConnector {
         return false;
     }
 
-
-    public void changeBalance(String playerID, int amount) {
-        // change the balance of myself
-        player.changeBalance(playerID, amount);
-        //Remittances moneyAmount = new Remittances(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
-        //client.sendTCP(moneyAmount);
-    }
 }

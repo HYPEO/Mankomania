@@ -1,6 +1,5 @@
 package space.hypeo.networking.packages;
 
-import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.RawPlayer;
 
 /**

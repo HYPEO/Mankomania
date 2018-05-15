@@ -38,8 +38,8 @@ public class RawPlayer {
      */
     public RawPlayer(RawPlayer p) {
         if (p != null && p != this) {
-            this.playerID = new String(p.playerID);
-            this.nickname = new String(p.nickname);
+            this.playerID = p.playerID;
+            this.nickname = p.nickname;
         }
     }
 

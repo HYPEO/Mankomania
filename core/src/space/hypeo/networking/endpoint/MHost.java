@@ -112,8 +112,6 @@ public class MHost extends Endpoint implements IHostConnector {
 
                 updateStageLobby();
 
-            } else if( object instanceof Remittances ) {
-                changeBalance((Remittances) object);
             }
         }
     }
@@ -182,34 +180,25 @@ public class MHost extends Endpoint implements IHostConnector {
         server.sendToAllTCP(new Notification("game will be closed now..."));
     }
 
-    public void changeBalance(String playerID, int amount) {
-
-        // TODO: check if playerID == self.playerID
-        //int connectionID = getConnectionID(playerID);
-
-        //Remittances remittances = new Remittances(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
-        //server.sendToTCP(connectionID, remittances);
-    }
-
     /**
      * Resends a received MoneyAmount from player to another player.
      * @param remittances
      */
-    private void changeBalance(Remittances remittances) {
+    /*private void changeBalance(Remittances remittances) {
 
         int connectionID = getConnectionID(remittances.getReceiverId());
         server.sendToTCP(connectionID, remittances);
-    }
+    }*/
 
 
-    public int getConnectionID(String playerId) throws IndexOutOfBoundsException {
+    public int getConnectionID(String playerId) throws IllegalArgumentException {
 
         RawPlayer needle = player.registeredPlayers().contains(playerId);
         int connectionID = 0;
 
         if( needle == null ) {
             Log.warn("Could not find player with ID '" + playerId + "' in lobby!");
-            throw new IndexOutOfBoundsException("Could not find player with ID '" + playerId + "' in lobby!");
+            throw new IllegalArgumentException("Could not find player with ID '" + playerId + "' in lobby!");
         }
 
         String connectionIP = needle.getAddress();
