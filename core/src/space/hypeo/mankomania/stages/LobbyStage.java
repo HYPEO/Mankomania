@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -34,7 +35,7 @@ public class LobbyStage extends Stage {
 
     private Skin skin;
     private RectangleActor background;
-    private Table layout;
+    private Container<Table> tableContainer;
 
     private boolean updateLobby;
     private float timeSinceLastUpdate;
@@ -58,7 +59,6 @@ public class LobbyStage extends Stage {
         }
     }
 
-
     private void setupBackground() {
         background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
         // Set up background.
@@ -73,22 +73,44 @@ public class LobbyStage extends Stage {
         });
     }
 
-    private void initLayout() {
+    private void setupLayout() {
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
+        /* very outer container for all widgets */
+        tableContainer = new Container<>();
+
+//        float sw = Gdx.graphics.getWidth();
+//        float sh = Gdx.graphics.getHeight();
+
+        Log.info("Gdx.graphics.getWidth() = " + Gdx.graphics.getWidth());
+        Log.info("Gdx.graphics.getHeight() = " + Gdx.graphics.getHeight());
+
+        float width = 500;
+        float height = 1000;
+
+        float widthC = width * 0.7f;
+        float heightC = height * 0.5f;
+
+        tableContainer.setSize(widthC, heightC);
+        tableContainer.setPosition((width - widthC) / 2.0f, (height - heightC) / 2.0f);
+        tableContainer.fillX();
+
+        /* outer table */
+        Table table = new Table(skin);
+        //table.setWidth( this.getWidth() );
+        //table.setPosition(0, this.getHeight() / 2);
+
         Label title = new Label("GAME LOBBY", skin);
+        //title.setFontScaleX(2);
+        //title.setFontScaleY(2);
+        title.setAlignment(Align.center);
 
-        layout = new Table();
-        layout.setWidth(this.getWidth());
-        layout.align(Align.center);
-        layout.setPosition(0, this.getHeight() - 200);
-        layout.padTop(50);
-        layout.add(title).width(300).height(100);
-        layout.row();
-    }
+        /* add title */
+        table.row().colspan(4).expandX().fillX();
+        table.add(title).fillX();
+        tableContainer.setActor(table);
 
-    private void buildListWidgetFromLobby() {
-
+        /* buttons */
         Lobby lobby = networkPlayer.registeredPlayers();
         Role role = networkPlayer.getRole();
 
@@ -98,25 +120,36 @@ public class LobbyStage extends Stage {
             return;
         }
 
+        Table buttonTable = new Table(skin);
+
         int index = 1;
         for( RawPlayer rawPlayer : lobby.getData() ) {
 
-            Button btnPlayer = new TextButton(
-                    index + ": " + rawPlayer, skin);
+            Log.info("Build GUI widgets for player " + rawPlayer);
 
-            btnPlayer.addListener(new ClickListener() {
+            Button btnIndex = new TextButton("" + index, skin);
+            Button btnNick = new TextButton(rawPlayer.getNickname(), skin);
+            Button btnAddr = new TextButton(rawPlayer.getAddress(), skin);
+            Button btnReady = new TextButton("OK", skin);
+
+            /*btnNick.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     // TODO: set status read to start game
                 }
 
-            });
+            });*/
 
-            layout.add(btnPlayer).width(300).height(100);
-            layout.row();
+            buttonTable.row().colspan(4).expandX().fillX();
+            buttonTable.add(btnIndex).expandX().fillX();
+            buttonTable.add(btnNick).expandX().fillX();
+            buttonTable.add(btnAddr).expandX().fillX();
+            buttonTable.add(btnReady).expandX().fillX();
 
             index++;
         }
+
+        tableContainer.setActor(buttonTable);
     }
 
     @Override
@@ -128,11 +161,10 @@ public class LobbyStage extends Stage {
             synchronized (this) {
                 if (updateLobby) {
                     setupBackground();
-                    initLayout();
-                    buildListWidgetFromLobby();
+                    setupLayout();
 
                     this.addActor(background);
-                    this.addActor(layout);
+                    this.addActor(tableContainer);
                 }
                 updateLobby = false;
             }

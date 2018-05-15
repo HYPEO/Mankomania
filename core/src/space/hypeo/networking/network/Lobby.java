@@ -2,8 +2,11 @@ package space.hypeo.networking.network;
 
 import com.esotericsoftware.minlog.Log;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import space.hypeo.networking.network.Network;
@@ -139,5 +142,28 @@ public class Lobby {
             Log.info("  " + index + ". ID = '" + rawPlayer +"'");
             index++;
         }
+    }
+
+    /**
+     * Creates a table representation of the player in the lobby.
+     * First row is the head-row.
+     * @return
+     */
+    public List<List<String>> toTable() {
+
+        List<List<String>> table = new ArrayList<>();
+        List<String> row;
+
+        /* create header row */
+        row = Arrays.asList("Player ID", "Nickname", "IP Address");
+        table.add(row);
+
+        /* create data rows */
+        for( RawPlayer rp : data ) {
+            row = Arrays.asList(rp.getPlayerID(), rp.getNickname(), rp.getAddress());
+            table.add(row);
+        }
+
+        return table;
     }
 }

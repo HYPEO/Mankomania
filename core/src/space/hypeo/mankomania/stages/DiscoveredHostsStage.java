@@ -40,6 +40,8 @@ public class DiscoveredHostsStage extends Stage {
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         Label title = new Label("Discovered Hosts", skin);
+        title.setFontScaleX(2);
+        title.setFontScaleY(2);
 
         // show avaliable hosts as buttons in table
         Table layout = new Table();
@@ -52,9 +54,6 @@ public class DiscoveredHostsStage extends Stage {
         layout.row();
 
         Log.info("Discovered Network: Host-List contains:");
-
-        layout.add(new Label("Discovered Hosts:", skin)).width(300).height(100);
-        layout.row();
 
         if( foundHosts != null && ! foundHosts.isEmpty() ) {
 
