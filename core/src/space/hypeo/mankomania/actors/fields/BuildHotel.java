@@ -8,20 +8,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
+import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 
 
 public class BuildHotel extends FieldActor {
 
-        private static final float FIELD_SCALE = 30f;
-        private static final String TEXTURE_PATH = "buildhotel.jpg";
+        private static final float FIELD_SCALE = 40f;
+        private static final String TEXTURE_PATH = "fields/hotel.png";
         Skin skin;
         Stage stage;
         boolean bought=false;
         String playerID="";
 
-        public BuildHotel(float x, float y, Texture texture, int price, Image fieldInfoImage, Stage stage) {
-            super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, fieldInfoImage);
+        public BuildHotel(float x, float y, Texture texture, int price, DetailActor detailActor, Stage stage) {
+            super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, detailActor);
             this.stage=stage;
         }
 
@@ -29,13 +31,12 @@ public class BuildHotel extends FieldActor {
         public void trigger(PlayerActor player) {
             if(!bought) {
                 skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-                Gdx.input.setInputProcessor(stage);
                 new Dialog("", skin, "dialog") {
                     protected void result(Object object) {
                         System.out.println("Chosen: " + object);
                         if(object.equals(true)) {
                             bought = true;
-                            BuildHotel.this.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("tile.png"))));
+                            BuildHotel.this.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("fields/hotel_bought.png"))));
                         }
                     }
                 }.text("Do you want to build a hotel?").button("Yes", true).button("No", false).key(Input.Keys.ENTER, true)
@@ -49,7 +50,7 @@ public class BuildHotel extends FieldActor {
                 }
 
             }
-
+            detailActor.showDetail(this);
         }
     }
 

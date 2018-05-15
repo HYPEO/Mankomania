@@ -2,10 +2,9 @@ package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.Input;
 import java.util.Random;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.mankomania.actors.fields.BuyHotelFieldActor;
@@ -88,11 +87,9 @@ public class MapStage extends Stage {
         // Create new Field
         FieldActor currentField;
         if (random == 0) {
-            currentField = new BuyHotelFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("RumsBuDee.png"), randomGenerator.nextInt(5) + 10, detailActor);
+            currentField = new BuildHotel(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), detailActor, this);
         } else if (random == 1) {
             currentField = new LoseMoneyFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("6dice.png"), randomGenerator.nextInt(10), detailActor);
-        } else if (random == 2) {
-                currentField = new BuildHotel(xMargin + (i * xDirection), yMargin + (i * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), fieldInfoImage, mapStage);
         } else {
             currentField = new EmptyFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), 0, detailActor);
         }
