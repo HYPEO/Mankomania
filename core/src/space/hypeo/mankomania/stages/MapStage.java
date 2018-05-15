@@ -2,10 +2,9 @@ package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import java.util.Random;
-
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.mankomania.actors.fields.BuyHotelFieldActor;
@@ -15,6 +14,7 @@ import space.hypeo.mankomania.actors.fields.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
+import space.hypeo.mankomania.actors.fields.BuildHotel;
 import space.hypeo.mankomania.factories.ActorFactory;
 
 /**
@@ -22,6 +22,9 @@ import space.hypeo.mankomania.factories.ActorFactory;
  */
 public class MapStage extends Stage {
     private static final int NUM_OF_FIELDS = 9;
+
+    private Image fieldInfoImage;
+
     private static final float MARGIN_X = 20f;
     private static final float MARGIN_Y = 175;
     private static final float FIELD_DISTANCE = 45f;
@@ -33,11 +36,14 @@ public class MapStage extends Stage {
         detailActor = ActorFactory.getDetailActor();
         this.addActor(detailActor);
         detailActor.positionActor(340);
+      
+        Texture texture = new Texture("badlogic.jpg");
+        fieldInfoImage = new Image(texture);
+        fieldInfoImage.setBounds(90, 125, 300, 300);
 
         PlayerDetailActor playerDetailActor = new PlayerDetailActor(new Texture("map_assets/player_1.png"));
         playerDetailActor.positionActor(PlayerDetailActor.ScreenPosition.BOTTOM_LEFT);
         this.addActor(playerDetailActor);
-
 
         PlayerDetailActor secondDetailActor = new PlayerDetailActor(new Texture("map_assets/player_2.png"));
         secondDetailActor.positionActor(PlayerDetailActor.ScreenPosition.BOTTOM_RIGHT);
@@ -81,7 +87,7 @@ public class MapStage extends Stage {
         // Create new Field
         FieldActor currentField;
         if (random == 0) {
-            currentField = new BuyHotelFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("RumsBuDee.png"), randomGenerator.nextInt(5) + 10, detailActor);
+            currentField = new BuildHotel(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), detailActor, this);
         } else if (random == 1) {
             currentField = new LoseMoneyFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("6dice.png"), randomGenerator.nextInt(10), detailActor);
         } else {

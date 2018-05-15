@@ -65,6 +65,8 @@ public class PlayerActor extends Image {
 
     @Override
     public void act(float deltaTime) {
+
+
         float xValue;
         float yValue;
         float zValue;
