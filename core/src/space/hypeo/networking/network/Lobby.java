@@ -1,4 +1,4 @@
-package space.hypeo.networking.packages;
+package space.hypeo.networking.network;
 
 import com.esotericsoftware.minlog.Log;
 
@@ -18,20 +18,30 @@ import space.hypeo.networking.network.RawPlayer;
  */
 public class Lobby {
 
+    protected int maxPlayer;
+    protected static final int MAX_PLAYER = 5;
+
     /**
      * The data structure that holds the players, that are connected.
      */
     protected Set<RawPlayer> data;
 
+    public Lobby() {
+        data = new HashSet<>();
+        maxPlayer = MAX_PLAYER;
+    }
+
     /**
      * Creates a new instance from type class Lobby.
      */
-    public Lobby() {
-        data = new HashSet<>();
+    public Lobby(int maxPlayer) {
+        this();
+        this.maxPlayer = maxPlayer;
     }
-    /*public Lobby(Set<RawPlayer> data) {
-        this.data = new HashSet<>(data);
-    }*/
+
+    public int getMaxPlayer() {
+        return maxPlayer;
+    }
 
     /**
      * Associates the specified value with the specified key in this map.
@@ -104,7 +114,7 @@ public class Lobby {
      * Retruns true, if maximum number of player has joined the lobby.
      * @return false if new player can join the lobby
      */
-    public boolean isFull() { return data.size() >= Network.MAX_PLAYER; }
+    public boolean isFull() { return data.size() >= maxPlayer; }
 
     /**
      * Removes all of the mappings from this map.

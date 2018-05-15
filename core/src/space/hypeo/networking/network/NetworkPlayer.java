@@ -1,12 +1,14 @@
 package space.hypeo.networking.network;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
+import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.endpoint.Endpoint;
 import space.hypeo.networking.endpoint.MClient;
 import space.hypeo.networking.endpoint.MHost;
-import space.hypeo.networking.packages.Lobby;
 
 /**
  * This class holds the important network data,
@@ -23,6 +25,8 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
      */
     private Lobby lobby;
 
+    private StageManager stageManager;
+
     public NetworkPlayer() {
         super();
     }
@@ -33,29 +37,19 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
      * @param role
      */
     public NetworkPlayer(String nickname, Role role, StageManager stageManager) {
-
         super(nickname);
-
         // TODO: check if WLAN connection is ON and connected to hotspot
+        this.stageManager = stageManager;
 
         if( endpoint != null ) {
             Log.warn("init: There is already an open connection!");
             return;
         }
 
-        // init endpoint + start process (depends on role)
-        if( role == Role.HOST ) {
-            endpoint = new MHost(this, stageManager);
-            endpoint.start();
-        } else if( role == Role.CLIENT ) {
-            endpoint = new MClient(this, stageManager);
-            endpoint.start();
-        } else {
-            Log.info("Enpoint could not be initialized for given Role: " + role);
-        }
+        setEnpoint(role, stageManager);
 
         // insert that player in lobby
-        lobby = new Lobby();
+        lobby = new Lobby(Network.MAX_PLAYER);
         lobby.add(this.getRawPlayer());
     }
 
@@ -74,6 +68,24 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
         return endpoint.getRole();
     }
 
+    /**
+     * Inits the endpoint as client or server and starts the process.
+     * @param role
+     * @param stageManager
+     */
+    private void setEnpoint(Role role, StageManager stageManager) {
+        //
+        if( role == Role.HOST ) {
+            endpoint = new MHost(this, stageManager);
+            endpoint.start();
+        } else if( role == Role.CLIENT ) {
+            endpoint = new MClient(this, stageManager);
+            endpoint.start();
+        } else {
+            Log.info("Enpoint could not be initialized for given Role: " + role);
+        }
+    }
+
     public Endpoint getEndpoint() {
         return endpoint;
     }
@@ -90,8 +102,17 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
     public void closeEndpoint() {
 
         if( endpoint != null ) {
+            // close connection
             endpoint.close();
             endpoint = null;
+
+            Stage currentStage = stageManager.getCurrentStage();
+            Viewport viewport = currentStage.getViewport();
+
+            // return to MainMenu
+            stageManager.remove(currentStage);
+            stageManager.push(StageFactory.getMainMenu(viewport, stageManager));
+
         } else {
             Log.info("No process running - nothing to do.");
         }

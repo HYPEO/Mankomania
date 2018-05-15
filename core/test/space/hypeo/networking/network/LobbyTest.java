@@ -1,4 +1,4 @@
-package space.hypeo.networking.packages;
+package space.hypeo.networking.network;
 
 import org.junit.After;
 import org.junit.Before;
@@ -7,8 +7,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import space.hypeo.networking.network.RawPlayer;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -26,6 +24,7 @@ public class LobbyTest {
     @Mock
     private RawPlayer rawPlayer;
 
+    private final int MAX_PLAYER = 5;
     private final String PLAYER_ID= "ac03";
     //private final String NICKNAME = "a_test_RawPlayer";
     //private final String IP_ADDRESS = "192.168.1.99";
@@ -33,7 +32,7 @@ public class LobbyTest {
     @Before
     public void setup() {
 
-        lobby = new Lobby();
+        lobby = new Lobby(MAX_PLAYER);
         rawPlayer = mock(RawPlayer.class);
 
         /* init mock behavior */
@@ -55,7 +54,7 @@ public class LobbyTest {
 
 
     @Test
-    public void test_isNotEmpty() {
+    public void test_isEmpty_not() {
         assertThat(!lobby.isEmpty(), is(false));
     }
 
@@ -110,7 +109,7 @@ public class LobbyTest {
     }
 
     @Test
-    public void test_contains_object_fails() {
+    public void test_contains_object_not() {
         assertThat(lobby.contains(rawPlayer), not(rawPlayer));
     }
 
@@ -121,7 +120,7 @@ public class LobbyTest {
     }
 
     @Test
-    public void test_contains_playerID_fails() {
+    public void test_contains_playerID_not() {
         assertThat(lobby.contains(PLAYER_ID), not(rawPlayer));
     }
 
@@ -129,5 +128,19 @@ public class LobbyTest {
     public void test_contains_playerID() {
         lobby.add(rawPlayer);
         assertThat(lobby.contains(PLAYER_ID), is(rawPlayer));
+    }
+
+    @Test
+    public void test_isFull_not() {
+        lobby.add(rawPlayer);
+        assertThat(lobby.isFull(), is(false));
+    }
+
+    @Test
+    public void test_isFull() {
+        lobby = new Lobby(1);
+        assertThat(lobby.getMaxPlayer(), is(1));
+        lobby.add(rawPlayer);
+        assertThat(lobby.isFull(), is(true));
     }
 }

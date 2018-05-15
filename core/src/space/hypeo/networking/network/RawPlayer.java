@@ -75,7 +75,7 @@ public class RawPlayer {
      */
     @Override
     public String toString() {
-        return "PlayerID: " + playerID + ", Nick: " + nickname;
+        return nickname;
     }
 
     @Override

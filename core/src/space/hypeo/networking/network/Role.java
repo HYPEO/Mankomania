@@ -16,7 +16,7 @@ public class Role {
 
     // TODO: public constructor is needed for network-registration
     // but UNWANTED here in this class!
-    public Role() {}
+    public Role() { this(STR_NOT_CONNECTED); }
 
     private static final String STR_CLIENT = "CLIENT";
     private static final String STR_HOST = "HOST";
