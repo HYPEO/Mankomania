@@ -1,7 +1,10 @@
 package space.hypeo.networking.network;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
+import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.endpoint.Endpoint;
 import space.hypeo.networking.endpoint.MClient;
@@ -22,6 +25,8 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
      */
     private Lobby lobby;
 
+    private StageManager stageManager;
+
     public NetworkPlayer() {
         super();
     }
@@ -33,8 +38,8 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
      */
     public NetworkPlayer(String nickname, Role role, StageManager stageManager) {
         super(nickname);
-
         // TODO: check if WLAN connection is ON and connected to hotspot
+        this.stageManager = stageManager;
 
         if( endpoint != null ) {
             Log.warn("init: There is already an open connection!");
@@ -97,8 +102,17 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
     public void closeEndpoint() {
 
         if( endpoint != null ) {
+            // close connection
             endpoint.close();
             endpoint = null;
+
+            Stage currentStage = stageManager.getCurrentStage();
+            Viewport viewport = currentStage.getViewport();
+
+            // return to MainMenu
+            stageManager.remove(currentStage);
+            stageManager.push(StageFactory.getMainMenu(viewport, stageManager));
+
         } else {
             Log.info("No process running - nothing to do.");
         }
