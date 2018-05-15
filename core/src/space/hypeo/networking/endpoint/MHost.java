@@ -23,8 +23,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
 /**
- * This class represents the host process on a device.
- * If you don't know, if you're client or host, call WhatAmI.getRole().
+ * This class represents the host process on the device.
  */
 public class MHost extends Endpoint implements IHostConnector {
 

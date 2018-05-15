@@ -26,8 +26,7 @@ import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
 
 /**
- * This class represents the client process for an endpoint on a device.
- * If you don't know, if you're client or host, call WhatAmI.getRole().
+ * This class represents the client process on the device.
  */
 public class MClient extends Endpoint implements IClientConnector {
 

@@ -71,11 +71,9 @@ public class LobbyStage extends Stage {
                 stageManager.remove(LobbyStage.this);
             }
         });
-
-
     }
 
-    private void setupLayout() {
+    private void initLayout() {
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         Label title = new Label("GAME LOBBY", skin);
@@ -130,7 +128,7 @@ public class LobbyStage extends Stage {
             synchronized (this) {
                 if (updateLobby) {
                     setupBackground();
-                    setupLayout();
+                    initLayout();
                     buildListWidgetFromLobby();
 
                     this.addActor(background);
