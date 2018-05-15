@@ -95,12 +95,18 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Log.info("Try to start server...");
-                // initialize device as host
-                WhatAmI.init("the_mighty_host", Role.HOST);
-                // start server process
-                WhatAmI.getHost().startServer();
-                Log.info("Server has started successfully");
+
+                Log.info("hostClickListener: " + WhatAmI.getRole());
+
+                if( WhatAmI.getRole() == Role.CLIENT ) {
+                    WhatAmI.closeEndpoint();
+                }
+
+                Log.info("hostClickListener: " + WhatAmI.getRole());
+
+                if( WhatAmI.getRole() == Role.NOT_CONNECTED ) {
+                    WhatAmI.init("the_mighty_host", Role.HOST, stageManager);
+                }
 
                 stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
             }
@@ -111,14 +117,27 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Log.info("Try to start client...");
-                // initialize device as client
-                WhatAmI.init("another_client", Role.CLIENT);
-                // start client process
-                WhatAmI.getClient().startClient();
-                Log.info("Client has started successfully");
 
-                stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
+                Log.info("clientClickListener: " + WhatAmI.getRole());
+
+                if( WhatAmI.getRole() == Role.HOST ) {
+                    WhatAmI.closeEndpoint();
+                }
+
+                Log.info("clientClickListener: " + WhatAmI.getRole());
+
+                if( WhatAmI.getRole() == Role.NOT_CONNECTED ) {
+                    Log.info("clientClickListener: start DiscoveredHostsStage");
+                    WhatAmI.init("another_client", Role.CLIENT, stageManager);
+                    stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager));
+                }
+
+                else if( WhatAmI.getRole() == Role.CLIENT ) {
+                    Log.info("clientClickListener: start LobbyStage");
+                    stageManager.push(StageFactory.getLobbyStage(viewport, stageManager));
+                }
+
+
             }
         };
     }

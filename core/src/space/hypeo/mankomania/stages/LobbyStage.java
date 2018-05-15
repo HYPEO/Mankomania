@@ -28,31 +28,66 @@ import space.hypeo.networking.network.Player;
  * Shows the network-lobby:
  * The lobby is a Scene in the game for players to join before playing the actual game.
  * In the lobby, players can pick options and set themselves as ready for the game to start.
- *
- * The list in the lobby creates each player - both host and clients - itself.
- * Therefore the hashmap 'players' - a field of class MHost - contains the necessary data.
  */
 public class LobbyStage extends Stage {
-    StageManager stageManager;
+    private StageManager stageManager;
+    private final Viewport viewport;
+
+    private Skin skin;
+    private RectangleActor background;
+    private Table layout;
+
+    private boolean updateLobby;
+    private float timeSinceLastUpdate;
 
     public LobbyStage(StageManager stageManager, Viewport viewport) {
         super(viewport);
         this.stageManager = stageManager;
+        this.viewport = viewport;
+        this.updateLobby = false;
+        this.timeSinceLastUpdate = 0f;
 
-        // Create actors.
-        RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+        updateLobby();
+    }
 
-        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+    public void updateLobby() {
+        synchronized (this){
+            updateLobby = true;
+        }
+    }
 
-        Label lblLobby = new Label("GAME LOBBY", skin);
 
-        Table tblLobby = new Table();
-        tblLobby.setWidth(this.getWidth());
-        tblLobby.align(Align.center);
-        tblLobby.setPosition(0, this.getHeight() - 200);
-        tblLobby.padTop(50);
-        tblLobby.add(lblLobby).width(300).height(100);
-        tblLobby.row();
+    private void setupBackground() {
+        background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+        // Set up background.
+        background.setColor(237f/255f, 30f/255f, 121f/255f, 1f);
+
+        // Add listener for click on background events.
+        background.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageManager.remove(LobbyStage.this);
+            }
+        });
+
+
+    }
+
+    private void setupLayout() {
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
+        Label title = new Label("GAME LOBBY", skin);
+
+        layout = new Table();
+        layout.setWidth(this.getWidth());
+        layout.align(Align.center);
+        layout.setPosition(0, this.getHeight() - 200);
+        layout.padTop(50);
+        layout.add(title).width(300).height(100);
+        layout.row();
+    }
+
+    private void setupLobby() {
 
         Lobby lobby = WhatAmI.getLobby();
         Role role = WhatAmI.getRole();
@@ -63,7 +98,6 @@ public class LobbyStage extends Stage {
             return;
         }
 
-        // TODO: game lobby has to be updated after changes in collection 'players'
         int index = 1;
         for( HashMap.Entry<String, Player> entry : lobby.getData().entrySet() ) {
 
@@ -79,25 +113,35 @@ public class LobbyStage extends Stage {
 
             });
 
-            tblLobby.add(btnPlayer).width(300).height(100);
-            tblLobby.row();
+            layout.add(btnPlayer).width(300).height(100);
+            layout.row();
 
             index++;
         }
 
-        // Set up background.
-        background.setColor(237f/255f, 30f/255f, 121f/255f, 1f);
 
-        // Add actors.
-        this.addActor(background);
-        this.addActor(tblLobby);
+    }
 
-        // Add listener for click events.
-        this.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                stageManager.remove(LobbyStage.this);
+    @Override
+    public void act(float delta)
+    {
+        timeSinceLastUpdate += delta;
+
+        if(timeSinceLastUpdate > 1f) {
+            synchronized (this) {
+                if (updateLobby) {
+                    setupBackground();
+                    setupLayout();
+                    setupLobby();
+
+                    this.addActor(background);
+                    this.addActor(layout);
+                }
+                updateLobby = false;
             }
-        });
+            timeSinceLastUpdate = 0f;
+        }
+
+        super.act(delta);
     }
 }

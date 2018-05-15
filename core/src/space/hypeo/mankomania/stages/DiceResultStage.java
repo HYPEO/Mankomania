@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import space.hypeo.mankomania.StageManager;
 
 public class DiceResultStage extends Stage {
-    public DiceResultStage(Viewport viewport, StageManager stageManager, int moveFields) {
+    public DiceResultStage(Viewport viewport, final StageManager stageManager, int moveFields) {
         super(viewport);
 
         // Set up skin

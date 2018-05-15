@@ -1,4 +1,4 @@
-package space.hypeo.networking.client;
+package space.hypeo.networking.endpoint;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -10,8 +10,8 @@ import java.net.InetAddress;
 import java.util.List;
 
 import space.hypeo.networking.network.IClientConnector;
-import space.hypeo.networking.network.IPlayerConnector;
 import space.hypeo.networking.network.NetworkAddress;
+import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
@@ -23,21 +23,25 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.Remittances;
 
 /**
- * This class represents the client process on a device.
- * If you don't know, if you're client or host, call
- * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
+ * This class represents the client process for an endpoint on a device.
+ * If you don't know, if you're client or host, call WhatAmI.getRole().
  */
-public class MClient implements IPlayerConnector, IClientConnector {
+public class MClient extends Endpoint implements IClientConnector {
 
-    private com.esotericsoftware.kryonet.Client client;
+    // instance of the client
+    private com.esotericsoftware.kryonet.Client client = null;
 
-    private List<InetAddress> discoveredHosts = null;
-
+    // host, that the client is connected to
     private Player hostInfo = null;
 
     private long startPingRequest = 0;
+
+    public MClient() {
+        super(Role.CLIENT);
+    }
 
     /**
      * This class handles the connection events with the client.
@@ -45,7 +49,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
     private class ClientListener extends Listener {
 
         /**
-         * If has connected to host
+         * If has connected to host.
          * @param connection
          */
         @Override
@@ -56,7 +60,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
         }
 
         /**
-         * If has diconnected from host
+         * If has diconnected from host.
          * @param connection
          */
         @Override
@@ -70,7 +74,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
         }
 
         /**
-         * If has reveived a package from host
+         * If has reveived a package from host.
          * @param connection
          * @param object
          */
@@ -84,7 +88,7 @@ public class MClient implements IPlayerConnector, IClientConnector {
 
             } else if( object instanceof Notification) {
                 Notification notification = (Notification) object;
-                Log.info("Client received: " + notification.toString());
+                Log.info("Client: Received notification: " + notification.toString());
 
             } else if( object instanceof Lobby ) {
                 /*
@@ -92,54 +96,107 @@ public class MClient implements IPlayerConnector, IClientConnector {
                  * after connecting or disconnecting clients
                  */
                 WhatAmI.setLobby( (Lobby) object );
-                Log.info("Client received updated list of player");
+                Log.info("Client: Received updated list of player");
+
+                updateStageLobby();
 
             } else if( object instanceof Acknowledge ) {
                 Acknowledge ack = (Acknowledge) object;
-                Log.info("Client: " + ack);
+                Log.info("Client: Received ACK from " + ack);
 
                 connection.sendTCP( new PlayerConnect(WhatAmI.getPlayer()) );
 
             } else if( object instanceof PlayerHost) {
                 hostInfo = (PlayerHost) object;
-                Log.info("Client: Got connection to host " + hostInfo);
+                Log.info("Client: Received Player info of host, to be connected with: " + hostInfo);
+
+            } else if( object instanceof Remittances) {
+                Remittances remittances = (Remittances) object;
+                // TODO: change my own balance
             }
         }
     }
 
+    /**
+     * Starts the client network thread.
+     * This thread is what receives (and sometimes sends) data over the network
+     */
     @Override
-    public void startClient() {
+    public void start() {
+        Log.info("Client will be started.");
+
+        if( client != null ) {
+            Log.warn("Client is still running - nothing to do!");
+            return;
+        }
 
         client = new Client();
-        new Thread(client).start();
+        client.start();
+        // register classes that can be sent/received by client
         Network.register(client);
+
+        Log.info("Client has started successfully.");
+    }
+
+    /**
+     * Closes any network connection AND stops the client network thread.
+     */
+    @Override
+    public void stop() {
+        Log.info("Client will be stopped.");
+
+        try {
+            client.close();
+            client.stop();
+
+        } catch( NullPointerException e ) {
+            Log.warn("Client was NOT running - nothing to do!");
+            Log.error(e.getMessage());
+        }
+    }
+
+    /**
+     * Closes the network connection BUT does NOT stop the client network thread.
+     * Client can reconnect or connect to a different server.
+     */
+    @Override
+    public void close() {
+        Log.info("Client will be closed.");
+        client.close();
     }
 
     @Override
     public List<InetAddress> discoverHosts() {
         // use UDP port for discovering hosts
-        discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
+        List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
         return discoveredHosts;
     }
 
+    /**
+     * Establishes a connection to given host.
+     * @param hostAddress host to connect to
+     */
     public void connectToHost(InetAddress hostAddress) {
 
-        if( client != null && discoveredHosts != null && discoveredHosts.contains(hostAddress) ) {
+        if( client != null && hostAddress != null ) {
+
+            Log.info("Client: Try to connect to " + hostAddress.toString());
+
             try {
                 client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_TCP, Network.PORT_UDP);
+                Log.info("Client: Connection to host " + hostAddress + " established");
 
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.error(e.getMessage());
             }
 
             client.addListener(new ClientListener());
 
-            //pingServer();
+            // the client will be added to lobby after network handshake by server!
 
-            WhatAmI.getLobby().print();
-
-            Log.info("MClient-connectToHost: " + WhatAmI.getRole());
+        } else {
+            Log.info("Client has NOT been initialized yet!");
         }
     }
 
@@ -161,6 +218,9 @@ public class MClient implements IPlayerConnector, IClientConnector {
     @Override
     public void changeBalance(String playerID, int amount) {
 
+        // TODO: check if playerID == self.playerID
+        Remittances moneyAmount = new Remittances(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
+        client.sendTCP(moneyAmount);
     }
 
     @Override
@@ -192,4 +252,5 @@ public class MClient implements IPlayerConnector, IClientConnector {
     public Lobby registeredPlayers() {
         return WhatAmI.getLobby();
     }
+
 }

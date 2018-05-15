@@ -1,9 +1,9 @@
-package space.hypeo.networking.host;
+package space.hypeo.networking.endpoint;
 
 import java.io.IOException;
 
 import space.hypeo.networking.network.IHostConnector;
-import space.hypeo.networking.network.IPlayerConnector;
+import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.WhatAmI;
 import space.hypeo.networking.network.Player;
 import space.hypeo.networking.packages.Acknowledge;
@@ -15,6 +15,7 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.Remittances;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -23,12 +24,16 @@ import com.esotericsoftware.minlog.Log;
 
 /**
  * This class represents the host process on a device.
- * If you don't know, if you're client or host, call
- * WhatAmI.getRole() and afterwards WhatAmI.getEndpoint()
+ * If you don't know, if you're client or host, call WhatAmI.getRole().
  */
-public class MHost implements IPlayerConnector, IHostConnector {
+public class MHost extends Endpoint implements IHostConnector {
 
-    private com.esotericsoftware.kryonet.Server server;
+    // instance of the host
+    private com.esotericsoftware.kryonet.Server server = null;
+
+    public MHost() {
+        super(Role.HOST);
+    }
 
     /**
      * This class handles the connection events with the server.
@@ -36,7 +41,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
     private class ServerListener extends Listener {
 
         /**
-         * If client has connected
+         * If client has connected.
          * @param connection
          */
         @Override
@@ -51,7 +56,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
             // send ack
             Log.info("Host: Send ack to requested client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new Acknowledge(WhatAmI.getPlayer().getAddress().toString()) );
+            connection.sendTCP( new Acknowledge(WhatAmI.getPlayer().getAddress()) );
 
             // send host info
             Log.info("Host: Send info of myself to client ip " + connection.getRemoteAddressTCP().toString());
@@ -59,7 +64,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
         }
 
         /**
-         * If client has disconnected
+         * If client has disconnected.
          * @param connection
          */
         @Override
@@ -68,7 +73,7 @@ public class MHost implements IPlayerConnector, IHostConnector {
         }
 
         /**
-         * If has received a package from client
+         * If has received a package from client.
          * @param connection
          * @param object
          */
@@ -83,33 +88,47 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
             } else if( object instanceof Notification ) {
                 Notification notification = (Notification) object;
-                Log.info("Host received: " + notification.toString());
+                Log.info("Host received Notification: " + notification.toString());
 
             } else if( object instanceof PlayerConnect) {
                 Player newPlayer = (PlayerConnect) object;
                 WhatAmI.addPlayerToLobby(newPlayer.getPlayerID(), newPlayer);
 
-                Log.info("Host: received new player, add to lobby");
-                WhatAmI.getLobby().print();
+                Log.info("Host: player has been connected, add to lobby");
+                WhatAmI.getLobby().log();
 
                 server.sendToAllTCP(WhatAmI.getLobby());
+
+                updateStageLobby();
 
             } else if( object instanceof PlayerDisconnect) {
                 Player leavingPlayer = (PlayerDisconnect) object;
                 WhatAmI.removePlayerFromLobby(leavingPlayer.getPlayerID());
 
                 Log.info("Host: player has been disconnected, removed from lobby");
-                WhatAmI.getLobby().print();
+                WhatAmI.getLobby().log();
 
                 server.sendToAllTCP(WhatAmI.getLobby());
+
+                updateStageLobby();
+
+            } else if( object instanceof Remittances ) {
+                changeBalance((Remittances) object);
             }
         }
     }
 
     @Override
-    public void startServer() {
-        server = new Server();
+    public void start() {
+        Log.info("Server will be started.");
 
+        if( server != null ) {
+            Log.warn("Server is still running - nothing to do!");
+            return;
+        }
+
+        server = new Server();
+        // register classes that can be sent/received by server
         Network.register(server);
 
         try {
@@ -121,13 +140,34 @@ public class MHost implements IPlayerConnector, IHostConnector {
 
         server.addListener(new ServerListener());
 
+        // add network data of server to lobby
         WhatAmI.addPlayerToLobby( WhatAmI.getPlayer().getPlayerID(), WhatAmI.getPlayer() );
-
-        WhatAmI.getLobby().print();
+        WhatAmI.getLobby().log();
 
         server.start();
 
-        Log.info("MHost-StartServer: " + WhatAmI.getRole());
+        Log.info("Server has started successfully.");
+    }
+
+    @Override
+    public void stop() {
+        close();
+    }
+
+    @Override
+    public void close() {
+        Log.info("Server will be closed.");
+
+        try {
+            server.stop();
+            server.close();
+
+        } catch( NullPointerException e ) {
+            Log.warn("Server was NOT running - nothing to do!");
+            Log.error(e.getMessage());
+        }
+
+        Log.info("Server closed.");
     }
 
     @Override
@@ -150,6 +190,21 @@ public class MHost implements IPlayerConnector, IHostConnector {
     @Override
     public void changeBalance(String playerID, int amount) {
 
+        // TODO: check if playerID == self.playerID
+        int connectionID = getConnectionID(playerID);
+
+        Remittances remittances = new Remittances(WhatAmI.getPlayer().getPlayerID(), playerID, amount);
+        server.sendToTCP(connectionID, remittances);
+    }
+
+    /**
+     * Resends a received MoneyAmount from player to another player.
+     * @param remittances
+     */
+    private void changeBalance(Remittances remittances) {
+
+        int connectionID = getConnectionID(remittances.getReceiverId());
+        server.sendToTCP(connectionID, remittances);
     }
 
     @Override
@@ -182,4 +237,25 @@ public class MHost implements IPlayerConnector, IHostConnector {
         return WhatAmI.getLobby();
     }
 
+    public int getConnectionID(String playerId) throws IndexOutOfBoundsException {
+
+        Player player = WhatAmI.getLobby().get(playerId);
+        int connectionID = 0;
+
+        if( player == null ) {
+            Log.warn("Could not find player with ID '" + playerId + "' in lobby!");
+            throw new IndexOutOfBoundsException("Could not find player with ID '" + playerId + "' in lobby!");
+        }
+
+        String connectionIP = player.getAddress();
+
+        for( Connection connection : server.getConnections() ) {
+            Log.info(connection.toString());
+            if( connection.getRemoteAddressTCP().toString().equals(connectionIP) ) {
+                connectionID = connection.getID();
+            }
+        }
+
+        return connectionID;
+    }
 }

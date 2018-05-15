@@ -11,12 +11,13 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.Remittances;
 
 /**
  * The class Network is a auxiliary class
  * to keep things common to both the client and server.
  */
-public class Network {
+public final class Network {
 
     // this class is not instantiable!
     private Network() {}
@@ -53,6 +54,7 @@ public class Network {
         kryo.register(PlayerDisconnect.class);
         kryo.register(PlayerHost.class);
 
+        kryo.register(Remittances.class);
     }
 
 }

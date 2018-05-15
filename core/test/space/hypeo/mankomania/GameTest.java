@@ -19,26 +19,32 @@ public abstract class GameTest {
         application = new HeadlessApplication(new ApplicationListener() {
             @Override
             public void create() {
+                //Emtpy method, application should run Headless.
             }
 
             @Override
             public void resize(int width, int height) {
+                //Emtpy method, application should run Headless.
             }
 
             @Override
             public void render() {
+                //Emtpy method, application should run Headless.
             }
 
             @Override
             public void pause() {
+                //Emtpy method, application should run Headless.
             }
 
             @Override
             public void resume() {
+                //Emtpy method, application should run Headless.
             }
 
             @Override
             public void dispose() {
+                //Emtpy method, application should run Headless.
             }
         });
 

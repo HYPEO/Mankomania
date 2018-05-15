@@ -55,4 +55,9 @@ public interface IPlayerConnector {
      */
     public Lobby registeredPlayers();
 
+    /**
+     * Update view of game lobby.
+     */
+    public void updateStageLobby();
+
 }
