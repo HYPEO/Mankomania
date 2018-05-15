@@ -32,7 +32,6 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
      * @param role
      */
     public NetworkPlayer(String nickname, Role role, StageManager stageManager) {
-
         super(nickname);
 
         // TODO: check if WLAN connection is ON and connected to hotspot
@@ -42,23 +41,12 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
             return;
         }
 
-        // init endpoint + start process (depends on role)
-        if( role == Role.HOST ) {
-            endpoint = new MHost(this, stageManager);
-            endpoint.start();
-        } else if( role == Role.CLIENT ) {
-            endpoint = new MClient(this, stageManager);
-            endpoint.start();
-        } else {
-            Log.info("Enpoint could not be initialized for given Role: " + role);
-        }
+        setEnpoint(role, stageManager);
 
         // insert that player in lobby
         lobby = new Lobby(Network.MAX_PLAYER);
         lobby.add(this.getRawPlayer());
     }
-
-    // TODO: create NetworkPlayer from RawPlayer
 
     public RawPlayer getRawPlayer() {
         return new RawPlayer(this);
@@ -73,6 +61,24 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
             return Role.NOT_CONNECTED;
         }
         return endpoint.getRole();
+    }
+
+    /**
+     * Inits the endpoint as client or server and starts the process.
+     * @param role
+     * @param stageManager
+     */
+    private void setEnpoint(Role role, StageManager stageManager) {
+        //
+        if( role == Role.HOST ) {
+            endpoint = new MHost(this, stageManager);
+            endpoint.start();
+        } else if( role == Role.CLIENT ) {
+            endpoint = new MClient(this, stageManager);
+            endpoint.start();
+        } else {
+            Log.info("Enpoint could not be initialized for given Role: " + role);
+        }
     }
 
     public Endpoint getEndpoint() {
