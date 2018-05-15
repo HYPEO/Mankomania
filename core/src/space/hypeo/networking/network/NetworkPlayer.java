@@ -58,6 +58,8 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
         lobby.add(this.getRawPlayer());
     }
 
+    // TODO: create NetworkPlayer from RawPlayer
+
     public RawPlayer getRawPlayer() {
         return new RawPlayer(this);
     }
