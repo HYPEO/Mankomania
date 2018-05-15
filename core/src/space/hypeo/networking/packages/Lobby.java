@@ -29,9 +29,9 @@ public class Lobby {
     public Lobby() {
         data = new HashSet<>();
     }
-    public Lobby(Set<RawPlayer> data) {
+    /*public Lobby(Set<RawPlayer> data) {
         this.data = new HashSet<>(data);
-    }
+    }*/
 
     /**
      * Associates the specified value with the specified key in this map.
@@ -104,7 +104,7 @@ public class Lobby {
      * Retruns true, if maximum number of player has joined the lobby.
      * @return false if new player can join the lobby
      */
-    public boolean isFull() {return data.size() >= Network.MAX_PLAYER; }
+    public boolean isFull() { return data.size() >= Network.MAX_PLAYER; }
 
     /**
      * Removes all of the mappings from this map.

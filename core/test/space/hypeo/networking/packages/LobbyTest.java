@@ -3,36 +3,56 @@ package space.hypeo.networking.packages;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import space.hypeo.networking.network.RawPlayer;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class LobbyTest {
 
+    /* class to test */
+    @InjectMocks
     private Lobby lobby;
-    private final String NICKNAME = "a_test_RawPlayer";
-    private String playerID;
+
+    /* the mock for the class, that will be tested */
+    @Mock
     private RawPlayer rawPlayer;
+
+    private final String PLAYER_ID= "ac03";
+    //private final String NICKNAME = "a_test_RawPlayer";
+    //private final String IP_ADDRESS = "192.168.1.99";
 
     @Before
     public void setup() {
+
         lobby = new Lobby();
-        rawPlayer = new RawPlayer(NICKNAME);
-        playerID = rawPlayer.getPlayerID();
+        rawPlayer = mock(RawPlayer.class);
+
+        /* init mock behavior */
+        when( rawPlayer.getPlayerID() ).thenReturn(PLAYER_ID);
+        //when( rawPlayer.getNickname() ).thenReturn(NICKNAME);
+        //when( rawPlayer.getAddress() ).thenReturn(IP_ADDRESS);
     }
 
     @After
     public void clean_up() {
         lobby = null;
-        rawPlayer = null;
     }
+
 
     @Test
     public void test_isEmpty() {
         assertThat(lobby.isEmpty(), is(true));
     }
+
 
     @Test
     public void test_isNotEmpty() {
@@ -78,7 +98,7 @@ public class LobbyTest {
     @Test
     public void test_remove_by_playerID() {
         lobby.add(rawPlayer);
-        lobby.remove(playerID);
+        lobby.remove(PLAYER_ID);
         assertThat(lobby.size(), is(0));
     }
 
@@ -102,12 +122,12 @@ public class LobbyTest {
 
     @Test
     public void test_contains_playerID_fails() {
-        assertThat(lobby.contains(playerID), not(rawPlayer));
+        assertThat(lobby.contains(PLAYER_ID), not(rawPlayer));
     }
 
     @Test
     public void test_contains_playerID() {
         lobby.add(rawPlayer);
-        assertThat(lobby.contains(playerID), is(rawPlayer));
+        assertThat(lobby.contains(PLAYER_ID), is(rawPlayer));
     }
 }
