@@ -55,7 +55,7 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
         }
 
         // insert that player in lobby
-        lobby = new Lobby();
+        lobby = new Lobby(Network.MAX_PLAYER);
         lobby.add(this.getRawPlayer());
     }
 
