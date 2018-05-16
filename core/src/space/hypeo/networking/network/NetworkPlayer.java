@@ -111,8 +111,6 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
 
             // return to MainMenu
             stageManager.remove(currentStage);
-            stageManager.push(StageFactory.getMainMenu(viewport, stageManager));
-
         } else {
             Log.info("No process running - nothing to do.");
         }

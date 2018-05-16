@@ -30,7 +30,7 @@ public class MainMenuStage extends Stage {
     private Button join;
     private Image title;
     private Table layout;
-    private final Viewport viewport;
+    private StageFactory stageFactory;
 
     /**
      * Creates the Main Menu
@@ -38,11 +38,11 @@ public class MainMenuStage extends Stage {
      * @param stageManager StageManager needed to switch between stages, create new ones, etc.
      * @param viewport     Viewport needed by Stage class.
      */
-    public MainMenuStage(StageManager stageManager, Viewport viewport) {
+    public MainMenuStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory) {
         super(viewport);
 
         this.stageManager = stageManager;
-        this.viewport = viewport;
+        this.stageFactory = stageFactory;
 
         setUpBackground();
         createWidgets();
@@ -84,7 +84,7 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stageManager.push(StageFactory.getMapStage(viewport, stageManager));
+                stageManager.push(stageFactory.getMapStage());
             }
         };
     }
@@ -95,7 +95,7 @@ public class MainMenuStage extends Stage {
             public void clicked(InputEvent event, float x, float y) {
 
                 NetworkPlayer hostPlayer = new NetworkPlayer("the_mighty_host", Role.HOST, stageManager);
-                stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, hostPlayer));
+                stageManager.push(stageFactory.getLobbyStage(hostPlayer));
             }
         };
     }
@@ -106,7 +106,7 @@ public class MainMenuStage extends Stage {
             public void clicked(InputEvent event, float x, float y) {
 
                 NetworkPlayer clientPlayer = new NetworkPlayer("another_client", Role.CLIENT, stageManager);
-                stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, clientPlayer));
+                stageManager.push(stageFactory.getDiscoveredHostsStage(clientPlayer));
             }
         };
     }

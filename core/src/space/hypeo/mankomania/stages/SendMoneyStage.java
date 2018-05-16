@@ -51,8 +51,6 @@ public class SendMoneyStage extends Stage {
 
                 //Method from class which handels logic stuff (PlayerActor etc.)
                 stageManager.remove(SendMoneyStage.this);
-                stageManager.push(StageFactory.getMapStage(viewport, stageManager));
-
             }
         });
 
