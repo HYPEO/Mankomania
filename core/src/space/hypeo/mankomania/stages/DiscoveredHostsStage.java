@@ -28,7 +28,7 @@ public class DiscoveredHostsStage extends Stage {
 
     private List<InetAddress> foundHosts = null;
 
-    public DiscoveredHostsStage(StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer) {
+    public DiscoveredHostsStage(StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer, StageFactory stageFactory) {
         super(viewport);
         this.viewport = viewport;
 
@@ -73,7 +73,7 @@ public class DiscoveredHostsStage extends Stage {
 
                         ((MClient) networkPlayer.getEndpoint()).connectToHost(hostAddr);
 
-                        stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, networkPlayer));
+                        stageManager.push(stageFactory.getLobbyStage(networkPlayer));
                     }
 
                 });
@@ -94,7 +94,7 @@ public class DiscoveredHostsStage extends Stage {
                 public void clicked(InputEvent event, float x, float y) {
 
                     stageManager.remove(DiscoveredHostsStage.this);
-                    stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, networkPlayer));
+                    stageManager.push(stageFactory.getDiscoveredHostsStage(networkPlayer));
                 }
 
             });

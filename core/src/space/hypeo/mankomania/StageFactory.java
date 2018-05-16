@@ -6,6 +6,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.View;
+
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
@@ -20,49 +22,52 @@ import space.hypeo.networking.network.NetworkPlayer;
  * Creates all the stages (views) for the game.
  */
 public class StageFactory {
-    private StageFactory() {}
+    private final Viewport viewport;
+    private final StageManager stageManager;
 
-    public static Stage getMapStage(final Viewport viewport, final StageManager stageManager){
+    public StageFactory(final Viewport viewport, final StageManager stageManager) {
+        this.viewport = viewport;
+        this.stageManager = stageManager;
+    }
+
+    public Stage getMapStage()
+    {
         List<PlayerActor> playerActors = new ArrayList<>();
-        playerActors.add(new PlayerActor("1", 1000000, true, viewport, stageManager));
+        playerActors.add(new PlayerActor("1", 1000000, true, viewport, stageManager, this));
         return new MapStage(viewport, stageManager, playerActors);
     }
 
-    public static Stage getDiceResultStage(final Viewport viewport, final StageManager stageManager, int moveFields) {
+    public Stage getDiceResultStage(int moveFields) {
         return new DiceResultStage(viewport, stageManager, moveFields);
     }
 
-    public static Stage getMainMenu(final Viewport viewport, final StageManager stageManager) {
-        return new MainMenuStage(stageManager, viewport);
+    public Stage getMainMenu() {
+        return new MainMenuStage(stageManager, viewport, this);
     }
 
-    public static Stage getSendMoneyStage(final Viewport viewport, final StageManager stageManager) {
+    public Stage getSendMoneyStage() {
         return new SendMoneyStage(viewport, stageManager);
     }
 
-    public static Stage getTitleStage(final Viewport viewport, final StageManager stageManager) {
+    public Stage getTitleStage() {
         return new TitleStage(stageManager, viewport);
     }
 
     /**
      * Shows the network-lobby for client and host.
-     * @param viewport
-     * @param stageManager
      * @return stage/view of lobby
      */
-    public static Stage getLobbyStage(final Viewport viewport, final StageManager stageManager, NetworkPlayer player) {
+    public Stage getLobbyStage(NetworkPlayer player) {
         return new LobbyStage(stageManager, viewport, player);
     }
 
     /**
      * Shows all discovered hosts for a client.
      * Client can choose a host to connect with.
-     * @param viewport
-     * @param stageManager
      * @return stage/view of discovered hosts for client
      */
-    public static Stage getDiscoveredHostsStage(final Viewport viewport, final StageManager stageManager, NetworkPlayer player) {
-        return new DiscoveredHostsStage(stageManager, viewport, player);
+    public Stage getDiscoveredHostsStage(NetworkPlayer player) {
+        return new DiscoveredHostsStage(stageManager, viewport, player, this);
     }
 
 }
