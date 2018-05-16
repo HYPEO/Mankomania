@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
+import java.util.List;
+
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.networking.network.RawPlayer;
@@ -74,8 +76,8 @@ public class LobbyStage extends Stage {
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         /* very outer table for all widgets */
-        rootTable = new Table(skin);
-        rootTable.setDebug(true);
+        rootTable = new Table();
+        rootTable.setDebug(true); // turn on all debug lines
         rootTable.setFillParent(true);
         this.addActor(rootTable);
 
@@ -101,13 +103,13 @@ public class LobbyStage extends Stage {
         //table.setPosition(0, this.getHeight() / 2);
 
         Label title = new Label("GAME LOBBY", skin);
-        //title.setFontScaleX(2);
-        //title.setFontScaleY(2);
+        title.setFontScaleX(2);
+        title.setFontScaleY(2);
         title.setAlignment(Align.center);
 
         /* add title */
         //table.row().colspan(4).expandX().fillX();
-        rootTable.add(title);
+        rootTable.add(title).padTop(50).padBottom(50);
         rootTable.row();
         //tableContainer.setActor(table);
 
@@ -121,7 +123,11 @@ public class LobbyStage extends Stage {
             return;
         }
 
+        Table btnTable = new Table();
+        int btnHeight = 60;
+
         int index = 1;
+        //List<List<String>> lstLobby = lobby.toTable();
         for( RawPlayer rawPlayer : lobby.getData() ) {
 
             Log.info("Build GUI widgets for player " + rawPlayer);
@@ -129,21 +135,25 @@ public class LobbyStage extends Stage {
             Button btnIndex = new TextButton("" + index, skin);
             Button btnNick = new TextButton(rawPlayer.getNickname(), skin);
             Button btnAddr = new TextButton(rawPlayer.getAddress(), skin);
-            Button btnReady = new TextButton("OK", skin);
+            Button btnReady = new TextButton("NOK", skin);
 
-            /*btnNick.addListener(new ClickListener() {
+            btnIndex.scaleBy(2,2);
+
+            btnReady.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    // TODO: set status read to start game
+                    //if( btnReady.get)
                 }
 
-            });*/
+            });
 
-            rootTable.add(btnIndex).expandX().fillX();
-            rootTable.add(btnNick).expandX().fillX();
-            rootTable.add(btnAddr).expandX().fillX();
-            rootTable.add(btnReady).expandX().fillX();
-            rootTable.row();
+            btnTable.add(btnIndex).height(btnHeight).width(60);
+            btnTable.add(btnNick).height(btnHeight);
+            btnTable.add(btnAddr).height(btnHeight);
+            btnTable.add(btnReady).height(btnHeight).width(60);
+            btnTable.row();
+
+            rootTable.add(btnTable);
 
             index++;
         }
@@ -157,10 +167,10 @@ public class LobbyStage extends Stage {
         if(timeSinceLastUpdate > 1f) {
             synchronized (this) {
                 if (updateLobby) {
-                    setupBackground();
+                    //setupBackground();
                     setupLayout();
 
-                    this.addActor(background);
+                    //this.addActor(background);
                     this.addActor(rootTable);
                 }
                 updateLobby = false;
