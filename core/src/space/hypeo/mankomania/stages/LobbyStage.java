@@ -32,9 +32,8 @@ public class LobbyStage extends Stage {
     private final Viewport viewport;
     private NetworkPlayer networkPlayer;
 
-    private Skin skin;
     private RectangleActor background;
-    private Container<Table> tableContainer;
+    private Table rootTable;
 
     private boolean updateLobby;
     private float timeSinceLastUpdate;
@@ -72,29 +71,32 @@ public class LobbyStage extends Stage {
     }
 
     private void setupLayout() {
-        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
-        /* very outer container for all widgets */
-        tableContainer = new Container<>();
+        /* very outer table for all widgets */
+        rootTable = new Table(skin);
+        rootTable.setDebug(true);
+        rootTable.setFillParent(true);
+        this.addActor(rootTable);
 
-//        float sw = Gdx.graphics.getWidth();
-//        float sh = Gdx.graphics.getHeight();
+        float width = Gdx.graphics.getWidth();
+        float height = Gdx.graphics.getHeight();
 
-        Log.info("Gdx.graphics.getWidth() = " + Gdx.graphics.getWidth());
-        Log.info("Gdx.graphics.getHeight() = " + Gdx.graphics.getHeight());
+        Log.info("current width = " + width);
+        Log.info("current height = " + height);
 
-        float width = 500;
-        float height = 1000;
+        //width = 500;
+        //height = 1000;
 
-        float widthC = width * 0.7f;
-        float heightC = height * 0.5f;
+        //float widthC = width * 0.7f;
+        //float heightC = height * 0.5f;
 
-        tableContainer.setSize(widthC, heightC);
-        tableContainer.setPosition((width - widthC) / 2.0f, (height - heightC) / 2.0f);
-        tableContainer.fillX();
+        //tableContainer.setSize(widthC, heightC);
+        //tableContainer.setPosition((width - widthC) / 2.0f, (height - heightC) / 2.0f);
+        //tableContainer.fillX();
 
-        /* outer table */
-        Table table = new Table(skin);
+        /* inner table */
+
         //table.setWidth( this.getWidth() );
         //table.setPosition(0, this.getHeight() / 2);
 
@@ -104,9 +106,10 @@ public class LobbyStage extends Stage {
         title.setAlignment(Align.center);
 
         /* add title */
-        table.row().colspan(4).expandX().fillX();
-        table.add(title).fillX();
-        tableContainer.setActor(table);
+        //table.row().colspan(4).expandX().fillX();
+        rootTable.add(title);
+        rootTable.row();
+        //tableContainer.setActor(table);
 
         /* buttons */
         Lobby lobby = networkPlayer.registeredPlayers();
@@ -117,8 +120,6 @@ public class LobbyStage extends Stage {
             stageManager.remove(LobbyStage.this);
             return;
         }
-
-        Table buttonTable = new Table(skin);
 
         int index = 1;
         for( RawPlayer rawPlayer : lobby.getData() ) {
@@ -138,16 +139,14 @@ public class LobbyStage extends Stage {
 
             });*/
 
-            buttonTable.row().colspan(4).expandX().fillX();
-            buttonTable.add(btnIndex).expandX().fillX();
-            buttonTable.add(btnNick).expandX().fillX();
-            buttonTable.add(btnAddr).expandX().fillX();
-            buttonTable.add(btnReady).expandX().fillX();
+            rootTable.add(btnIndex).expandX().fillX();
+            rootTable.add(btnNick).expandX().fillX();
+            rootTable.add(btnAddr).expandX().fillX();
+            rootTable.add(btnReady).expandX().fillX();
+            rootTable.row();
 
             index++;
         }
-
-        tableContainer.setActor(buttonTable);
     }
 
     @Override
@@ -162,7 +161,7 @@ public class LobbyStage extends Stage {
                     setupLayout();
 
                     this.addActor(background);
-                    this.addActor(tableContainer);
+                    this.addActor(rootTable);
                 }
                 updateLobby = false;
             }
