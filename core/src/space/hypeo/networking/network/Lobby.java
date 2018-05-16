@@ -22,7 +22,7 @@ import space.hypeo.networking.network.RawPlayer;
 public class Lobby {
 
     protected int maxPlayer;
-    protected static final int MAX_PLAYER = 5;
+    protected static final int MAX_PLAYER = Network.MAX_PLAYER;
 
     /**
      * The data structure that holds the players, that are connected.
