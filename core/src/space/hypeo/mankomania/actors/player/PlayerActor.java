@@ -33,13 +33,13 @@ public class PlayerActor extends Image {
     private final Viewport viewport;
     private PlayerDetailActor playerDetailActor;
 
-    //TODO: Update documentation.
     /**
-     * Creates a new instance of a Class that implementaion for a NetworkPlayer.
      *
      * @param playerID     The player's ID (useful for communications)
      * @param balance      The player's current balance (starting balance)
      * @param isLocal      Defines whether this player is the local one (i.e the one controlled with this device)
+     * @param viewport     Viewport this PlayerActor belongs to.
+     * @param stageManager stageManager for pushing DiceStage.
      */
     public PlayerActor(String playerID, int balance, boolean isLocal, final Viewport viewport, final StageManager stageManager) {
         super(new Texture("players/player_1.png"));
@@ -50,6 +50,11 @@ public class PlayerActor extends Image {
         this.viewport = viewport;
     }
 
+    /**
+     * Initializes the starting-field and corresponding PlayerDetailActor.
+     * @param currentField
+     * @param playerDetailActor
+     */
     public void initializeState(FieldActor currentField, PlayerDetailActor playerDetailActor)
     {
         this.playerDetailActor = playerDetailActor;
