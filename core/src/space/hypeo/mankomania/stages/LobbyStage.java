@@ -30,7 +30,6 @@ import space.hypeo.networking.network.NetworkPlayer;
 public class LobbyStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
-
     private NetworkPlayer networkPlayer;
 
     private Skin skin;
@@ -40,12 +39,11 @@ public class LobbyStage extends Stage {
     private boolean updateLobby;
     private float timeSinceLastUpdate;
 
-    public LobbyStage(StageManager stageManager, Viewport viewport, NetworkPlayer player) {
+    public LobbyStage(StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
-
-        this.networkPlayer = player;
+        this.networkPlayer = networkPlayer;
 
         this.updateLobby = false;
         this.timeSinceLastUpdate = 0f;

@@ -6,11 +6,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+import space.hypeo.networking.network.NetworkPlayer;
+
 /**
  * The GDX Game class, called from the android project.
  */
 public class Mankomania extends ApplicationAdapter {
     private StageManager manager;
+    private NetworkPlayer networkPlayer;
+
+    public Mankomania(NetworkPlayer networkPlayer) {
+        this.networkPlayer = networkPlayer;
+    }
 
     @Override
     public void create() {
@@ -18,8 +25,8 @@ public class Mankomania extends ApplicationAdapter {
         camera.setToOrtho(false, 480, 800);
         ExtendViewport viewport = new ExtendViewport(480, 800, camera);
         manager = new StageManager();
-        manager.push(StageFactory.getMainMenu(viewport, manager));
-        manager.push(StageFactory.getTitleStage(viewport, manager));
+        manager.push(StageFactory.getMainMenu(viewport, manager, networkPlayer));
+        manager.push(StageFactory.getTitleStage(viewport, manager, networkPlayer));
     }
 
     @Override
@@ -28,6 +35,4 @@ public class Mankomania extends ApplicationAdapter {
         manager.getCurrentStage().act();
         manager.getCurrentStage().draw();
     }
-
-
 }

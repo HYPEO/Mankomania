@@ -32,16 +32,16 @@ public class StageFactory {
         return new DiceResultStage(viewport, stageManager, moveFields);
     }
 
-    public static Stage getMainMenu(final Viewport viewport, final StageManager stageManager) {
-        return new MainMenuStage(stageManager, viewport);
+    public static Stage getMainMenu(final Viewport viewport, final StageManager stageManager, NetworkPlayer networkPlayer) {
+        return new MainMenuStage(stageManager, viewport, networkPlayer);
     }
 
     public static Stage getSendMoneyStage(final Viewport viewport, final StageManager stageManager) {
         return new SendMoneyStage(viewport, stageManager);
     }
 
-    public static Stage getTitleStage(final Viewport viewport, final StageManager stageManager) {
-        return new TitleStage(stageManager, viewport);
+    public static Stage getTitleStage(final Viewport viewport, final StageManager stageManager, NetworkPlayer networkPlayer) {
+        return new TitleStage(stageManager, viewport, networkPlayer);
     }
 
     /**

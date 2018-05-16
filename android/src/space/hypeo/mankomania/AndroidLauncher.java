@@ -12,30 +12,30 @@ public class AndroidLauncher extends AndroidApplication {
 
 	Mankomania mankomania = null;
 
-	private NetworkPlayer player = null;
+	private NetworkPlayer networkPlayer = null;
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
-		mankomania = new Mankomania();
+		mankomania = new Mankomania(networkPlayer);
 		initialize(mankomania, config);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		if( player.getRole() != Role.NOT_CONNECTED ) {
-			player.stopEndpoint();
+		if( networkPlayer.getRole() != Role.NOT_CONNECTED ) {
+			networkPlayer.stopEndpoint();
 		}
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		if( player.getRole() != Role.NOT_CONNECTED ) {
-			player.closeEndpoint();
+		if( networkPlayer.getRole() != Role.NOT_CONNECTED ) {
+			networkPlayer.closeEndpoint();
 		}
 	}
 }

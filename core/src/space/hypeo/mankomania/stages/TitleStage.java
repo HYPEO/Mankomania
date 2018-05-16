@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.networking.network.NetworkPlayer;
 
 /**
  * Created by pichlermarc on 25.04.2018.
@@ -19,9 +20,13 @@ import space.hypeo.mankomania.actors.common.RectangleActor;
  */
 public class TitleStage extends Stage {
     private Image title;
+    private NetworkPlayer networkPlayer;
 
-    public TitleStage(final StageManager stageManager, Viewport viewport) {
+    public TitleStage(final StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer) {
         super(viewport);
+
+        /* NOTE: reference networkPlayer can still be null here! */
+        this.networkPlayer = networkPlayer;
 
         setUpBackground();
         setUpTitle();

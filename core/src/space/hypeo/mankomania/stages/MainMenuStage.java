@@ -31,6 +31,7 @@ public class MainMenuStage extends Stage {
     private Image title;
     private Table layout;
     private final Viewport viewport;
+    private NetworkPlayer networkPlayer;
 
     /**
      * Creates the Main Menu
@@ -38,8 +39,9 @@ public class MainMenuStage extends Stage {
      * @param stageManager StageManager needed to switch between stages, create new ones, etc.
      * @param viewport     Viewport needed by Stage class.
      */
-    public MainMenuStage(StageManager stageManager, Viewport viewport) {
+    public MainMenuStage(StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer) {
         super(viewport);
+        this.networkPlayer = networkPlayer;
 
         this.stageManager = stageManager;
         this.viewport = viewport;
@@ -94,8 +96,15 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                NetworkPlayer hostPlayer = new NetworkPlayer("the_mighty_host", Role.HOST, stageManager);
-                stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, hostPlayer));
+                Role rHost = Role.HOST;
+
+                if( networkPlayer == null ) {
+                    networkPlayer = new NetworkPlayer("the_mighty_host", rHost, stageManager);
+                }
+
+                if( networkPlayer.getRole() == rHost ) {
+                    stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, networkPlayer));
+                }
             }
         };
     }
@@ -105,8 +114,15 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                NetworkPlayer clientPlayer = new NetworkPlayer("another_client", Role.CLIENT, stageManager);
-                stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, clientPlayer));
+                Role rClient = Role.CLIENT;
+
+                if( networkPlayer == null ) {
+                    networkPlayer = new NetworkPlayer("another_client", Role.CLIENT, stageManager);
+                }
+
+                if( networkPlayer.getRole() == rClient ) {
+                    stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, networkPlayer));
+                }
             }
         };
     }
