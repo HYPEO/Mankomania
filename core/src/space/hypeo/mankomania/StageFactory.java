@@ -3,6 +3,10 @@ package space.hypeo.mankomania;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.MapStage;
@@ -19,7 +23,9 @@ public class StageFactory {
     private StageFactory() {}
 
     public static Stage getMapStage(final Viewport viewport, final StageManager stageManager){
-        return new MapStage(viewport, stageManager);
+        List<PlayerActor> playerActors = new ArrayList<>();
+        playerActors.add(new PlayerActor("1", 1000000, true, viewport, stageManager));
+        return new MapStage(viewport, stageManager, playerActors);
     }
 
     public static Stage getDiceResultStage(final Viewport viewport, final StageManager stageManager, int moveFields) {

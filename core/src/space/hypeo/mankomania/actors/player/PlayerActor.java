@@ -31,27 +31,32 @@ public class PlayerActor extends Image {
     private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
     private final StageManager manager;
     private final Viewport viewport;
-    private final PlayerDetailActor playerDetailActor;
+    private PlayerDetailActor playerDetailActor;
 
+    //TODO: Update documentation.
     /**
      * Creates a new instance of a Class that implementaion for a NetworkPlayer.
      *
      * @param playerID     The player's ID (useful for communications)
      * @param balance      The player's current balance (starting balance)
      * @param isLocal      Defines whether this player is the local one (i.e the one controlled with this device)
-     * @param currentField Defines the players current position.
      */
-    public PlayerActor(String playerID, int balance, boolean isLocal, FieldActor currentField, final Viewport viewport, final StageManager stageManager, PlayerDetailActor playerDetailActor) {
+    public PlayerActor(String playerID, int balance, boolean isLocal, final Viewport viewport, final StageManager stageManager) {
         super(new Texture("players/player_1.png"));
-        this.currentField = currentField;
-        this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
-        updateBounds();
         this.isLocal = isLocal;
         this.balance = balance;
-        this.playerDetailActor = playerDetailActor;
 
         this.manager = stageManager;
         this.viewport = viewport;
+    }
+
+    public void initializeState(FieldActor currentField, PlayerDetailActor playerDetailActor)
+    {
+        this.playerDetailActor = playerDetailActor;
+        this.currentField = currentField;
+
+        this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
+        updateBounds();
     }
 
     /**
