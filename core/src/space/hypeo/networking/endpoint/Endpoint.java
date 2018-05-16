@@ -1,8 +1,12 @@
 package space.hypeo.networking.endpoint;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
+import javax.swing.text.View;
+
+import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.NetworkPlayer;
@@ -45,9 +49,12 @@ public abstract class Endpoint  {
         Log.info(role + ": updateStageLobby");
 
         Stage currentStage = stageManager.getCurrentStage();
+        //Viewport viewport = currentStage.getViewport();
 
         if( currentStage instanceof LobbyStage) {
             ((LobbyStage) currentStage).updateLobby();
+            //stageManager.remove(currentStage);
+            //stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, this.player));
             currentStage.act();
         }
     }

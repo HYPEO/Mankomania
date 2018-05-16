@@ -1,6 +1,7 @@
 package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
+import java.util.Iterator;
 import java.util.List;
 
 import space.hypeo.mankomania.StageManager;
@@ -34,32 +36,23 @@ public class LobbyStage extends Stage {
     private final Viewport viewport;
     private NetworkPlayer networkPlayer;
 
-    private RectangleActor background;
-    private Table rootTable;
-
-    private boolean updateLobby;
-    private float timeSinceLastUpdate;
-
     public LobbyStage(StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
         this.networkPlayer = networkPlayer;
 
-        this.updateLobby = false;
-        this.timeSinceLastUpdate = 0f;
-
         updateLobby();
     }
 
     public void updateLobby() {
-        synchronized (this){
-            updateLobby = true;
-        }
+        this.clear();
+        //setupBackground();
+        setupLayout();
     }
 
     private void setupBackground() {
-        background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+        RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
         // Set up background.
         background.setColor(237f/255f, 30f/255f, 121f/255f, 1f);
 
@@ -70,13 +63,15 @@ public class LobbyStage extends Stage {
                 stageManager.remove(LobbyStage.this);
             }
         });
+
+        this.addActor(background);
     }
 
     private void setupLayout() {
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         /* very outer table for all widgets */
-        rootTable = new Table();
+        Table rootTable = new Table();
         rootTable.setDebug(true); // turn on all debug lines
         rootTable.setFillParent(true);
         this.addActor(rootTable);
@@ -123,11 +118,24 @@ public class LobbyStage extends Stage {
             return;
         }
 
+        /* inner table contains players from lobby: represented as button */
         Table btnTable = new Table();
         int btnHeight = 60;
 
+        /* header row */
+        Label hIndex = new Label("#", skin);
+        Label hNick = new Label("Nickname", skin);
+        Label hAddr = new Label("IP Address", skin);
+        Label hReady = new Label("?", skin);
+
+        btnTable.add(hIndex).height(btnHeight).width(60).align(Align.right);
+        btnTable.add(hNick).height(btnHeight).width(180);
+        btnTable.add(hAddr).height(btnHeight).width(150);
+        btnTable.add(hReady).height(btnHeight).width(60).align(Align.right);
+        btnTable.row();
+
+        /* data rows */
         int index = 1;
-        //List<List<String>> lstLobby = lobby.toTable();
         for( RawPlayer rawPlayer : lobby.getData() ) {
 
             Log.info("Build GUI widgets for player " + rawPlayer);
@@ -135,49 +143,30 @@ public class LobbyStage extends Stage {
             Button btnIndex = new TextButton("" + index, skin);
             Button btnNick = new TextButton(rawPlayer.getNickname(), skin);
             Button btnAddr = new TextButton(rawPlayer.getAddress(), skin);
-            Button btnReady = new TextButton("NOK", skin);
+            Button btnReady = new TextButton("NO", skin);
 
             btnIndex.scaleBy(2,2);
 
             btnReady.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    //if( btnReady.get)
+
                 }
 
             });
 
             btnTable.add(btnIndex).height(btnHeight).width(60);
-            btnTable.add(btnNick).height(btnHeight);
-            btnTable.add(btnAddr).height(btnHeight);
+            btnTable.add(btnNick).height(btnHeight).width(180);
+            btnTable.add(btnAddr).height(btnHeight).width(150);
             btnTable.add(btnReady).height(btnHeight).width(60);
             btnTable.row();
 
-            rootTable.add(btnTable);
-
             index++;
         }
+
+        rootTable.add(btnTable);
+
+        this.addActor(rootTable);
     }
 
-    @Override
-    public void act(float delta)
-    {
-        timeSinceLastUpdate += delta;
-
-        if(timeSinceLastUpdate > 1f) {
-            synchronized (this) {
-                if (updateLobby) {
-                    //setupBackground();
-                    setupLayout();
-
-                    //this.addActor(background);
-                    this.addActor(rootTable);
-                }
-                updateLobby = false;
-            }
-            timeSinceLastUpdate = 0f;
-        }
-
-        super.act(delta);
-    }
 }

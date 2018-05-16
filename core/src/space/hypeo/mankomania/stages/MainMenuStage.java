@@ -117,6 +117,7 @@ public class MainMenuStage extends Stage {
                 Role rClient = Role.CLIENT;
 
                 if( networkPlayer == null ) {
+                    // TODO: do the discovering (takes 5sec) on the discoverStage
                     networkPlayer = new NetworkPlayer("another_client", Role.CLIENT, stageManager);
                 }
 
