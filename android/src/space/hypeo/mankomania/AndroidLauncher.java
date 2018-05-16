@@ -26,7 +26,7 @@ public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		if( networkPlayer.getRole() != Role.NOT_CONNECTED ) {
+		if( networkPlayer != null && networkPlayer.getRole() != Role.NOT_CONNECTED ) {
 			networkPlayer.stopEndpoint();
 		}
 	}
@@ -34,7 +34,7 @@ public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		if( networkPlayer.getRole() != Role.NOT_CONNECTED ) {
+		if( networkPlayer != null && networkPlayer.getRole() != Role.NOT_CONNECTED ) {
 			networkPlayer.closeEndpoint();
 		}
 	}
