@@ -8,6 +8,7 @@ import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.RawPlayer;
 import space.hypeo.networking.network.Role;
+import space.hypeo.networking.packages.Remittances;
 
 
 /**
@@ -56,5 +57,16 @@ public abstract class Endpoint  {
         }
     }
 
+    /**
+     * Toggles the status of a player in the lobby between:
+     * ready2play <-> not_ready2play
+     * @param player2toggleStatus name of the player
+     */
     public abstract void toggleReadyStatus(RawPlayer player2toggleStatus);
+
+    /**
+     * Resends a received MoneyAmount from player to another player.
+     * @param remittances
+     */
+    public abstract void changeBalance(Remittances remittances);
 }

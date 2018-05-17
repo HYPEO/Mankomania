@@ -3,7 +3,6 @@ package space.hypeo.networking.network;
 import com.esotericsoftware.minlog.Log;
 
 import java.net.SocketException;
-import java.util.List;
 import java.util.UUID;
 
 /**

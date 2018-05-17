@@ -17,6 +17,7 @@ import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerToggleReadyStatus;
+import space.hypeo.networking.packages.Remittances;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -186,15 +187,12 @@ public class MHost extends Endpoint implements IHostConnector {
         server.sendToAllTCP(new Notification("game will be closed now..."));
     }
 
-    /**
-     * Resends a received MoneyAmount from player to another player.
-     * @param remittances
-     */
-    /*private void changeBalance(Remittances remittances) {
-
+    @Override
+    public void changeBalance(Remittances remittances) {
+        // TODO: correct that process!
         int connectionID = getConnectionID(remittances.getReceiverId());
         server.sendToTCP(connectionID, remittances);
-    }*/
+    }
 
 
     public int getConnectionID(String playerId) throws IllegalArgumentException {

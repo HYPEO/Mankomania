@@ -25,6 +25,7 @@ import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerToggleReadyStatus;
+import space.hypeo.networking.packages.Remittances;
 
 /**
  * This class represents the client process on the device.
@@ -215,7 +216,12 @@ public class MClient extends Endpoint implements IClientConnector {
 
     @Override
     public void toggleReadyStatus(RawPlayer player2toggleStatus) {
-        player2toggleStatus = networkPlayer.getRawPlayer();
-        client.sendTCP( new PlayerToggleReadyStatus(player2toggleStatus) );
+        client.sendTCP( new PlayerToggleReadyStatus(networkPlayer.getRawPlayer()) );
+    }
+
+    @Override
+    public void changeBalance(Remittances remittances) {
+        // TODO: correct that process!
+        client.sendTCP(remittances);
     }
 }

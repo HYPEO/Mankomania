@@ -9,6 +9,7 @@ import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.endpoint.Endpoint;
 import space.hypeo.networking.endpoint.MClient;
 import space.hypeo.networking.endpoint.MHost;
+import space.hypeo.networking.packages.Remittances;
 
 /**
  * This class holds the important network data,
@@ -120,17 +121,18 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
 
     @Override
     public void changeBalance(String playerID, int amount) {
-
+        Remittances remittances = new Remittances(this.getPlayerID(), playerID, amount);
+        endpoint.changeBalance(remittances);
     }
 
     @Override
     public void movePlayer(String playerID, int position) {
-
+        // TODO: move player on the map
     }
 
     @Override
     public void endTurn() {
-
+        // TODO: end the current turn for this player
     }
 
     @Override

@@ -1,7 +1,6 @@
 package space.hypeo.networking.network;
 
 import com.esotericsoftware.minlog.Log;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.ArrayList;
 import java.util.Arrays;
