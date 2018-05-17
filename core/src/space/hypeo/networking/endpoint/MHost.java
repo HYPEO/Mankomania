@@ -48,7 +48,7 @@ public class MHost extends Endpoint implements IHostConnector {
         public void connected(Connection connection) {
             super.connected(connection);
 
-            if( player.getLobby().isFull() ) {
+            if( networkPlayer.getLobby().isFull() ) {
                 connection.sendTCP(new Notification("Host: Sorry, no more space for additional player left"));
                 connection.close();
                 return;
@@ -56,11 +56,11 @@ public class MHost extends Endpoint implements IHostConnector {
 
             // send ack to client
             Log.info("Host: Send ack to requested client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new Acknowledge(player) );
+            connection.sendTCP( new Acknowledge(networkPlayer) );
 
             // send host info
             Log.info("Host: Send info of myself to client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new PlayerHost(player) );
+            connection.sendTCP( new PlayerHost(networkPlayer) );
         }
 
         /**
@@ -92,23 +92,23 @@ public class MHost extends Endpoint implements IHostConnector {
 
             } else if( object instanceof PlayerConnect ) {
                 RawPlayer newPlayer = (PlayerConnect) object;
-                player.getLobby().add(newPlayer);
+                networkPlayer.getLobby().add(newPlayer);
 
                 Log.info("Host: player has been connected, add to lobby");
-                player.getLobby().log();
+                networkPlayer.getLobby().log();
 
-                server.sendToAllTCP(player.getLobby());
+                server.sendToAllTCP(networkPlayer.getLobby());
 
                 updateStageLobby();
 
             } else if( object instanceof PlayerDisconnect ) {
                 RawPlayer leavingPlayer = (PlayerDisconnect) object;
-                player.getLobby().remove(leavingPlayer);
+                networkPlayer.getLobby().remove(leavingPlayer);
 
                 Log.info("Host: player has been disconnected, removed from lobby");
-                player.getLobby().log();
+                networkPlayer.getLobby().log();
 
-                server.sendToAllTCP(player.getLobby());
+                server.sendToAllTCP(networkPlayer.getLobby());
 
                 updateStageLobby();
 
@@ -199,7 +199,7 @@ public class MHost extends Endpoint implements IHostConnector {
 
     public int getConnectionID(String playerId) throws IllegalArgumentException {
 
-        RawPlayer needle = player.getLobby().contains(playerId);
+        RawPlayer needle = networkPlayer.getLobby().contains(playerId);
         int connectionID = 0;
 
         if( needle == null ) {
@@ -221,7 +221,7 @@ public class MHost extends Endpoint implements IHostConnector {
 
     @Override
     public void toggleReadyStatus(RawPlayer player2toggleStatus) {
-        Lobby lobby = player.getLobby();
+        Lobby lobby = networkPlayer.getLobby();
         lobby.toggleReadyStatus(player2toggleStatus);
 
         server.sendToAllTCP(lobby);

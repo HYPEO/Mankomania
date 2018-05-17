@@ -67,7 +67,7 @@ public class MClient extends Endpoint implements IClientConnector {
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            connection.sendTCP( new PlayerDisconnect(player.getRawPlayer()) );
+            connection.sendTCP( new PlayerDisconnect(networkPlayer.getRawPlayer()) );
 
             hostInfo = null;
             connection.close();
@@ -95,7 +95,7 @@ public class MClient extends Endpoint implements IClientConnector {
                  * receive new list of NetworkPlayer:
                  * after connecting or disconnecting clients
                  */
-                player.setLobby( (Lobby) object );
+                networkPlayer.setLobby( (Lobby) object );
                 Log.info("Client: Received updated lobby");
 
                 updateStageLobby();
@@ -104,7 +104,7 @@ public class MClient extends Endpoint implements IClientConnector {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: Received ACK from " + ack);
 
-                connection.sendTCP( new PlayerConnect(player.getRawPlayer()) );
+                connection.sendTCP( new PlayerConnect(networkPlayer.getRawPlayer()) );
 
             } else if( object instanceof PlayerHost) {
                 hostInfo = (PlayerHost) object;
@@ -215,7 +215,7 @@ public class MClient extends Endpoint implements IClientConnector {
 
     @Override
     public void toggleReadyStatus(RawPlayer player2toggleStatus) {
-        player2toggleStatus = player.getRawPlayer();
+        player2toggleStatus = networkPlayer.getRawPlayer();
         client.sendTCP( new PlayerToggleReadyStatus(player2toggleStatus) );
     }
 }

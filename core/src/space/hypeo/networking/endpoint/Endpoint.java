@@ -1,12 +1,8 @@
 package space.hypeo.networking.endpoint;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
-import javax.swing.text.View;
-
-import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.NetworkPlayer;
@@ -19,17 +15,17 @@ import space.hypeo.networking.network.Role;
  */
 public abstract class Endpoint  {
 
-    // a reference to the corresponding player
-    protected NetworkPlayer player;
+    // a reference to the corresponding networkPlayer
+    protected NetworkPlayer networkPlayer;
 
     // identifies the endpoint due to its role in the connection
     protected Role role;
 
     protected StageManager stageManager;
 
-    public Endpoint(NetworkPlayer player, Role role, StageManager stageManager) {
+    public Endpoint(NetworkPlayer networkPlayer, Role role, StageManager stageManager) {
         this.role = role;
-        this.player = player;
+        this.networkPlayer = networkPlayer;
         this.stageManager = stageManager;
     }
 
@@ -55,7 +51,7 @@ public abstract class Endpoint  {
         if( currentStage instanceof LobbyStage) {
             ((LobbyStage) currentStage).updateLobby();
             //stageManager.remove(currentStage);
-            //stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, this.player));
+            //stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, this.networkPlayer));
             currentStage.act();
         }
     }
