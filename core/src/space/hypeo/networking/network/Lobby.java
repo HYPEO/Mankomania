@@ -1,17 +1,15 @@
 package space.hypeo.networking.network;
 
 import com.esotericsoftware.minlog.Log;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-
-import space.hypeo.networking.network.Network;
-import space.hypeo.networking.network.RawPlayer;
-
 
 /**
  * This class represents the list of player that joined the game,
@@ -26,11 +24,14 @@ public class Lobby {
 
     /**
      * The data structure that holds the players, that are connected.
+     *
+     * RawPlayer ... data of the player
+     * Boolean   ... if the player is ready to participate the game (out of the lobby)
      */
-    protected Set<RawPlayer> data;
+    protected Map<RawPlayer, Boolean> data;
 
     public Lobby() {
-        data = new HashSet<>();
+        data = new HashMap<>();
         maxPlayer = MAX_PLAYER;
     }
 
@@ -51,7 +52,7 @@ public class Lobby {
      * @param p value, NetworkPlayer
      */
     public void add(RawPlayer p) {
-        data.add(p);
+        data.put(p, false);
     }
 
     /**
@@ -59,9 +60,9 @@ public class Lobby {
      * @param playerID ID to remove
      */
     public void remove(String playerID) {
-        Iterator<RawPlayer> it = data.iterator();
+        Iterator it = data.keySet().iterator();
         while( it.hasNext() ) {
-            RawPlayer p = it.next();
+            RawPlayer p = (RawPlayer)it.next();
             if( p.getPlayerID().equals(playerID) ) {
                 it.remove();
             }
@@ -77,11 +78,11 @@ public class Lobby {
     }
 
     public boolean contains(RawPlayer player) {
-        return data.contains(player);
+        return data.containsKey(player);
     }
 
     public RawPlayer contains(String playerId) {
-        for( RawPlayer p : data ) {
+        for( RawPlayer p : data.keySet() ) {
             if( p.getPlayerID().equals(playerId) ) {
                 return p;
             }
@@ -94,7 +95,7 @@ public class Lobby {
      * @return data Set
      */
     public Set<RawPlayer> getData() {
-        return data;
+        return data.keySet();
     }
 
     /**
@@ -138,7 +139,7 @@ public class Lobby {
         }
 
         int index = 1;
-        for( RawPlayer rawPlayer : data ) {
+        for( RawPlayer rawPlayer : data.keySet() ) {
             Log.info("  " + index + ". ID = '" + rawPlayer +"'");
             index++;
         }
@@ -159,11 +160,37 @@ public class Lobby {
         table.add(row);
 
         /* create data rows */
-        for( RawPlayer rp : data ) {
+        for( RawPlayer rp : data.keySet() ) {
             row = Arrays.asList(rp.getPlayerID(), rp.getNickname(), rp.getAddress());
             table.add(row);
         }
 
         return table;
+    }
+
+    /**
+     * Returns the value, the ready status, for given player.
+     * @param rawPlayer get status for
+     * @return ready status for player
+     */
+    public Boolean getStatus(RawPlayer rawPlayer) {
+        return data.get(rawPlayer);
+    }
+
+    /**
+     * Updates, meaning toggles, the status of the given player.
+     * @param rawPlayer RawPlayer toggles status
+     */
+    public void toggleReadyStatus(RawPlayer rawPlayer) {
+        for( Map.Entry<RawPlayer, Boolean> entry : data.entrySet() ) {
+            if( entry.getKey().equals(rawPlayer) ) {
+
+                if( entry.getValue() == false ) {
+                    entry.setValue(true);
+                } else {
+                    entry.setValue(false);
+                }
+            }
+        }
     }
 }

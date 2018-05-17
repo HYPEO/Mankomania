@@ -143,4 +143,25 @@ public class LobbyTest {
         lobby.add(rawPlayer);
         assertThat(lobby.isFull(), is(true));
     }
+
+    @Test
+    public void test_initStatus() {
+        lobby.add(rawPlayer);
+        assertThat(lobby.getStatus(rawPlayer), is(false));
+    }
+
+    @Test
+    public void test_toggleStatus_oneTime() {
+        lobby.add(rawPlayer);
+        lobby.toggleReadyStatus(rawPlayer);
+        assertThat(lobby.getStatus(rawPlayer), is(true));
+    }
+
+    @Test
+    public void test_toggleStatus_twoTimes() {
+        lobby.add(rawPlayer);
+        lobby.toggleReadyStatus(rawPlayer);
+        lobby.toggleReadyStatus(rawPlayer);
+        assertThat(lobby.getStatus(rawPlayer), is(false));
+    }
 }
