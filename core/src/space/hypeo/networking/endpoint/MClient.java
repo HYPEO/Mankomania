@@ -24,6 +24,7 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.PlayerToggleReadyStatus;
 
 /**
  * This class represents the client process on the device.
@@ -95,7 +96,7 @@ public class MClient extends Endpoint implements IClientConnector {
                  * after connecting or disconnecting clients
                  */
                 player.setLobby( (Lobby) object );
-                Log.info("Client: Received updated list of player");
+                Log.info("Client: Received updated lobby");
 
                 updateStageLobby();
 
@@ -107,7 +108,7 @@ public class MClient extends Endpoint implements IClientConnector {
 
             } else if( object instanceof PlayerHost) {
                 hostInfo = (PlayerHost) object;
-                Log.info("Client: Received NetworkPlayer info of host, to be connected with: " + hostInfo);
+                Log.info("Client: Received info of host, to be connected with: " + hostInfo);
 
             }
         }
@@ -212,4 +213,9 @@ public class MClient extends Endpoint implements IClientConnector {
         return false;
     }
 
+    @Override
+    public void toggleReadyStatus(RawPlayer player2toggleStatus) {
+        player2toggleStatus = player.getRawPlayer();
+        client.sendTCP( new PlayerToggleReadyStatus(player2toggleStatus) );
+    }
 }

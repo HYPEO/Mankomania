@@ -193,4 +193,21 @@ public class Lobby {
             }
         }
     }
+
+    /**
+     * Checks if all player within the lobby are ready to start the game.
+     * @return boolean
+     */
+    public boolean areAllPlayerReady() {
+        if( this.isEmpty() ) {
+            return false;
+        }
+
+        for( Boolean isReady : data.values() ) {
+            if( ! isReady ) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

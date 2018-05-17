@@ -10,6 +10,7 @@ import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.NetworkPlayer;
+import space.hypeo.networking.network.RawPlayer;
 import space.hypeo.networking.network.Role;
 
 
@@ -58,4 +59,6 @@ public abstract class Endpoint  {
             currentStage.act();
         }
     }
+
+    public abstract void toggleReadyStatus(RawPlayer player2toggleStatus);
 }

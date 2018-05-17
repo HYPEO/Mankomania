@@ -144,7 +144,7 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
     }
 
     @Override
-    public Lobby registeredPlayers() {
+    public Lobby getLobby() {
         return lobby;
     }
 

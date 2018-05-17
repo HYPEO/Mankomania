@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.network.IHostConnector;
+import space.hypeo.networking.network.Lobby;
 import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.RawPlayer;
 import space.hypeo.networking.network.Role;
@@ -15,7 +16,7 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
-import space.hypeo.networking.packages.Remittances;
+import space.hypeo.networking.packages.PlayerToggleReadyStatus;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -47,7 +48,7 @@ public class MHost extends Endpoint implements IHostConnector {
         public void connected(Connection connection) {
             super.connected(connection);
 
-            if( player.registeredPlayers().isFull() ) {
+            if( player.getLobby().isFull() ) {
                 connection.sendTCP(new Notification("Host: Sorry, no more space for additional player left"));
                 connection.close();
                 return;
@@ -89,27 +90,33 @@ public class MHost extends Endpoint implements IHostConnector {
                 Notification notification = (Notification) object;
                 Log.info("Host received Notification: " + notification.toString());
 
-            } else if( object instanceof PlayerConnect) {
+            } else if( object instanceof PlayerConnect ) {
                 RawPlayer newPlayer = (PlayerConnect) object;
-                player.registeredPlayers().add(newPlayer);
+                player.getLobby().add(newPlayer);
 
                 Log.info("Host: player has been connected, add to lobby");
-                player.registeredPlayers().log();
+                player.getLobby().log();
 
-                server.sendToAllTCP(player.registeredPlayers());
+                server.sendToAllTCP(player.getLobby());
 
                 updateStageLobby();
 
-            } else if( object instanceof PlayerDisconnect) {
+            } else if( object instanceof PlayerDisconnect ) {
                 RawPlayer leavingPlayer = (PlayerDisconnect) object;
-                player.registeredPlayers().remove(leavingPlayer);
+                player.getLobby().remove(leavingPlayer);
 
                 Log.info("Host: player has been disconnected, removed from lobby");
-                player.registeredPlayers().log();
+                player.getLobby().log();
 
-                server.sendToAllTCP(player.registeredPlayers());
+                server.sendToAllTCP(player.getLobby());
 
                 updateStageLobby();
+
+            } else if( object instanceof PlayerToggleReadyStatus ) {
+                RawPlayer toggleStatusPlayer = (RawPlayer) object;
+
+                Log.info("Host: toggle ready status of player " + toggleStatusPlayer);
+                toggleReadyStatus(toggleStatusPlayer);
 
             }
         }
@@ -192,7 +199,7 @@ public class MHost extends Endpoint implements IHostConnector {
 
     public int getConnectionID(String playerId) throws IllegalArgumentException {
 
-        RawPlayer needle = player.registeredPlayers().contains(playerId);
+        RawPlayer needle = player.getLobby().contains(playerId);
         int connectionID = 0;
 
         if( needle == null ) {
@@ -210,5 +217,13 @@ public class MHost extends Endpoint implements IHostConnector {
         }
 
         return connectionID;
+    }
+
+    @Override
+    public void toggleReadyStatus(RawPlayer player2toggleStatus) {
+        Lobby lobby = player.getLobby();
+        lobby.toggleReadyStatus(player2toggleStatus);
+
+        server.sendToAllTCP(lobby);
     }
 }

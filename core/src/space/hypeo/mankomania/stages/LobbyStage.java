@@ -1,11 +1,9 @@
 package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -14,9 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
-
-import java.util.Iterator;
-import java.util.List;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
@@ -109,7 +104,7 @@ public class LobbyStage extends Stage {
         //tableContainer.setActor(table);
 
         /* buttons */
-        Lobby lobby = networkPlayer.registeredPlayers();
+        Lobby lobby = networkPlayer.getLobby();
         Role role = networkPlayer.getRole();
 
         if( lobby == null || role == Role.NOT_CONNECTED ) {
