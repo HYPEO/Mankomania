@@ -2,6 +2,7 @@ package space.hypeo.mankomania.actors.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -17,6 +18,7 @@ import space.hypeo.mankomania.actors.map.PlayerDetailActor;
  */
 public class PlayerActor extends Image {
     private static final float PLAYER_SCALE = 60f;
+    private final StageFactory stageFactory;
     protected FieldActor currentField;
 
     // Current player state.
@@ -41,9 +43,10 @@ public class PlayerActor extends Image {
      * @param viewport     Viewport this PlayerActor belongs to.
      * @param stageManager stageManager for pushing DiceStage.
      */
-    public PlayerActor(String playerID, int balance, boolean isLocal, final Viewport viewport, final StageManager stageManager) {
+    public PlayerActor(String playerID, int balance, boolean isLocal, final Viewport viewport, final StageManager stageManager, StageFactory stageFactory) {
         super(new Texture("players/player_1.png"));
         this.isLocal = isLocal;
+        this.stageFactory = stageFactory;
         this.balance = balance;
 
         this.manager = stageManager;
@@ -97,7 +100,7 @@ public class PlayerActor extends Image {
                 // TODO: check if it is the players turn, then move
                 int moveFields = die.nextInt(6) + 1;
                 this.move(moveFields);
-                manager.push(StageFactory.getDiceResultStage(viewport, manager, moveFields));
+                manager.push(stageFactory.getDiceResultStage(moveFields));
 
                 // TODO: maybe cheat function here (for example: if other player is playing roulette)
             }

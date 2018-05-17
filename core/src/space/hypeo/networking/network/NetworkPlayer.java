@@ -27,6 +27,7 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
     private Lobby lobby;
 
     private StageManager stageManager;
+    private StageFactory stageFactory;
 
     public NetworkPlayer() {
         super();
@@ -37,10 +38,11 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
      * @param nickname
      * @param role
      */
-    public NetworkPlayer(String nickname, Role role, StageManager stageManager) {
+    public NetworkPlayer(String nickname, Role role, StageManager stageManager, StageFactory stageFactory) {
         super(nickname);
         // TODO: check if WLAN connection is ON and connected to hotspot
         this.stageManager = stageManager;
+        this.stageFactory = stageFactory;
 
         if( endpoint != null ) {
             Log.warn("init: There is already an open connection!");
@@ -108,11 +110,10 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
             endpoint = null;
 
             Stage currentStage = stageManager.getCurrentStage();
-            Viewport viewport = currentStage.getViewport();
 
             // return to MainMenu
             stageManager.remove(currentStage);
-            stageManager.push(StageFactory.getMainMenu(viewport, stageManager, this));
+            stageManager.push(stageFactory.getMainMenu(this));
 
         } else {
             Log.info("No process running - nothing to do.");

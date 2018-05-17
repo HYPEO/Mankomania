@@ -30,8 +30,9 @@ public class MainMenuStage extends Stage {
     private Button join;
     private Image title;
     private Table layout;
-    private final Viewport viewport;
+
     private NetworkPlayer networkPlayer;
+    private StageFactory stageFactory;
 
     /**
      * Creates the Main Menu
@@ -39,12 +40,12 @@ public class MainMenuStage extends Stage {
      * @param stageManager StageManager needed to switch between stages, create new ones, etc.
      * @param viewport     Viewport needed by Stage class.
      */
-    public MainMenuStage(StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer) {
+    public MainMenuStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, NetworkPlayer networkPlayer) {
         super(viewport);
         this.networkPlayer = networkPlayer;
 
         this.stageManager = stageManager;
-        this.viewport = viewport;
+        this.stageFactory = stageFactory;
 
         setUpBackground();
         createWidgets();
@@ -86,7 +87,7 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stageManager.push(StageFactory.getMapStage(viewport, stageManager));
+                stageManager.push(stageFactory.getMapStage());
             }
         };
     }
@@ -99,12 +100,13 @@ public class MainMenuStage extends Stage {
                 Role rHost = Role.HOST;
 
                 if( networkPlayer == null ) {
-                    networkPlayer = new NetworkPlayer("the_mighty_host", rHost, stageManager);
+                    networkPlayer = new NetworkPlayer("the_mighty_host", rHost, stageManager, stageFactory);
                 }
 
                 if( networkPlayer.getRole() == rHost ) {
-                    stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, networkPlayer));
+                    stageManager.push(stageFactory.getLobbyStage(networkPlayer));
                 }
+
             }
         };
     }
@@ -118,12 +120,13 @@ public class MainMenuStage extends Stage {
 
                 if( networkPlayer == null ) {
                     // TODO: do the discovering (takes 5sec) on the discoverStage
-                    networkPlayer = new NetworkPlayer("another_client", Role.CLIENT, stageManager);
+                    networkPlayer = new NetworkPlayer("another_client", Role.CLIENT, stageManager, stageFactory);
                 }
 
                 if( networkPlayer.getRole() == rClient ) {
-                    stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, networkPlayer));
+                    stageManager.push(stageFactory.getDiscoveredHostsStage(networkPlayer));
                 }
+
             }
         };
     }

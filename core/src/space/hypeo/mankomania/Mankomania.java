@@ -25,8 +25,10 @@ public class Mankomania extends ApplicationAdapter {
         camera.setToOrtho(false, 480, 800);
         ExtendViewport viewport = new ExtendViewport(480, 800, camera);
         manager = new StageManager();
-        manager.push(StageFactory.getMainMenu(viewport, manager, networkPlayer));
-        manager.push(StageFactory.getTitleStage(viewport, manager, networkPlayer));
+
+        StageFactory stageFactory = new StageFactory(viewport, manager);
+        manager.push(stageFactory.getMainMenu(networkPlayer));
+        manager.push(stageFactory.getTitleStage(networkPlayer));
     }
 
     @Override
