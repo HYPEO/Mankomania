@@ -36,7 +36,7 @@ public class StageFactory {
     public Stage getMapStage()
     {
         List<PlayerActor> playerActors = new ArrayList<>();
-        playerActors.add(new PlayerActor("1", 1000000, true, stageManager, this));
+        playerActors.add(new PlayerActor(1000000, true, stageManager, this));
         return new MapStage(viewport, stageManager, playerActors);
     }
 

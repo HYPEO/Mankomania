@@ -38,13 +38,12 @@ public class PlayerActor extends Group {
     private Image actorImage;
 
     /**
-     * @param playerID     The player's ID (useful for communications)
      * @param balance      The player's current balance (starting balance)
      * @param isLocal      Defines whether this player is the local one (i.e the one controlled with this device)
      * @param stageManager StageManager for pushing DiceStage.
      * @param stageFactory StageFactory for creating new Stages.
      */
-    public PlayerActor(String playerID, int balance, boolean isLocal, final StageManager stageManager, StageFactory stageFactory) {
+    public PlayerActor(int balance, boolean isLocal, final StageManager stageManager, StageFactory stageFactory) {
         this.actorImage = new Image(new Texture("players/player_1.png"));
         this.isLocal = isLocal;
         this.stageFactory = stageFactory;
