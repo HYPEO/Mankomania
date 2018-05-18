@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.network.IHostConnector;
+import space.hypeo.networking.network.Lobby;
 import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.RawPlayer;
 import space.hypeo.networking.network.Role;
@@ -15,6 +16,7 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.PlayerToggleReadyStatus;
 import space.hypeo.networking.packages.Remittances;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -23,8 +25,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
 /**
- * This class represents the host process on a device.
- * If you don't know, if you're client or host, call WhatAmI.getRole().
+ * This class represents the host process on the device.
  */
 public class MHost extends Endpoint implements IHostConnector {
 
@@ -48,7 +49,7 @@ public class MHost extends Endpoint implements IHostConnector {
         public void connected(Connection connection) {
             super.connected(connection);
 
-            if( player.registeredPlayers().isFull() ) {
+            if( networkPlayer.getLobby().isFull() ) {
                 connection.sendTCP(new Notification("Host: Sorry, no more space for additional player left"));
                 connection.close();
                 return;
@@ -56,11 +57,11 @@ public class MHost extends Endpoint implements IHostConnector {
 
             // send ack to client
             Log.info("Host: Send ack to requested client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new Acknowledge(player) );
+            connection.sendTCP( new Acknowledge(networkPlayer) );
 
             // send host info
             Log.info("Host: Send info of myself to client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new PlayerHost(player) );
+            connection.sendTCP( new PlayerHost(networkPlayer) );
         }
 
         /**
@@ -90,27 +91,33 @@ public class MHost extends Endpoint implements IHostConnector {
                 Notification notification = (Notification) object;
                 Log.info("Host received Notification: " + notification.toString());
 
-            } else if( object instanceof PlayerConnect) {
+            } else if( object instanceof PlayerConnect ) {
                 RawPlayer newPlayer = (PlayerConnect) object;
-                player.registeredPlayers().add(newPlayer);
+                networkPlayer.getLobby().add(newPlayer);
 
                 Log.info("Host: player has been connected, add to lobby");
-                player.registeredPlayers().log();
+                networkPlayer.getLobby().log();
 
-                server.sendToAllTCP(player.registeredPlayers());
+                server.sendToAllTCP(networkPlayer.getLobby());
 
                 updateStageLobby();
 
-            } else if( object instanceof PlayerDisconnect) {
+            } else if( object instanceof PlayerDisconnect ) {
                 RawPlayer leavingPlayer = (PlayerDisconnect) object;
-                player.registeredPlayers().remove(leavingPlayer);
+                networkPlayer.getLobby().remove(leavingPlayer);
 
                 Log.info("Host: player has been disconnected, removed from lobby");
-                player.registeredPlayers().log();
+                networkPlayer.getLobby().log();
 
-                server.sendToAllTCP(player.registeredPlayers());
+                server.sendToAllTCP(networkPlayer.getLobby());
 
                 updateStageLobby();
+
+            } else if( object instanceof PlayerToggleReadyStatus ) {
+                RawPlayer toggleStatusPlayer = (RawPlayer) object;
+
+                Log.info("Host: toggle ready status of player " + toggleStatusPlayer);
+                toggleReadyStatus(toggleStatusPlayer);
 
             }
         }
@@ -180,20 +187,17 @@ public class MHost extends Endpoint implements IHostConnector {
         server.sendToAllTCP(new Notification("game will be closed now..."));
     }
 
-    /**
-     * Resends a received MoneyAmount from player to another player.
-     * @param remittances
-     */
-    /*private void changeBalance(Remittances remittances) {
-
+    @Override
+    public void changeBalance(Remittances remittances) {
+        // TODO: correct that process!
         int connectionID = getConnectionID(remittances.getReceiverId());
         server.sendToTCP(connectionID, remittances);
-    }*/
+    }
 
 
     public int getConnectionID(String playerId) throws IllegalArgumentException {
 
-        RawPlayer needle = player.registeredPlayers().contains(playerId);
+        RawPlayer needle = networkPlayer.getLobby().contains(playerId);
         int connectionID = 0;
 
         if( needle == null ) {
@@ -211,5 +215,13 @@ public class MHost extends Endpoint implements IHostConnector {
         }
 
         return connectionID;
+    }
+
+    @Override
+    public void toggleReadyStatus(RawPlayer player2toggleStatus) {
+        Lobby lobby = networkPlayer.getLobby();
+        lobby.toggleReadyStatus(player2toggleStatus);
+
+        server.sendToAllTCP(lobby);
     }
 }

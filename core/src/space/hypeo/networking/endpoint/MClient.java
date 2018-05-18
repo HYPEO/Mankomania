@@ -24,10 +24,11 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.PlayerToggleReadyStatus;
+import space.hypeo.networking.packages.Remittances;
 
 /**
- * This class represents the client process for an endpoint on a device.
- * If you don't know, if you're client or host, call WhatAmI.getRole().
+ * This class represents the client process on the device.
  */
 public class MClient extends Endpoint implements IClientConnector {
 
@@ -67,7 +68,7 @@ public class MClient extends Endpoint implements IClientConnector {
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            connection.sendTCP( new PlayerDisconnect(player.getRawPlayer()) );
+            connection.sendTCP( new PlayerDisconnect(networkPlayer.getRawPlayer()) );
 
             hostInfo = null;
             connection.close();
@@ -95,8 +96,8 @@ public class MClient extends Endpoint implements IClientConnector {
                  * receive new list of NetworkPlayer:
                  * after connecting or disconnecting clients
                  */
-                player.setLobby( (Lobby) object );
-                Log.info("Client: Received updated list of player");
+                networkPlayer.setLobby( (Lobby) object );
+                Log.info("Client: Received updated lobby");
 
                 updateStageLobby();
 
@@ -104,11 +105,11 @@ public class MClient extends Endpoint implements IClientConnector {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: Received ACK from " + ack);
 
-                connection.sendTCP( new PlayerConnect(player.getRawPlayer()) );
+                connection.sendTCP( new PlayerConnect(networkPlayer.getRawPlayer()) );
 
             } else if( object instanceof PlayerHost) {
                 hostInfo = (PlayerHost) object;
-                Log.info("Client: Received NetworkPlayer info of host, to be connected with: " + hostInfo);
+                Log.info("Client: Received info of host, to be connected with: " + hostInfo);
 
             }
         }
@@ -213,4 +214,14 @@ public class MClient extends Endpoint implements IClientConnector {
         return false;
     }
 
+    @Override
+    public void toggleReadyStatus(RawPlayer player2toggleStatus) {
+        client.sendTCP( new PlayerToggleReadyStatus(networkPlayer.getRawPlayer()) );
+    }
+
+    @Override
+    public void changeBalance(Remittances remittances) {
+        // TODO: correct that process!
+        client.sendTCP(remittances);
+    }
 }

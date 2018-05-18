@@ -5,37 +5,50 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import space.hypeo.networking.network.IDeviceStateSubscriber;
 import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.Role;
+import space.hypeo.networking.network.IDeviceStatePublisher;
 
-public class AndroidLauncher extends AndroidApplication {
+public class AndroidLauncher extends AndroidApplication implements IDeviceStatePublisher {
 
-	Mankomania mankomania = null;
+    Mankomania mankomania = null;
+    List<IDeviceStateSubscriber> subscriberList;
 
-	private NetworkPlayer player = null;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+        subscriberList = new LinkedList<>();
+        mankomania = new Mankomania(this);
+        initialize(mankomania, config);
+    }
 
-	@Override
-	protected void onCreate (Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        synchronized (this) {
+            for (IDeviceStateSubscriber subscriber : subscriberList)
+                subscriber.onPause();
+        }
+    }
 
-		mankomania = new Mankomania();
-		initialize(mankomania, config);
-	}
+    @Override
+    protected void onStop() {
+        super.onStop();
+        synchronized (this) {
+            for (IDeviceStateSubscriber subscriber : subscriberList)
+                subscriber.onStop();
+        }
+    }
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		if( player != null && player.getRole() != Role.NOT_CONNECTED ) {
-			player.stopEndpoint();
-		}
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		if( player != null && player.getRole() != Role.NOT_CONNECTED ) {
-			player.closeEndpoint();
-		}
-	}
+    @Override
+    public void subscribe(IDeviceStateSubscriber subscriber) {
+        synchronized (this) {
+            subscriberList.add(subscriber);
+        }
+    }
 }

@@ -25,20 +25,16 @@ public class LobbyTest {
     private RawPlayer rawPlayer;
 
     private final int MAX_PLAYER = 5;
-    private final String PLAYER_ID= "ac03";
-    //private final String NICKNAME = "a_test_RawPlayer";
-    //private final String IP_ADDRESS = "192.168.1.99";
+    private int autoIncrementPlayerCounter;
+    private final String PLAYER_ID= "ID_";
+    /*private final String NICKNAME = "NICK_";
+    private final String IP_ADDRESS = "192.168.1.";*/
 
     @Before
     public void setup() {
-
+        autoIncrementPlayerCounter = 1;
         lobby = new Lobby(MAX_PLAYER);
-        rawPlayer = mock(RawPlayer.class);
-
-        /* init mock behavior */
-        when( rawPlayer.getPlayerID() ).thenReturn(PLAYER_ID);
-        //when( rawPlayer.getNickname() ).thenReturn(NICKNAME);
-        //when( rawPlayer.getAddress() ).thenReturn(IP_ADDRESS);
+        rawPlayer = getRawPlayerMock();
     }
 
     @After
@@ -46,12 +42,23 @@ public class LobbyTest {
         lobby = null;
     }
 
+    private RawPlayer getRawPlayerMock() {
+        RawPlayer rp = mock(RawPlayer.class);
+
+        /* init mock behavior */
+        when( rp.getPlayerID() ).thenReturn(PLAYER_ID + autoIncrementPlayerCounter);
+        /*when( rp.getNickname() ).thenReturn(NICKNAME + autoIncrementPlayerCounter);
+        when( rp.getAddress() ).thenReturn(IP_ADDRESS + autoIncrementPlayerCounter);*/
+
+        autoIncrementPlayerCounter++;
+        return rp;
+    }
+
 
     @Test
     public void test_isEmpty() {
         assertThat(lobby.isEmpty(), is(true));
     }
-
 
     @Test
     public void test_isEmpty_not() {
@@ -97,7 +104,7 @@ public class LobbyTest {
     @Test
     public void test_remove_by_playerID() {
         lobby.add(rawPlayer);
-        lobby.remove(PLAYER_ID);
+        lobby.remove(PLAYER_ID + 1);
         assertThat(lobby.size(), is(0));
     }
 
@@ -121,13 +128,13 @@ public class LobbyTest {
 
     @Test
     public void test_contains_playerID_not() {
-        assertThat(lobby.contains(PLAYER_ID), not(rawPlayer));
+        assertThat(lobby.contains(PLAYER_ID + 1), not(rawPlayer));
     }
 
     @Test
     public void test_contains_playerID() {
         lobby.add(rawPlayer);
-        assertThat(lobby.contains(PLAYER_ID), is(rawPlayer));
+        assertThat(lobby.contains(PLAYER_ID + 1), is(rawPlayer));
     }
 
     @Test
@@ -142,5 +149,61 @@ public class LobbyTest {
         assertThat(lobby.getMaxPlayer(), is(1));
         lobby.add(rawPlayer);
         assertThat(lobby.isFull(), is(true));
+    }
+
+    @Test
+    public void test_initStatus() {
+        lobby.add(rawPlayer);
+        assertThat(lobby.getStatus(rawPlayer), is(false));
+    }
+
+    @Test
+    public void test_toggleStatus_oneTime() {
+        lobby.add(rawPlayer);
+        lobby.toggleReadyStatus(rawPlayer);
+        assertThat(lobby.getStatus(rawPlayer), is(true));
+    }
+
+    @Test
+    public void test_toggleStatus_twoTimes() {
+        lobby.add(rawPlayer);
+        lobby.toggleReadyStatus(rawPlayer);
+        lobby.toggleReadyStatus(rawPlayer);
+        assertThat(lobby.getStatus(rawPlayer), is(false));
+    }
+
+    @Test
+    public void test_areAllPlayerReady_emptyLobby() {
+        assertThat(lobby.areAllPlayerReady(), is(false));
+    }
+
+    @Test
+    public void test_areAllPlayerReady_onePlayer() {
+        lobby.add(rawPlayer);
+        lobby.toggleReadyStatus(rawPlayer);
+        assertThat(lobby.areAllPlayerReady(), is(true));
+    }
+
+    @Test
+    public void test_areAllPlayerReady_twoPlayer_notReady() {
+        lobby.add(rawPlayer);
+        lobby.toggleReadyStatus(rawPlayer);
+
+        RawPlayer secondPlayer = getRawPlayerMock();
+        lobby.add(secondPlayer);
+
+        assertThat(lobby.areAllPlayerReady(), is(false));
+    }
+
+    @Test
+    public void test_areAllPlayerReady_twoPlayer_ready() {
+        lobby.add(rawPlayer);
+        lobby.toggleReadyStatus(rawPlayer);
+
+        RawPlayer secondPlayer = getRawPlayerMock();
+        lobby.add(secondPlayer);
+        lobby.toggleReadyStatus(secondPlayer);
+
+        assertThat(lobby.areAllPlayerReady(), is(true));
     }
 }

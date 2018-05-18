@@ -51,5 +51,5 @@ public interface IPlayerConnector {
     /**
      * Gets the list of players registered for the Game.
      */
-    public Lobby registeredPlayers();
+    public Lobby getLobby();
 }

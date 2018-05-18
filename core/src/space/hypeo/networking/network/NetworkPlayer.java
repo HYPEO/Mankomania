@@ -9,12 +9,13 @@ import space.hypeo.mankomania.StageManager;
 import space.hypeo.networking.endpoint.Endpoint;
 import space.hypeo.networking.endpoint.MClient;
 import space.hypeo.networking.endpoint.MHost;
+import space.hypeo.networking.packages.Remittances;
 
 /**
  * This class holds the important network data,
  * that identifies a player in the network.
  */
-public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
+public class NetworkPlayer extends RawPlayer implements IPlayerConnector, IDeviceStateSubscriber {
 
     // The reference to the host or client.
     private Endpoint endpoint;
@@ -26,6 +27,7 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
     private Lobby lobby;
 
     private StageManager stageManager;
+    private StageFactory stageFactory;
 
     public NetworkPlayer() {
         super();
@@ -36,10 +38,11 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
      * @param nickname
      * @param role
      */
-    public NetworkPlayer(String nickname, Role role, StageManager stageManager) {
+    public NetworkPlayer(String nickname, Role role, StageManager stageManager, StageFactory stageFactory) {
         super(nickname);
         // TODO: check if WLAN connection is ON and connected to hotspot
         this.stageManager = stageManager;
+        this.stageFactory = stageFactory;
 
         if( endpoint != null ) {
             Log.warn("init: There is already an open connection!");
@@ -107,10 +110,11 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
             endpoint = null;
 
             Stage currentStage = stageManager.getCurrentStage();
-            Viewport viewport = currentStage.getViewport();
 
             // return to MainMenu
             stageManager.remove(currentStage);
+            stageManager.push(stageFactory.getMainMenu());
+
         } else {
             Log.info("No process running - nothing to do.");
         }
@@ -118,17 +122,18 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
 
     @Override
     public void changeBalance(String playerID, int amount) {
-
+        Remittances remittances = new Remittances(this.getPlayerID(), playerID, amount);
+        endpoint.changeBalance(remittances);
     }
 
     @Override
     public void movePlayer(String playerID, int position) {
-
+        // TODO: move player on the map
     }
 
     @Override
     public void endTurn() {
-
+        // TODO: end the current turn for this player
     }
 
     @Override
@@ -142,7 +147,7 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
     }
 
     @Override
-    public Lobby registeredPlayers() {
+    public Lobby getLobby() {
         return lobby;
     }
 
@@ -169,5 +174,15 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
     @Override
     public int hashCode() {
         return super.hashCode();
+    }
+
+    @Override
+    public void onPause() {
+        endpoint.close();
+    }
+
+    @Override
+    public void onStop() {
+        endpoint.close();
     }
 }

@@ -40,6 +40,7 @@ public class RawPlayer {
         if (p != null && p != this) {
             this.playerID = p.playerID;
             this.nickname = p.nickname;
+            this.address = p.address;
         }
     }
 
@@ -75,7 +76,7 @@ public class RawPlayer {
      */
     @Override
     public String toString() {
-        return nickname;
+        return "ID " + playerID + ", nick " + nickname + ", addr " + address;
     }
 
     @Override
@@ -100,4 +101,6 @@ public class RawPlayer {
     public int hashCode() {
         return playerID.hashCode();
     }
+
+
 }

@@ -16,6 +16,7 @@ import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
+import space.hypeo.networking.network.IDeviceStatePublisher;
 import space.hypeo.networking.network.NetworkPlayer;
 
 /**
@@ -24,10 +25,12 @@ import space.hypeo.networking.network.NetworkPlayer;
 public class StageFactory {
     private final Viewport viewport;
     private final StageManager stageManager;
+    private IDeviceStatePublisher publisher;
 
-    public StageFactory(final Viewport viewport, final StageManager stageManager) {
+    public StageFactory(final Viewport viewport, final StageManager stageManager, final IDeviceStatePublisher publisher) {
         this.viewport = viewport;
         this.stageManager = stageManager;
+        this.publisher = publisher;
     }
 
     public Stage getMapStage()
@@ -42,15 +45,16 @@ public class StageFactory {
     }
 
     public Stage getMainMenu() {
-        return new MainMenuStage(stageManager, viewport, this);
+            return new MainMenuStage(stageManager, viewport, this, publisher);
     }
 
     public Stage getSendMoneyStage() {
         return new SendMoneyStage(viewport, stageManager);
     }
 
+
     public Stage getTitleStage() {
-        return new TitleStage(stageManager, viewport);
+            return new TitleStage(stageManager, viewport);
     }
 
     /**
