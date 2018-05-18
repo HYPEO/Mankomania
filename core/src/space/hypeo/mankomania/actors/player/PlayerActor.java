@@ -43,8 +43,10 @@ public class PlayerActor extends Group {
      * @param stageManager StageManager for pushing DiceStage.
      * @param stageFactory StageFactory for creating new Stages.
      */
-    public PlayerActor(int balance, boolean isLocal, final StageManager stageManager, StageFactory stageFactory) {
-        this.actorImage = new Image(new Texture("players/player_1.png"));
+    public PlayerActor(Image actorImage, int balance, boolean isLocal, final StageManager stageManager, StageFactory stageFactory) {
+        this.actorImage = actorImage;
+        this.addActor(this.actorImage);
+
         this.isLocal = isLocal;
         this.stageFactory = stageFactory;
         this.balance = balance;
