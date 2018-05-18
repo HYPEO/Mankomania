@@ -32,34 +32,31 @@ public class PlayerActor extends Image {
 
     private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
     private final StageManager manager;
-    private final Viewport viewport;
     private PlayerDetailActor playerDetailActor;
 
     /**
-     *
      * @param playerID     The player's ID (useful for communications)
      * @param balance      The player's current balance (starting balance)
      * @param isLocal      Defines whether this player is the local one (i.e the one controlled with this device)
-     * @param viewport     Viewport this PlayerActor belongs to.
-     * @param stageManager stageManager for pushing DiceStage.
+     * @param stageManager StageManager for pushing DiceStage.
+     * @param stageFactory StageFactory for creating new Stages.
      */
-    public PlayerActor(String playerID, int balance, boolean isLocal, final Viewport viewport, final StageManager stageManager, StageFactory stageFactory) {
+    public PlayerActor(String playerID, int balance, boolean isLocal, final StageManager stageManager, StageFactory stageFactory) {
         super(new Texture("players/player_1.png"));
         this.isLocal = isLocal;
         this.stageFactory = stageFactory;
         this.balance = balance;
 
         this.manager = stageManager;
-        this.viewport = viewport;
     }
 
     /**
      * Initializes the starting-field and corresponding PlayerDetailActor.
+     *
      * @param currentField
      * @param playerDetailActor
      */
-    public void initializeState(FieldActor currentField, PlayerDetailActor playerDetailActor)
-    {
+    public void initializeState(FieldActor currentField, PlayerDetailActor playerDetailActor) {
         this.playerDetailActor = playerDetailActor;
         this.currentField = currentField;
 
@@ -124,8 +121,8 @@ public class PlayerActor extends Image {
      * Updates the object bounds to the current field.
      */
     private void updateBounds() {
-        this.setBounds(currentField.getX()+(currentField.getWidth()/2f)-(this.getWidth()/2f),
-                currentField.getY()+(currentField.getHeight()/2f)-(this.getHeight()/2f)+8f,
+        this.setBounds(currentField.getX() + (currentField.getWidth() / 2f) - (this.getWidth() / 2f),
+                currentField.getY() + (currentField.getHeight() / 2f) - (this.getHeight() / 2f) + 8f,
                 PLAYER_SCALE,
                 PLAYER_SCALE);
     }
