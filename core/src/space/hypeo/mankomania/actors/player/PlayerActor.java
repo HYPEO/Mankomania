@@ -2,6 +2,7 @@ package space.hypeo.mankomania.actors.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -14,56 +15,56 @@ import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
 /**
- * Class that represents a NetworkPlayer.
+ * Class that represents a Player.
  */
-public class PlayerActor extends Image {
+public class PlayerActor extends Group {
     private static final float PLAYER_SCALE = 60f;
-    private final StageFactory stageFactory;
-    protected FieldActor currentField;
 
     // Current player state.
     private int balance;
     private boolean isLocal;
+    private FieldActor currentField;
 
     // For dice feature
     private float timeElapsed = 0;
     private Random die = new Random();
     private static final float EARTH_GRAVITY = 9.81f;
-
     private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
+
+    // UI-Relevant Items.
     private final StageManager manager;
-    private final Viewport viewport;
     private PlayerDetailActor playerDetailActor;
+    private Image actorImage;
+    private final StageFactory stageFactory;
 
     /**
-     *
-     * @param playerID     The player's ID (useful for communications)
+     * @param actorImage   Image that represents the actor.
      * @param balance      The player's current balance (starting balance)
      * @param isLocal      Defines whether this player is the local one (i.e the one controlled with this device)
-     * @param viewport     Viewport this PlayerActor belongs to.
-     * @param stageManager stageManager for pushing DiceStage.
+     * @param stageManager StageManager for pushing DiceStage.
+     * @param stageFactory StageFactory for creating new Stages.
      */
-    public PlayerActor(String playerID, int balance, boolean isLocal, final Viewport viewport, final StageManager stageManager, StageFactory stageFactory) {
-        super(new Texture("players/player_1.png"));
+    public PlayerActor(Image actorImage, int balance, boolean isLocal, final StageManager stageManager, StageFactory stageFactory) {
+        this.actorImage = actorImage;
+        this.addActor(this.actorImage);
+
         this.isLocal = isLocal;
         this.stageFactory = stageFactory;
         this.balance = balance;
-
         this.manager = stageManager;
-        this.viewport = viewport;
     }
 
     /**
      * Initializes the starting-field and corresponding PlayerDetailActor.
-     * @param currentField
-     * @param playerDetailActor
+     *
+     * @param currentField      The field this Player starts out at.
+     * @param playerDetailActor The PlayerDetailActor that belongs to this player.
      */
-    public void initializeState(FieldActor currentField, PlayerDetailActor playerDetailActor)
-    {
+    public void initializeState(FieldActor currentField, PlayerDetailActor playerDetailActor) {
         this.playerDetailActor = playerDetailActor;
         this.currentField = currentField;
 
-        this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
+        actorImage.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
         updateBounds();
     }
 
@@ -124,8 +125,8 @@ public class PlayerActor extends Image {
      * Updates the object bounds to the current field.
      */
     private void updateBounds() {
-        this.setBounds(currentField.getX()+(currentField.getWidth()/2f)-(this.getWidth()/2f),
-                currentField.getY()+(currentField.getHeight()/2f)-(this.getHeight()/2f)+8f,
+        actorImage.setBounds(currentField.getX() + (currentField.getWidth() / 2f) - (actorImage.getWidth() / 2f),
+                currentField.getY() + (currentField.getHeight() / 2f) - (actorImage.getHeight() / 2f) + 8f,
                 PLAYER_SCALE,
                 PLAYER_SCALE);
     }
