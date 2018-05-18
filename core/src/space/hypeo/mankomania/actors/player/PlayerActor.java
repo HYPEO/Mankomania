@@ -2,6 +2,7 @@ package space.hypeo.mankomania.actors.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -16,7 +17,7 @@ import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 /**
  * Class that represents a NetworkPlayer.
  */
-public class PlayerActor extends Image {
+public class PlayerActor extends Group {
     private static final float PLAYER_SCALE = 60f;
     private final StageFactory stageFactory;
     protected FieldActor currentField;
@@ -34,6 +35,8 @@ public class PlayerActor extends Image {
     private final StageManager manager;
     private PlayerDetailActor playerDetailActor;
 
+    private Image actorImage;
+
     /**
      * @param playerID     The player's ID (useful for communications)
      * @param balance      The player's current balance (starting balance)
@@ -42,11 +45,10 @@ public class PlayerActor extends Image {
      * @param stageFactory StageFactory for creating new Stages.
      */
     public PlayerActor(String playerID, int balance, boolean isLocal, final StageManager stageManager, StageFactory stageFactory) {
-        super(new Texture("players/player_1.png"));
+        this.actorImage = new Image(new Texture("players/player_1.png"));
         this.isLocal = isLocal;
         this.stageFactory = stageFactory;
         this.balance = balance;
-
         this.manager = stageManager;
     }
 
@@ -60,7 +62,7 @@ public class PlayerActor extends Image {
         this.playerDetailActor = playerDetailActor;
         this.currentField = currentField;
 
-        this.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
+        actorImage.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
         updateBounds();
     }
 
@@ -121,7 +123,7 @@ public class PlayerActor extends Image {
      * Updates the object bounds to the current field.
      */
     private void updateBounds() {
-        this.setBounds(currentField.getX() + (currentField.getWidth() / 2f) - (this.getWidth() / 2f),
+        actorImage.setBounds(currentField.getX() + (currentField.getWidth() / 2f) - (this.getWidth() / 2f),
                 currentField.getY() + (currentField.getHeight() / 2f) - (this.getHeight() / 2f) + 8f,
                 PLAYER_SCALE,
                 PLAYER_SCALE);
