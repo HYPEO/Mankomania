@@ -15,29 +15,30 @@ import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
 /**
- * Class that represents a NetworkPlayer.
+ * Class that represents a Player.
  */
 public class PlayerActor extends Group {
     private static final float PLAYER_SCALE = 60f;
-    private final StageFactory stageFactory;
-    protected FieldActor currentField;
 
     // Current player state.
     private int balance;
     private boolean isLocal;
+    private FieldActor currentField;
 
     // For dice feature
     private float timeElapsed = 0;
     private Random die = new Random();
     private static final float EARTH_GRAVITY = 9.81f;
-
     private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
+
+    // UI-Relevant Items.
     private final StageManager manager;
     private PlayerDetailActor playerDetailActor;
-
     private Image actorImage;
+    private final StageFactory stageFactory;
 
     /**
+     * @param actorImage   Image that represents the actor.
      * @param balance      The player's current balance (starting balance)
      * @param isLocal      Defines whether this player is the local one (i.e the one controlled with this device)
      * @param stageManager StageManager for pushing DiceStage.
@@ -56,8 +57,8 @@ public class PlayerActor extends Group {
     /**
      * Initializes the starting-field and corresponding PlayerDetailActor.
      *
-     * @param currentField
-     * @param playerDetailActor
+     * @param currentField      The field this Player starts out at.
+     * @param playerDetailActor The PlayerDetailActor that belongs to this player.
      */
     public void initializeState(FieldActor currentField, PlayerDetailActor playerDetailActor) {
         this.playerDetailActor = playerDetailActor;
