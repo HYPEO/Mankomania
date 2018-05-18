@@ -22,11 +22,8 @@ public class TitleStage extends Stage {
     private Image title;
     private NetworkPlayer networkPlayer;
 
-    public TitleStage(final StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer) {
+    public TitleStage(final StageManager stageManager, Viewport viewport) {
         super(viewport);
-
-        /* NOTE: reference networkPlayer can still be null here! */
-        this.networkPlayer = networkPlayer;
 
         setUpBackground();
         setUpTitle();

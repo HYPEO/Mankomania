@@ -30,20 +30,33 @@ public class LobbyStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
     private NetworkPlayer networkPlayer;
+    private boolean update;
 
     public LobbyStage(StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
         this.networkPlayer = networkPlayer;
-
-        updateLobby();
+        this.update = false;
+        setupLayout();
     }
 
     public void updateLobby() {
-        this.clear();
-        //setupBackground();
-        setupLayout();
+        synchronized (this) {
+            update = true;
+        }
+    }
+
+    @Override
+    public void act(float delta)
+    {
+        synchronized (this)
+        {
+            if(update) {
+                this.clear();
+                setupLayout();
+            }
+        }
     }
 
     private void setupBackground() {

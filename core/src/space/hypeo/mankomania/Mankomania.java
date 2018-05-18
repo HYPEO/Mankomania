@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+import space.hypeo.networking.network.IDeviceStatePublisher;
+import space.hypeo.networking.network.IDeviceStateSubscriber;
 import space.hypeo.networking.network.NetworkPlayer;
 
 /**
@@ -13,10 +15,10 @@ import space.hypeo.networking.network.NetworkPlayer;
  */
 public class Mankomania extends ApplicationAdapter {
     private StageManager manager;
-    private NetworkPlayer networkPlayer;
+    private IDeviceStatePublisher deviceStatePublisher;
 
-    public Mankomania(NetworkPlayer networkPlayer) {
-        this.networkPlayer = networkPlayer;
+    public Mankomania(IDeviceStatePublisher deviceStatePublisher) {
+        this.deviceStatePublisher = deviceStatePublisher;
     }
 
     @Override
@@ -26,9 +28,9 @@ public class Mankomania extends ApplicationAdapter {
         ExtendViewport viewport = new ExtendViewport(480, 800, camera);
         manager = new StageManager();
 
-        StageFactory stageFactory = new StageFactory(viewport, manager);
-        manager.push(stageFactory.getMainMenu(networkPlayer));
-        manager.push(stageFactory.getTitleStage(networkPlayer));
+        StageFactory stageFactory = new StageFactory(viewport, manager, deviceStatePublisher);
+        manager.push(stageFactory.getMainMenu());
+        manager.push(stageFactory.getTitleStage());
     }
 
     @Override

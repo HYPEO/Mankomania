@@ -14,7 +14,7 @@ import space.hypeo.networking.packages.Remittances;
 /**
  * This class provides functionality for an endpoint of a connection.
  */
-public abstract class Endpoint  {
+public abstract class Endpoint {
 
     // a reference to the corresponding networkPlayer
     protected NetworkPlayer networkPlayer;
@@ -47,25 +47,23 @@ public abstract class Endpoint  {
         Log.info(role + ": updateStageLobby");
 
         Stage currentStage = stageManager.getCurrentStage();
-        //Viewport viewport = currentStage.getViewport();
 
-        if( currentStage instanceof LobbyStage) {
+        if (currentStage instanceof LobbyStage) {
             ((LobbyStage) currentStage).updateLobby();
-            //stageManager.remove(currentStage);
-            //stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, this.networkPlayer));
-            currentStage.act();
         }
     }
 
     /**
      * Toggles the status of a player in the lobby between:
      * ready2play <-> not_ready2play
+     *
      * @param player2toggleStatus name of the player
      */
     public abstract void toggleReadyStatus(RawPlayer player2toggleStatus);
 
     /**
      * Resends a received MoneyAmount from player to another player.
+     *
      * @param remittances
      */
     public abstract void changeBalance(Remittances remittances);

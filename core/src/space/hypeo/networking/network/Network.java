@@ -41,7 +41,7 @@ public final class Network {
         kryo.register(PingRequest.class);
         kryo.register(PingResponse.class);
         kryo.register(Notification.class);
-        kryo.register(java.util.HashSet.class);
+        kryo.register(java.util.HashMap.class);
 
         kryo.register(Lobby.class);
         kryo.register(NetworkPlayer.class);

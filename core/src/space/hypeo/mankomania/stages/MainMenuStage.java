@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.networking.network.IDeviceStatePublisher;
 import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.Role;
 
@@ -31,8 +32,8 @@ public class MainMenuStage extends Stage {
     private Image title;
     private Table layout;
 
-    private NetworkPlayer networkPlayer;
     private StageFactory stageFactory;
+    private IDeviceStatePublisher deviceStatePublisher;
 
     /**
      * Creates the Main Menu
@@ -40,12 +41,12 @@ public class MainMenuStage extends Stage {
      * @param stageManager StageManager needed to switch between stages, create new ones, etc.
      * @param viewport     Viewport needed by Stage class.
      */
-    public MainMenuStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, NetworkPlayer networkPlayer) {
+    public MainMenuStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, IDeviceStatePublisher deviceStatePublisher) {
         super(viewport);
-        this.networkPlayer = networkPlayer;
 
         this.stageManager = stageManager;
         this.stageFactory = stageFactory;
+        this.deviceStatePublisher = deviceStatePublisher;
 
         setUpBackground();
         createWidgets();
@@ -96,17 +97,9 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
-                Role rHost = Role.HOST;
-
-                if( networkPlayer == null ) {
-                    networkPlayer = new NetworkPlayer("the_mighty_host", rHost, stageManager, stageFactory);
-                }
-
-                if( networkPlayer.getRole() == rHost ) {
-                    stageManager.push(stageFactory.getLobbyStage(networkPlayer));
-                }
-
+                NetworkPlayer networkPlayer = new NetworkPlayer("the_mighty_host", Role.HOST, stageManager, stageFactory);
+                deviceStatePublisher.subscribe(networkPlayer);
+                stageManager.push(stageFactory.getLobbyStage(networkPlayer));
             }
         };
     }
@@ -115,18 +108,7 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
-                Role rClient = Role.CLIENT;
-
-                if( networkPlayer == null ) {
-                    // TODO: do the discovering (takes 5sec) on the discoverStage
-                    networkPlayer = new NetworkPlayer("another_client", Role.CLIENT, stageManager, stageFactory);
-                }
-
-                if( networkPlayer.getRole() == rClient ) {
-                    stageManager.push(stageFactory.getDiscoveredHostsStage(networkPlayer));
-                }
-
+                stageManager.push(stageFactory.getDiscoveredHostsStage(new NetworkPlayer("another_client", Role.CLIENT, stageManager, stageFactory)));
             }
         };
     }

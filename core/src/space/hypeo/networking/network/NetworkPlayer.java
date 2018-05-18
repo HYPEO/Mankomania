@@ -15,7 +15,7 @@ import space.hypeo.networking.packages.Remittances;
  * This class holds the important network data,
  * that identifies a player in the network.
  */
-public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
+public class NetworkPlayer extends RawPlayer implements IPlayerConnector, IDeviceStateSubscriber {
 
     // The reference to the host or client.
     private Endpoint endpoint;
@@ -113,7 +113,7 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
 
             // return to MainMenu
             stageManager.remove(currentStage);
-            stageManager.push(stageFactory.getMainMenu(this));
+            stageManager.push(stageFactory.getMainMenu());
 
         } else {
             Log.info("No process running - nothing to do.");
@@ -174,5 +174,15 @@ public class NetworkPlayer extends RawPlayer implements IPlayerConnector {
     @Override
     public int hashCode() {
         return super.hashCode();
+    }
+
+    @Override
+    public void onPause() {
+        endpoint.close();
+    }
+
+    @Override
+    public void onStop() {
+        endpoint.close();
     }
 }
