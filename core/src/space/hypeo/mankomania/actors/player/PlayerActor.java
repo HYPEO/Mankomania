@@ -125,8 +125,8 @@ public class PlayerActor extends Group {
      * Updates the object bounds to the current field.
      */
     private void updateBounds() {
-        actorImage.setBounds(currentField.getX() + (currentField.getWidth() / 2f) - (this.getWidth() / 2f),
-                currentField.getY() + (currentField.getHeight() / 2f) - (this.getHeight() / 2f) + 8f,
+        actorImage.setBounds(currentField.getX() + (currentField.getWidth() / 2f) - (actorImage.getWidth() / 2f),
+                currentField.getY() + (currentField.getHeight() / 2f) - (actorImage.getHeight() / 2f) + 8f,
                 PLAYER_SCALE,
                 PLAYER_SCALE);
     }
