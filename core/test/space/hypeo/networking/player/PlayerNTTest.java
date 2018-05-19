@@ -40,6 +40,6 @@ public class PlayerNTTest {
 
     @Test
     public void test_getEndpoint() {
-        assertThat(true, is(true));
+        assertThat(playerNT.getEndpoint(), is(endpoint));
     }
 }

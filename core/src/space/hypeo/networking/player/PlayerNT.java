@@ -1,20 +1,15 @@
 package space.hypeo.networking.player;
 
-import com.esotericsoftware.minlog.Log;
-
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.networking.endpoint.IEndpoint;
-import space.hypeo.networking.endpoint.MClient;
-import space.hypeo.networking.endpoint.MHost;
 import space.hypeo.mankomania.IDeviceStateSubscriber;
 import space.hypeo.mankomania.player.IPlayerConnector;
 import space.hypeo.mankomania.player.Lobby;
-import space.hypeo.networking.network.Role;
 import space.hypeo.networking.packages.Remittances;
 
 /**
- * This class holds the important network data,
- * that identifies a player in the network.
+ * This class is a wrapper class for server and client.
+ * the endpoint is the reference to the host/client object.
  */
 public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     private final PlayerManager playerManager;
