@@ -16,23 +16,25 @@ import com.esotericsoftware.minlog.Log;
 import java.net.InetAddress;
 import java.util.List;
 
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.networking.endpoint.MClient;
-import space.hypeo.networking.network.NetworkPlayer;
 
 
 public class DiscoveredHostsStage extends Stage {
     private final Viewport viewport;
+    private PlayerManager playerManager;
 
     private List<InetAddress> foundHosts;
 
-    public DiscoveredHostsStage(StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer, StageFactory stageFactory) {
+    public DiscoveredHostsStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, PlayerManager playerManager) {
         super(viewport);
         this.viewport = viewport;
+        this.playerManager = playerManager;
 
-        this.foundHosts = ((MClient) networkPlayer.getEndpoint()).discoverHosts();
+        this.foundHosts = ((MClient) playerManager.getPlayerNT().getEndpoint()).discoverHosts();
 
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
@@ -70,9 +72,9 @@ public class DiscoveredHostsStage extends Stage {
 
                         Log.info("Try to connect to host " + hostAddr + "...");
 
-                        ((MClient) networkPlayer.getEndpoint()).connectToHost(hostAddr);
+                        ((MClient) playerManager.getPlayerNT().getEndpoint()).connectToHost(hostAddr);
 
-                        stageManager.push(stageFactory.getLobbyStage(networkPlayer));
+                        stageManager.push(stageFactory.getLobbyStage(playerManager));
                     }
 
                 });
@@ -93,7 +95,7 @@ public class DiscoveredHostsStage extends Stage {
                 public void clicked(InputEvent event, float x, float y) {
 
                     stageManager.remove(DiscoveredHostsStage.this);
-                    stageManager.push(stageFactory.getDiscoveredHostsStage(networkPlayer));
+                    stageManager.push(stageFactory.getDiscoveredHostsStage(playerManager));
                 }
 
             });

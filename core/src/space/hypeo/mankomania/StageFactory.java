@@ -8,8 +8,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.text.View;
-
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
@@ -18,8 +17,6 @@ import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
-import space.hypeo.networking.network.IDeviceStatePublisher;
-import space.hypeo.networking.network.NetworkPlayer;
 
 /**
  * Creates all the stages (views) for the game.
@@ -67,8 +64,8 @@ public class StageFactory {
      * Shows the network-lobby for client and host.
      * @return stage/view of lobby
      */
-    public Stage getLobbyStage(NetworkPlayer player) {
-        return new LobbyStage(stageManager, viewport, player);
+    public Stage getLobbyStage(PlayerManager playerManager) {
+        return new LobbyStage(stageManager, viewport, playerManager);
     }
 
     /**
@@ -76,8 +73,8 @@ public class StageFactory {
      * Client can choose a host to connect with.
      * @return stage/view of discovered hosts for client
      */
-    public Stage getDiscoveredHostsStage(NetworkPlayer player) {
-        return new DiscoveredHostsStage(stageManager, viewport, player, this);
+    public Stage getDiscoveredHostsStage(PlayerManager playerManager) {
+        return new DiscoveredHostsStage(stageManager, viewport, this, playerManager);
     }
 
 }

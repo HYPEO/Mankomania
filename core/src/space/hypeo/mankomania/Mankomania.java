@@ -6,9 +6,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
-import space.hypeo.networking.network.IDeviceStatePublisher;
-import space.hypeo.networking.network.IDeviceStateSubscriber;
-import space.hypeo.networking.network.NetworkPlayer;
 
 /**
  * The GDX Game class, called from the android project.

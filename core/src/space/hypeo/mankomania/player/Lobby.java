@@ -1,4 +1,4 @@
-package space.hypeo.networking.network;
+package space.hypeo.mankomania.player;
 
 import com.esotericsoftware.minlog.Log;
 
@@ -9,6 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import space.hypeo.mankomania.player.PlayerSkeleton;
+import space.hypeo.networking.network.Network;
 
 /**
  * This class represents the list of player that joined the game,
@@ -24,10 +27,10 @@ public class Lobby {
     /**
      * The data structure that holds the players, that are connected.
      *
-     * RawPlayer ... data of the player
-     * Boolean   ... if the player is ready to participate the game (out of the lobby)
+     * PlayerSkelton ... raw data of the player
+     * Boolean       ... if the player is ready to participate the game (out of the lobby)
      */
-    protected Map<RawPlayer, Boolean> data;
+    protected Map<PlayerSkeleton, Boolean> data;
 
     public Lobby() {
         data = new HashMap<>();
@@ -48,9 +51,9 @@ public class Lobby {
 
     /**
      * Associates the specified value with the specified key in this map.
-     * @param p value, NetworkPlayer
+     * @param p value, PlayerSkeleton
      */
-    public void add(RawPlayer p) {
+    public void add(PlayerSkeleton p) {
         data.put(p, false);
     }
 
@@ -61,7 +64,7 @@ public class Lobby {
     public void remove(String playerID) {
         Iterator it = data.keySet().iterator();
         while( it.hasNext() ) {
-            RawPlayer p = (RawPlayer)it.next();
+            PlayerSkeleton p = (PlayerSkeleton) it.next();
             if( p.getPlayerID().equals(playerID) ) {
                 it.remove();
             }
@@ -70,18 +73,18 @@ public class Lobby {
 
     /**
      * Removes a player from the lobby.
-     * @param player RawPlayer to remove
+     * @param player PlayerSkeleton to remove
      */
-    public void remove(RawPlayer player) {
+    public void remove(PlayerSkeleton player) {
         data.remove(player);
     }
 
-    public boolean contains(RawPlayer player) {
+    public boolean contains(PlayerSkeleton player) {
         return data.containsKey(player);
     }
 
-    public RawPlayer contains(String playerId) {
-        for( RawPlayer p : data.keySet() ) {
+    public PlayerSkeleton contains(String playerId) {
+        for( PlayerSkeleton p : data.keySet() ) {
             if( p.getPlayerID().equals(playerId) ) {
                 return p;
             }
@@ -93,7 +96,7 @@ public class Lobby {
      * Returns the raw data of that instance.
      * @return data Set
      */
-    public Set<RawPlayer> getData() {
+    public Set<PlayerSkeleton> getData() {
         return data.keySet();
     }
 
@@ -138,8 +141,8 @@ public class Lobby {
         }
 
         int index = 1;
-        for( RawPlayer rawPlayer : data.keySet() ) {
-            Log.info("  " + index + ". ID = '" + rawPlayer +"'");
+        for( PlayerSkeleton playerSkeleton : data.keySet() ) {
+            Log.info("  " + index + ". ID = '" + playerSkeleton +"'");
             index++;
         }
     }
@@ -159,8 +162,8 @@ public class Lobby {
         table.add(row);
 
         /* create data rows */
-        for( RawPlayer rp : data.keySet() ) {
-            row = Arrays.asList(rp.getPlayerID(), rp.getNickname(), rp.getAddress());
+        for( PlayerSkeleton pk : data.keySet() ) {
+            row = Arrays.asList(pk.getPlayerID(), pk.getNickname(), pk.getAddress());
             table.add(row);
         }
 
@@ -169,22 +172,22 @@ public class Lobby {
 
     /**
      * Returns the value, the ready status, for given player.
-     * @param rawPlayer get status for
+     * @param playerSkeleton get status for
      * @return ready status for player
      */
-    public Boolean getStatus(RawPlayer rawPlayer) {
-        return data.get(rawPlayer);
+    public Boolean getStatus(PlayerSkeleton playerSkeleton) {
+        return data.get(playerSkeleton);
     }
 
     /**
      * Updates, meaning toggles, the status of the given player.
-     * @param rawPlayer RawPlayer toggles status
+     * @param playerSkeleton toggles status for this player
      */
-    public void toggleReadyStatus(RawPlayer rawPlayer) {
-        for( Map.Entry<RawPlayer, Boolean> entry : data.entrySet() ) {
-            if( entry.getKey().equals(rawPlayer) ) {
+    public void toggleReadyStatus(PlayerSkeleton playerSkeleton) {
+        for( Map.Entry<PlayerSkeleton, Boolean> entry : data.entrySet() ) {
+            if( entry.getKey().equals(playerSkeleton) ) {
 
-                if( entry.getValue() == false ) {
+                if( ! entry.getValue() ) {
                     entry.setValue(true);
                 } else {
                     entry.setValue(false);

@@ -13,12 +13,12 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.networking.network.RawPlayer;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.network.Lobby;
-import space.hypeo.networking.network.NetworkPlayer;
+import space.hypeo.mankomania.player.Lobby;
 
 
 /**
@@ -29,15 +29,16 @@ import space.hypeo.networking.network.NetworkPlayer;
 public class LobbyStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
-    private NetworkPlayer networkPlayer;
+    private PlayerManager playerManager;
     private boolean update;
 
-    public LobbyStage(StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer) {
+    public LobbyStage(StageManager stageManager, Viewport viewport, PlayerManager playerManager) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
-        this.networkPlayer = networkPlayer;
+        this.playerManager = playerManager;
         this.update = false;
+        setupBackground();
         setupLayout();
     }
 
@@ -86,24 +87,8 @@ public class LobbyStage extends Stage {
 
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
-
         Log.info("current width = " + width);
         Log.info("current height = " + height);
-
-        //width = 500;
-        //height = 1000;
-
-        //float widthC = width * 0.7f;
-        //float heightC = height * 0.5f;
-
-        //tableContainer.setSize(widthC, heightC);
-        //tableContainer.setPosition((width - widthC) / 2.0f, (height - heightC) / 2.0f);
-        //tableContainer.fillX();
-
-        /* inner table */
-
-        //table.setWidth( this.getWidth() );
-        //table.setPosition(0, this.getHeight() / 2);
 
         Label title = new Label("GAME LOBBY", skin);
         title.setFontScaleX(2);
@@ -111,14 +96,12 @@ public class LobbyStage extends Stage {
         title.setAlignment(Align.center);
 
         /* add title */
-        //table.row().colspan(4).expandX().fillX();
         rootTable.add(title).padTop(50).padBottom(50);
         rootTable.row();
-        //tableContainer.setActor(table);
 
         /* buttons */
-        Lobby lobby = networkPlayer.getLobby();
-        Role role = networkPlayer.getRole();
+        Lobby lobby = playerManager.getLobby();
+        Role role = playerManager.getRole();
 
         if( lobby == null || role == Role.NOT_CONNECTED ) {
             Log.error("LobbyStage: lobby must not be null!");
@@ -144,13 +127,13 @@ public class LobbyStage extends Stage {
 
         /* data rows */
         int index = 1;
-        for( RawPlayer rawPlayer : lobby.getData() ) {
+        for( PlayerSkeleton playerSkeleton : lobby.getData() ) {
 
-            Log.info("Build GUI widgets for player " + rawPlayer);
+            Log.info("Build GUI widgets for player " + playerSkeleton);
 
             Button btnIndex = new TextButton("" + index, skin);
-            Button btnNick = new TextButton(rawPlayer.getNickname(), skin);
-            Button btnAddr = new TextButton(rawPlayer.getAddress(), skin);
+            Button btnNick = new TextButton(playerSkeleton.getNickname(), skin);
+            Button btnAddr = new TextButton(playerSkeleton.getAddress(), skin);
             Button btnReady = new TextButton("NO", skin);
 
             btnIndex.scaleBy(2,2);
@@ -158,7 +141,7 @@ public class LobbyStage extends Stage {
             btnReady.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-
+                    // TODO: code for change status "ready to play" will follow.
                 }
 
             });

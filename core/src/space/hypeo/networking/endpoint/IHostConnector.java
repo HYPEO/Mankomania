@@ -1,4 +1,4 @@
-package space.hypeo.networking.network;
+package space.hypeo.networking.endpoint;
 
 /**
  * Interface provides service methods for player that is game-host
