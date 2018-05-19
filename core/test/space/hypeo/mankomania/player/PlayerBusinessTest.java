@@ -12,6 +12,7 @@ import space.hypeo.mankomania.player.PlayerManager;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class PlayerBusinessTest {
 
@@ -34,12 +35,7 @@ public class PlayerBusinessTest {
     }
 
     @Test
-    public void test_not_equal() {
-        assertThat(playerBusiness, not(new PlayerBusiness("another_raw", playerManager)));
-    }
-
-    @Test
-    public void test_equal() {
-        assertEquals(playerBusiness, playerBusiness);
+    public void test_getPlayerManager() {
+        assertEquals(playerBusiness.getPlayerManager(), playerManager);
     }
 }
