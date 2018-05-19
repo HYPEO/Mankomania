@@ -14,11 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import space.hypeo.Player.PlayerFactory;
+import space.hypeo.Player.PlayerManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.networking.network.IDeviceStatePublisher;
-import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.Role;
 
 /**
@@ -34,6 +35,8 @@ public class MainMenuStage extends Stage {
 
     private StageFactory stageFactory;
     private IDeviceStatePublisher deviceStatePublisher;
+
+    private PlayerManager playerManager;
 
     /**
      * Creates the Main Menu
@@ -97,9 +100,13 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                NetworkPlayer networkPlayer = new NetworkPlayer("the_mighty_host", Role.HOST, stageManager, stageFactory);
-                deviceStatePublisher.subscribe(networkPlayer);
-                stageManager.push(stageFactory.getLobbyStage(networkPlayer));
+
+                PlayerManager playerManager = new PlayerManager(Role.HOST);
+                PlayerFactory playerFactory = new PlayerFactory(playerManager);
+                playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("the_mighty_host"));
+
+                deviceStatePublisher.subscribe(playerManager.getPlayerNT());
+                stageManager.push(stageFactory.getLobbyStage(playerManager));
             }
         };
     }
@@ -108,7 +115,11 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stageManager.push(stageFactory.getDiscoveredHostsStage(new NetworkPlayer("another_client", Role.CLIENT, stageManager, stageFactory)));
+                PlayerManager playerManager = new PlayerManager(Role.CLIENT);
+                PlayerFactory playerFactory = new PlayerFactory(playerManager);
+                playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("another_client"));
+
+                stageManager.push(stageFactory.getDiscoveredHostsStage(playerManager));
             }
         };
     }

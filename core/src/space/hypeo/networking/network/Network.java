@@ -8,8 +8,8 @@ import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
-import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.Remittances;
 
 /**
@@ -44,7 +44,7 @@ public final class Network {
         kryo.register(java.util.HashMap.class);
 
         kryo.register(Lobby.class);
-        kryo.register(NetworkPlayer.class);
+        kryo.register(PlayerNT.class);
         kryo.register(String.class);
         kryo.register(space.hypeo.networking.network.Role.class);
 
@@ -55,7 +55,7 @@ public final class Network {
 
         kryo.register(Remittances.class);
 
-        kryo.register(RawPlayer.class);
+        kryo.register(PlayerBusiness.class);
     }
 
 }

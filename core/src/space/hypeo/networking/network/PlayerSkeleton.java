@@ -5,21 +5,15 @@ import com.esotericsoftware.minlog.Log;
 import java.net.SocketException;
 import java.util.UUID;
 
-/**
- * This class represents the raw data or skeleton of a NetworkPlayer.
- * It is necessary, to send a light-weight object through the network.
- */
-public class RawPlayer {
-
+public class PlayerSkeleton {
     protected String playerID;      // player ID
     protected String nickname;      // nickname
     protected String address;       // IP address in W/LAN
 
-    public RawPlayer() {}
-
-    public RawPlayer(String nickname) {
-        this.playerID = generatePlayerID();
+    public PlayerSkeleton(String nickname) {
         this.nickname = nickname;
+
+        this.playerID = generatePlayerID();
 
         // fetch IP in W/LAN
         String currentIpAddr = "";
@@ -34,13 +28,13 @@ public class RawPlayer {
 
     /**
      * Copy constructor.
-     * @param p
+     * @param playerSkeleton the new instance will be a deep copy of that object
      */
-    public RawPlayer(RawPlayer p) {
-        if (p != null && p != this) {
-            this.playerID = p.playerID;
-            this.nickname = p.nickname;
-            this.address = p.address;
+    public PlayerSkeleton(PlayerSkeleton playerSkeleton) {
+        if (playerSkeleton != null && playerSkeleton != this) {
+            this.playerID = playerSkeleton.playerID;
+            this.nickname = playerSkeleton.nickname;
+            this.address = playerSkeleton.address;
         }
     }
 
@@ -52,10 +46,6 @@ public class RawPlayer {
         return nickname;
     }
 
-    /**
-     * Gets current address.
-     * @return String IP Address
-     */
     public String getAddress() {
         return address;
     }
@@ -71,7 +61,7 @@ public class RawPlayer {
     }
 
     /**
-     * Returns the string representation of current RawPlayer object.
+     * Returns the string representation of current PlayerBusiness object.
      * @return String representation
      */
     @Override
@@ -84,8 +74,8 @@ public class RawPlayer {
         if( o == null) { return false; }
         if( o == this) { return true; }
 
-        if( o instanceof RawPlayer ) {
-            RawPlayer other = (RawPlayer) o;
+        if( o instanceof PlayerSkeleton) {
+            PlayerSkeleton other = (PlayerSkeleton) o;
             return this.playerID.equals(other.playerID);
 
         } else if( o instanceof String ) {
@@ -101,6 +91,4 @@ public class RawPlayer {
     public int hashCode() {
         return playerID.hashCode();
     }
-
-
 }

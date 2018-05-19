@@ -9,8 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import space.hypeo.networking.network.IDeviceStateSubscriber;
-import space.hypeo.networking.network.NetworkPlayer;
-import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.IDeviceStatePublisher;
 
 public class AndroidLauncher extends AndroidApplication implements IDeviceStatePublisher {

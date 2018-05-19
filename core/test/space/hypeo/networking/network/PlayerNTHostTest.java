@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -14,18 +13,17 @@ import space.hypeo.networking.endpoint.Endpoint;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class NetworkPlayerHostTest {
+public class PlayerNTHostTest {
 
     /* class to test */
     @InjectMocks
-    private NetworkPlayer networkPlayer;
+    private PlayerNT playerNT;
 
-    /* mocks for networkPlayer */
+    /* mocks for playerNT */
     @Mock private Endpoint endpoint;
-    @Mock private RawPlayer rawPlayer;
+    @Mock private PlayerBusiness playerBusiness;
     @Mock private Lobby lobby;
 
     private static final String PLAYER_ID= "ac03";
@@ -33,8 +31,8 @@ public class NetworkPlayerHostTest {
     private static final String IP_ADDRESS = "192.168.1.99";
     private static final Role ROLE = Role.HOST;
 
-    private RawPlayer getRawPlayerMock() {
-        RawPlayer rpm = mock(RawPlayer.class);
+    private PlayerBusiness getRawPlayerMock() {
+        PlayerBusiness rpm = mock(PlayerBusiness.class);
         //when( rpm.getPlayerID() ).thenReturn(PLAYER_ID);
         //when( rpm.getNickname() ).thenReturn(NICKNAME);
         //when( rpm.getAddress() ).thenReturn(IP_ADDRESS);
@@ -54,15 +52,15 @@ public class NetworkPlayerHostTest {
 
     @Before
     public void setup() {
-        networkPlayer = new NetworkPlayer();
+        playerNT = new PlayerNT();
         endpoint = getEndpointMock();
         lobby = mock(Lobby.class);
-        rawPlayer = getRawPlayerMock();
+        playerBusiness = getRawPlayerMock();
     }
 
     @After
     public void clean_up() {
-        networkPlayer = null;
+        playerNT = null;
     }
 
     @Test

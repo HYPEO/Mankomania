@@ -13,12 +13,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
+import space.hypeo.Player.PlayerManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.networking.network.RawPlayer;
+import space.hypeo.networking.network.PlayerBusiness;
+import space.hypeo.networking.network.PlayerSkeleton;
 import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.Lobby;
-import space.hypeo.networking.network.NetworkPlayer;
 
 
 /**
@@ -29,14 +30,14 @@ import space.hypeo.networking.network.NetworkPlayer;
 public class LobbyStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
-    private NetworkPlayer networkPlayer;
+    private PlayerManager playerManager;
     private boolean update;
 
-    public LobbyStage(StageManager stageManager, Viewport viewport, NetworkPlayer networkPlayer) {
+    public LobbyStage(StageManager stageManager, Viewport viewport, PlayerManager playerManager) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
-        this.networkPlayer = networkPlayer;
+        this.playerManager = playerManager;
         this.update = false;
         setupLayout();
     }
@@ -117,8 +118,8 @@ public class LobbyStage extends Stage {
         //tableContainer.setActor(table);
 
         /* buttons */
-        Lobby lobby = networkPlayer.getLobby();
-        Role role = networkPlayer.getRole();
+        Lobby lobby = playerManager.getLobby();
+        Role role = playerManager.getRole();
 
         if( lobby == null || role == Role.NOT_CONNECTED ) {
             Log.error("LobbyStage: lobby must not be null!");
@@ -144,13 +145,13 @@ public class LobbyStage extends Stage {
 
         /* data rows */
         int index = 1;
-        for( RawPlayer rawPlayer : lobby.getData() ) {
+        for( PlayerSkeleton playerSkeleton : lobby.getData() ) {
 
-            Log.info("Build GUI widgets for player " + rawPlayer);
+            Log.info("Build GUI widgets for player " + playerSkeleton);
 
             Button btnIndex = new TextButton("" + index, skin);
-            Button btnNick = new TextButton(rawPlayer.getNickname(), skin);
-            Button btnAddr = new TextButton(rawPlayer.getAddress(), skin);
+            Button btnNick = new TextButton(playerSkeleton.getNickname(), skin);
+            Button btnAddr = new TextButton(playerSkeleton.getAddress(), skin);
             Button btnReady = new TextButton("NO", skin);
 
             btnIndex.scaleBy(2,2);

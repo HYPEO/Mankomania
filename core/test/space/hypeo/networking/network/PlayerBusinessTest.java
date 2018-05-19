@@ -7,27 +7,27 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-public class RawPlayerTest {
+public class PlayerBusinessTest {
 
-    private RawPlayer rawPlayer;
+    private PlayerBusiness playerBusiness;
 
     @Before
     public void setup() {
-        rawPlayer = new RawPlayer("test_raw");
+        playerBusiness = new PlayerBusiness("test_raw");
     }
 
     @After
     public void clean_up() {
-        rawPlayer = null;
+        playerBusiness = null;
     }
 
     @Test
     public void test_not_equal() {
-        assertThat(rawPlayer, not(new RawPlayer("another_raw")));
+        assertThat(playerBusiness, not(new PlayerBusiness("another_raw")));
     }
 
     @Test
     public void test_equal() {
-        assertEquals(rawPlayer, rawPlayer);
+        assertEquals(playerBusiness, playerBusiness);
     }
 }

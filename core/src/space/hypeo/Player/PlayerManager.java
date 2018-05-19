@@ -1,0 +1,75 @@
+package space.hypeo.Player;
+
+import space.hypeo.mankomania.actors.player.PlayerActor;
+import space.hypeo.networking.network.Lobby;
+import space.hypeo.networking.network.Network;
+import space.hypeo.networking.network.PlayerNT;
+import space.hypeo.networking.network.PlayerBusiness;
+import space.hypeo.networking.network.Role;
+
+public class PlayerManager {
+    private PlayerBusiness playerBusiness;
+    private PlayerNT playerNT;
+    private PlayerActor playerActor;
+
+    // identifies the endpoint due to its role in the connection
+    private final Role role;
+
+    /* contains a list of all PlayerNT objects,
+     * that are connected to the host of the game.
+     * even the own PlayerNT object itself.
+     */
+    private Lobby lobby;
+
+    // status of the player in the lobby
+    private boolean ready2startGame;
+
+    public PlayerManager(final Role role) {
+        playerBusiness = null;
+        playerNT = null;
+        playerActor = null;
+        this.role = role;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public Lobby getLobby() {
+        return lobby;
+    }
+
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
+    }
+
+    public PlayerBusiness getPlayerBusiness() {
+        return playerBusiness;
+    }
+
+    public void setPlayerBusiness(final PlayerBusiness playerBusiness) {
+        // TODO: object from factory method
+        this.playerBusiness = playerBusiness;
+
+        // TODO: insert that player in lobby
+        lobby = new Lobby(Network.MAX_PLAYER);
+        lobby.add(playerBusiness.getPlayerSkeleton());
+    }
+
+    public PlayerNT getPlayerNT() {
+        return playerNT;
+    }
+
+    public void setPlayerNT(final PlayerNT playerNT) {
+        // TODO: object from factory method
+        this.playerNT = playerNT;
+    }
+
+    public PlayerActor getPlayerActor() {
+        return playerActor;
+    }
+
+    public void setPlayerActor(PlayerActor playerActor) {
+        this.playerActor = playerActor;
+    }
+}

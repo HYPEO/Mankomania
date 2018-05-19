@@ -1,6 +1,6 @@
 package space.hypeo.networking.packages;
 
-import space.hypeo.networking.network.RawPlayer;
+import space.hypeo.networking.network.PlayerBusiness;
 
 /**
  * This class is for the handshake between host and client.
@@ -18,7 +18,7 @@ public class Acknowledge {
      * Creates a new instance of Acknowledge with given host IP address.
      * @param host
      */
-    public Acknowledge(RawPlayer host) {
+    public Acknowledge(PlayerBusiness host) {
         msg += host.getPlayerID();
     }
 
