@@ -3,6 +3,8 @@ package space.hypeo.networking.network;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
+import space.hypeo.mankomania.player.Lobby;
+import space.hypeo.mankomania.player.PlayerBusiness;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
@@ -11,6 +13,7 @@ import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.Remittances;
+import space.hypeo.networking.player.PlayerNT;
 
 /**
  * The class Network is a auxiliary class

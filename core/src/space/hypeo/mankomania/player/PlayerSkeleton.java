@@ -1,9 +1,11 @@
-package space.hypeo.networking.network;
+package space.hypeo.mankomania.player;
 
 import com.esotericsoftware.minlog.Log;
 
 import java.net.SocketException;
 import java.util.UUID;
+
+import space.hypeo.networking.network.NetworkAddress;
 
 public class PlayerSkeleton {
     protected String playerID;      // player ID

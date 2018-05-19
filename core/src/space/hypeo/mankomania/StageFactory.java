@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.List;
 
-import space.hypeo.player.PlayerManager;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
@@ -17,7 +17,6 @@ import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
-import space.hypeo.networking.network.IDeviceStatePublisher;
 
 /**
  * Creates all the stages (views) for the game.

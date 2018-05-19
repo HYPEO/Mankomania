@@ -1,6 +1,6 @@
 package space.hypeo.networking.packages;
 
-import space.hypeo.networking.network.PlayerSkeleton;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 
 public class PlayerToggleReadyStatus extends PlayerSkeleton {
     public PlayerToggleReadyStatus(String nickname) {

@@ -1,4 +1,4 @@
-package space.hypeo.networking.network;
+package space.hypeo.mankomania.player;
 
 import com.esotericsoftware.minlog.Log;
 
@@ -9,6 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import space.hypeo.mankomania.player.PlayerSkeleton;
+import space.hypeo.networking.network.Network;
 
 /**
  * This class represents the list of player that joined the game,

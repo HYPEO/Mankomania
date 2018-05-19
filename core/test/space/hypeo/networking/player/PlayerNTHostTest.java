@@ -1,4 +1,4 @@
-package space.hypeo.networking.network;
+package space.hypeo.networking.network.player;
 
 import org.junit.After;
 import org.junit.Before;
@@ -8,8 +8,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import space.hypeo.player.PlayerManager;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.networking.endpoint.IEndpoint;
+import space.hypeo.networking.player.PlayerNT;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;

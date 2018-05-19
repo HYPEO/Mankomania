@@ -16,7 +16,7 @@ import com.esotericsoftware.minlog.Log;
 import java.net.InetAddress;
 import java.util.List;
 
-import space.hypeo.player.PlayerManager;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;

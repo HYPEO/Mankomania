@@ -1,6 +1,4 @@
-package space.hypeo.player;
-
-import space.hypeo.networking.network.PlayerBusiness;
+package space.hypeo.mankomania.player;
 
 public class PlayerFactory {
     private final PlayerManager playerManager;

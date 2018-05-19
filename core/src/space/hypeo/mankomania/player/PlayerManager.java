@@ -1,10 +1,8 @@
-package space.hypeo.player;
+package space.hypeo.mankomania.player;
 
 import space.hypeo.mankomania.actors.player.PlayerActor;
-import space.hypeo.networking.network.Lobby;
 import space.hypeo.networking.network.Network;
-import space.hypeo.networking.network.PlayerNT;
-import space.hypeo.networking.network.PlayerBusiness;
+import space.hypeo.networking.player.PlayerNT;
 import space.hypeo.networking.network.Role;
 
 public class PlayerManager {

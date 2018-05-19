@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.networking.network.PlayerNT;
+import space.hypeo.networking.player.PlayerNT;
 
 /**
  * Created by pichlermarc on 25.04.2018.

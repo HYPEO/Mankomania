@@ -1,6 +1,6 @@
 package space.hypeo.networking.packages;
 
-import space.hypeo.networking.network.PlayerBusiness;
+import space.hypeo.mankomania.player.PlayerBusiness;
 
 /**
  * This class is for the handshake between host and client.

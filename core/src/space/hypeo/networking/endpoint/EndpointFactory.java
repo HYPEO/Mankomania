@@ -1,6 +1,6 @@
 package space.hypeo.networking.endpoint;
 
-import space.hypeo.player.PlayerManager;
+import space.hypeo.mankomania.player.PlayerManager;
 
 public class EndpointFactory {
     private final PlayerManager playerManager;

@@ -1,6 +1,6 @@
 package space.hypeo.networking.endpoint;
 
-import space.hypeo.networking.network.PlayerSkeleton;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.packages.Remittances;
 
 

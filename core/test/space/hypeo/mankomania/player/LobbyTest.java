@@ -1,4 +1,4 @@
-package space.hypeo.networking.network;
+package space.hypeo.mankomania.player;
 
 import org.junit.After;
 import org.junit.Before;
@@ -7,6 +7,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import space.hypeo.mankomania.player.Lobby;
+import space.hypeo.mankomania.player.PlayerBusiness;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;

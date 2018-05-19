@@ -9,12 +9,11 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
-import space.hypeo.player.PlayerManager;
-import space.hypeo.networking.network.IClientConnector;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.networking.network.NetworkAddress;
-import space.hypeo.networking.network.PlayerSkeleton;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.packages.Acknowledge;
-import space.hypeo.networking.network.Lobby;
+import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;

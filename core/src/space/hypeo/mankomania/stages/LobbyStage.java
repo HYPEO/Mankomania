@@ -13,12 +13,12 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
-import space.hypeo.player.PlayerManager;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.networking.network.PlayerSkeleton;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.network.Lobby;
+import space.hypeo.mankomania.player.Lobby;
 
 
 /**

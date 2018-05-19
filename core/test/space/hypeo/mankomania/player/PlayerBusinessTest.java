@@ -1,4 +1,4 @@
-package space.hypeo.networking.network;
+package space.hypeo.mankomania.player;
 
 import org.junit.After;
 import org.junit.Before;
@@ -6,7 +6,8 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import space.hypeo.player.PlayerManager;
+import space.hypeo.mankomania.player.PlayerBusiness;
+import space.hypeo.mankomania.player.PlayerManager;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;

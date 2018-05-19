@@ -1,6 +1,4 @@
-package space.hypeo.networking.network;
-
-import space.hypeo.player.PlayerManager;
+package space.hypeo.mankomania.player;
 
 /**
  * This class represents the raw data or skeleton of a PlayerNT.

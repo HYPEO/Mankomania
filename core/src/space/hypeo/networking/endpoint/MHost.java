@@ -2,10 +2,9 @@ package space.hypeo.networking.endpoint;
 
 import java.io.IOException;
 
-import space.hypeo.player.PlayerManager;
-import space.hypeo.networking.network.IHostConnector;
-import space.hypeo.networking.network.Lobby;
-import space.hypeo.networking.network.PlayerSkeleton;
+import space.hypeo.mankomania.player.PlayerManager;
+import space.hypeo.mankomania.player.Lobby;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
