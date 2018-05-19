@@ -4,13 +4,15 @@ import com.esotericsoftware.minlog.Log;
 
 import space.hypeo.Player.PlayerManager;
 import space.hypeo.networking.endpoint.IEndpoint;
+import space.hypeo.networking.endpoint.MClient;
+import space.hypeo.networking.endpoint.MHost;
 import space.hypeo.networking.packages.Remittances;
 
 /**
  * This class holds the important network data,
  * that identifies a player in the network.
  */
-public class PlayerNT implements IEndpoint, IPlayerConnector, IDeviceStateSubscriber {
+public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     private PlayerManager playerManager;
 
     // The reference to the host or client.
@@ -18,6 +20,16 @@ public class PlayerNT implements IEndpoint, IPlayerConnector, IDeviceStateSubscr
 
     public PlayerNT(final PlayerManager playerManager) {
         this.playerManager = playerManager;
+
+        Role role = playerManager.getRole();
+
+        if( role == Role.HOST ) {
+            endpoint = new MHost(playerManager);
+        } else if( role == Role.CLIENT ) {
+            endpoint = new MClient(playerManager);
+        } else {
+            Log.info("Enpoint could not be initialized for given Role: " + role);
+        }
     }
 
     public IEndpoint getEndpoint() {
@@ -25,38 +37,8 @@ public class PlayerNT implements IEndpoint, IPlayerConnector, IDeviceStateSubscr
     }
 
     @Override
-    public void stop() {
-        if( endpoint != null ) {
-            endpoint.stop();
-        } else {
-            Log.info("No process running - nothing to do.");
-        }
-    }
-
-    @Override
-    public void close() {
-        if( endpoint != null ) {
-            endpoint.close();
-            endpoint = null;
-
-            // TODO: return to main menu
-
-        } else {
-            Log.info("No process running - nothing to do.");
-        }
-    }
-
-    @Override
     public Lobby getLobby() {
         return playerManager.getLobby();
-    }
-
-    @Override
-    public void toggleReadyStatus(PlayerSkeleton player2toggleReadyStatus) {
-    }
-
-    @Override
-    public void changeBalance(Remittances remittances) {
     }
 
     public void stopEndpoint() {
@@ -103,12 +85,12 @@ public class PlayerNT implements IEndpoint, IPlayerConnector, IDeviceStateSubscr
 
     @Override
     public void onPause() {
-        endpoint.close();
+        endpoint.stop();
     }
 
     @Override
     public void onStop() {
-        endpoint.close();
+        endpoint.stop();
     }
 
     @Override

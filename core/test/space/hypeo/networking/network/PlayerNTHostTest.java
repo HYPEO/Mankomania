@@ -8,7 +8,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import space.hypeo.networking.endpoint.Endpoint;
+import space.hypeo.Player.PlayerManager;
+import space.hypeo.networking.endpoint.IEndpoint;
+import space.hypeo.networking.endpoint.MClient;
+import space.hypeo.networking.endpoint.MHost;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -21,41 +24,15 @@ public class PlayerNTHostTest {
     @InjectMocks
     private PlayerNT playerNT;
 
-    /* mocks for playerNT */
-    @Mock private Endpoint endpoint;
-    @Mock private PlayerBusiness playerBusiness;
-    @Mock private Lobby lobby;
+    @Mock private PlayerManager playerManager;
+    @Mock private IEndpoint endpoint;
 
-    private static final String PLAYER_ID= "ac03";
-    private static final String NICKNAME = "a_test_RawPlayer";
-    private static final String IP_ADDRESS = "192.168.1.99";
-    private static final Role ROLE = Role.HOST;
-
-    private PlayerBusiness getRawPlayerMock() {
-        PlayerBusiness rpm = mock(PlayerBusiness.class);
-        //when( rpm.getPlayerID() ).thenReturn(PLAYER_ID);
-        //when( rpm.getNickname() ).thenReturn(NICKNAME);
-        //when( rpm.getAddress() ).thenReturn(IP_ADDRESS);
-        return rpm;
-    }
-
-    private Lobby getLobbyMock() {
-        Lobby l = mock(Lobby.class);
-        return l;
-    }
-
-    private Endpoint getEndpointMock() {
-        Endpoint ep = mock(Endpoint.class);
-        //when( ep.getRole() ).thenReturn(ROLE);
-        return ep;
-    }
 
     @Before
     public void setup() {
-        playerNT = new PlayerNT();
-        endpoint = getEndpointMock();
-        lobby = mock(Lobby.class);
-        playerBusiness = getRawPlayerMock();
+        playerManager = mock(PlayerManager.class);
+        endpoint = mock(IEndpoint.class);
+        playerNT = new PlayerNT(playerManager);
     }
 
     @After
@@ -64,7 +41,8 @@ public class PlayerNTHostTest {
     }
 
     @Test
-    public void test_() {
+    public void test_getEndpoint() {
+
         assertThat(true, is(true));
     }
 }

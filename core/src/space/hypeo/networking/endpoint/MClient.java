@@ -12,7 +12,6 @@ import java.util.List;
 import space.hypeo.Player.PlayerManager;
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.NetworkAddress;
-import space.hypeo.networking.network.PlayerBusiness;
 import space.hypeo.networking.network.PlayerSkeleton;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.network.Lobby;
@@ -40,6 +39,10 @@ public class MClient implements IEndpoint, IClientConnector {
 
     private long startPingRequest = 0;
 
+    /**
+     * Creates a new instance and starts client.
+     * @param playerManager
+     */
     public MClient(PlayerManager playerManager) {
         this.playerManager = playerManager;
         this.start();
@@ -140,7 +143,6 @@ public class MClient implements IEndpoint, IClientConnector {
     /**
      * Closes any network connection AND stops the client network thread.
      */
-    @Override
     public void stop() {
         Log.info("Client will be stopped.");
 
@@ -158,7 +160,6 @@ public class MClient implements IEndpoint, IClientConnector {
      * Closes the network connection BUT does NOT stop the client network thread.
      * Client can reconnect or connect to a different server.
      */
-    @Override
     public void close() {
         Log.info("Client will be closed.");
         client.close();

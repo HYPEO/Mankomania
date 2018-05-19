@@ -3,17 +3,28 @@ package space.hypeo.networking.network;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
+import space.hypeo.Player.PlayerManager;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
+import static org.mockito.Mockito.mock;
 
 public class PlayerBusinessTest {
 
+    /* class to test */
+    @InjectMocks
     private PlayerBusiness playerBusiness;
+
+    @Mock
+    private PlayerManager playerManager;
 
     @Before
     public void setup() {
-        playerBusiness = new PlayerBusiness("test_raw");
+        playerManager = mock(PlayerManager.class);
+        playerBusiness = new PlayerBusiness("test_raw", playerManager);
     }
 
     @After
@@ -23,7 +34,7 @@ public class PlayerBusinessTest {
 
     @Test
     public void test_not_equal() {
-        assertThat(playerBusiness, not(new PlayerBusiness("another_raw")));
+        assertThat(playerBusiness, not(new PlayerBusiness("another_raw", playerManager)));
     }
 
     @Test

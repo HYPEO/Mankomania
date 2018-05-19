@@ -12,8 +12,6 @@ public interface IEndpoint {
 
     public void stop();
 
-    public void close();
-
     /**
      * Update view of game lobby.
      */

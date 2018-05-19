@@ -32,6 +32,10 @@ public class MHost  implements IEndpoint, IHostConnector {
     // instance of the host
     private com.esotericsoftware.kryonet.Server server;
 
+    /**
+     * Creates a new instance and starts server.
+     * @param playerManager
+     */
     public MHost(PlayerManager playerManager) {
         this.playerManager = playerManager;
         this.start();
@@ -154,15 +158,13 @@ public class MHost  implements IEndpoint, IHostConnector {
 
     @Override
     public void stop() {
-        close();
+        stop();
     }
 
-    @Override
     public void close() {
         Log.info("Server will be closed.");
 
         try {
-            server.stop();
             server.close();
 
         } catch( NullPointerException e ) {

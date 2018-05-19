@@ -22,7 +22,7 @@ public class LobbyTest {
 
     /* the mock for the class, that will be tested */
     @Mock
-    private PlayerBusiness playerBusiness;
+    private PlayerSkeleton playerSkeleton;
 
     private final int MAX_PLAYER = 5;
     private int autoIncrementPlayerCounter;
@@ -34,7 +34,7 @@ public class LobbyTest {
     public void setup() {
         autoIncrementPlayerCounter = 1;
         lobby = new Lobby(MAX_PLAYER);
-        playerBusiness = getRawPlayerMock();
+        playerSkeleton = getPlayerSkeletonMock();
     }
 
     @After
@@ -42,7 +42,7 @@ public class LobbyTest {
         lobby = null;
     }
 
-    private PlayerBusiness getRawPlayerMock() {
+    private PlayerSkeleton getPlayerSkeletonMock() {
         PlayerBusiness rp = mock(PlayerBusiness.class);
 
         /* init mock behavior */
@@ -73,7 +73,7 @@ public class LobbyTest {
 
     @Test
     public void test_clear_one() {
-        lobby.add(playerBusiness);
+        lobby.add(playerSkeleton);
         lobby.clear();
         assertThat(lobby.size(), is(0));
     }
@@ -85,61 +85,61 @@ public class LobbyTest {
 
     @Test
     public void test_size_one() {
-        lobby.add(playerBusiness);
+        lobby.add(playerSkeleton);
         assertThat(lobby.size(), is(1));
     }
 
     @Test
     public void test_remove_zero() {
-        lobby.remove(playerBusiness);
+        lobby.remove(playerSkeleton);
         assertThat(lobby.size(), is(0));
     }
 
     @Test
     public void test_add_one() {
-        lobby.add(playerBusiness);
+        lobby.add(playerSkeleton);
         assertThat(lobby.size(), is(1));
     }
 
     @Test
     public void test_remove_by_playerID() {
-        lobby.add(playerBusiness);
+        lobby.add(playerSkeleton);
         lobby.remove(PLAYER_ID + 1);
         assertThat(lobby.size(), is(0));
     }
 
     @Test
     public void test_remove_by_object() {
-        lobby.add(playerBusiness);
-        lobby.remove(playerBusiness);
+        lobby.add(playerSkeleton);
+        lobby.remove(playerSkeleton);
         assertThat(lobby.size(), is(0));
     }
 
     @Test
     public void test_contains_object_not() {
-        assertThat(lobby.contains(playerBusiness), not(playerBusiness));
+        assertThat(lobby.contains(playerSkeleton), not(playerSkeleton));
     }
 
     @Test
     public void test_contains_object() {
-        lobby.add(playerBusiness);
-        assertThat(lobby.contains(playerBusiness), is(true));
+        lobby.add(playerSkeleton);
+        assertThat(lobby.contains(playerSkeleton), is(true));
     }
 
     @Test
     public void test_contains_playerID_not() {
-        assertThat(lobby.contains(PLAYER_ID + 1), not(playerBusiness));
+        assertThat(lobby.contains(PLAYER_ID + 1), not(playerSkeleton));
     }
 
     @Test
     public void test_contains_playerID() {
-        lobby.add(playerBusiness);
-        assertThat(lobby.contains(PLAYER_ID + 1), is(playerBusiness));
+        lobby.add(playerSkeleton);
+        assertThat(lobby.contains(PLAYER_ID + 1), is(playerSkeleton));
     }
 
     @Test
     public void test_isFull_not() {
-        lobby.add(playerBusiness);
+        lobby.add(playerSkeleton);
         assertThat(lobby.isFull(), is(false));
     }
 
@@ -147,29 +147,29 @@ public class LobbyTest {
     public void test_isFull() {
         lobby = new Lobby(1);
         assertThat(lobby.getMaxPlayer(), is(1));
-        lobby.add(playerBusiness);
+        lobby.add(playerSkeleton);
         assertThat(lobby.isFull(), is(true));
     }
 
     @Test
     public void test_initStatus() {
-        lobby.add(playerBusiness);
-        assertThat(lobby.getStatus(playerBusiness), is(false));
+        lobby.add(playerSkeleton);
+        assertThat(lobby.getStatus(playerSkeleton), is(false));
     }
 
     @Test
     public void test_toggleStatus_oneTime() {
-        lobby.add(playerBusiness);
-        lobby.toggleReadyStatus(playerBusiness);
-        assertThat(lobby.getStatus(playerBusiness), is(true));
+        lobby.add(playerSkeleton);
+        lobby.toggleReadyStatus(playerSkeleton);
+        assertThat(lobby.getStatus(playerSkeleton), is(true));
     }
 
     @Test
     public void test_toggleStatus_twoTimes() {
-        lobby.add(playerBusiness);
-        lobby.toggleReadyStatus(playerBusiness);
-        lobby.toggleReadyStatus(playerBusiness);
-        assertThat(lobby.getStatus(playerBusiness), is(false));
+        lobby.add(playerSkeleton);
+        lobby.toggleReadyStatus(playerSkeleton);
+        lobby.toggleReadyStatus(playerSkeleton);
+        assertThat(lobby.getStatus(playerSkeleton), is(false));
     }
 
     @Test
@@ -179,17 +179,17 @@ public class LobbyTest {
 
     @Test
     public void test_areAllPlayerReady_onePlayer() {
-        lobby.add(playerBusiness);
-        lobby.toggleReadyStatus(playerBusiness);
+        lobby.add(playerSkeleton);
+        lobby.toggleReadyStatus(playerSkeleton);
         assertThat(lobby.areAllPlayerReady(), is(true));
     }
 
     @Test
     public void test_areAllPlayerReady_twoPlayer_notReady() {
-        lobby.add(playerBusiness);
-        lobby.toggleReadyStatus(playerBusiness);
+        lobby.add(playerSkeleton);
+        lobby.toggleReadyStatus(playerSkeleton);
 
-        PlayerBusiness secondPlayer = getRawPlayerMock();
+        PlayerSkeleton secondPlayer = getPlayerSkeletonMock();
         lobby.add(secondPlayer);
 
         assertThat(lobby.areAllPlayerReady(), is(false));
@@ -197,10 +197,10 @@ public class LobbyTest {
 
     @Test
     public void test_areAllPlayerReady_twoPlayer_ready() {
-        lobby.add(playerBusiness);
-        lobby.toggleReadyStatus(playerBusiness);
+        lobby.add(playerSkeleton);
+        lobby.toggleReadyStatus(playerSkeleton);
 
-        PlayerBusiness secondPlayer = getRawPlayerMock();
+        PlayerSkeleton secondPlayer = getPlayerSkeletonMock();
         lobby.add(secondPlayer);
         lobby.toggleReadyStatus(secondPlayer);
 
