@@ -15,6 +15,8 @@ public class PlayerActor extends Group {
     // Current player state.
     private int balance;
     protected FieldActor currentField;
+    protected boolean isActive;
+
 
     // UI Relevant
     private PlayerDetailActor playerDetailActor;
@@ -28,6 +30,7 @@ public class PlayerActor extends Group {
         this.actorImage = actorImage;
         this.addActor(this.actorImage);
         this.balance = balance;
+        this.isActive = false;
     }
 
     /**
@@ -71,5 +74,15 @@ public class PlayerActor extends Group {
     public void setBalance(int balance) {
         this.balance = balance;
         this.playerDetailActor.updateBalance(balance);
+    }
+
+    public void setActive()
+    {
+        this.isActive = true;
+    }
+
+    public void setInactive()
+    {
+        this.isActive = false;
     }
 }

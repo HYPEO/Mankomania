@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.GameTest;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
@@ -37,6 +38,8 @@ public class LocalPlayerActorTest extends GameTest {
     private FieldActor fieldActor;
     @Mock
     private PlayerDetailActor playerDetailActor;
+    @Mock
+    private GameStateManager gameStateManager;
 
     private PlayerActor playerActor;
 
@@ -45,7 +48,7 @@ public class LocalPlayerActorTest extends GameTest {
 
     @Before
     public void setUp() {
-        playerActor = new LocalPlayerActor(actorImage, BALANCE, stageManager, stageFactory);
+        playerActor = new LocalPlayerActor(actorImage, BALANCE, stageManager, stageFactory, gameStateManager);
         playerActor.initializeState(fieldActor, playerDetailActor);
     }
 

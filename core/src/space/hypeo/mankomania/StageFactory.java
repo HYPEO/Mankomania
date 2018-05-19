@@ -35,12 +35,33 @@ public class StageFactory {
 
     public Stage getMapStage()
     {
-        List<PlayerActor> playerActors = new ArrayList<>();
-        playerActors.add(new LocalPlayerActor(new Image(new Texture("players/player_1.png")),
+        GameStateManager gameStateManager = new OfflineGameStateManager();
+
+        new LocalPlayerActor(new Image(new Texture("players/player_1.png")),
                 1000000,
                 stageManager,
-                this));
-        return new MapStage(viewport, stageManager, playerActors);
+                this,
+                gameStateManager);
+
+        new LocalPlayerActor(new Image(new Texture("players/player_2.png")),
+                1000000,
+                stageManager,
+                this,
+                gameStateManager);
+
+        new LocalPlayerActor(new Image(new Texture("players/player_3.png")),
+                1000000,
+                stageManager,
+                this,
+                gameStateManager);
+
+        new LocalPlayerActor(new Image(new Texture("players/player_4.png")),
+                1000000,
+                stageManager,
+                this,
+                gameStateManager);
+
+        return new MapStage(viewport, stageManager, gameStateManager);
     }
 
     public Stage getDiceResultStage(int moveFields) {
