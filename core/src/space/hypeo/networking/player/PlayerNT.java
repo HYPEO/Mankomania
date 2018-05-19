@@ -17,23 +17,12 @@ import space.hypeo.networking.packages.Remittances;
  * that identifies a player in the network.
  */
 public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
-    private PlayerManager playerManager;
+    private final PlayerManager playerManager;
+    private final IEndpoint endpoint;
 
-    // The reference to the host or client.
-    private IEndpoint endpoint;
-
-    public PlayerNT(final PlayerManager playerManager) {
+    public PlayerNT(final PlayerManager playerManager, final IEndpoint endpoint) {
         this.playerManager = playerManager;
-
-        Role role = playerManager.getRole();
-
-        if( role == Role.HOST ) {
-            endpoint = new MHost(playerManager);
-        } else if( role == Role.CLIENT ) {
-            endpoint = new MClient(playerManager);
-        } else {
-            Log.info("Enpoint could not be initialized for given Role: " + role);
-        }
+        this.endpoint = endpoint;
     }
 
     public IEndpoint getEndpoint() {

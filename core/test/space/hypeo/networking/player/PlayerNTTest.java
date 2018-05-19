@@ -1,4 +1,4 @@
-package space.hypeo.networking.network.player;
+package space.hypeo.networking.player;
 
 import org.junit.After;
 import org.junit.Before;
@@ -10,14 +10,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.networking.endpoint.IEndpoint;
-import space.hypeo.networking.player.PlayerNT;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PlayerNTHostTest {
+public class PlayerNTTest {
 
     /* class to test */
     @InjectMocks
@@ -31,7 +30,7 @@ public class PlayerNTHostTest {
     public void setup() {
         playerManager = mock(PlayerManager.class);
         endpoint = mock(IEndpoint.class);
-        playerNT = new PlayerNT(playerManager);
+        playerNT = new PlayerNT(playerManager, endpoint);
     }
 
     @After
@@ -41,7 +40,6 @@ public class PlayerNTHostTest {
 
     @Test
     public void test_getEndpoint() {
-
         assertThat(true, is(true));
     }
 }
