@@ -8,10 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import space.hypeo.Player.PlayerManager;
+import space.hypeo.player.PlayerManager;
 import space.hypeo.networking.endpoint.IEndpoint;
-import space.hypeo.networking.endpoint.MClient;
-import space.hypeo.networking.endpoint.MHost;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;

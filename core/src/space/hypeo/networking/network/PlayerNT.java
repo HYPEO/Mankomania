@@ -2,7 +2,7 @@ package space.hypeo.networking.network;
 
 import com.esotericsoftware.minlog.Log;
 
-import space.hypeo.Player.PlayerManager;
+import space.hypeo.player.PlayerManager;
 import space.hypeo.networking.endpoint.IEndpoint;
 import space.hypeo.networking.endpoint.MClient;
 import space.hypeo.networking.endpoint.MHost;
@@ -42,9 +42,7 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     }
 
     public void stopEndpoint() {
-    }
-
-    public void closeEndpoint() {
+        endpoint.stop();
     }
 
     @Override
@@ -71,16 +69,6 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     @Override
     public int getPlayerPosition(String playerID) {
         return 0;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package space.hypeo.networking.packages;
 
-import space.hypeo.Player.PlayerManager;
 import space.hypeo.networking.network.PlayerSkeleton;
 
 /**

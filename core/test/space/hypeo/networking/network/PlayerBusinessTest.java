@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import space.hypeo.Player.PlayerManager;
+import space.hypeo.player.PlayerManager;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;

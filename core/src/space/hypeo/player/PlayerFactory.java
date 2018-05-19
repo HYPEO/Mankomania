@@ -1,6 +1,5 @@
-package space.hypeo.Player;
+package space.hypeo.player;
 
-import space.hypeo.networking.network.PlayerNT;
 import space.hypeo.networking.network.PlayerBusiness;
 
 public class PlayerFactory {
@@ -16,9 +15,5 @@ public class PlayerFactory {
 
     public PlayerBusiness getPlayerBusiness(final String nickname) {
         return new PlayerBusiness(nickname, playerManager);
-    }
-
-    public PlayerNT getNetworkPlayer(final String nickname) {
-        return new PlayerNT(playerManager);
     }
 }

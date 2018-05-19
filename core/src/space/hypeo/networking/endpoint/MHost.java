@@ -2,10 +2,9 @@ package space.hypeo.networking.endpoint;
 
 import java.io.IOException;
 
-import space.hypeo.Player.PlayerManager;
+import space.hypeo.player.PlayerManager;
 import space.hypeo.networking.network.IHostConnector;
 import space.hypeo.networking.network.Lobby;
-import space.hypeo.networking.network.PlayerBusiness;
 import space.hypeo.networking.network.PlayerSkeleton;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.network.Network;
@@ -105,8 +104,7 @@ public class MHost  implements IEndpoint, IHostConnector {
 
                 server.sendToAllTCP(playerManager.getLobby());
 
-                // TODO: update lobby
-                //updateStageLobby();
+                playerManager.updateLobby();
 
             } else if( object instanceof PlayerDisconnect) {
                 PlayerSkeleton leavingPlayer = (PlayerDisconnect) object;
@@ -117,8 +115,7 @@ public class MHost  implements IEndpoint, IHostConnector {
 
                 server.sendToAllTCP(playerManager.getLobby());
 
-                // TODO: update lobby
-                //updateStageLobby();
+                playerManager.updateLobby();
 
             } else if( object instanceof PlayerToggleReadyStatus) {
                 PlayerSkeleton toggleStatusPlayer = (PlayerSkeleton) object;
@@ -126,6 +123,7 @@ public class MHost  implements IEndpoint, IHostConnector {
                 Log.info("Host: toggle ready status of player " + toggleStatusPlayer);
                 toggleReadyStatus(toggleStatusPlayer);
 
+                playerManager.updateLobby();
             }
         }
     }

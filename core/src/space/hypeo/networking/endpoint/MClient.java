@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
-import space.hypeo.Player.PlayerManager;
+import space.hypeo.player.PlayerManager;
 import space.hypeo.networking.network.IClientConnector;
 import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.network.PlayerSkeleton;
@@ -96,15 +96,11 @@ public class MClient implements IEndpoint, IClientConnector {
                 Log.info("Client: Received notification: " + notification.toString());
 
             } else if( object instanceof Lobby ) {
-                /*
-                 * receive new list of PlayerNT:
-                 * after connecting or disconnecting clients
-                 */
+                /* receive new list of PlayerNT:
+                 * after connecting or disconnecting clients */
                 playerManager.setLobby( (Lobby) object );
                 Log.info("Client: Received updated lobby");
 
-                // TODO: update lobby
-                //updateStageLobby();
 
             } else if( object instanceof Acknowledge ) {
                 Acknowledge ack = (Acknowledge) object;

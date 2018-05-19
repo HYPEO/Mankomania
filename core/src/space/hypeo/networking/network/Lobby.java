@@ -184,7 +184,7 @@ public class Lobby {
         for( Map.Entry<PlayerSkeleton, Boolean> entry : data.entrySet() ) {
             if( entry.getKey().equals(playerSkeleton) ) {
 
-                if( entry.getValue() == false ) {
+                if( ! entry.getValue() ) {
                     entry.setValue(true);
                 } else {
                     entry.setValue(false);

@@ -14,8 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import space.hypeo.Player.PlayerFactory;
-import space.hypeo.Player.PlayerManager;
+import space.hypeo.player.PlayerFactory;
+import space.hypeo.player.PlayerManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;

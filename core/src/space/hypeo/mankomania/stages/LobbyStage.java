@@ -13,10 +13,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
-import space.hypeo.Player.PlayerManager;
+import space.hypeo.player.PlayerManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.networking.network.PlayerBusiness;
 import space.hypeo.networking.network.PlayerSkeleton;
 import space.hypeo.networking.network.Role;
 import space.hypeo.networking.network.Lobby;
@@ -39,6 +38,7 @@ public class LobbyStage extends Stage {
         this.viewport = viewport;
         this.playerManager = playerManager;
         this.update = false;
+        setupBackground();
         setupLayout();
     }
 
@@ -87,24 +87,8 @@ public class LobbyStage extends Stage {
 
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
-
         Log.info("current width = " + width);
         Log.info("current height = " + height);
-
-        //width = 500;
-        //height = 1000;
-
-        //float widthC = width * 0.7f;
-        //float heightC = height * 0.5f;
-
-        //tableContainer.setSize(widthC, heightC);
-        //tableContainer.setPosition((width - widthC) / 2.0f, (height - heightC) / 2.0f);
-        //tableContainer.fillX();
-
-        /* inner table */
-
-        //table.setWidth( this.getWidth() );
-        //table.setPosition(0, this.getHeight() / 2);
 
         Label title = new Label("GAME LOBBY", skin);
         title.setFontScaleX(2);
@@ -112,10 +96,8 @@ public class LobbyStage extends Stage {
         title.setAlignment(Align.center);
 
         /* add title */
-        //table.row().colspan(4).expandX().fillX();
         rootTable.add(title).padTop(50).padBottom(50);
         rootTable.row();
-        //tableContainer.setActor(table);
 
         /* buttons */
         Lobby lobby = playerManager.getLobby();
@@ -159,7 +141,7 @@ public class LobbyStage extends Stage {
             btnReady.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-
+                    // TODO: code for change status "ready to play" will follow.
                 }
 
             });

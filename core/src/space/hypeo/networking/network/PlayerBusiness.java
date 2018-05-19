@@ -1,6 +1,6 @@
 package space.hypeo.networking.network;
 
-import space.hypeo.Player.PlayerManager;
+import space.hypeo.player.PlayerManager;
 
 /**
  * This class represents the raw data or skeleton of a PlayerNT.
@@ -12,6 +12,16 @@ public class PlayerBusiness extends PlayerSkeleton {
     public PlayerBusiness(String nickname, final PlayerManager playerManager) {
         super(nickname);
         this.playerManager = playerManager;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
     public PlayerManager getPlayerManager() {

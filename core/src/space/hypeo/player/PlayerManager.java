@@ -1,4 +1,4 @@
-package space.hypeo.Player;
+package space.hypeo.player;
 
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.networking.network.Lobby;
@@ -43,6 +43,15 @@ public class PlayerManager {
         this.lobby = lobby;
     }
 
+    public boolean isReady2startGame() {
+        return ready2startGame;
+    }
+
+    public void setReady2startGame(boolean ready2startGame) {
+        // TODO: triggered by button Ready in LobbyStage
+        this.ready2startGame = ready2startGame;
+    }
+
     public PlayerBusiness getPlayerBusiness() {
         return playerBusiness;
     }
@@ -71,5 +80,17 @@ public class PlayerManager {
 
     public void setPlayerActor(PlayerActor playerActor) {
         this.playerActor = playerActor;
+    }
+
+    public void updateLobby() {
+
+        // TODO: update LobbyStage
+        /*
+        Stage currentStage = stageManager.getCurrentStage();
+
+        if (currentStage instanceof LobbyStage) {
+            ((LobbyStage) currentStage).updateLobby();
+        }
+        */
     }
 }
