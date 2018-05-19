@@ -93,9 +93,10 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                stageManager.push(StageFactory.getHorseRaceStage(viewport, stageManager));
 
-                NetworkPlayer hostPlayer = new NetworkPlayer("the_mighty_host", Role.HOST, stageManager);
-                stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, hostPlayer));
+                //NetworkPlayer hostPlayer = new NetworkPlayer("the_mighty_host", Role.HOST, stageManager);
+                //stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, hostPlayer));
             }
         };
     }
