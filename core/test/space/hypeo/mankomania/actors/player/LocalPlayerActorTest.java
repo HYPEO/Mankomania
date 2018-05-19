@@ -17,17 +17,22 @@ import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
- * Tests the PlayerActor Class.
+ * Created by pichlermarc on 20.05.2018.
  */
-public class PlayerActorTest extends GameTest {
-
+public class LocalPlayerActorTest extends GameTest {
     private static final int BALANCE = 100000;
 
     @Mock
     private Image actorImage;
+    @Mock
+    private Texture detailTexture;
+    @Mock
+    private StageManager stageManager;
+    @Mock
+    private StageFactory stageFactory;
     @Mock
     private FieldActor fieldActor;
     @Mock
@@ -40,53 +45,27 @@ public class PlayerActorTest extends GameTest {
 
     @Before
     public void setUp() {
-        playerActor = new PlayerActor(actorImage, BALANCE);
+        playerActor = new LocalPlayerActor(actorImage, BALANCE, stageManager, stageFactory);
         playerActor.initializeState(fieldActor, playerDetailActor);
     }
 
     @Test
-    public void moveNonLocalActor() {
+    public void moveLocalActor() {
 
         // SET-UP:
-        // Set up nonlocal Player
-        playerActor = new PlayerActor(actorImage, BALANCE);
-        playerActor.initializeState(fieldActor, playerDetailActor);
+        Mockito.reset(actorImage);
 
         // Return predefined following field on method call.
         FieldActor targetFieldActor = Mockito.mock(FieldActor.class);
         Mockito.when(fieldActor.getFollowingField(4)).thenReturn(targetFieldActor);
 
-        // Reset actorImage, since I only want to verify whether it moved on move() call.
-        Mockito.reset(actorImage);
-
         // EXECUTION:
-        // Move player.
         playerActor.move(4);
 
         // VERIFICATION:
-        // Verify that targetFieldActor has not been triggered, since non-local Actors should not trigger fields on device.
-        Mockito.verify(targetFieldActor, Mockito.never()).trigger(playerActor);
-        // Verify that bounds have been updated, meaning that the player moved somewhere on-screen.
+        // Check if targetFieldActor has been triggered.
+        Mockito.verify(targetFieldActor).trigger(playerActor);
+        // Check if position has been updated.
         Mockito.verify(actorImage).setBounds(Mockito.anyFloat(), Mockito.anyFloat(), Mockito.anyFloat(), Mockito.anyFloat());
     }
-
-    @Test
-    public void getBalance() {
-        // VERIFICATION:
-        // Check if balance has been set correctly.
-        assertEquals(BALANCE, playerActor.getBalance());
-    }
-
-    @Test
-    public void setBalance() {
-        // EXECUTION:
-        playerActor.setBalance(20000);
-
-        // VERIFICATION:
-        assertEquals(20000, playerActor.getBalance());
-        // Verify that playerDetailActor has been notified to update.s
-        Mockito.verify(playerDetailActor).updateBalance(20000);
-    }
-
-
 }

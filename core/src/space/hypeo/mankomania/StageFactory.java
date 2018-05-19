@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.List;
 
+import space.hypeo.mankomania.actors.player.LocalPlayerActor;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
@@ -35,9 +36,8 @@ public class StageFactory {
     public Stage getMapStage()
     {
         List<PlayerActor> playerActors = new ArrayList<>();
-        playerActors.add(new PlayerActor(new Image(new Texture("players/player_1.png")),
+        playerActors.add(new LocalPlayerActor(new Image(new Texture("players/player_1.png")),
                 1000000,
-                true,
                 stageManager,
                 this));
         return new MapStage(viewport, stageManager, playerActors);
