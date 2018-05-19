@@ -57,7 +57,7 @@ public class PlayerSkeleton {
      * Take from UUID the last 4 characters.
      * @return String PlayerID
      */
-    public static String generatePlayerID() {
+    private static String generatePlayerID() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString().substring(uuid.toString().length() - 4);
     }
