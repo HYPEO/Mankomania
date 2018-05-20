@@ -105,7 +105,7 @@ public class MClient implements IEndpoint, IClientConnector {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: Received ACK from " + ack);
 
-                connection.sendTCP( new PlayerConnect(playerManager.getPlayerBusiness()) );
+                connection.sendTCP( new PlayerConnect(playerManager.getPlayerBusiness().getPlayerSkeleton()) );
 
             } else if( object instanceof PlayerHost) {
                 hostPlayer = (PlayerHost) object;
@@ -164,6 +164,7 @@ public class MClient implements IEndpoint, IClientConnector {
     public List<InetAddress> discoverHosts() {
         // TODO: check if WLAN has "Wireless Isolation" enabled => no discovery possible
         // use UDP port for discovering hosts
+        Log.info("Client: Searching in WLAN for hosts...");
         List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
         return discoveredHosts;

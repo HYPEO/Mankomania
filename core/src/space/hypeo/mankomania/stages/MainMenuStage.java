@@ -104,6 +104,7 @@ public class MainMenuStage extends Stage {
                 PlayerManager playerManager = new PlayerManager(Role.HOST);
                 PlayerFactory playerFactory = new PlayerFactory(playerManager);
                 playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("the_mighty_host"));
+                playerManager.setPlayerNT(playerFactory.getPlayerNT());
 
                 deviceStatePublisher.subscribe(playerManager.getPlayerNT());
                 stageManager.push(stageFactory.getLobbyStage(playerManager));
@@ -118,7 +119,9 @@ public class MainMenuStage extends Stage {
                 PlayerManager playerManager = new PlayerManager(Role.CLIENT);
                 PlayerFactory playerFactory = new PlayerFactory(playerManager);
                 playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("another_client"));
+                playerManager.setPlayerNT(playerFactory.getPlayerNT());
 
+                deviceStatePublisher.subscribe(playerManager.getPlayerNT());
                 stageManager.push(stageFactory.getDiscoveredHostsStage(playerManager));
             }
         };

@@ -101,9 +101,9 @@ public class MHost  implements IEndpoint, IHostConnector {
                 Log.info("Host: player has been connected, add to lobby");
                 playerManager.getLobby().log();
 
-                server.sendToAllTCP(playerManager.getLobby());
+                //server.sendToAllTCP(playerManager.getLobby());
 
-                playerManager.updateLobby();
+                //playerManager.updateLobby();
 
             } else if( object instanceof PlayerDisconnect) {
                 PlayerSkeleton leavingPlayer = (PlayerDisconnect) object;
@@ -112,17 +112,17 @@ public class MHost  implements IEndpoint, IHostConnector {
                 Log.info("Host: player has been disconnected, removed from lobby");
                 playerManager.getLobby().log();
 
-                server.sendToAllTCP(playerManager.getLobby());
+                //server.sendToAllTCP(playerManager.getLobby());
 
-                playerManager.updateLobby();
+                //playerManager.updateLobby();
 
             } else if( object instanceof PlayerToggleReadyStatus) {
                 PlayerSkeleton toggleStatusPlayer = (PlayerSkeleton) object;
 
                 Log.info("Host: toggle ready status of player " + toggleStatusPlayer);
-                toggleReadyStatus(toggleStatusPlayer);
+                //toggleReadyStatus(toggleStatusPlayer);
 
-                playerManager.updateLobby();
+                //playerManager.updateLobby();
             }
         }
     }
