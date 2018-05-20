@@ -99,7 +99,7 @@ public class MClient implements IEndpoint, IClientConnector {
                  * after connecting or disconnecting clients */
                 playerManager.setLobby( (Lobby) object );
                 Log.info("Client: Received updated lobby");
-
+                playerManager.updateLobby();
 
             } else if( object instanceof Acknowledge ) {
                 Acknowledge ack = (Acknowledge) object;

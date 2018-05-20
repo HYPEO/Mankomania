@@ -101,9 +101,9 @@ public class MHost  implements IEndpoint, IHostConnector {
                 Log.info("Host: player has been connected, add to lobby");
                 playerManager.getLobby().log();
 
-                //server.sendToAllTCP(playerManager.getLobby());
+                server.sendToAllTCP(playerManager.getLobby());
 
-                //playerManager.updateLobby();
+                playerManager.updateLobby();
 
             } else if( object instanceof PlayerDisconnect) {
                 PlayerSkeleton leavingPlayer = (PlayerDisconnect) object;
