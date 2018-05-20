@@ -9,9 +9,7 @@ import space.hypeo.mankomania.player.PlayerBusiness;
 public class Acknowledge {
     private String msg = "Connection accepted from host ";
 
-    /**
-     * Default constructor.
-     */
+    /* NOTE: default constructor is required for network traffic */
     public Acknowledge() {}
 
     /**

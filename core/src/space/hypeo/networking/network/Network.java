@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.EndPoint;
 
 import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.mankomania.player.PlayerBusiness;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
@@ -12,6 +13,7 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.PlayerToggleReadyStatus;
 import space.hypeo.networking.packages.Remittances;
 import space.hypeo.networking.player.PlayerNT;
 
@@ -41,24 +43,23 @@ public final class Network {
      */
     public static void register (EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
-        kryo.register(PingRequest.class);
-        kryo.register(PingResponse.class);
-        kryo.register(Notification.class);
+
+        kryo.register(String.class);
         kryo.register(java.util.HashMap.class);
 
-        kryo.register(Lobby.class);
-        kryo.register(PlayerNT.class);
-        kryo.register(String.class);
-        kryo.register(space.hypeo.networking.network.Role.class);
-
+        /* networking.packages */
         kryo.register(Acknowledge.class);
+        kryo.register(Notification.class);
+        kryo.register(PingRequest.class);
+        kryo.register(PingResponse.class);
         kryo.register(PlayerConnect.class);
         kryo.register(PlayerDisconnect.class);
         kryo.register(PlayerHost.class);
-
+        kryo.register(PlayerToggleReadyStatus.class);
         kryo.register(Remittances.class);
 
-        kryo.register(PlayerBusiness.class);
+        kryo.register(PlayerSkeleton.class);
+        kryo.register(Lobby.class);
     }
 
 }

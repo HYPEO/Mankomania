@@ -12,6 +12,9 @@ public class PlayerSkeleton {
     protected String nickname;      // nickname
     protected String address;       // IP address in W/LAN
 
+    /* NOTE: default constructor required for network traffic */
+    public PlayerSkeleton() {}
+
     public PlayerSkeleton(String nickname) {
         this.nickname = nickname;
 
