@@ -142,7 +142,7 @@ public class Lobby {
 
         int index = 1;
         for( PlayerSkeleton playerSkeleton : data.keySet() ) {
-            Log.info("  " + index + ". ID = '" + playerSkeleton +"'");
+            Log.info("  #" + index + ": '" + playerSkeleton +"'");
             index++;
         }
     }
