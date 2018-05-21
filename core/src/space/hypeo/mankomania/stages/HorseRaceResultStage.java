@@ -22,9 +22,7 @@ import space.hypeo.mankomania.actors.horse.HorseActor;
 
 public class HorseRaceResultStage extends Stage {
     private StageManager stageManager;
-    private int winningHorseID;
     private int backedHorseID;
-    private float winningQuote;
     private int bet;
 
     private Label title;
@@ -34,16 +32,16 @@ public class HorseRaceResultStage extends Stage {
 
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
-    public HorseRaceResultStage(Viewport viewport, final StageManager stageManager, int winningHorseID,
-                          int backedHorseID, float winningQuote, int bet) {
+    public HorseRaceResultStage(Viewport viewport, final StageManager stageManager, int backedHorseID, int bet,
+                                HorseActor winningHorse) {
         super(viewport);
 
         this.stageManager = stageManager;
-        this.winningHorseID = winningHorseID;
         this.backedHorseID = backedHorseID;
-        this.winningQuote = winningQuote;
         this.bet = bet;
+        this.winningHorse = winningHorse;
 
+        // Set up Stage
         setUpBackground();
         createWidgets();
         setUpClickListeners();
@@ -59,27 +57,23 @@ public class HorseRaceResultStage extends Stage {
     }
 
     private void createWidgets() {
-
-        //TODO: move more fields into HorseActor class, take this as parameter for more details
-
-        if(winningHorseID == backedHorseID) {
-            title = new Label("Congratulations!!", skin);
-            message = new Label("Your bet was: " + bet + "\n more details to come", skin);
+        if(winningHorse.getId() == backedHorseID) {
+            title = new Label("Congratulations!! \n" + winningHorse.getHorseName() + " won!", skin);
+            message = new Label("Your bet was: " + bet + "\n with a Quote of: " +
+                    winningHorse.getQuote() + "\n YOU WIN: " + winningHorse.getQuote() * bet +
+                    "Euro", skin);
         }
         else {
-            title = new Label("Sorry :(", skin);
-            message = new Label("You lost your bet of: " + bet + "Euro \n more details to come", skin);
+            title = new Label("Sorry :( \n" + winningHorse.getHorseName() + " won...", skin);
+            message = new Label("You lost your bet of: " + bet + "Euro \n Maybe next time", skin);
         }
 
         title.setFontScale(2);
-        winningHorse = new HorseActor(winningHorseID);
         backButton = new TextButton("Back", skin);
-
     }
 
     private void setUpClickListeners() {
         backButton.addListener(backButtonListener());
-
     }
 
     private void setUpLayout() {

@@ -6,9 +6,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -34,26 +32,25 @@ public class HorseRaceStage extends Stage {
     private StageManager stageManager;
     private Viewport viewport;
 
-    private TextButton horse1;
-    private TextButton horse2;
-    private TextButton horse3;
-    private TextButton horse4;
-    private TextButton startRace;
-    private Label currentAmount;
-    private float selectedHorseQuote;
-    private int slectedHorseID;
-    private float horse1Quote = 1f;
-    private float horse2Quote = 1.5f;
-    private float horse3Quote = 2f;
-    private float horse4Quote = 2.5f;
+    private TextButton horse1Button;
+    private TextButton horse2Button;
+    private TextButton horse3Button;
+    private TextButton horse4Button;
+
     private HorseActor horse1Actor;
     private HorseActor horse2Actor;
     private HorseActor horse3Actor;
     private HorseActor horse4Actor;
+
     private MoveToAction horse1Movement;
     private MoveToAction horse2Movement;
     private MoveToAction horse3Movement;
     private MoveToAction horse4Movement;
+
+    private TextButton startRace;
+    private Label currentAmount;
+    private float selectedHorseQuote;
+    private int slectedHorseID;
     private int winningHorseID;
 
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
@@ -64,7 +61,9 @@ public class HorseRaceStage extends Stage {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
+        selectedHorseQuote = 0;
 
+        // Set up Stage
         setUpBackground();
         createWidgets();
         setUpClickListeners();
@@ -83,24 +82,30 @@ public class HorseRaceStage extends Stage {
     }
 
     private void createWidgets() {
-        horse1 = new TextButton("La Tartaruga \n Quote: " + Float.toString(horse1Quote), skin);
-        horse2 = new TextButton("Schnecki \n Quote: " + Float.toString(horse2Quote), skin);
-        horse3 = new TextButton("Salami \n Quote: " + Float.toString(horse3Quote), skin);
-        horse4 = new TextButton("Plumbum \n Quote: " + Float.toString(horse4Quote), skin);
+        horse1Actor = new HorseActor(1, "La Tartaruga", 1f);
+        horse2Actor = new HorseActor(2, "Schnecki", 1.5f);
+        horse3Actor = new HorseActor(3, "Salami", 1.8f);
+        horse4Actor = new HorseActor(4, "Plumbum", 2.2f);
+
+        horse1Button = new TextButton(horse1Actor.getHorseName() + "\n Quote: " +
+                Float.toString(horse1Actor.getQuote()), skin);
+        horse2Button = new TextButton(horse2Actor.getHorseName() + "\n Quote: " +
+                Float.toString(horse2Actor.getQuote()), skin);
+        horse3Button = new TextButton(horse3Actor.getHorseName() + "\n Quote: " +
+                Float.toString(horse3Actor.getQuote()), skin);
+        horse4Button = new TextButton(horse4Actor.getHorseName() + "\n Quote: " +
+                Float.toString(horse4Actor.getQuote()), skin);
+
         startRace = new TextButton("GO!!!", skin);
         currentAmount = new Label("5000 Euro", skin);
-
-        horse1Actor = new HorseActor(1);
-        horse2Actor = new HorseActor(2);
-        horse3Actor = new HorseActor(3);
-        horse4Actor = new HorseActor(4);
     }
 
     private void setUpClickListeners() {
-        horse1.addListener(horse1ClickListener());
-        horse2.addListener(horse2ClickListener());
-        horse3.addListener(horse3ClickListener());
-        horse4.addListener(horse4ClickListener());
+        horse1Button.addListener(horse1ClickListener());
+        horse2Button.addListener(horse2ClickListener());
+        horse3Button.addListener(horse3ClickListener());
+        horse4Button.addListener(horse4ClickListener());
+
         startRace.addListener(startRaceClickListender());
         amount.addListener(amountChangeListener());
     }
@@ -122,10 +127,10 @@ public class HorseRaceStage extends Stage {
         layout.setWidth(this.getWidth());
         layout.align(Align.bottom);
         layout.setPosition(0, 0);
-        layout.add(horse1).width(100).height(100).padRight(10).padLeft(5);
-        layout.add(horse2).width(100).height(100).padRight(10);
-        layout.add(horse3).width(100).height(100).padRight(10);
-        layout.add(horse4).width(100).height(100).padRight(10);
+        layout.add(horse1Button).width(100).height(100).padRight(10).padLeft(5);
+        layout.add(horse2Button).width(100).height(100).padRight(10);
+        layout.add(horse3Button).width(100).height(100).padRight(10);
+        layout.add(horse4Button).width(100).height(100).padRight(10);
         layout.row();
         layout.add(amount).colspan(4).width(300).padTop(40 - amount.getHeight());
         layout.row();
@@ -139,47 +144,53 @@ public class HorseRaceStage extends Stage {
 
     private void setUpRaceResult() {
         Random rand = new Random();
-        float minTime = 0.9f;
-        float maxTime = 4; // for adjustments: maxTime = maxTime - minTime
+        float minTime = 1.5f;
+        float maxTime = 3.5f; // note for adjustments: maxTime <= maxTime - minTime
+        float avgQuoteTime = (horse1Actor.getQuote() + horse2Actor.getQuote() + horse3Actor.getQuote() +
+                horse4Actor.getQuote()) / 4;
+        float horse1Time;
+        float horse2Time;
+        float horse3Time;
+        float horse4Time;
 
-        float horse1Time = rand.nextFloat() * maxTime + minTime;
-        float horse2Time = rand.nextFloat() * maxTime + minTime;
-        float horse3Time = rand.nextFloat() * maxTime + minTime;
-        float horse4Time = rand.nextFloat() * maxTime + minTime;
-
-        while (!checkUniqueHorseTimes(horse1Time, horse2Time, horse3Time, horse4Time)) {
-            horse1Time = rand.nextFloat() * maxTime + minTime;
-            horse2Time = rand.nextFloat() * maxTime + minTime;
-            horse3Time = rand.nextFloat() * maxTime + minTime;
-            horse4Time = rand.nextFloat() * maxTime + minTime;
-        }
+        // Calculate time for each horse and avoid horses with same time
+        do {
+            horse1Time = ((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime;
+            horse2Time = ((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime;
+            horse3Time = ((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime;
+            horse4Time = ((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime;
+        } while (!checkUniqueHorseTimes(horse1Time, horse2Time, horse3Time, horse4Time));
 
         calculateWinningHorse(horse1Time, horse2Time, horse3Time, horse4Time);
 
+        // Create MoveToActions for each horse with it's time
+        // Horse 1
         horse1Movement = new MoveToAction();
         horse1Movement.setPosition(this.getWidth() - horse1Actor.getWidth(),
                 this.getHeight() - horse1Actor.getHeight());
         horse1Movement.setDuration(horse1Time);
         horse1Movement.setInterpolation(Interpolation.fade);
 
+        // Horse 2
         horse2Movement = new MoveToAction();
         horse2Movement.setPosition(this.getWidth() - horse2Actor.getWidth(),
                 this.getHeight() - horse2Actor.getHeight() * 2);
         horse2Movement.setDuration(horse2Time);
         horse2Movement.setInterpolation(Interpolation.fade);
 
+        // Horse 3
         horse3Movement = new MoveToAction();
         horse3Movement.setPosition(this.getWidth() - horse2Actor.getWidth(),
                 this.getHeight() - horse3Actor.getHeight() * 3);
         horse3Movement.setDuration(horse3Time);
         horse3Movement.setInterpolation(Interpolation.fade);
 
+        // Horse 4
         horse4Movement = new MoveToAction();
         horse4Movement.setPosition(this.getWidth() - horse2Actor.getWidth(),
                 this.getHeight() - horse4Actor.getHeight() * 4);
         horse4Movement.setDuration(horse4Time);
         horse4Movement.setInterpolation(Interpolation.fade);
-
     }
 
     private void calculateWinningHorse(float horse1, float horse2, float horse3, float horse4) {
@@ -268,19 +279,24 @@ public class HorseRaceStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(!startRace.getLabel().textEquals("get Results")) {
-                    horse1Actor.addAction(horse1Movement);
-                    horse2Actor.addAction(horse2Movement);
-                    horse3Actor.addAction(horse3Movement);
-                    horse4Actor.addAction(horse4Movement);
+                if(selectedHorseQuote != 0) {
+                    if (!startRace.getLabel().textEquals("get Results")) {
+                        horse1Actor.addAction(horse1Movement);
+                        horse2Actor.addAction(horse2Movement);
+                        horse3Actor.addAction(horse3Movement);
+                        horse4Actor.addAction(horse4Movement);
 
-                    startRace.setText("get Results");
-                }
-                else {
-                    // push ResultStage
-                    stageManager.remove(HorseRaceStage.this);
-                    stageManager.push(StageFactory.getHorseRaceResultStage(viewport, stageManager, winningHorseID,
-                            slectedHorseID, 1, ((int) amount.getValue())));
+                        startRace.setText("get Results");
+                    } else {
+                        // remove this Stage so you get back to the game after Result Stage is closed
+                        stageManager.remove(HorseRaceStage.this);
+
+                        // push ResultStage
+                        stageManager.push(StageFactory.getHorseRaceResultStage(viewport, stageManager,
+                                slectedHorseID, ((int) amount.getValue()), getWinningHorse(winningHorseID)));
+                    }
+                } else {
+                    startRace.setText("Select a Horse and GO!!");
                 }
             }
         };
@@ -297,25 +313,35 @@ public class HorseRaceStage extends Stage {
     }
 
     private void selectHorse(int horseID) {
-        horse1.getLabel().setColor(Color.WHITE);
-        horse2.getLabel().setColor(Color.WHITE);
-        horse3.getLabel().setColor(Color.WHITE);
-        horse4.getLabel().setColor(Color.WHITE);
+        horse1Button.getLabel().setColor(Color.WHITE);
+        horse2Button.getLabel().setColor(Color.WHITE);
+        horse3Button.getLabel().setColor(Color.WHITE);
+        horse4Button.getLabel().setColor(Color.WHITE);
         slectedHorseID = horseID;
 
         switch (horseID) {
-            case 1: horse1.getLabel().setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
-                    selectedHorseQuote = horse1Quote;
+            case 1: horse1Button.getLabel().setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
+                    selectedHorseQuote = horse1Actor.getQuote();
                     break;
-            case 2: horse2.getLabel().setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
-                    selectedHorseQuote = horse2Quote;
+            case 2: horse2Button.getLabel().setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
+                    selectedHorseQuote = horse1Actor.getQuote();
                     break;
-            case 3: horse3.getLabel().setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
-                    selectedHorseQuote = horse3Quote;
+            case 3: horse3Button.getLabel().setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
+                    selectedHorseQuote = horse3Actor.getQuote();
                     break;
-            case 4: horse4.getLabel().setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
-                    selectedHorseQuote = horse4Quote;
+            case 4: horse4Button.getLabel().setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
+                    selectedHorseQuote = horse4Actor.getQuote();
                     break;
         }
+    }
+
+    private HorseActor getWinningHorse(int horseID) {
+        switch (horseID) {
+            case 1: return horse1Actor;
+            case 2: return horse2Actor;
+            case 3: return horse3Actor;
+            case 4: return horse4Actor;
+        }
+        return null;
     }
 }
