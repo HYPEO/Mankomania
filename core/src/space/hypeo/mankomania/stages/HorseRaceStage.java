@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Random;
 
+import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.mankomania.actors.horse.HorseActor;
@@ -53,7 +54,7 @@ public class HorseRaceStage extends Stage {
     private MoveToAction horse2Movement;
     private MoveToAction horse3Movement;
     private MoveToAction horse4Movement;
-    private float winningHorse;
+    private int winningHorseID;
 
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
     final Slider amount = new Slider(5000, 50000, 1000, false, skin);
@@ -185,36 +186,36 @@ public class HorseRaceStage extends Stage {
         if(horse1 < horse2) {
             if (horse3 < horse4) {
                 if (horse1 < horse3) {
-                    winningHorse = 1;
+                    winningHorseID = 1;
                 }
                 else {
-                    winningHorse = 3;
+                    winningHorseID = 3;
                 }
             }
             else {
                 if (horse1 < horse4) {
-                    winningHorse = 1;
+                    winningHorseID = 1;
                 }
                 else {
-                    winningHorse = 4;
+                    winningHorseID = 4;
                 }
             }
         }
         else {
             if (horse3 < horse4) {
                 if (horse2 < horse3) {
-                    winningHorse = 2;
+                    winningHorseID = 2;
                 }
                 else {
-                    winningHorse = 3;
+                    winningHorseID = 3;
                 }
             }
             else {
                 if (horse2 < horse4) {
-                    winningHorse = 2;
+                    winningHorseID = 2;
                 }
                 else {
-                    winningHorse = 4;
+                    winningHorseID = 4;
                 }
             }
         }
@@ -262,14 +263,25 @@ public class HorseRaceStage extends Stage {
             }
         };
     }
+
     private ClickListener startRaceClickListender() {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                horse1Actor.addAction(horse1Movement);
-                horse2Actor.addAction(horse2Movement);
-                horse3Actor.addAction(horse3Movement);
-                horse4Actor.addAction(horse4Movement);
+                if(!startRace.getLabel().textEquals("get Results")) {
+                    horse1Actor.addAction(horse1Movement);
+                    horse2Actor.addAction(horse2Movement);
+                    horse3Actor.addAction(horse3Movement);
+                    horse4Actor.addAction(horse4Movement);
+
+                    startRace.setText("get Results");
+                }
+                else {
+                    // push ResultStage
+                    stageManager.remove(HorseRaceStage.this);
+                    stageManager.push(StageFactory.getHorseRaceResultStage(viewport, stageManager, winningHorseID,
+                            slectedHorseID, 1, ((int) amount.getValue())));
+                }
             }
         };
     }

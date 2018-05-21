@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
+import space.hypeo.mankomania.stages.HorseRaceResultStage;
 import space.hypeo.mankomania.stages.HorseRaceStage;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.MapStage;
@@ -41,6 +42,12 @@ public class StageFactory {
 
     public static Stage getHorseRaceStage(final Viewport viewport, final StageManager stageManager) {
         return new HorseRaceStage(viewport, stageManager);
+    }
+
+    public static Stage getHorseRaceResultStage(final Viewport viewport, final StageManager stageManager,
+                                                int winningHorseID, int backedHorseID, float winningQuote,
+                                                int bet) {
+        return new HorseRaceResultStage(viewport, stageManager, winningHorseID, backedHorseID, winningQuote, bet);
     }
 
     /**
