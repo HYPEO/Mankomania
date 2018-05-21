@@ -13,7 +13,6 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
-import space.hypeo.networking.packages.PlayerToggleReadyStatus;
 import space.hypeo.networking.packages.Remittances;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -214,15 +213,6 @@ public class MHost implements IEndpoint, IHostConnector {
         }
 
         return connectionID;
-    }
-
-    @Override
-    public void toggleReadyStatus(PlayerSkeleton player2toggleReadyStatus) {
-        // TODO: correct that process!
-        Lobby lobby = playerManager.getLobby();
-        lobby.toggleReadyStatus(player2toggleReadyStatus);
-
-        server.sendToAllTCP(lobby);
     }
 
     @Override

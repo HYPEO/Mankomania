@@ -11,7 +11,6 @@ import java.util.List;
 
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.networking.network.NetworkAddress;
-import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.networking.network.Network;
@@ -21,7 +20,6 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
-import space.hypeo.networking.packages.PlayerToggleReadyStatus;
 import space.hypeo.networking.packages.Remittances;
 
 /**
@@ -208,12 +206,6 @@ public class MClient implements IEndpoint, IClientConnector {
     @Override
     public boolean joinGame(String playerID) {
         return false;
-    }
-
-    @Override
-    public void toggleReadyStatus(PlayerSkeleton player2toggleReadyStatus) {
-        // TODO: correct that process!
-        client.sendTCP( new PlayerToggleReadyStatus(playerManager.getPlayerBusiness()) );
     }
 
     @Override

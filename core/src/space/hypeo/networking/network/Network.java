@@ -4,7 +4,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
 import space.hypeo.mankomania.player.Lobby;
-import space.hypeo.mankomania.player.PlayerBusiness;
 import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.Notification;
@@ -13,9 +12,7 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
-import space.hypeo.networking.packages.PlayerToggleReadyStatus;
 import space.hypeo.networking.packages.Remittances;
-import space.hypeo.networking.player.PlayerNT;
 
 /**
  * The class Network is a auxiliary class
@@ -55,7 +52,6 @@ public final class Network {
         kryo.register(PlayerConnect.class);
         kryo.register(PlayerDisconnect.class);
         kryo.register(PlayerHost.class);
-        kryo.register(PlayerToggleReadyStatus.class);
         kryo.register(Remittances.class);
 
         kryo.register(PlayerSkeleton.class);
