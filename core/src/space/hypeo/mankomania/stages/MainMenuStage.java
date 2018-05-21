@@ -116,6 +116,7 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                // TODO: BUG client is in lobby multiple times if returned to main menu
                 PlayerManager playerManager = new PlayerManager(stageManager, Role.CLIENT);
                 PlayerFactory playerFactory = new PlayerFactory(playerManager);
                 playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("another_client"));

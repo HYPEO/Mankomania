@@ -71,4 +71,9 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     public String getPlayerID() {
         return playerManager.getPlayerBusiness().getPlayerID();
     }
+
+    @Override
+    public void broadCastLobby() {
+        endpoint.broadCastLobby();
+    }
 }

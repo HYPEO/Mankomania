@@ -95,8 +95,6 @@ public class MClient implements IEndpoint, IClientConnector {
                 Log.info("Client: Received notification: " + notification.toString());
 
             } else if( object instanceof Lobby ) {
-                /* receive new lobby:
-                 * after connecting or disconnecting clients */
                 playerManager.setLobby( (Lobby) object );
                 Log.info("Client: Received updated lobby");
                 playerManager.updateLobby();
@@ -222,5 +220,10 @@ public class MClient implements IEndpoint, IClientConnector {
     public void changeBalance(Remittances remittances) {
         // TODO: correct that process!
         client.sendTCP(remittances);
+    }
+
+    @Override
+    public void broadCastLobby() {
+        client.sendTCP(playerManager.getLobby());
     }
 }

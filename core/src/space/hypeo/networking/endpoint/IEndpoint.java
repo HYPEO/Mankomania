@@ -24,4 +24,6 @@ public interface IEndpoint {
      * @param remittances
      */
     public void changeBalance(Remittances remittances);
+
+    public void broadCastLobby();
 }

@@ -101,11 +101,7 @@ public class MHost implements IEndpoint, IHostConnector {
                 Log.info("Host: player has been connected, add to lobby");
                 playerManager.getLobby().log();
 
-                Log.info("Host: send broadcast new lobby");
-                server.sendToAllTCP(playerManager.getLobby());
-
-                Log.info("Host: update own lobby");
-                playerManager.updateLobby();
+                broadCastLobby();
 
             } else if( object instanceof PlayerDisconnect) {
                 PlayerSkeleton leavingPlayer = (PlayerDisconnect) object;
@@ -114,17 +110,17 @@ public class MHost implements IEndpoint, IHostConnector {
                 Log.info("Host: player has been disconnected, removed from lobby");
                 playerManager.getLobby().log();
 
-                //server.sendToAllTCP(playerManager.getLobby());
+                broadCastLobby();
 
-                //playerManager.updateLobby();
+            } else if( object instanceof Lobby) {
+                Log.info("Host: Received updated lobby");
+                playerManager.setLobby( (Lobby) object );
 
-            } else if( object instanceof PlayerToggleReadyStatus) {
-                PlayerSkeleton toggleStatusPlayer = (PlayerSkeleton) object;
+                Log.info("Host: Broadcast updated lobby");
+                server.sendToAllExceptTCP(connection.getID(), (Lobby) object);
 
-                Log.info("Host: toggle ready status of player " + toggleStatusPlayer);
-                //toggleReadyStatus(toggleStatusPlayer);
-
-                //playerManager.updateLobby();
+                Log.info("Host: update own lobby");
+                playerManager.updateLobby();
             }
         }
     }
@@ -227,5 +223,14 @@ public class MHost implements IEndpoint, IHostConnector {
         lobby.toggleReadyStatus(player2toggleReadyStatus);
 
         server.sendToAllTCP(lobby);
+    }
+
+    @Override
+    public void broadCastLobby() {
+        Log.info("Host: send broadcast new lobby");
+        server.sendToAllTCP(playerManager.getLobby());
+
+        Log.info("Host: update own lobby");
+        playerManager.updateLobby();
     }
 }

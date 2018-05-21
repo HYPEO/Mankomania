@@ -55,6 +55,7 @@ public class LobbyStage extends Stage {
         {
             if(update) {
                 this.clear();
+                setupBackground();
                 setupLayout();
                 update = false;
             }
@@ -130,14 +131,16 @@ public class LobbyStage extends Stage {
             Button btnIndex = new TextButton("" + index, skin);
             Button btnNick = new TextButton(playerSkeleton.getNickname(), skin);
             Button btnAddr = new TextButton(playerSkeleton.getAddress(), skin);
-            Button btnReady = new TextButton("NO", skin);
+            Button btnReady = new TextButton( (playerManager.getLobby().getReadyStatus(playerSkeleton) ? "YES" : "NO"), skin);
 
             btnIndex.scaleBy(2,2);
 
             btnReady.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    // TODO: code for change status "ready to play" will follow.
+                    if( playerSkeleton.equals(playerManager.getPlayerBusiness().getPlayerSkeleton()) ) {
+                        playerManager.toggleReadyStatus();
+                    }
                 }
 
             });

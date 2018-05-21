@@ -175,7 +175,7 @@ public class Lobby {
      * @param playerSkeleton get status for
      * @return ready status for player
      */
-    public Boolean getStatus(PlayerSkeleton playerSkeleton) {
+    public Boolean getReadyStatus(PlayerSkeleton playerSkeleton) {
         return data.get(playerSkeleton);
     }
 
@@ -184,15 +184,13 @@ public class Lobby {
      * @param playerSkeleton toggles status for this player
      */
     public void toggleReadyStatus(PlayerSkeleton playerSkeleton) {
-        for( Map.Entry<PlayerSkeleton, Boolean> entry : data.entrySet() ) {
-            if( entry.getKey().equals(playerSkeleton) ) {
-
-                if( ! entry.getValue() ) {
-                    entry.setValue(true);
-                } else {
-                    entry.setValue(false);
-                }
-            }
+        Log.info("try to toggle ready status for " + playerSkeleton);
+        if( data.containsKey(playerSkeleton) && data.get(playerSkeleton) ) {
+            data.put(playerSkeleton, false);
+            Log.info("ready status: changed to false");
+        } else if( data.containsKey(playerSkeleton) && ! data.get(playerSkeleton) ) {
+            data.put(playerSkeleton, true);
+            Log.info("ready status: changed to true");
         }
     }
 
