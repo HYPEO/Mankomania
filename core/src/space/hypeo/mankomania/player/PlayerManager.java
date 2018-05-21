@@ -1,6 +1,7 @@
 package space.hypeo.mankomania.player;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.esotericsoftware.minlog.Log;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
@@ -47,6 +48,7 @@ public class PlayerManager {
 
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
+        Log.info(role + ": new lobby object was set");
     }
 
     public boolean isReady2startGame() {
@@ -90,11 +92,13 @@ public class PlayerManager {
 
     public void updateLobby() {
 
+        Log.info(role + ": try to update StageLobby");
         // TODO: update LobbyStage
 
         Stage currentStage = stageManager.getCurrentStage();
 
         if (currentStage instanceof LobbyStage) {
+            Log.info(role + ": current stage is StageLobby -> update it!");
             ((LobbyStage) currentStage).updateLobby();
         }
 

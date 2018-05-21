@@ -95,7 +95,7 @@ public class MClient implements IEndpoint, IClientConnector {
                 Log.info("Client: Received notification: " + notification.toString());
 
             } else if( object instanceof Lobby ) {
-                /* receive new list of PlayerNT:
+                /* receive new lobby:
                  * after connecting or disconnecting clients */
                 playerManager.setLobby( (Lobby) object );
                 Log.info("Client: Received updated lobby");

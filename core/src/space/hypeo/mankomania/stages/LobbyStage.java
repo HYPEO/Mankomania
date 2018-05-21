@@ -56,6 +56,7 @@ public class LobbyStage extends Stage {
             if(update) {
                 this.clear();
                 setupLayout();
+                update = false;
             }
         }
     }
@@ -83,7 +84,7 @@ public class LobbyStage extends Stage {
 
         /* very outer table for all widgets */
         Table rootTable = new Table();
-        rootTable.setDebug(true); // turn on all debug lines
+        //rootTable.setDebug(true); // turn on all debug lines
         rootTable.setFillParent(true);
         this.addActor(rootTable);
 

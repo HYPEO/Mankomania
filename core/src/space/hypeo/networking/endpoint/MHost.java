@@ -24,7 +24,7 @@ import com.esotericsoftware.minlog.Log;
 /**
  * This class represents the host process on the device.
  */
-public class MHost  implements IEndpoint, IHostConnector {
+public class MHost implements IEndpoint, IHostConnector {
     private PlayerManager playerManager;
 
     // instance of the host
@@ -92,7 +92,7 @@ public class MHost  implements IEndpoint, IHostConnector {
 
             } else if( object instanceof Notification ) {
                 Notification notification = (Notification) object;
-                Log.info("Host received Notification: " + notification.toString());
+                Log.info("Host: received Notification: " + notification.toString());
 
             } else if( object instanceof PlayerConnect) {
                 PlayerSkeleton newPlayer = (PlayerConnect) object;
@@ -101,8 +101,10 @@ public class MHost  implements IEndpoint, IHostConnector {
                 Log.info("Host: player has been connected, add to lobby");
                 playerManager.getLobby().log();
 
+                Log.info("Host: send broadcast new lobby");
                 server.sendToAllTCP(playerManager.getLobby());
 
+                Log.info("Host: update own lobby");
                 playerManager.updateLobby();
 
             } else if( object instanceof PlayerDisconnect) {
