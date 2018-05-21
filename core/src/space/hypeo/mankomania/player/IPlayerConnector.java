@@ -55,6 +55,9 @@ public interface IPlayerConnector {
      */
     public Lobby getLobby();
 
+    /**
+     * Sends the Game Lobby broadcast.
+     */
     public void broadCastLobby();
 
 }

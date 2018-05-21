@@ -80,7 +80,6 @@ public class PlayerManager {
     }
 
     public void setPlayerNT(final PlayerNT playerNT) {
-        // TODO: object from factory method
         this.playerNT = playerNT;
     }
 
