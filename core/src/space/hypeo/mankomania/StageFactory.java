@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.MapStage;
+import space.hypeo.mankomania.stages.RouletteStage;
 import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
@@ -57,6 +58,9 @@ public class StageFactory {
      */
     public static Stage getDiscoveredHostsStage(final Viewport viewport, final StageManager stageManager, NetworkPlayer player) {
         return new DiscoveredHostsStage(stageManager, viewport, player);
+    }
+    public static Stage getRouletteStage(final Viewport viewport, final StageManager stageManager) {
+        return new RouletteStage(viewport,stageManager);
     }
 
 }
