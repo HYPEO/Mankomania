@@ -101,9 +101,10 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                PlayerManager playerManager = new PlayerManager(Role.HOST);
+                playerManager = new PlayerManager(stageManager, Role.HOST);
                 PlayerFactory playerFactory = new PlayerFactory(playerManager);
                 playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("the_mighty_host"));
+                playerManager.setPlayerNT(playerFactory.getPlayerNT());
 
                 deviceStatePublisher.subscribe(playerManager.getPlayerNT());
                 stageManager.push(stageFactory.getLobbyStage(playerManager));
@@ -115,10 +116,13 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                PlayerManager playerManager = new PlayerManager(Role.CLIENT);
+                // TODO: BUG client is in lobby multiple times if returned to main menu
+                playerManager = new PlayerManager(stageManager, Role.CLIENT);
                 PlayerFactory playerFactory = new PlayerFactory(playerManager);
                 playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("another_client"));
+                playerManager.setPlayerNT(playerFactory.getPlayerNT());
 
+                deviceStatePublisher.subscribe(playerManager.getPlayerNT());
                 stageManager.push(stageFactory.getDiscoveredHostsStage(playerManager));
             }
         };

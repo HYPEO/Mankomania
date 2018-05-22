@@ -55,7 +55,9 @@ public class LobbyStage extends Stage {
         {
             if(update) {
                 this.clear();
+                setupBackground();
                 setupLayout();
+                update = false;
             }
         }
     }
@@ -77,18 +79,15 @@ public class LobbyStage extends Stage {
     }
 
     private void setupLayout() {
+        Log.info(playerManager.getRole() + ": " + "Build LobbyStage ...");
+
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         /* very outer table for all widgets */
         Table rootTable = new Table();
-        rootTable.setDebug(true); // turn on all debug lines
+        //rootTable.setDebug(true); // turn on all debug lines
         rootTable.setFillParent(true);
         this.addActor(rootTable);
-
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
-        Log.info("current width = " + width);
-        Log.info("current height = " + height);
 
         Label title = new Label("GAME LOBBY", skin);
         title.setFontScaleX(2);
@@ -129,19 +128,19 @@ public class LobbyStage extends Stage {
         int index = 1;
         for( PlayerSkeleton playerSkeleton : lobby.getData() ) {
 
-            Log.info("Build GUI widgets for player " + playerSkeleton);
-
             Button btnIndex = new TextButton("" + index, skin);
             Button btnNick = new TextButton(playerSkeleton.getNickname(), skin);
             Button btnAddr = new TextButton(playerSkeleton.getAddress(), skin);
-            Button btnReady = new TextButton("NO", skin);
+            Button btnReady = new TextButton( (playerManager.getLobby().getReadyStatus(playerSkeleton) ? "YES" : "NO"), skin);
 
             btnIndex.scaleBy(2,2);
 
             btnReady.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    // TODO: code for change status "ready to play" will follow.
+                    if( playerSkeleton.equals(playerManager.getPlayerBusiness().getPlayerSkeleton()) ) {
+                        playerManager.toggleReadyStatus();
+                    }
                 }
 
             });
@@ -155,6 +154,7 @@ public class LobbyStage extends Stage {
             index++;
         }
 
+        /* add buttons */
         rootTable.add(btnTable);
 
         this.addActor(rootTable);

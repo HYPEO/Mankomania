@@ -158,14 +158,14 @@ public class LobbyTest {
     @Test
     public void test_initStatus() {
         lobby.add(playerSkeleton);
-        assertThat(lobby.getStatus(playerSkeleton), is(false));
+        assertThat(lobby.getReadyStatus(playerSkeleton), is(false));
     }
 
     @Test
     public void test_toggleStatus_oneTime() {
         lobby.add(playerSkeleton);
         lobby.toggleReadyStatus(playerSkeleton);
-        assertThat(lobby.getStatus(playerSkeleton), is(true));
+        assertThat(lobby.getReadyStatus(playerSkeleton), is(true));
     }
 
     @Test
@@ -173,7 +173,7 @@ public class LobbyTest {
         lobby.add(playerSkeleton);
         lobby.toggleReadyStatus(playerSkeleton);
         lobby.toggleReadyStatus(playerSkeleton);
-        assertThat(lobby.getStatus(playerSkeleton), is(false));
+        assertThat(lobby.getReadyStatus(playerSkeleton), is(false));
     }
 
     @Test

@@ -1,11 +1,18 @@
 package space.hypeo.mankomania.player;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.esotericsoftware.minlog.Log;
+
+import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
+import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.player.PlayerNT;
 import space.hypeo.networking.network.Role;
 
 public class PlayerManager {
+    private final StageManager stageManager;
+
     private PlayerBusiness playerBusiness;
     private PlayerNT playerNT;
     private PlayerActor playerActor;
@@ -19,10 +26,9 @@ public class PlayerManager {
      */
     private Lobby lobby;
 
-    // status of the player in the lobby
-    private boolean ready2startGame;
+    public PlayerManager(final StageManager stageManager, final Role role) {
+        this.stageManager = stageManager;
 
-    public PlayerManager(final Role role) {
         playerBusiness = null;
         playerNT = null;
         playerActor = null;
@@ -39,15 +45,23 @@ public class PlayerManager {
 
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
+        Log.info(role + ": new lobby object was set");
     }
 
     public boolean isReady2startGame() {
-        return ready2startGame;
+        return lobby.getReadyStatus(playerBusiness.getPlayerSkeleton());
     }
 
-    public void setReady2startGame(boolean ready2startGame) {
-        // TODO: triggered by button Ready in LobbyStage
-        this.ready2startGame = ready2startGame;
+    public void toggleReadyStatus() {
+        Log.info(role + ": toggle ReadyStatus (old: " + lobby.getReadyStatus(playerBusiness.getPlayerSkeleton()) + ")");
+        lobby.toggleReadyStatus(playerBusiness.getPlayerSkeleton());
+        Log.info(role + ": toggle ReadyStatus: " + lobby.getReadyStatus(playerBusiness.getPlayerSkeleton()));
+        updateLobby();
+        broadCastLobby();
+    }
+
+    private void broadCastLobby() {
+        playerNT.broadCastLobby();
     }
 
     public PlayerBusiness getPlayerBusiness() {
@@ -55,10 +69,8 @@ public class PlayerManager {
     }
 
     public void setPlayerBusiness(final PlayerBusiness playerBusiness) {
-        // TODO: object from factory method
         this.playerBusiness = playerBusiness;
 
-        // TODO: insert that player in lobby
         lobby = new Lobby(Network.MAX_PLAYER);
         lobby.add(playerBusiness.getPlayerSkeleton());
     }
@@ -68,7 +80,6 @@ public class PlayerManager {
     }
 
     public void setPlayerNT(final PlayerNT playerNT) {
-        // TODO: object from factory method
         this.playerNT = playerNT;
     }
 
@@ -82,13 +93,14 @@ public class PlayerManager {
 
     public void updateLobby() {
 
-        // TODO: update LobbyStage
-        /*
+        Log.info(role + ": try to update StageLobby");
+
         Stage currentStage = stageManager.getCurrentStage();
 
         if (currentStage instanceof LobbyStage) {
+            Log.info(role + ": current stage is StageLobby -> update it!");
             ((LobbyStage) currentStage).updateLobby();
         }
-        */
+
     }
 }

@@ -11,7 +11,6 @@ import java.util.List;
 
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.networking.network.NetworkAddress;
-import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.networking.network.Network;
@@ -21,7 +20,6 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
-import space.hypeo.networking.packages.PlayerToggleReadyStatus;
 import space.hypeo.networking.packages.Remittances;
 
 /**
@@ -95,17 +93,15 @@ public class MClient implements IEndpoint, IClientConnector {
                 Log.info("Client: Received notification: " + notification.toString());
 
             } else if( object instanceof Lobby ) {
-                /* receive new list of PlayerNT:
-                 * after connecting or disconnecting clients */
                 playerManager.setLobby( (Lobby) object );
                 Log.info("Client: Received updated lobby");
-
+                playerManager.updateLobby();
 
             } else if( object instanceof Acknowledge ) {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: Received ACK from " + ack);
 
-                connection.sendTCP( new PlayerConnect(playerManager.getPlayerBusiness()) );
+                connection.sendTCP( new PlayerConnect(playerManager.getPlayerBusiness().getPlayerSkeleton()) );
 
             } else if( object instanceof PlayerHost) {
                 hostPlayer = (PlayerHost) object;
@@ -164,6 +160,7 @@ public class MClient implements IEndpoint, IClientConnector {
     public List<InetAddress> discoverHosts() {
         // TODO: check if WLAN has "Wireless Isolation" enabled => no discovery possible
         // use UDP port for discovering hosts
+        Log.info("Client: Searching in WLAN for hosts...");
         List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
         return discoveredHosts;
@@ -212,14 +209,13 @@ public class MClient implements IEndpoint, IClientConnector {
     }
 
     @Override
-    public void toggleReadyStatus(PlayerSkeleton player2toggleReadyStatus) {
-        // TODO: correct that process!
-        client.sendTCP( new PlayerToggleReadyStatus(playerManager.getPlayerBusiness()) );
-    }
-
-    @Override
     public void changeBalance(Remittances remittances) {
         // TODO: correct that process!
         client.sendTCP(remittances);
+    }
+
+    @Override
+    public void broadCastLobby() {
+        client.sendTCP(playerManager.getLobby());
     }
 }
