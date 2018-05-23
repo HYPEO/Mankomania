@@ -31,6 +31,7 @@ import space.hypeo.mankomania.actors.horse.HorseActor;
 public class HorseRaceStage extends Stage {
     private StageManager stageManager;
     private Viewport viewport;
+    private StageFactory stageFactory;
 
     private TextButton horse1Button;
     private TextButton horse2Button;
@@ -57,10 +58,11 @@ public class HorseRaceStage extends Stage {
     final Slider amount = new Slider(5000, 50000, 1000, false, skin);
 
 
-    public HorseRaceStage(Viewport viewport, StageManager stageManager) {
+    public HorseRaceStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
+        this.stageFactory = stageFactory;
         selectedHorseQuote = 0;
 
         // Set up Stage
@@ -292,7 +294,7 @@ public class HorseRaceStage extends Stage {
                         stageManager.remove(HorseRaceStage.this);
 
                         // push ResultStage
-                        stageManager.push(StageFactory.getHorseRaceResultStage(viewport, stageManager,
+                        stageManager.push(stageFactory.getHorseRaceResultStage(
                                 slectedHorseID, ((int) amount.getValue()), getWinningHorse(winningHorseID)));
                     }
                 } else {

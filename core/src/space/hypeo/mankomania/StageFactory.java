@@ -80,12 +80,11 @@ public class StageFactory {
             return new TitleStage(stageManager, viewport);
     }
 
-    public static Stage getHorseRaceStage(final Viewport viewport, final StageManager stageManager) {
-        return new HorseRaceStage(viewport, stageManager);
+    public Stage getHorseRaceStage() {
+        return new HorseRaceStage(viewport, stageManager, this);
     }
 
-    public static Stage getHorseRaceResultStage(final Viewport viewport, final StageManager stageManager,
-                                                int backedHorseID, int bet, HorseActor winningHorse) {
+    public Stage getHorseRaceResultStage(int backedHorseID, int bet, HorseActor winningHorse) {
         return new HorseRaceResultStage(viewport, stageManager, backedHorseID, bet, winningHorse);
     }
 
