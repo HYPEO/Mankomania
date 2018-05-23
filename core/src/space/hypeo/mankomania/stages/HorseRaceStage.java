@@ -291,6 +291,16 @@ public class HorseRaceStage extends Stage {
 
                         startRace.setText("get Results");
                     } else {
+                        // calculate race result and change the player's balance
+                        if(winningHorseID == slectedHorseID) {
+                            // player won, increase balance
+                            playerActor.changeBalance(Math.round(amount.getValue() * selectedHorseQuote));
+                        }
+                        else {
+                            // player lost, reduce balance
+                            playerActor.changeBalance((int) amount.getValue() * -1);
+                        }
+
                         // remove this Stage so you get back to the game after Result Stage is closed
                         stageManager.remove(HorseRaceStage.this);
 

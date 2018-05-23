@@ -11,8 +11,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
  * Created by manuelegger on 23.05.18.
  */
 
-public class HorseRaceFieldActor extends FieldActor
-{
+public class HorseRaceFieldActor extends FieldActor {
     private StageFactory stageFactory;
     private StageManager stageManager;
 
