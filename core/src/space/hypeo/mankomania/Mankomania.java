@@ -6,11 +6,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+
 /**
  * The GDX Game class, called from the android project.
  */
 public class Mankomania extends ApplicationAdapter {
     private StageManager manager;
+    private IDeviceStatePublisher deviceStatePublisher;
+
+    public Mankomania(IDeviceStatePublisher deviceStatePublisher) {
+        this.deviceStatePublisher = deviceStatePublisher;
+    }
 
     @Override
     public void create() {
@@ -18,8 +24,10 @@ public class Mankomania extends ApplicationAdapter {
         camera.setToOrtho(false, 480, 800);
         ExtendViewport viewport = new ExtendViewport(480, 800, camera);
         manager = new StageManager();
-        manager.push(StageFactory.getMainMenu(viewport, manager));
-        manager.push(StageFactory.getTitleStage(viewport, manager));
+
+        StageFactory stageFactory = new StageFactory(viewport, manager, deviceStatePublisher);
+        manager.push(stageFactory.getMainMenu());
+        manager.push(stageFactory.getTitleStage());
     }
 
     @Override
@@ -28,6 +36,4 @@ public class Mankomania extends ApplicationAdapter {
         manager.getCurrentStage().act();
         manager.getCurrentStage().draw();
     }
-
-
 }

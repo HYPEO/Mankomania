@@ -14,10 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import space.hypeo.mankomania.player.PlayerFactory;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.networking.network.NetworkPlayer;
+import space.hypeo.mankomania.IDeviceStatePublisher;
 import space.hypeo.networking.network.Role;
 
 /**
@@ -30,7 +32,11 @@ public class MainMenuStage extends Stage {
     private Button join;
     private Image title;
     private Table layout;
-    private final Viewport viewport;
+
+    private StageFactory stageFactory;
+    private IDeviceStatePublisher deviceStatePublisher;
+
+    private PlayerManager playerManager;
 
     /**
      * Creates the Main Menu
@@ -38,11 +44,12 @@ public class MainMenuStage extends Stage {
      * @param stageManager StageManager needed to switch between stages, create new ones, etc.
      * @param viewport     Viewport needed by Stage class.
      */
-    public MainMenuStage(StageManager stageManager, Viewport viewport) {
+    public MainMenuStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, IDeviceStatePublisher deviceStatePublisher) {
         super(viewport);
 
         this.stageManager = stageManager;
-        this.viewport = viewport;
+        this.stageFactory = stageFactory;
+        this.deviceStatePublisher = deviceStatePublisher;
 
         setUpBackground();
         createWidgets();
@@ -84,7 +91,7 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stageManager.push(StageFactory.getMapStage(viewport, stageManager));
+                stageManager.push(stageFactory.getMapStage());
             }
         };
     }
@@ -93,10 +100,13 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stageManager.push(StageFactory.getHorseRaceStage(viewport, stageManager));
 
-                //NetworkPlayer hostPlayer = new NetworkPlayer("the_mighty_host", Role.HOST, stageManager);
-                //stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, hostPlayer));
+                PlayerManager playerManager = new PlayerManager(Role.HOST);
+                PlayerFactory playerFactory = new PlayerFactory(playerManager);
+                playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("the_mighty_host"));
+
+                deviceStatePublisher.subscribe(playerManager.getPlayerNT());
+                stageManager.push(stageFactory.getLobbyStage(playerManager));
             }
         };
     }
@@ -105,9 +115,11 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                PlayerManager playerManager = new PlayerManager(Role.CLIENT);
+                PlayerFactory playerFactory = new PlayerFactory(playerManager);
+                playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("another_client"));
 
-                NetworkPlayer clientPlayer = new NetworkPlayer("another_client", Role.CLIENT, stageManager);
-                stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, clientPlayer));
+                stageManager.push(stageFactory.getDiscoveredHostsStage(playerManager));
             }
         };
     }

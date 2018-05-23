@@ -2,12 +2,16 @@ package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
+
+import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.mankomania.actors.fields.BuyHotelFieldActor;
 import space.hypeo.mankomania.actors.fields.EmptyFieldActor;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.fields.LoseMoneyFieldActor;
@@ -23,40 +27,21 @@ import space.hypeo.mankomania.factories.ActorFactory;
 public class MapStage extends Stage {
     private static final int NUM_OF_FIELDS = 9;
 
-    private Image fieldInfoImage;
-
     private static final float MARGIN_X = 20f;
     private static final float MARGIN_Y = 175;
     private static final float FIELD_DISTANCE = 45f;
+    private static final int MAX_PLAYERS = 4;
     private DetailActor detailActor;
 
-    public MapStage(Viewport viewport, StageManager stageManager) {
+    public MapStage(Viewport viewport, StageManager stageManager, GameStateManager gameStateManager) {
         super(viewport);
+        if(gameStateManager.registeredPlayerCount()> MAX_PLAYERS)
+            throw new IllegalArgumentException("gameStateManager must not contain more than "+ MAX_PLAYERS + " players.");
+
         setUpBackground();
         detailActor = ActorFactory.getDetailActor();
         this.addActor(detailActor);
         detailActor.positionActor(340);
-      
-        Texture texture = new Texture("badlogic.jpg");
-        fieldInfoImage = new Image(texture);
-        fieldInfoImage.setBounds(90, 125, 300, 300);
-
-        PlayerDetailActor playerDetailActor = new PlayerDetailActor(new Texture("map_assets/player_1.png"));
-        playerDetailActor.positionActor(PlayerDetailActor.ScreenPosition.BOTTOM_LEFT);
-        this.addActor(playerDetailActor);
-
-        PlayerDetailActor secondDetailActor = new PlayerDetailActor(new Texture("map_assets/player_2.png"));
-        secondDetailActor.positionActor(PlayerDetailActor.ScreenPosition.BOTTOM_RIGHT);
-        this.addActor(secondDetailActor);
-
-        PlayerDetailActor thirdDetailActor = new PlayerDetailActor(new Texture("map_assets/player_3.png"));
-        thirdDetailActor.positionActor(PlayerDetailActor.ScreenPosition.TOP_LEFT);
-        this.addActor(thirdDetailActor);
-
-        PlayerDetailActor fourthDetailActor = new PlayerDetailActor(new Texture("map_assets/player_4.png"));
-        fourthDetailActor.positionActor(PlayerDetailActor.ScreenPosition.TOP_RIGHT);
-        this.addActor(fourthDetailActor);
-
 
         // Create the empty field.
         FieldActor firstField = new EmptyFieldActor(MARGIN_X, MARGIN_Y, new Texture("transparent.png"), 0, detailActor);
@@ -64,7 +49,6 @@ public class MapStage extends Stage {
 
         // Remember the first field as the previous one.
         FieldActor previousField = firstField;
-
 
         previousField = generateFieldLine(NUM_OF_FIELDS, FIELD_DISTANCE, 0, MARGIN_X, MARGIN_Y, previousField);
         previousField = generateFieldLine(NUM_OF_FIELDS, 0, FIELD_DISTANCE, MARGIN_X + NUM_OF_FIELDS * FIELD_DISTANCE, MARGIN_Y, previousField);
@@ -74,11 +58,39 @@ public class MapStage extends Stage {
         // Link the last field with the first one to create a full loop.
         previousField.setNextField(firstField);
 
-        // Create player on first field.
-        PlayerActor player = new PlayerActor("1", 1000000, true, firstField, viewport, stageManager, playerDetailActor);
-        this.addActor(player);
+        //Setup players and player details.
+        List<PlayerDetailActor> playerDetailActors = generateDetailActors();
 
+        Iterator<PlayerDetailActor> playerDetailIterator = playerDetailActors.iterator();
+        for (PlayerActor actor : gameStateManager.getPlayers()) {
+            PlayerDetailActor detail = playerDetailIterator.next();
+            actor.initializeState(firstField, detail);
+            this.addActor(actor);
+            this.addActor(detail);
+        }
+    }
 
+    private List<PlayerDetailActor> generateDetailActors()
+    {
+        List<PlayerDetailActor> playerDetailActors = new ArrayList<>();
+
+        PlayerDetailActor playerDetailActor = new PlayerDetailActor(new Texture("map_assets/player_1.png"));
+        playerDetailActor.positionActor(PlayerDetailActor.ScreenPosition.BOTTOM_LEFT);
+        playerDetailActors.add(playerDetailActor);
+
+        PlayerDetailActor secondDetailActor = new PlayerDetailActor(new Texture("map_assets/player_2.png"));
+        secondDetailActor.positionActor(PlayerDetailActor.ScreenPosition.BOTTOM_RIGHT);
+        playerDetailActors.add(secondDetailActor);
+
+        PlayerDetailActor thirdDetailActor = new PlayerDetailActor(new Texture("map_assets/player_3.png"));
+        thirdDetailActor.positionActor(PlayerDetailActor.ScreenPosition.TOP_LEFT);
+        playerDetailActors.add(thirdDetailActor);
+
+        PlayerDetailActor fourthDetailActor = new PlayerDetailActor(new Texture("map_assets/player_4.png"));
+        fourthDetailActor.positionActor(PlayerDetailActor.ScreenPosition.TOP_RIGHT);
+        playerDetailActors.add(fourthDetailActor);
+
+        return playerDetailActors;
     }
 
     private FieldActor generateField(int fieldIndex, float xDirection, float yDirection, float xMargin, float yMargin) {
