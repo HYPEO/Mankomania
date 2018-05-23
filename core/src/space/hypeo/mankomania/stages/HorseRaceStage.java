@@ -23,6 +23,7 @@ import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.mankomania.actors.horse.HorseActor;
+import space.hypeo.mankomania.actors.player.PlayerActor;
 
 /**
  * Created by manuelegger on 16.05.18.
@@ -30,8 +31,8 @@ import space.hypeo.mankomania.actors.horse.HorseActor;
 
 public class HorseRaceStage extends Stage {
     private StageManager stageManager;
-    private Viewport viewport;
     private StageFactory stageFactory;
+    private PlayerActor playerActor;
 
     private TextButton horse1Button;
     private TextButton horse2Button;
@@ -58,11 +59,11 @@ public class HorseRaceStage extends Stage {
     final Slider amount = new Slider(5000, 50000, 1000, false, skin);
 
 
-    public HorseRaceStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory) {
+    public HorseRaceStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor) {
         super(viewport);
         this.stageManager = stageManager;
-        this.viewport = viewport;
         this.stageFactory = stageFactory;
+        this.playerActor = playerActor;
         selectedHorseQuote = 0;
 
         // Set up Stage

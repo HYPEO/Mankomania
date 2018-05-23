@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.actors.horse.HorseActor;
 import space.hypeo.mankomania.actors.player.LocalPlayerActor;
+import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.HorseRaceResultStage;
@@ -80,8 +81,8 @@ public class StageFactory {
             return new TitleStage(stageManager, viewport);
     }
 
-    public Stage getHorseRaceStage() {
-        return new HorseRaceStage(viewport, stageManager, this);
+    public Stage getHorseRaceStage(PlayerActor playerActor) {
+        return new HorseRaceStage(viewport, stageManager, this, playerActor);
     }
 
     public Stage getHorseRaceResultStage(int backedHorseID, int bet, HorseActor winningHorse) {

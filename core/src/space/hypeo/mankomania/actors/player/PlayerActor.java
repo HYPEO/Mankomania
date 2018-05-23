@@ -23,8 +23,8 @@ public class PlayerActor extends Group {
     private Image actorImage;
 
     /**
-     * @param actorImage   Image that represents the actor.
-     * @param balance      The player's current balance (starting balance)
+     * @param actorImage Image that represents the actor.
+     * @param balance    The player's current balance (starting balance)
      */
     public PlayerActor(Image actorImage, int balance) {
         this.actorImage = actorImage;
@@ -76,13 +76,15 @@ public class PlayerActor extends Group {
         this.playerDetailActor.updateBalance(balance);
     }
 
-    public void setActive()
-    {
+    public void changeBalance(int remittance) {
+        this.balance += remittance;
+    }
+
+    public void setActive() {
         this.isActive = true;
     }
 
-    public void setInactive()
-    {
+    public void setInactive() {
         this.isActive = false;
     }
 }
