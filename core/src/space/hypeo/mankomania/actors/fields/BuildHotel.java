@@ -62,6 +62,7 @@ public class BuildHotel extends FieldActor {
                     startTime = System.currentTimeMillis();
                     BuildHotel.this.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("fields/building.png"))));
                     building();
+
                 }
             }
         }.text("Do you want to build a hotel?").button("Yes", true).button("No", false).key(Input.Keys.ENTER, true)
@@ -110,7 +111,3 @@ public class BuildHotel extends FieldActor {
 
     }
 }
-
-
-
-

@@ -80,7 +80,6 @@ public class PlayerActor extends Group {
     @Override
     public void act(float deltaTime) {
 
-
         float xValue;
         float yValue;
         float zValue;
