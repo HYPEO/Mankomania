@@ -107,6 +107,14 @@ public class MClient implements IEndpoint, IClientConnector {
                 hostPlayer = (PlayerHost) object;
                 Log.info("Client: Received info of host, to be connected with: " + hostPlayer);
 
+            }  else if( object instanceof PlayerDisconnect) {
+                PlayerDisconnect playerDisconnect = (PlayerDisconnect) object;
+
+                if(playerDisconnect.equals(playerManager.getPlayerBusiness().getPlayerSkeleton())) {
+                    Log.info("Client: Received instruction to close connection to host: " + hostPlayer);
+                    client.sendTCP(playerDisconnect);
+                    stop();
+                }
             }
         }
     }

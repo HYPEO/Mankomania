@@ -132,6 +132,8 @@ public class LobbyStage extends Stage {
         int index = 1;
         for( PlayerSkeleton playerSkeleton : lobby.getData() ) {
 
+            PlayerSkeleton myself = playerManager.getPlayerBusiness().getPlayerSkeleton();
+
             Button btnIndex = new TextButton("" + index, skin);
             Button btnNick = new TextButton(playerSkeleton.getNickname(), skin);
             Button btnAddr = new TextButton(playerSkeleton.getAddress(), skin);
@@ -139,18 +141,25 @@ public class LobbyStage extends Stage {
 
             Color color = playerSkeleton.getColor();
             if(color != null) {
-                Log.info("color of '" + playerSkeleton.getNickname() +"' is " + color);
                 btnNick.setColor(color);
-            } else {
-                Log.info("My color has not been set yet!");
             }
 
             btnIndex.scaleBy(2,2);
 
+            btnIndex.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if(playerManager.getRole() == Role.HOST && !playerSkeleton.equals(myself)) {
+                        playerManager.kickPlayer(playerSkeleton);
+                    }
+                }
+
+            });
+
             btnReady.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if( playerSkeleton.equals(playerManager.getPlayerBusiness().getPlayerSkeleton()) ) {
+                    if( playerSkeleton.equals(myself)) {
                         playerManager.toggleReadyStatus();
                     }
                 }
@@ -160,8 +169,7 @@ public class LobbyStage extends Stage {
             btnNick.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if( playerSkeleton.equals(playerManager.getPlayerBusiness().getPlayerSkeleton()) ) {
-                        // TODO: call
+                    if(playerSkeleton.equals(myself)) {
                         stageManager.push(stageFactory.getSetColorStage(playerManager));
                     }
                 }

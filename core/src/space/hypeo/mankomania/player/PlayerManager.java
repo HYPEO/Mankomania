@@ -9,6 +9,7 @@ import java.util.Set;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.LobbyStage;
+import space.hypeo.networking.endpoint.IHostConnector;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.player.PlayerNT;
 import space.hypeo.networking.network.Role;
@@ -115,5 +116,12 @@ public class PlayerManager {
         lobby.setColor(playerBusiness.getPlayerSkeleton(), color);
         updateLobbyStage();
         broadCastLobby();
+    }
+
+    public void kickPlayer(PlayerSkeleton playerToKick) {
+        if(role == Role.HOST) {
+            IHostConnector host = (IHostConnector)playerNT;
+            host.kickPlayerFromLobby(playerToKick);
+        }
     }
 }

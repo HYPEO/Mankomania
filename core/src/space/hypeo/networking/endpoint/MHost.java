@@ -223,4 +223,9 @@ public class MHost implements IEndpoint, IHostConnector {
         Log.info("Host: update own lobby");
         playerManager.updateLobbyStage();
     }
+
+    @Override
+    public void kickPlayerFromLobby(PlayerSkeleton playerToKick) {
+        server.sendToTCP(getConnectionID(playerToKick.getPlayerID()), new PlayerDisconnect(playerToKick));
+    }
 }
