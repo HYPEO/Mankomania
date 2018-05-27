@@ -56,6 +56,8 @@ public final class Network {
 
         kryo.register(PlayerSkeleton.class);
         kryo.register(Lobby.class);
+
+        kryo.register(com.badlogic.gdx.graphics.Color.class);
     }
 
 }

@@ -1,6 +1,7 @@
 package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
+import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
@@ -29,13 +31,15 @@ import space.hypeo.mankomania.player.Lobby;
 public class LobbyStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
+    private final StageFactory stageFactory;
     private PlayerManager playerManager;
     private boolean update;
 
-    public LobbyStage(StageManager stageManager, Viewport viewport, PlayerManager playerManager) {
+    public LobbyStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, PlayerManager playerManager) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
+        this.stageFactory = stageFactory;
         this.playerManager = playerManager;
         this.update = false;
         setupBackground();
@@ -133,6 +137,14 @@ public class LobbyStage extends Stage {
             Button btnAddr = new TextButton(playerSkeleton.getAddress(), skin);
             Button btnReady = new TextButton( (playerManager.getLobby().getReadyStatus(playerSkeleton) ? "YES" : "NO"), skin);
 
+            Color color = playerSkeleton.getColor();
+            if(color != null) {
+                Log.info("color of '" + playerSkeleton.getNickname() +"' is " + color);
+                btnNick.setColor(color);
+            } else {
+                Log.info("My color has not been set yet!");
+            }
+
             btnIndex.scaleBy(2,2);
 
             btnReady.addListener(new ClickListener() {
@@ -140,6 +152,17 @@ public class LobbyStage extends Stage {
                 public void clicked(InputEvent event, float x, float y) {
                     if( playerSkeleton.equals(playerManager.getPlayerBusiness().getPlayerSkeleton()) ) {
                         playerManager.toggleReadyStatus();
+                    }
+                }
+
+            });
+
+            btnNick.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if( playerSkeleton.equals(playerManager.getPlayerBusiness().getPlayerSkeleton()) ) {
+                        // TODO: call
+                        stageManager.push(stageFactory.getSetColorStage(playerManager));
                     }
                 }
 

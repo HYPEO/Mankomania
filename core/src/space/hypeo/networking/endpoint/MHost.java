@@ -119,7 +119,7 @@ public class MHost implements IEndpoint, IHostConnector {
                 server.sendToAllExceptTCP(connection.getID(), (Lobby) object);
 
                 Log.info("Host: update own lobby");
-                playerManager.updateLobby();
+                playerManager.updateLobbyStage();
             }
         }
     }
@@ -221,6 +221,6 @@ public class MHost implements IEndpoint, IHostConnector {
         server.sendToAllTCP(playerManager.getLobby());
 
         Log.info("Host: update own lobby");
-        playerManager.updateLobby();
+        playerManager.updateLobbyStage();
     }
 }

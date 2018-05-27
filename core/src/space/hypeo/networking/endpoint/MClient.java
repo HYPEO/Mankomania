@@ -95,7 +95,7 @@ public class MClient implements IEndpoint, IClientConnector {
             } else if( object instanceof Lobby ) {
                 playerManager.setLobby( (Lobby) object );
                 Log.info("Client: Received updated lobby");
-                playerManager.updateLobby();
+                playerManager.updateLobbyStage();
 
             } else if( object instanceof Acknowledge ) {
                 Acknowledge ack = (Acknowledge) object;

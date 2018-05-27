@@ -13,6 +13,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.MapStage;
+import space.hypeo.mankomania.stages.SetColorStage;
 import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
@@ -65,7 +66,7 @@ public class StageFactory {
      * @return stage/view of lobby
      */
     public Stage getLobbyStage(PlayerManager playerManager) {
-        return new LobbyStage(stageManager, viewport, playerManager);
+        return new LobbyStage(stageManager, viewport, this, playerManager);
     }
 
     /**
@@ -77,4 +78,7 @@ public class StageFactory {
         return new DiscoveredHostsStage(stageManager, viewport, this, playerManager);
     }
 
+    public Stage getSetColorStage(PlayerManager playerManager) {
+        return new SetColorStage(stageManager, viewport, this, playerManager);
+    }
 }

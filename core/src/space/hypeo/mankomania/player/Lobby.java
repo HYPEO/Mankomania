@@ -1,10 +1,12 @@
 package space.hypeo.mankomania.player;
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.minlog.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -209,5 +211,38 @@ public class Lobby {
             }
         }
         return true;
+    }
+
+    /**
+     * Determines the used colors of all players connected to the lobby.
+     * @return empty set if nobody has set their color yet.
+     *         else: set of used colors.
+     */
+    public Set<Color> usedColors() {
+
+        Set<Color> usedColorsAllPlayer = new HashSet<>();
+
+        for(PlayerSkeleton playerSkeleton : data.keySet()) {
+            Color playerColor = playerSkeleton.getColor();
+            if(playerColor != null) {
+                usedColorsAllPlayer.add(playerColor);
+            }
+        }
+
+        return usedColorsAllPlayer;
+    }
+
+    /**
+     * Updates, sets, the color of the given player.
+     * @param playerChangeColor color
+     */
+    public void setColor(PlayerSkeleton playerChangeColor, Color color) {
+        Log.info("set color for " + playerChangeColor);
+
+        for(PlayerSkeleton playerInLobby : data.keySet()) {
+            if(playerInLobby.equals(playerChangeColor)) {
+                playerInLobby.setColor(color);
+            }
+        }
     }
 }
