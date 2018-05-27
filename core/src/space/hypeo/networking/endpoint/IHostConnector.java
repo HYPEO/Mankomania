@@ -24,9 +24,9 @@ public interface IHostConnector {
     public void endGame();
 
     /**
-     * Remove player from lobby.
+     * Send client the order to close its connection to the host.
      * @param playerToKick
      */
-    public void kickPlayerFromLobby(PlayerSkeleton playerToKick);
+    public void sendOrderToCloseConnection(PlayerSkeleton playerToKick);
 
 }

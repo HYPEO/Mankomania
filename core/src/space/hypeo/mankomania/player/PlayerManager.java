@@ -121,7 +121,7 @@ public class PlayerManager {
     public void kickPlayer(PlayerSkeleton playerToKick) {
         if(role == Role.HOST) {
             IHostConnector host = (IHostConnector)playerNT;
-            host.kickPlayerFromLobby(playerToKick);
+            host.sendOrderToCloseConnection(playerToKick);
         }
     }
 }

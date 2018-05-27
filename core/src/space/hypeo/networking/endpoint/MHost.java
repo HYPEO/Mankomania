@@ -152,7 +152,9 @@ public class MHost implements IEndpoint, IHostConnector {
 
     @Override
     public void stop() {
-        stop();
+        if(server != null) {
+            stop();
+        }
     }
 
     public void close() {
@@ -160,6 +162,7 @@ public class MHost implements IEndpoint, IHostConnector {
 
         try {
             server.close();
+            server = null;
 
         } catch( NullPointerException e ) {
             Log.warn("Server was NOT running - nothing to do!");
@@ -225,7 +228,7 @@ public class MHost implements IEndpoint, IHostConnector {
     }
 
     @Override
-    public void kickPlayerFromLobby(PlayerSkeleton playerToKick) {
+    public void sendOrderToCloseConnection(PlayerSkeleton playerToKick) {
         server.sendToTCP(getConnectionID(playerToKick.getPlayerID()), new PlayerDisconnect(playerToKick));
     }
 }
