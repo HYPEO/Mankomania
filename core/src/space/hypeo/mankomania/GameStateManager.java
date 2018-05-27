@@ -14,10 +14,14 @@ public abstract class GameStateManager {
 
     PlayerActor activePlayer;
     Queue<PlayerActor> playerActors;
+    private StageManager stageManager;
+    private StageFactory stageFactory;
 
-    public GameStateManager()
+    public GameStateManager(StageManager stageManager, StageFactory stageFactory)
     {
-        playerActors = new LinkedList<>();
+        this.stageManager = stageManager;
+        this.stageFactory = stageFactory;
+        this.playerActors = new LinkedList<>();
     }
 
     public void addPlayer(PlayerActor playerActor)
@@ -35,7 +39,8 @@ public abstract class GameStateManager {
 
     public void setWinner(PlayerActor playerActor)
     {
-        throw new NotImplementedException();
+        stageManager.remove(stageManager.getCurrentStage());
+        stageManager.push(stageFactory.getEndGameStage(playerActor));
     }
 
     public Collection<PlayerActor> getPlayers(){

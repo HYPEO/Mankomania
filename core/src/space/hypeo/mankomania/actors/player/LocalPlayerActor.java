@@ -40,7 +40,7 @@ public class LocalPlayerActor extends PlayerActor {
     public void move(int steps) {
         super.move(steps);
         currentField.trigger(this);
-        if(this.getBalance()<0)
+        if(this.getBalance()<=0)
             gameStateManager.setWinner(this);
         gameStateManager.endTurn();
     }

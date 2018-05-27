@@ -87,4 +87,8 @@ public class PlayerActor extends Group {
     public void setInactive() {
         this.isActive = false;
     }
+
+    public PlayerDetailActor getPlayerDetailActor() {
+        return this.playerDetailActor;
+    }
 }
