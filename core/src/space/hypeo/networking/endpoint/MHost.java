@@ -230,7 +230,11 @@ public class MHost implements IEndpoint, IHostConnector {
     @Override
     public void sendOrderToCloseConnection(PlayerSkeleton playerToKick) {
         Log.info("MHost: Send order to client '" + playerToKick + "' to close connection to host");
+
+        int connectionID = getConnectionID(playerToKick.getPlayerID());
+        PlayerDisconnect playerDisconnect = new PlayerDisconnect(playerToKick);
+
         // TODO: next line has no effect?!
-        server.sendToTCP(getConnectionID(playerToKick.getPlayerID()), new PlayerDisconnect(playerToKick));
+        server.sendToTCP(connectionID, playerDisconnect);
     }
 }
