@@ -119,7 +119,7 @@ public class MHost implements IEndpoint, IHostConnector {
                 server.sendToAllExceptTCP(connection.getID(), (Lobby) object);
 
                 Log.info("Host: update own lobby");
-                playerManager.updateLobby();
+                playerManager.updateLobbyStage();
             }
         }
     }
@@ -152,7 +152,9 @@ public class MHost implements IEndpoint, IHostConnector {
 
     @Override
     public void stop() {
-        stop();
+        if(server != null) {
+            stop();
+        }
     }
 
     public void close() {
@@ -160,6 +162,7 @@ public class MHost implements IEndpoint, IHostConnector {
 
         try {
             server.close();
+            server = null;
 
         } catch( NullPointerException e ) {
             Log.warn("Server was NOT running - nothing to do!");
@@ -193,7 +196,7 @@ public class MHost implements IEndpoint, IHostConnector {
     }
 
 
-    public int getConnectionID(String playerId) throws IllegalArgumentException {
+    public int getConnectionID(String playerId) {
 
         PlayerSkeleton needle = playerManager.getLobby().contains(playerId);
         int connectionID = 0;
@@ -221,6 +224,17 @@ public class MHost implements IEndpoint, IHostConnector {
         server.sendToAllTCP(playerManager.getLobby());
 
         Log.info("Host: update own lobby");
-        playerManager.updateLobby();
+        playerManager.updateLobbyStage();
+    }
+
+    @Override
+    public void sendOrderToCloseConnection(PlayerSkeleton playerToKick) {
+        Log.info("MHost: Send order to client '" + playerToKick + "' to close connection to host");
+
+        int connectionID = getConnectionID(playerToKick.getPlayerID());
+        PlayerDisconnect playerDisconnect = new PlayerDisconnect(playerToKick);
+
+        // TODO: next line has no effect?!
+        server.sendToTCP(connectionID, playerDisconnect);
     }
 }

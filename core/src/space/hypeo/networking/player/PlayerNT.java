@@ -1,10 +1,15 @@
 package space.hypeo.networking.player;
 
+import com.esotericsoftware.minlog.Log;
+
 import space.hypeo.mankomania.player.PlayerManager;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.endpoint.IEndpoint;
 import space.hypeo.mankomania.IDeviceStateSubscriber;
 import space.hypeo.mankomania.player.IPlayerConnector;
 import space.hypeo.mankomania.player.Lobby;
+import space.hypeo.networking.endpoint.IHostConnector;
+import space.hypeo.networking.network.Role;
 import space.hypeo.networking.packages.Remittances;
 
 /**
@@ -75,5 +80,13 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     @Override
     public void broadCastLobby() {
         endpoint.broadCastLobby();
+    }
+
+    public void kickPlayerFromLobby(PlayerSkeleton playerToKick) {
+        if(playerManager.getRole() == Role.HOST) {
+            Log.info("PlayerNT: Try to kick player " + playerToKick);
+            IHostConnector host = (IHostConnector) endpoint;
+            host.sendOrderToCloseConnection(playerToKick);
+        }
     }
 }

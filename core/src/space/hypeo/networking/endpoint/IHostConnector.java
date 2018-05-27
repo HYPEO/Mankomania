@@ -1,5 +1,7 @@
 package space.hypeo.networking.endpoint;
 
+import space.hypeo.mankomania.player.PlayerSkeleton;
+
 /**
  * Interface provides service methods for player that is game-host
  */
@@ -20,5 +22,11 @@ public interface IHostConnector {
      * Release all resources and close all open connections.
      */
     public void endGame();
+
+    /**
+     * Send client the order to close its connection to the host.
+     * @param playerToKick
+     */
+    public void sendOrderToCloseConnection(PlayerSkeleton playerToKick);
 
 }

@@ -1,7 +1,10 @@
 package space.hypeo.mankomania.player;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.esotericsoftware.minlog.Log;
+
+import java.util.Set;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
@@ -56,7 +59,7 @@ public class PlayerManager {
         Log.info(role + ": toggle ReadyStatus (old: " + lobby.getReadyStatus(playerBusiness.getPlayerSkeleton()) + ")");
         lobby.toggleReadyStatus(playerBusiness.getPlayerSkeleton());
         Log.info(role + ": toggle ReadyStatus: " + lobby.getReadyStatus(playerBusiness.getPlayerSkeleton()));
-        updateLobby();
+        updateLobbyStage();
         broadCastLobby();
     }
 
@@ -91,9 +94,9 @@ public class PlayerManager {
         this.playerActor = playerActor;
     }
 
-    public void updateLobby() {
+    public void updateLobbyStage() {
 
-        Log.info(role + ": try to update StageLobby");
+        Log.info(role + ": try to update LobbyStage");
 
         Stage currentStage = stageManager.getCurrentStage();
 
@@ -101,6 +104,23 @@ public class PlayerManager {
             Log.info(role + ": current stage is StageLobby -> update it!");
             ((LobbyStage) currentStage).updateLobby();
         }
+    }
 
+    public Set<Color> usedPlayerColors() {
+        return lobby.usedColors();
+    }
+
+    public void setColor(Color color) {
+        playerBusiness.setColor(color);
+        lobby.setColor(playerBusiness.getPlayerSkeleton(), color);
+        updateLobbyStage();
+        broadCastLobby();
+    }
+
+    public void kickPlayer(PlayerSkeleton playerToKick) {
+        Log.info("PlayerManager.kickPlayer() " + playerToKick);
+        if(role == Role.HOST && playerNT != null) {
+            playerNT.kickPlayerFromLobby(playerToKick);
+        }
     }
 }
