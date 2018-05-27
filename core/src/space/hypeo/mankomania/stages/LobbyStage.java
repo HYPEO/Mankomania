@@ -145,8 +145,6 @@ public class LobbyStage extends Stage {
                 btnNick.setColor(color);
             }
 
-            btnIndex.scaleBy(2,2);
-
             /* only host can kick clients */
             if(myRole == Role.HOST && !playerSkeleton.equals(myself)) {
 

@@ -10,6 +10,7 @@ import java.net.InetAddress;
 import java.util.List;
 
 import space.hypeo.mankomania.player.PlayerManager;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.mankomania.player.Lobby;
@@ -84,6 +85,8 @@ public class MClient implements IEndpoint, IClientConnector {
         public void received(Connection connection, Object object) {
             super.received(connection, object);
 
+            PlayerSkeleton myself = playerManager.getPlayerBusiness().getPlayerSkeleton();
+
             if( object instanceof PingResponse) {
                 PingResponse pingResponse = (PingResponse) object;
                 Log.info("Ping time [ms] = " + (startPingRequest - pingResponse.getTime()));
@@ -101,7 +104,7 @@ public class MClient implements IEndpoint, IClientConnector {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: Received ACK from " + ack);
 
-                connection.sendTCP( new PlayerConnect(playerManager.getPlayerBusiness().getPlayerSkeleton()) );
+                connection.sendTCP( new PlayerConnect(myself) );
 
             } else if( object instanceof PlayerHost) {
                 hostPlayer = (PlayerHost) object;
@@ -109,12 +112,12 @@ public class MClient implements IEndpoint, IClientConnector {
 
             }  else if( object instanceof PlayerDisconnect) {
                 PlayerDisconnect playerDisconnect = (PlayerDisconnect) object;
+                Log.info("Client: Received order to disconnect from host");
 
-                if(playerDisconnect.equals(playerManager.getPlayerBusiness().getPlayerSkeleton())) {
-                    Log.info("Client: Received instruction to close connection to host: " + hostPlayer);
-                    client.sendTCP(playerDisconnect);
-                    close();
-                }
+                Log.info("Client: Order is for me ");
+                client.sendTCP(playerDisconnect);
+                close();
+
             }
         }
     }

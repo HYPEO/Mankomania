@@ -196,7 +196,7 @@ public class MHost implements IEndpoint, IHostConnector {
     }
 
 
-    public int getConnectionID(String playerId) throws IllegalArgumentException {
+    public int getConnectionID(String playerId) {
 
         PlayerSkeleton needle = playerManager.getLobby().contains(playerId);
         int connectionID = 0;
@@ -229,7 +229,7 @@ public class MHost implements IEndpoint, IHostConnector {
 
     @Override
     public void sendOrderToCloseConnection(PlayerSkeleton playerToKick) {
-        Log.info("MHost: Send order to close connection to client " + playerToKick);
+        Log.info("MHost: Send order to client '" + playerToKick + "' to close connection to host");
         // TODO: next line has no effect?!
         server.sendToTCP(getConnectionID(playerToKick.getPlayerID()), new PlayerDisconnect(playerToKick));
     }
