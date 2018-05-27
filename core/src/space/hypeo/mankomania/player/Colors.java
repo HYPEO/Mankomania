@@ -10,6 +10,9 @@ import java.util.Set;
  * This class defines the colors, that are available for a player.
  */
 public class Colors {
+
+    private Colors() {}
+
     private static final Set<Color> avaiableColors =
             new HashSet<>(Arrays.asList(
                     new Color(Color.BLACK),
