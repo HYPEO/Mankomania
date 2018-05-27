@@ -133,6 +133,7 @@ public class LobbyStage extends Stage {
         for( PlayerSkeleton playerSkeleton : lobby.getData() ) {
 
             PlayerSkeleton myself = playerManager.getPlayerBusiness().getPlayerSkeleton();
+            Role myRole = playerManager.getRole();
 
             Button btnIndex = new TextButton("" + index, skin);
             Button btnNick = new TextButton(playerSkeleton.getNickname(), skin);
@@ -146,35 +147,35 @@ public class LobbyStage extends Stage {
 
             btnIndex.scaleBy(2,2);
 
-            btnIndex.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    if(playerManager.getRole() == Role.HOST && !playerSkeleton.equals(myself)) {
+            /* only host can kick clients */
+            if(myRole == Role.HOST && !playerSkeleton.equals(myself)) {
+
+                btnIndex.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        Log.info("invoke player manager to kick " + playerSkeleton);
                         playerManager.kickPlayer(playerSkeleton);
                     }
-                }
+                });
+            }
 
-            });
-
-            btnReady.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    if( playerSkeleton.equals(myself)) {
+            if( playerSkeleton.equals(myself)) {
+                btnReady.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
                         playerManager.toggleReadyStatus();
                     }
-                }
+                });
+            }
 
-            });
-
-            btnNick.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    if(playerSkeleton.equals(myself)) {
+            if( playerSkeleton.equals(myself)) {
+                btnNick.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
                         stageManager.push(stageFactory.getSetColorStage(playerManager));
                     }
-                }
-
-            });
+                });
+            }
 
             btnTable.add(btnIndex).height(btnHeight).width(60);
             btnTable.add(btnNick).height(btnHeight).width(180);

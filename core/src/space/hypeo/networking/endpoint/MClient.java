@@ -113,7 +113,7 @@ public class MClient implements IEndpoint, IClientConnector {
                 if(playerDisconnect.equals(playerManager.getPlayerBusiness().getPlayerSkeleton())) {
                     Log.info("Client: Received instruction to close connection to host: " + hostPlayer);
                     client.sendTCP(playerDisconnect);
-                    stop();
+                    close();
                 }
             }
         }

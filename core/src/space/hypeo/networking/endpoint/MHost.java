@@ -229,6 +229,8 @@ public class MHost implements IEndpoint, IHostConnector {
 
     @Override
     public void sendOrderToCloseConnection(PlayerSkeleton playerToKick) {
+        Log.info("MHost: Send order to close connection to client " + playerToKick);
+        // TODO: next line has no effect?!
         server.sendToTCP(getConnectionID(playerToKick.getPlayerID()), new PlayerDisconnect(playerToKick));
     }
 }

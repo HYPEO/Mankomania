@@ -10,6 +10,7 @@ import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.endpoint.IHostConnector;
+import space.hypeo.networking.endpoint.MHost;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.player.PlayerNT;
 import space.hypeo.networking.network.Role;
@@ -119,9 +120,9 @@ public class PlayerManager {
     }
 
     public void kickPlayer(PlayerSkeleton playerToKick) {
-        if(role == Role.HOST) {
-            IHostConnector host = (IHostConnector)playerNT;
-            host.sendOrderToCloseConnection(playerToKick);
+        Log.info("PlayerManager.kickPlayer() " + playerToKick);
+        if(role == Role.HOST && playerNT != null) {
+            playerNT.kickPlayerFromLobby(playerToKick);
         }
     }
 }
