@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
@@ -70,27 +71,34 @@ public class RouletteStage extends Stage {
         ButtonGroup betButtons = new ButtonGroup(blackField,redField,greenField);
         //next set the max and min amount to be checked
         betButtons.setMaxCheckCount(1);
-        betButtons.setMinCheckCount(0);
+        betButtons.setMinCheckCount(1);
         greenField.setName("Green");
         blackField.setName("Black");
         redField.setName("Red");
+        blackField.setChecked(true);
         Table table = new Table();
         Table buttonTable = new Table();
-        Stack overlay = new Stack();
+        Group group = new Group();
         table.setWidth(this.getWidth());
         table.setHeight(this.getHeight());
         table.align(Align.center);
+        group.setSize(407,407);
         spinImage.setSize(266,266);
         rouletteImage.setSize(407,407);
+        group.setWidth(this.getWidth());
+        group.setHeight(this.getHeight());
         betMoney = new TextField("", skin);
         wonOrLost = new Label("Good Luck",skin);
-        overlay.addActor(spinImage);
-        overlay.addActor(rouletteImage);
-        //table.setFillParent(true);
-        table.add(overlay);
+
+        group.addActor(rouletteImage);
+        group.addActor(spinImage);
+
+        spinImage.setPosition( group.getWidth() / 2f - spinImage.getWidth() / 2f, group.getHeight() / 2f - spinImage.getHeight() / 2f );
+        rouletteImage.setPosition( group.getWidth() / 2f - rouletteImage.getWidth() / 2f, group.getHeight() / 2f - rouletteImage.getHeight() / 2f );
+
+        table.add(group).padBottom(-200).padTop(-100);
         table.row();
-        table.row();
-        table.add(buttonTable).padTop(20);
+        table.add(buttonTable).padTop(5);
         buttonTable.add(blackField).width(100).height(40);
         buttonTable.add(redField).width(100).height(40);
         buttonTable.add(greenField).width(100).height(40);
@@ -108,13 +116,11 @@ public class RouletteStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 numOfSpins = randomizeSpin.nextInt((184 - 73) + 1) + 73;
-                //numOfSpins = 9;
                 float spinningDegrees = (360/37) * numOfSpins;
 
-                //numOfSpins = spinningDegrees;
-                spinImage.addAction(Actions.parallel(Actions.moveTo(0,0,3), Actions.rotateBy(spinningDegrees, 3)));
-                spinImage.setPosition(0, 0);
-                spinImage.setOrigin(408/2, 408/2);
+                spinImage.addAction(Actions.parallel(Actions.moveTo(group.getWidth() / 2f - spinImage.getWidth() / 2f, group.getHeight() / 2f - spinImage.getHeight() / 2f ,3), Actions.rotateBy(spinningDegrees, 3)));
+                spinImage.setOrigin(266/2, 266/2);
+
                 wonOrLost.setText(WinnerIs(Integer.parseInt(betMoney.getText()),betButtons.getChecked().getName()));
                 Log.info("Number of Spins: " + numOfSpins);
                 spinRoulette.setDisabled(true);
