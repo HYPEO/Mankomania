@@ -28,6 +28,12 @@ public final class NetworkAddress {
     public static final String IPADDRESS_PATTERN =
             "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
 
+    /**
+     * Validates the IP Address.
+     * @param ipAddress given IP Address
+     * @return IP address if valide
+     *          null if IP address violates pattern
+     */
     public static String validateIpAddress(String ipAddress) {
         String validIpAddress = null;
 
