@@ -77,8 +77,9 @@ public class PlayerDetailActor extends Group {
             balanceLabel.setY(balanceIcon.getY() - 5f);
         } else if (position == ScreenPosition.CENTERED) {
             playerDetail.setRotation(0f);
-            playerDetail.setX((480 - playerDetail.getWidth())/2);
-            playerDetail.setX((800 - playerDetail.getHeight())/2);
+            playerDetail.setBounds(0, 0, playerDetail.getWidth() * 4, playerDetail.getHeight() * 4);
+            playerDetail.setX((480 - playerDetail.getWidth())/2f);
+            playerDetail.setY((800 - playerDetail.getHeight())/2f);
             this.removeActor(balanceLabel);
             this.removeActor(balanceIcon);
         }
