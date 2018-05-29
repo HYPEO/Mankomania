@@ -1,5 +1,7 @@
 package space.hypeo.mankomania.player;
 
+import com.badlogic.gdx.graphics.Color;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +13,9 @@ import space.hypeo.networking.network.NetworkAddress;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class PlayerSkeletonTest {
 
@@ -57,6 +62,13 @@ public class PlayerSkeletonTest {
     @Test
     public void test_equal() {
         assertEquals(playerSkeleton, playerSkeleton);
+    }
+
+    @Test
+    public void test_color() {
+        Color color = mock(Color.class);
+        playerSkeleton.setColor(color);
+        assertEquals(playerSkeleton.getColor(), color);
     }
 
 }
