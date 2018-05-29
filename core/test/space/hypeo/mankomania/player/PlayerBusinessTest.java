@@ -6,13 +6,9 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import space.hypeo.mankomania.player.PlayerBusiness;
-import space.hypeo.mankomania.player.PlayerManager;
 
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class PlayerBusinessTest {
 
@@ -26,7 +22,7 @@ public class PlayerBusinessTest {
     @Before
     public void setup() {
         playerManager = mock(PlayerManager.class);
-        playerBusiness = new PlayerBusiness("test_raw", playerManager);
+        playerBusiness = new PlayerBusiness("NICK_", playerManager);
     }
 
     @After

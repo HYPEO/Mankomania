@@ -13,9 +13,7 @@ import space.hypeo.networking.network.NetworkAddress;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class PlayerSkeletonTest {
 

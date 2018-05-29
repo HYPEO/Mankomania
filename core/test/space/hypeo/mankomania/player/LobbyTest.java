@@ -12,7 +12,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -63,7 +62,7 @@ public class LobbyTest {
         PlayerSkeleton ps = mock(PlayerSkeleton.class);
 
         /* init mock behavior */
-        when(ps.getPlayerID()).thenReturn(PLAYER_ID + autoIncrementPlayerCounter);
+        //when(ps.getPlayerID()).thenReturn(PLAYER_ID + autoIncrementPlayerCounter);
         when(ps.getColor()).thenReturn(color);
 
         autoIncrementPlayerCounter++;
@@ -280,6 +279,24 @@ public class LobbyTest {
         Set<Color> usedColorsInLobby = lobby.usedColors();
 
         assertEquals(usedColorsInLobby, expectedColors);
+    }
+
+    @Test
+    public void test_getData() {
+        PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMock();
+        PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
+        PlayerSkeleton playerSkeleton3 = getPlayerSkeletonMock();
+
+        lobby.add(playerSkeleton1);
+        lobby.add(playerSkeleton2);
+        lobby.add(playerSkeleton3);
+
+        Set<PlayerSkeleton> expectedPlayerSkeleton =
+                new HashSet<>(Arrays.asList(
+                        playerSkeleton1, playerSkeleton2, playerSkeleton3
+                ));
+
+        assertEquals(lobby.getData(), expectedPlayerSkeleton);
     }
 
 }
