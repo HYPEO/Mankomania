@@ -92,7 +92,7 @@ public class RouletteStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.remove(RouletteStage.this);
-                stageManager.push(StageFactory.getMainMenu(viewport, stageManager));
+                //stageManager.push(StageFactory.getMainMenu(viewport, stageManager));
 
             }
         });
