@@ -1,8 +1,10 @@
-package space.hypeo.networking.network;
+package space.hypeo.networking.network.network;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import space.hypeo.networking.network.Role;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;

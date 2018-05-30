@@ -1,25 +1,27 @@
-package space.hypeo.networking.network;
+package space.hypeo.mankomania.player;
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.minlog.Log;
 
 import java.net.SocketException;
 import java.util.UUID;
 
-/**
- * This class represents the raw data or skeleton of a NetworkPlayer.
- * It is necessary, to send a light-weight object through the network.
- */
-public class RawPlayer {
+import space.hypeo.networking.network.NetworkAddress;
 
+public class PlayerSkeleton {
     protected String playerID;      // player ID
     protected String nickname;      // nickname
     protected String address;       // IP address in W/LAN
 
-    public RawPlayer() {}
+    protected Color color;
 
-    public RawPlayer(String nickname) {
-        this.playerID = generatePlayerID();
+    /* NOTE: default constructor required for network traffic */
+    public PlayerSkeleton() {}
+
+    public PlayerSkeleton(String nickname) {
         this.nickname = nickname;
+
+        playerID = generatePlayerID();
 
         // fetch IP in W/LAN
         String currentIpAddr = "";
@@ -29,17 +31,20 @@ public class RawPlayer {
         } catch(SocketException e) {
             Log.info(e.getMessage());
         }
-        this.address = currentIpAddr;
+        address = currentIpAddr;
+
+        color = null;
     }
 
     /**
      * Copy constructor.
-     * @param p
+     * @param playerSkeleton the new instance will be a deep copy of that object
      */
-    public RawPlayer(RawPlayer p) {
-        if (p != null && p != this) {
-            this.playerID = p.playerID;
-            this.nickname = p.nickname;
+    public PlayerSkeleton(PlayerSkeleton playerSkeleton) {
+        if (playerSkeleton != null && playerSkeleton != this) {
+            this.playerID = playerSkeleton.playerID;
+            this.nickname = playerSkeleton.nickname;
+            this.address = playerSkeleton.address;
         }
     }
 
@@ -51,12 +56,17 @@ public class RawPlayer {
         return nickname;
     }
 
-    /**
-     * Gets current address.
-     * @return String IP Address
-     */
     public String getAddress() {
         return address;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+        Log.info("set my (" + nickname + ") color to " + color);
     }
 
     /**
@@ -64,18 +74,19 @@ public class RawPlayer {
      * Take from UUID the last 4 characters.
      * @return String PlayerID
      */
-    public static String generatePlayerID() {
+    private static String generatePlayerID() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString().substring(uuid.toString().length() - 4);
     }
 
     /**
-     * Returns the string representation of current RawPlayer object.
+     * Returns the string representation of current PlayerBusiness object.
      * @return String representation
      */
     @Override
     public String toString() {
-        return nickname;
+        return "ID " + playerID + ", nick " + nickname + ", addr " + address +
+                (color != null ? color : "");
     }
 
     @Override
@@ -83,8 +94,8 @@ public class RawPlayer {
         if( o == null) { return false; }
         if( o == this) { return true; }
 
-        if( o instanceof RawPlayer ) {
-            RawPlayer other = (RawPlayer) o;
+        if( o instanceof PlayerSkeleton) {
+            PlayerSkeleton other = (PlayerSkeleton) o;
             return this.playerID.equals(other.playerID);
 
         } else if( o instanceof String ) {
