@@ -74,7 +74,7 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
 
     @Override
     public String getPlayerID() {
-        return playerManager.getPlayerBusiness().getPlayerID();
+        return playerManager.getPlayerSkeleton().getPlayerID();
     }
 
     @Override

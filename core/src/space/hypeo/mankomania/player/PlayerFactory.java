@@ -15,9 +15,8 @@ public class PlayerFactory {
         return playerManager;
     }
 
-    public PlayerBusiness getPlayerBusiness(final String nickname) {
-
-        return new PlayerBusiness(nickname, playerManager);
+    public PlayerSkeleton getPlayerSkeleton(String nick) {
+        return new PlayerSkeleton(nick);
     }
 
     public PlayerNT getPlayerNT() {

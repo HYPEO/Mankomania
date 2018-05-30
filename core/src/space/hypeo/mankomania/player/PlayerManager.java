@@ -7,7 +7,6 @@ import com.esotericsoftware.minlog.Log;
 import java.util.Set;
 
 import space.hypeo.mankomania.StageManager;
-import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.player.PlayerNT;
@@ -16,9 +15,8 @@ import space.hypeo.networking.network.Role;
 public class PlayerManager {
     private final StageManager stageManager;
 
-    private PlayerBusiness playerBusiness;
+    private PlayerSkeleton playerSkeleton;
     private PlayerNT playerNT;
-    private PlayerActor playerActor;
 
     // identifies the endpoint due to its role in the connection
     private final Role role;
@@ -32,9 +30,8 @@ public class PlayerManager {
     public PlayerManager(final StageManager stageManager, final Role role) {
         this.stageManager = stageManager;
 
-        playerBusiness = null;
+        playerSkeleton = null;
         playerNT = null;
-        playerActor = null;
         this.role = role;
     }
 
@@ -52,13 +49,13 @@ public class PlayerManager {
     }
 
     public boolean isReady2startGame() {
-        return lobby.getReadyStatus(playerBusiness.getPlayerSkeleton());
+        return lobby.getReadyStatus(playerSkeleton);
     }
 
     public void toggleReadyStatus() {
-        Log.info(role + ": toggle ReadyStatus (old: " + lobby.getReadyStatus(playerBusiness.getPlayerSkeleton()) + ")");
-        lobby.toggleReadyStatus(playerBusiness.getPlayerSkeleton());
-        Log.info(role + ": toggle ReadyStatus: " + lobby.getReadyStatus(playerBusiness.getPlayerSkeleton()));
+        Log.info(role + ": toggle ReadyStatus (old: " + lobby.getReadyStatus(playerSkeleton) + ")");
+        lobby.toggleReadyStatus(playerSkeleton);
+        Log.info(role + ": toggle ReadyStatus: " + lobby.getReadyStatus(playerSkeleton));
         updateLobbyStage();
         broadCastLobby();
     }
@@ -67,15 +64,15 @@ public class PlayerManager {
         playerNT.broadCastLobby();
     }
 
-    public PlayerBusiness getPlayerBusiness() {
-        return playerBusiness;
+    public PlayerSkeleton getPlayerSkeleton() {
+        return playerSkeleton;
     }
 
-    public void setPlayerBusiness(final PlayerBusiness playerBusiness) {
-        this.playerBusiness = playerBusiness;
+    public void setPlayerSkeleton(final PlayerSkeleton playerSkeleton) {
+        this.playerSkeleton = playerSkeleton;
 
         lobby = new Lobby(Network.MAX_PLAYER);
-        lobby.add(playerBusiness.getPlayerSkeleton());
+        lobby.add(playerSkeleton);
     }
 
     public PlayerNT getPlayerNT() {
@@ -84,14 +81,6 @@ public class PlayerManager {
 
     public void setPlayerNT(final PlayerNT playerNT) {
         this.playerNT = playerNT;
-    }
-
-    public PlayerActor getPlayerActor() {
-        return playerActor;
-    }
-
-    public void setPlayerActor(PlayerActor playerActor) {
-        this.playerActor = playerActor;
     }
 
     public void updateLobbyStage() {
@@ -111,8 +100,8 @@ public class PlayerManager {
     }
 
     public void setColor(Color color) {
-        playerBusiness.setColor(color);
-        lobby.setColor(playerBusiness.getPlayerSkeleton(), color);
+        playerSkeleton.setColor(color);
+        lobby.setColor(playerSkeleton, color);
         updateLobbyStage();
         broadCastLobby();
     }

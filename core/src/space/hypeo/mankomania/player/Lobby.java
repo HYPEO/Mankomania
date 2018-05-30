@@ -3,12 +3,9 @@ package space.hypeo.mankomania.player;
 import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.minlog.Log;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -147,29 +144,6 @@ public class Lobby {
             Log.info("  #" + index + ": '" + playerSkeleton +"'");
             index++;
         }
-    }
-
-    /**
-     * Creates a table representation of the player in the lobby.
-     * First row is the head-row.
-     * @return
-     */
-    public List<List<String>> toTable() {
-
-        List<List<String>> table = new ArrayList<>();
-        List<String> row;
-
-        /* create header row */
-        row = Arrays.asList("Player ID", "Nickname", "IP Address");
-        table.add(row);
-
-        /* create data rows */
-        for( PlayerSkeleton pk : data.keySet() ) {
-            row = Arrays.asList(pk.getPlayerID(), pk.getNickname(), pk.getAddress());
-            table.add(row);
-        }
-
-        return table;
     }
 
     /**

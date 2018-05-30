@@ -59,11 +59,11 @@ public class MHost implements IEndpoint, IHostConnector {
 
             // send ack to client
             Log.info("Host: Send ack to requested client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new Acknowledge(playerManager.getPlayerBusiness()) );
+            connection.sendTCP( new Acknowledge(playerManager.getPlayerSkeleton()) );
 
             // send host info
             Log.info("Host: Send info of myself to client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new PlayerHost(playerManager.getPlayerBusiness().getPlayerID()) );
+            connection.sendTCP( new PlayerHost(playerManager.getPlayerSkeleton().getPlayerID()) );
         }
 
         /**
