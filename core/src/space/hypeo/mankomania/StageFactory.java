@@ -10,6 +10,7 @@ import space.hypeo.mankomania.actors.player.LocalPlayerActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
+import space.hypeo.mankomania.stages.EndGameStage;
 import space.hypeo.mankomania.stages.HorseRaceResultStage;
 import space.hypeo.mankomania.stages.HorseRaceStage;
 import space.hypeo.mankomania.stages.LobbyStage;
@@ -35,28 +36,28 @@ public class StageFactory {
 
     public Stage getMapStage()
     {
-        GameStateManager gameStateManager = new OfflineGameStateManager();
+        GameStateManager gameStateManager = new OfflineGameStateManager(stageManager, this);
 
         new LocalPlayerActor(new Image(new Texture("players/player_1.png")),
-                1000000,
+                100,
                 stageManager,
                 this,
                 gameStateManager);
 
         new LocalPlayerActor(new Image(new Texture("players/player_2.png")),
-                1000000,
+                100,
                 stageManager,
                 this,
                 gameStateManager);
 
         new LocalPlayerActor(new Image(new Texture("players/player_3.png")),
-                1000000,
+                100,
                 stageManager,
                 this,
                 gameStateManager);
 
         new LocalPlayerActor(new Image(new Texture("players/player_4.png")),
-                1000000,
+                100,
                 stageManager,
                 this,
                 gameStateManager);
@@ -106,4 +107,7 @@ public class StageFactory {
         return new DiscoveredHostsStage(stageManager, viewport, this, playerManager);
     }
 
+    public Stage getEndGameStage(PlayerActor winningPlayer){
+        return new EndGameStage(viewport, stageManager, winningPlayer.getPlayerDetailActor());
+    }
 }

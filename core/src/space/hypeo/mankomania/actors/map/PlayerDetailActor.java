@@ -16,7 +16,8 @@ public class PlayerDetailActor extends Group {
         BOTTOM_LEFT,
         BOTTOM_RIGHT,
         TOP_LEFT,
-        TOP_RIGHT;
+        TOP_RIGHT,
+        CENTERED
     }
 
     private final Image playerDetail;
@@ -74,6 +75,13 @@ public class PlayerDetailActor extends Group {
             balanceIcon.setBounds(480 - 120f - balanceIcon.getWidth() * 0.1f, 800 - 45f - balanceIcon.getHeight() * 0.1f, balanceIcon.getWidth() * 0.1f, balanceIcon.getHeight() * 0.1f);
             balanceLabel.setX(balanceIcon.getX() + 30f - 100f);
             balanceLabel.setY(balanceIcon.getY() - 5f);
+        } else if (position == ScreenPosition.CENTERED) {
+            playerDetail.setRotation(0f);
+            playerDetail.setBounds(0, 0, playerDetail.getWidth() * 4, playerDetail.getHeight() * 4);
+            playerDetail.setX((480 - playerDetail.getWidth())/2f);
+            playerDetail.setY((800 - playerDetail.getHeight())/2f);
+            this.removeActor(balanceLabel);
+            this.removeActor(balanceIcon);
         }
     }
 
