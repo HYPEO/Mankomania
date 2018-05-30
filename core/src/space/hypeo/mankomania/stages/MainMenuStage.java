@@ -19,6 +19,7 @@ import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.IDeviceStatePublisher;
 import space.hypeo.networking.network.Role;
 
@@ -116,6 +117,7 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
                 // TODO: BUG client is in lobby multiple times if returned to main menu
                 playerManager = new PlayerManager(stageManager, Role.CLIENT);
                 PlayerFactory playerFactory = new PlayerFactory(playerManager);
