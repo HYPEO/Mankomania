@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.networking.network.NetworkPlayer;
 import space.hypeo.networking.network.Role;
 
@@ -104,7 +105,6 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
                 //NetworkPlayer clientPlayer = new NetworkPlayer("another_client", Role.CLIENT, stageManager);
                 //stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, clientPlayer));
                 stageManager.push(StageFactory.getRouletteStage(viewport,stageManager));

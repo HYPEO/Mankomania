@@ -22,11 +22,14 @@ import com.esotericsoftware.minlog.Log;
 
 import java.util.Random;
 
+import space.hypeo.mankomania.DigitFilter;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
+import space.hypeo.mankomania.actors.player.PlayerActor;
 
 public class RouletteStage extends Stage {
     private StageManager stageManager;
+    private PlayerActor playerActor;
     private CheckBox greenField;
     private CheckBox redField;
     private CheckBox blackField;
@@ -53,6 +56,7 @@ public class RouletteStage extends Stage {
 
         //TODO: Roulette Sprite
         super(viewport);
+        this.playerActor = playerActor;
         green = "Green";
         black = "Black";
         red = "Red";
@@ -70,7 +74,6 @@ public class RouletteStage extends Stage {
         setUpTable();
 
         this.addActor(table);
-        betMoney.setText("400");
         spinRoulette.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -126,6 +129,7 @@ public class RouletteStage extends Stage {
         blackField.setChecked(true);
 
         betMoney = new TextField("", skin);
+        betMoney.setTextFieldFilter(new DigitFilter());
         wonOrLost = new Label("Good Luck",skin);
 
     }
@@ -156,26 +160,35 @@ public class RouletteStage extends Stage {
     {
         //TODO: Change Player Balance
         String winningColour;
+        int factor = 0;
         if(numOfSpins % 37 == 0)
         {
             winningColour = green;
+            factor = 14;
         }
         else if((numOfSpins % 2 == 1 && numOfSpins/37 % 2 == 0) || (numOfSpins % 2 == 0 && numOfSpins/37 % 2 == 1))
         {
             winningColour = black;
+            factor = 2;
         }
         else if((numOfSpins % 2 == 0 && numOfSpins/37 % 2 == 0) || (numOfSpins % 2 == 1 && numOfSpins/37 % 2 == 1))
         {
             winningColour = red;
+            factor = 2;
         }
         else
             winningColour = errorMessage;
-        if(winningColour.equals(selectedColour))
+        if(winningColour.equals(selectedColour)) {
+            //playerActor.changeBalance(money * factor);
             return "You Won";
+
+        }
         else if(winningColour.equals(errorMessage))
             return errorMessage;
-        else
+        else {
+            //playerActor.changeBalance(money * (-1));
             return "You Lost";
+        }
 
     }
 
