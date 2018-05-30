@@ -1,12 +1,11 @@
 package space.hypeo.mankomania.player;
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.minlog.Log;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -142,32 +141,9 @@ public class Lobby {
 
         int index = 1;
         for( PlayerSkeleton playerSkeleton : data.keySet() ) {
-            Log.info("  " + index + ". ID = '" + playerSkeleton +"'");
+            Log.info("  #" + index + ": '" + playerSkeleton +"'");
             index++;
         }
-    }
-
-    /**
-     * Creates a table representation of the player in the lobby.
-     * First row is the head-row.
-     * @return
-     */
-    public List<List<String>> toTable() {
-
-        List<List<String>> table = new ArrayList<>();
-        List<String> row;
-
-        /* create header row */
-        row = Arrays.asList("Player ID", "Nickname", "IP Address");
-        table.add(row);
-
-        /* create data rows */
-        for( PlayerSkeleton pk : data.keySet() ) {
-            row = Arrays.asList(pk.getPlayerID(), pk.getNickname(), pk.getAddress());
-            table.add(row);
-        }
-
-        return table;
     }
 
     /**
@@ -175,7 +151,7 @@ public class Lobby {
      * @param playerSkeleton get status for
      * @return ready status for player
      */
-    public Boolean getStatus(PlayerSkeleton playerSkeleton) {
+    public Boolean getReadyStatus(PlayerSkeleton playerSkeleton) {
         return data.get(playerSkeleton);
     }
 
@@ -184,15 +160,13 @@ public class Lobby {
      * @param playerSkeleton toggles status for this player
      */
     public void toggleReadyStatus(PlayerSkeleton playerSkeleton) {
-        for( Map.Entry<PlayerSkeleton, Boolean> entry : data.entrySet() ) {
-            if( entry.getKey().equals(playerSkeleton) ) {
-
-                if( ! entry.getValue() ) {
-                    entry.setValue(true);
-                } else {
-                    entry.setValue(false);
-                }
-            }
+        Log.info("try to toggle ready status for " + playerSkeleton);
+        if( data.containsKey(playerSkeleton) && data.get(playerSkeleton) ) {
+            data.put(playerSkeleton, false);
+            Log.info("ready status: changed to false");
+        } else if( data.containsKey(playerSkeleton) && ! data.get(playerSkeleton) ) {
+            data.put(playerSkeleton, true);
+            Log.info("ready status: changed to true");
         }
     }
 
@@ -211,5 +185,38 @@ public class Lobby {
             }
         }
         return true;
+    }
+
+    /**
+     * Determines the used colors of all players connected to the lobby.
+     * @return empty set if nobody has set their color yet.
+     *         else: set of used colors.
+     */
+    public Set<Color> usedColors() {
+
+        Set<Color> usedColorsAllPlayer = new HashSet<>();
+
+        for(PlayerSkeleton playerSkeleton : data.keySet()) {
+            Color playerColor = playerSkeleton.getColor();
+            if(playerColor != null) {
+                usedColorsAllPlayer.add(playerColor);
+            }
+        }
+
+        return usedColorsAllPlayer;
+    }
+
+    /**
+     * Updates, sets, the color of the given player.
+     * @param playerChangeColor color
+     */
+    public void setColor(PlayerSkeleton playerChangeColor, Color color) {
+        Log.info("set color for " + playerChangeColor);
+
+        for(PlayerSkeleton playerInLobby : data.keySet()) {
+            if(playerInLobby.equals(playerChangeColor)) {
+                playerInLobby.setColor(color);
+            }
+        }
     }
 }

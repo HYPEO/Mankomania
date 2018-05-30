@@ -7,6 +7,11 @@ import space.hypeo.mankomania.player.PlayerSkeleton;
  */
 public class PlayerDisconnect extends PlayerSkeleton {
 
+    /* NOTE: default constructor is required for network traffic */
+    public PlayerDisconnect() {
+        super();
+    }
+
     public PlayerDisconnect(String nickname) {
         super(nickname);
     }

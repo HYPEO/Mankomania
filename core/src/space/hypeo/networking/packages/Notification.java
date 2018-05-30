@@ -4,6 +4,7 @@ public class Notification {
 
     private String msg;
 
+    /* NOTE: default constructor is required for network traffic */
     public Notification() {
         msg = null;
     }

@@ -1,5 +1,7 @@
 package space.hypeo.mankomania.player;
 
+import com.badlogic.gdx.graphics.Color;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,13 +10,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import space.hypeo.mankomania.player.Lobby;
-import space.hypeo.mankomania.player.PlayerBusiness;
-import space.hypeo.mankomania.player.PlayerSkeleton;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -31,8 +35,6 @@ public class LobbyTest {
     private final int MAX_PLAYER = 5;
     private int autoIncrementPlayerCounter;
     private final String PLAYER_ID= "ID_";
-    /*private final String NICKNAME = "NICK_";
-    private final String IP_ADDRESS = "192.168.1.";*/
 
     @Before
     public void setup() {
@@ -47,15 +49,24 @@ public class LobbyTest {
     }
 
     private PlayerSkeleton getPlayerSkeletonMock() {
-        PlayerBusiness rp = mock(PlayerBusiness.class);
+        PlayerSkeleton playerSkeleton = mock(PlayerSkeleton.class);
 
         /* init mock behavior */
-        when( rp.getPlayerID() ).thenReturn(PLAYER_ID + autoIncrementPlayerCounter);
-        /*when( rp.getNickname() ).thenReturn(NICKNAME + autoIncrementPlayerCounter);
-        when( rp.getAddress() ).thenReturn(IP_ADDRESS + autoIncrementPlayerCounter);*/
+        when( playerSkeleton.getPlayerID() ).thenReturn(PLAYER_ID + autoIncrementPlayerCounter);
 
         autoIncrementPlayerCounter++;
-        return rp;
+        return playerSkeleton;
+    }
+
+    private PlayerSkeleton getPlayerSkeletonMockColor(Color color) {
+        PlayerSkeleton ps = mock(PlayerSkeleton.class);
+
+        /* init mock behavior */
+        //when(ps.getPlayerID()).thenReturn(PLAYER_ID + autoIncrementPlayerCounter);
+        when(ps.getColor()).thenReturn(color);
+
+        autoIncrementPlayerCounter++;
+        return ps;
     }
 
 
@@ -158,14 +169,14 @@ public class LobbyTest {
     @Test
     public void test_initStatus() {
         lobby.add(playerSkeleton);
-        assertThat(lobby.getStatus(playerSkeleton), is(false));
+        assertThat(lobby.getReadyStatus(playerSkeleton), is(false));
     }
 
     @Test
     public void test_toggleStatus_oneTime() {
         lobby.add(playerSkeleton);
         lobby.toggleReadyStatus(playerSkeleton);
-        assertThat(lobby.getStatus(playerSkeleton), is(true));
+        assertThat(lobby.getReadyStatus(playerSkeleton), is(true));
     }
 
     @Test
@@ -173,7 +184,7 @@ public class LobbyTest {
         lobby.add(playerSkeleton);
         lobby.toggleReadyStatus(playerSkeleton);
         lobby.toggleReadyStatus(playerSkeleton);
-        assertThat(lobby.getStatus(playerSkeleton), is(false));
+        assertThat(lobby.getReadyStatus(playerSkeleton), is(false));
     }
 
     @Test
@@ -210,4 +221,82 @@ public class LobbyTest {
 
         assertThat(lobby.areAllPlayerReady(), is(true));
     }
+
+    @Test
+    public void test_setColorPlayerSkeleton() {
+        Color color = mock(Color.class);
+        PlayerSkeleton playerSkeleton = getPlayerSkeletonMockColor(color);
+        playerSkeleton.setColor(color);
+
+        verify(playerSkeleton).setColor(color);
+    }
+
+    @Test
+    public void test_setColor() {
+        Color color = mock(Color.class);
+        PlayerSkeleton playerSkeleton = getPlayerSkeletonMockColor(color);
+
+        lobby.add(playerSkeleton);
+        lobby.setColor(playerSkeleton,color);
+
+        verify(playerSkeleton).setColor(color);
+    }
+
+    @Test
+    public void test_setColor_fails() {
+        Color color1 = mock(Color.class);
+        Color color2 = mock(Color.class);
+        PlayerSkeleton playerSkeleton = getPlayerSkeletonMockColor(color1);
+
+        lobby.add(playerSkeleton);
+        lobby.setColor(playerSkeleton,color1);
+
+        verify(playerSkeleton, never()).setColor(color2);
+    }
+
+    @Test
+    public void test_usedColors() {
+        Color color1 = mock(Color.class);
+        Color color2 = mock(Color.class);
+
+        PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMockColor(color1);
+        PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMockColor(color2);
+
+        lobby.add(playerSkeleton1);
+        lobby.add(playerSkeleton2);
+
+        lobby.setColor(playerSkeleton1, color1);
+        lobby.setColor(playerSkeleton2, color2);
+
+        verify(playerSkeleton1).setColor(color1);
+        verify(playerSkeleton2).setColor(color2);
+
+        Set<Color> expectedColors =
+                new HashSet<>(Arrays.asList(
+                        color1, color2
+                ));
+
+        Set<Color> usedColorsInLobby = lobby.usedColors();
+
+        assertEquals(usedColorsInLobby, expectedColors);
+    }
+
+    @Test
+    public void test_getData() {
+        PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMock();
+        PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
+        PlayerSkeleton playerSkeleton3 = getPlayerSkeletonMock();
+
+        lobby.add(playerSkeleton1);
+        lobby.add(playerSkeleton2);
+        lobby.add(playerSkeleton3);
+
+        Set<PlayerSkeleton> expectedPlayerSkeleton =
+                new HashSet<>(Arrays.asList(
+                        playerSkeleton1, playerSkeleton2, playerSkeleton3
+                ));
+
+        assertEquals(lobby.getData(), expectedPlayerSkeleton);
+    }
+
 }
