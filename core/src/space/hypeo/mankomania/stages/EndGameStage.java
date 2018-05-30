@@ -1,7 +1,10 @@
 package space.hypeo.mankomania.stages;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -20,7 +23,17 @@ public class EndGameStage extends Stage {
         this.stageManager = stageManager;
         setupBackground();
         playerDetailActor.positionActor(PlayerDetailActor.ScreenPosition.CENTERED);
+        Texture winGameTexture = new Texture(Gdx.files.internal("end_game/winner.png"));
+        winGameTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        Image winGameImage = new Image(winGameTexture);
+        winGameImage.setWidth(400);
+        winGameImage.setHeight(400);
+        winGameImage.setX((viewport.getWorldWidth()-winGameImage.getWidth())/2);
+        winGameImage.setY(430);
+
+        this.addActor(winGameImage);
         this.addActor(playerDetailActor);
+
     }
 
     private void setupBackground() {
