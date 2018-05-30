@@ -70,7 +70,7 @@ public class MClient implements IEndpoint, IClientConnector {
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            connection.sendTCP( new PlayerDisconnect(playerManager.getPlayerBusiness()) );
+            connection.sendTCP( new PlayerDisconnect(playerManager.getPlayerSkeleton()) );
 
             hostPlayer = null;
             connection.close();
@@ -85,7 +85,7 @@ public class MClient implements IEndpoint, IClientConnector {
         public void received(Connection connection, Object object) {
             super.received(connection, object);
 
-            PlayerSkeleton myself = playerManager.getPlayerBusiness().getPlayerSkeleton();
+            PlayerSkeleton myself = playerManager.getPlayerSkeleton();
 
             if( object instanceof PingResponse) {
                 PingResponse pingResponse = (PingResponse) object;

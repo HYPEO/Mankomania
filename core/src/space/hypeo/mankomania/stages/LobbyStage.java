@@ -132,7 +132,7 @@ public class LobbyStage extends Stage {
         int index = 1;
         for( PlayerSkeleton playerSkeleton : lobby.getData() ) {
 
-            PlayerSkeleton myself = playerManager.getPlayerBusiness().getPlayerSkeleton();
+            PlayerSkeleton myself = playerManager.getPlayerSkeleton();
             Role myRole = playerManager.getRole();
 
             Button btnIndex = new TextButton("" + index, skin);

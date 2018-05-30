@@ -49,13 +49,13 @@ public class LobbyTest {
     }
 
     private PlayerSkeleton getPlayerSkeletonMock() {
-        PlayerBusiness rp = mock(PlayerBusiness.class);
+        PlayerSkeleton playerSkeleton = mock(PlayerSkeleton.class);
 
         /* init mock behavior */
-        when( rp.getPlayerID() ).thenReturn(PLAYER_ID + autoIncrementPlayerCounter);
+        when( playerSkeleton.getPlayerID() ).thenReturn(PLAYER_ID + autoIncrementPlayerCounter);
 
         autoIncrementPlayerCounter++;
-        return rp;
+        return playerSkeleton;
     }
 
     private PlayerSkeleton getPlayerSkeletonMockColor(Color color) {

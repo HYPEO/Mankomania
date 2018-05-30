@@ -103,7 +103,7 @@ public class MainMenuStage extends Stage {
 
                 playerManager = new PlayerManager(stageManager, Role.HOST);
                 PlayerFactory playerFactory = new PlayerFactory(playerManager);
-                playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("the_mighty_host"));
+                playerManager.setPlayerSkeleton(playerFactory.getPlayerSkeleton("the_mighty_host"));
                 playerManager.setPlayerNT(playerFactory.getPlayerNT());
 
                 deviceStatePublisher.subscribe(playerManager.getPlayerNT());
@@ -119,7 +119,7 @@ public class MainMenuStage extends Stage {
                 // TODO: BUG client is in lobby multiple times if returned to main menu
                 playerManager = new PlayerManager(stageManager, Role.CLIENT);
                 PlayerFactory playerFactory = new PlayerFactory(playerManager);
-                playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("another_client"));
+                playerManager.setPlayerSkeleton(playerFactory.getPlayerSkeleton("another_client"));
                 playerManager.setPlayerNT(playerFactory.getPlayerNT());
 
                 deviceStatePublisher.subscribe(playerManager.getPlayerNT());
