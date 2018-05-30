@@ -1,4 +1,4 @@
-package space.hypeo.networking.network;
+package space.hypeo.networking.endpoint;
 
 import java.net.InetAddress;
 import java.util.List;

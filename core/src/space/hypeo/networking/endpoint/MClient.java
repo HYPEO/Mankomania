@@ -9,38 +9,41 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
-import space.hypeo.mankomania.StageManager;
-import space.hypeo.networking.network.IClientConnector;
+import space.hypeo.mankomania.player.PlayerManager;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.network.NetworkAddress;
-import space.hypeo.networking.network.NetworkPlayer;
-import space.hypeo.networking.network.RawPlayer;
-import space.hypeo.networking.network.Role;
 import space.hypeo.networking.packages.Acknowledge;
-import space.hypeo.networking.network.Lobby;
+import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
-import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.Remittances;
 
 /**
- * This class represents the client process for an endpoint on a device.
- * If you don't know, if you're client or host, call WhatAmI.getRole().
+ * This class represents the client process on the device.
  */
-public class MClient extends Endpoint implements IClientConnector {
+public class MClient implements IEndpoint, IClientConnector {
+    private PlayerManager playerManager;
 
     // instance of the client
-    private com.esotericsoftware.kryonet.Client client = null;
+    private com.esotericsoftware.kryonet.Client client;
 
     // host, that the client is connected to
-    private RawPlayer hostInfo = null;
+    private PlayerHost hostPlayer;
 
     private long startPingRequest = 0;
 
-    public MClient(NetworkPlayer player, StageManager stageManager) {
-        super(player, Role.CLIENT, stageManager);
+    /**
+     * Creates a new instance and starts client.
+     * @param playerManager
+     */
+    public MClient(PlayerManager playerManager) {
+        this.playerManager = playerManager;
+        this.start();
     }
 
     /**
@@ -67,9 +70,9 @@ public class MClient extends Endpoint implements IClientConnector {
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            connection.sendTCP( new PlayerDisconnect(player.getRawPlayer()) );
+            connection.sendTCP( new PlayerDisconnect(playerManager.getPlayerBusiness()) );
 
-            hostInfo = null;
+            hostPlayer = null;
             connection.close();
         }
 
@@ -82,6 +85,8 @@ public class MClient extends Endpoint implements IClientConnector {
         public void received(Connection connection, Object object) {
             super.received(connection, object);
 
+            PlayerSkeleton myself = playerManager.getPlayerBusiness().getPlayerSkeleton();
+
             if( object instanceof PingResponse) {
                 PingResponse pingResponse = (PingResponse) object;
                 Log.info("Ping time [ms] = " + (startPingRequest - pingResponse.getTime()));
@@ -91,24 +96,27 @@ public class MClient extends Endpoint implements IClientConnector {
                 Log.info("Client: Received notification: " + notification.toString());
 
             } else if( object instanceof Lobby ) {
-                /*
-                 * receive new list of NetworkPlayer:
-                 * after connecting or disconnecting clients
-                 */
-                player.setLobby( (Lobby) object );
-                Log.info("Client: Received updated list of player");
-
-                updateStageLobby();
+                playerManager.setLobby( (Lobby) object );
+                Log.info("Client: Received updated lobby");
+                playerManager.updateLobbyStage();
 
             } else if( object instanceof Acknowledge ) {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: Received ACK from " + ack);
 
-                connection.sendTCP( new PlayerConnect(player.getRawPlayer()) );
+                connection.sendTCP( new PlayerConnect(myself) );
 
             } else if( object instanceof PlayerHost) {
-                hostInfo = (PlayerHost) object;
-                Log.info("Client: Received NetworkPlayer info of host, to be connected with: " + hostInfo);
+                hostPlayer = (PlayerHost) object;
+                Log.info("Client: Received info of host, to be connected with: " + hostPlayer);
+
+            }  else if( object instanceof PlayerDisconnect) {
+                PlayerDisconnect playerDisconnect = (PlayerDisconnect) object;
+                Log.info("Client: Received order to disconnect from host");
+
+                Log.info("Client: Order is for me ");
+                client.sendTCP(playerDisconnect);
+                close();
 
             }
         }
@@ -118,8 +126,7 @@ public class MClient extends Endpoint implements IClientConnector {
      * Starts the client network thread.
      * This thread is what receives (and sometimes sends) data over the network
      */
-    @Override
-    public void start() {
+    private void start() {
         Log.info("Client will be started.");
 
         if( client != null ) {
@@ -138,7 +145,6 @@ public class MClient extends Endpoint implements IClientConnector {
     /**
      * Closes any network connection AND stops the client network thread.
      */
-    @Override
     public void stop() {
         Log.info("Client will be stopped.");
 
@@ -156,7 +162,6 @@ public class MClient extends Endpoint implements IClientConnector {
      * Closes the network connection BUT does NOT stop the client network thread.
      * Client can reconnect or connect to a different server.
      */
-    @Override
     public void close() {
         Log.info("Client will be closed.");
         client.close();
@@ -166,6 +171,7 @@ public class MClient extends Endpoint implements IClientConnector {
     public List<InetAddress> discoverHosts() {
         // TODO: check if WLAN has "Wireless Isolation" enabled => no discovery possible
         // use UDP port for discovering hosts
+        Log.info("Client: Searching in WLAN for hosts...");
         List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
         return discoveredHosts;
@@ -213,4 +219,14 @@ public class MClient extends Endpoint implements IClientConnector {
         return false;
     }
 
+    @Override
+    public void changeBalance(Remittances remittances) {
+        // TODO: correct that process!
+        client.sendTCP(remittances);
+    }
+
+    @Override
+    public void broadCastLobby() {
+        client.sendTCP(playerManager.getLobby());
+    }
 }

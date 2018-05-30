@@ -1,6 +1,7 @@
 package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -13,12 +14,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
+import space.hypeo.mankomania.StageFactory;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.networking.network.RawPlayer;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.network.Lobby;
-import space.hypeo.networking.network.NetworkPlayer;
+import space.hypeo.mankomania.player.Lobby;
 
 
 /**
@@ -29,38 +31,43 @@ import space.hypeo.networking.network.NetworkPlayer;
 public class LobbyStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
+    private final StageFactory stageFactory;
+    private PlayerManager playerManager;
+    private boolean update;
 
-    private NetworkPlayer networkPlayer;
-
-    private Skin skin;
-    private RectangleActor background;
-    private Table layout;
-
-    private boolean updateLobby;
-    private float timeSinceLastUpdate;
-
-    public LobbyStage(StageManager stageManager, Viewport viewport, NetworkPlayer player) {
+    public LobbyStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, PlayerManager playerManager) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
-
-        this.networkPlayer = player;
-
-        this.updateLobby = false;
-        this.timeSinceLastUpdate = 0f;
-
-        updateLobby();
+        this.stageFactory = stageFactory;
+        this.playerManager = playerManager;
+        this.update = false;
+        setupBackground();
+        setupLayout();
     }
 
     public void updateLobby() {
-        synchronized (this){
-            updateLobby = true;
+        synchronized (this) {
+            update = true;
         }
     }
 
+    @Override
+    public void act(float delta)
+    {
+        synchronized (this)
+        {
+            if(update) {
+                this.clear();
+                setupBackground();
+                setupLayout();
+                update = false;
+            }
+        }
+    }
 
     private void setupBackground() {
-        background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+        RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
         // Set up background.
         background.setColor(237f/255f, 30f/255f, 121f/255f, 1f);
 
@@ -72,27 +79,32 @@ public class LobbyStage extends Stage {
             }
         });
 
-
+        this.addActor(background);
     }
 
     private void setupLayout() {
-        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        Log.info(playerManager.getRole() + ": " + "Build LobbyStage ...");
+
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
+        /* very outer table for all widgets */
+        Table rootTable = new Table();
+        //rootTable.setDebug(true); // turn on all debug lines
+        rootTable.setFillParent(true);
+        this.addActor(rootTable);
 
         Label title = new Label("GAME LOBBY", skin);
+        title.setFontScaleX(2);
+        title.setFontScaleY(2);
+        title.setAlignment(Align.center);
 
-        layout = new Table();
-        layout.setWidth(this.getWidth());
-        layout.align(Align.center);
-        layout.setPosition(0, this.getHeight() - 200);
-        layout.padTop(50);
-        layout.add(title).width(300).height(100);
-        layout.row();
-    }
+        /* add title */
+        rootTable.add(title).padTop(50).padBottom(50);
+        rootTable.row();
 
-    private void buildListWidgetFromLobby() {
-
-        Lobby lobby = networkPlayer.registeredPlayers();
-        Role role = networkPlayer.getRole();
+        /* buttons */
+        Lobby lobby = playerManager.getLobby();
+        Role role = playerManager.getRole();
 
         if( lobby == null || role == Role.NOT_CONNECTED ) {
             Log.error("LobbyStage: lobby must not be null!");
@@ -100,47 +112,82 @@ public class LobbyStage extends Stage {
             return;
         }
 
+        /* inner table contains players from lobby: represented as button */
+        Table btnTable = new Table();
+        int btnHeight = 60;
+
+        /* header row */
+        Label hIndex = new Label("#", skin);
+        Label hNick = new Label("Nickname", skin);
+        Label hAddr = new Label("IP Address", skin);
+        Label hReady = new Label("?", skin);
+
+        btnTable.add(hIndex).height(btnHeight).width(60).align(Align.right);
+        btnTable.add(hNick).height(btnHeight).width(180);
+        btnTable.add(hAddr).height(btnHeight).width(150);
+        btnTable.add(hReady).height(btnHeight).width(60).align(Align.right);
+        btnTable.row();
+
+        /* data rows */
         int index = 1;
-        for( RawPlayer rawPlayer : lobby.getData() ) {
+        for( PlayerSkeleton playerSkeleton : lobby.getData() ) {
 
-            Button btnPlayer = new TextButton(
-                    index + ": " + rawPlayer, skin);
+            PlayerSkeleton myself = playerManager.getPlayerBusiness().getPlayerSkeleton();
+            Role myRole = playerManager.getRole();
 
-            btnPlayer.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    // TODO: set status read to start game
-                }
+            Button btnIndex = new TextButton("" + index, skin);
+            Button btnNick = new TextButton(playerSkeleton.getNickname(), skin);
+            Button btnAddr = new TextButton(playerSkeleton.getAddress(), skin);
+            Button btnReady = new TextButton( (playerManager.getLobby().getReadyStatus(playerSkeleton) ? "YES" : "NO"), skin);
 
-            });
+            Color color = playerSkeleton.getColor();
+            if(color != null) {
+                btnNick.setColor(color);
+            }
 
-            layout.add(btnPlayer).width(300).height(100);
-            layout.row();
+            /* only host can kick clients */
+            if(myRole == Role.HOST && !playerSkeleton.equals(myself)) {
+
+                btnIndex.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        Log.info("invoke player manager to kick " + playerSkeleton);
+                        playerManager.kickPlayer(playerSkeleton);
+                    }
+                });
+            }
+
+            if( playerSkeleton.equals(myself)) {
+                btnReady.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        playerManager.toggleReadyStatus();
+                    }
+                });
+            }
+
+            if( playerSkeleton.equals(myself)) {
+                btnNick.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        stageManager.push(stageFactory.getSetColorStage(playerManager));
+                    }
+                });
+            }
+
+            btnTable.add(btnIndex).height(btnHeight).width(60);
+            btnTable.add(btnNick).height(btnHeight).width(180);
+            btnTable.add(btnAddr).height(btnHeight).width(150);
+            btnTable.add(btnReady).height(btnHeight).width(60);
+            btnTable.row();
 
             index++;
         }
+
+        /* add buttons */
+        rootTable.add(btnTable);
+
+        this.addActor(rootTable);
     }
 
-    @Override
-    public void act(float delta)
-    {
-        timeSinceLastUpdate += delta;
-
-        if(timeSinceLastUpdate > 1f) {
-            synchronized (this) {
-                if (updateLobby) {
-                    setupBackground();
-                    setupLayout();
-                    buildListWidgetFromLobby();
-
-                    this.addActor(background);
-                    this.addActor(layout);
-                }
-                updateLobby = false;
-            }
-            timeSinceLastUpdate = 0f;
-        }
-
-        super.act(delta);
-    }
 }

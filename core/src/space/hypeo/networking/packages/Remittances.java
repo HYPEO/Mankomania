@@ -6,6 +6,7 @@ public class Remittances {
     private String senderId;
     private String receiverId;
 
+    /* NOTE: default constructor is required for network traffic */
     public Remittances() {}
 
     public Remittances(String senderId, String receiverId, int amount) {
