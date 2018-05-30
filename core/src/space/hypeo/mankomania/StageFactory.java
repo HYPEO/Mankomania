@@ -5,15 +5,20 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import space.hypeo.mankomania.player.PlayerManager;
+
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.MapStage;
+
+import space.hypeo.mankomania.stages.RouletteStage;
 import space.hypeo.mankomania.stages.SetColorStage;
+
 import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
@@ -76,6 +81,9 @@ public class StageFactory {
      */
     public Stage getDiscoveredHostsStage(PlayerManager playerManager) {
         return new DiscoveredHostsStage(stageManager, viewport, this, playerManager);
+    }
+    public static Stage getRouletteStage(final Viewport viewport, final StageManager stageManager) {
+        return new RouletteStage(viewport,stageManager);
     }
 
     public Stage getSetColorStage(PlayerManager playerManager) {
