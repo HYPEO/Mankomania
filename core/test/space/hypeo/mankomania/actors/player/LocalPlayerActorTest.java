@@ -49,7 +49,7 @@ public class LocalPlayerActorTest extends GameTest {
     @Before
     public void setUp() {
         playerActor = new LocalPlayerActor(actorImage, BALANCE, stageManager, stageFactory, gameStateManager);
-        playerActor.initializeState(fieldActor, playerDetailActor);
+        playerActor.initializeState(fieldActor);
     }
 
     @Test

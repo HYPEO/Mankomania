@@ -153,7 +153,7 @@ public class MHost implements IEndpoint, IHostConnector {
     @Override
     public void stop() {
         if(server != null) {
-            stop();
+            server.stop();
         }
     }
 

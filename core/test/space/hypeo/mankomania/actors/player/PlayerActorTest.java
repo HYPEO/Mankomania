@@ -1,6 +1,5 @@
 package space.hypeo.mankomania.actors.player;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import org.junit.Before;
@@ -12,8 +11,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import space.hypeo.mankomania.GameTest;
-import space.hypeo.mankomania.StageFactory;
-import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
@@ -41,7 +38,7 @@ public class PlayerActorTest extends GameTest {
     @Before
     public void setUp() {
         playerActor = new PlayerActor(actorImage, BALANCE);
-        playerActor.initializeState(fieldActor, playerDetailActor);
+        playerActor.initializeState(fieldActor);
     }
 
     @Test
@@ -50,7 +47,7 @@ public class PlayerActorTest extends GameTest {
         // SET-UP:
         // Set up nonlocal Player
         playerActor = new PlayerActor(actorImage, BALANCE);
-        playerActor.initializeState(fieldActor, playerDetailActor);
+        playerActor.initializeState(fieldActor);
 
         // Return predefined following field on method call.
         FieldActor targetFieldActor = Mockito.mock(FieldActor.class);

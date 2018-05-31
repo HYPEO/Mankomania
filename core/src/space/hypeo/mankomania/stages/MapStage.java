@@ -4,21 +4,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 
 import space.hypeo.mankomania.GameStateManager;
-import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.mankomania.actors.fields.BuildHotel;
 import space.hypeo.mankomania.actors.fields.EmptyFieldActor;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.fields.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
-import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
-import space.hypeo.mankomania.actors.fields.BuildHotel;
 import space.hypeo.mankomania.factories.ActorFactory;
 
 /**
@@ -33,13 +28,13 @@ public class MapStage extends Stage {
     private static final int MAX_PLAYERS = 4;
     private DetailActor detailActor;
 
-    public MapStage(Viewport viewport, StageManager stageManager, GameStateManager gameStateManager) {
+    public MapStage(Viewport viewport, GameStateManager gameStateManager, ActorFactory actorFactory) {
         super(viewport);
         if(gameStateManager.registeredPlayerCount()> MAX_PLAYERS)
             throw new IllegalArgumentException("gameStateManager must not contain more than "+ MAX_PLAYERS + " players.");
 
         setUpBackground();
-        detailActor = ActorFactory.getDetailActor();
+        detailActor = actorFactory.getDetailActor();
         this.addActor(detailActor);
         detailActor.positionActor(340);
 
@@ -58,39 +53,11 @@ public class MapStage extends Stage {
         // Link the last field with the first one to create a full loop.
         previousField.setNextField(firstField);
 
-        //Setup players and player details.
-        List<PlayerDetailActor> playerDetailActors = generateDetailActors();
-
-        Iterator<PlayerDetailActor> playerDetailIterator = playerDetailActors.iterator();
         for (PlayerActor actor : gameStateManager.getPlayers()) {
-            PlayerDetailActor detail = playerDetailIterator.next();
-            actor.initializeState(firstField, detail);
+            actor.initializeState(firstField);
             this.addActor(actor);
-            this.addActor(detail);
+            this.addActor(actor.getPlayerDetailActor());
         }
-    }
-
-    private List<PlayerDetailActor> generateDetailActors()
-    {
-        List<PlayerDetailActor> playerDetailActors = new ArrayList<>();
-
-        PlayerDetailActor playerDetailActor = new PlayerDetailActor(new Texture("map_assets/player_1.png"));
-        playerDetailActor.positionActor(PlayerDetailActor.ScreenPosition.BOTTOM_LEFT);
-        playerDetailActors.add(playerDetailActor);
-
-        PlayerDetailActor secondDetailActor = new PlayerDetailActor(new Texture("map_assets/player_2.png"));
-        secondDetailActor.positionActor(PlayerDetailActor.ScreenPosition.BOTTOM_RIGHT);
-        playerDetailActors.add(secondDetailActor);
-
-        PlayerDetailActor thirdDetailActor = new PlayerDetailActor(new Texture("map_assets/player_3.png"));
-        thirdDetailActor.positionActor(PlayerDetailActor.ScreenPosition.TOP_LEFT);
-        playerDetailActors.add(thirdDetailActor);
-
-        PlayerDetailActor fourthDetailActor = new PlayerDetailActor(new Texture("map_assets/player_4.png"));
-        fourthDetailActor.positionActor(PlayerDetailActor.ScreenPosition.TOP_RIGHT);
-        playerDetailActors.add(fourthDetailActor);
-
-        return playerDetailActors;
     }
 
     private FieldActor generateField(int fieldIndex, float xDirection, float yDirection, float xMargin, float yMargin) {

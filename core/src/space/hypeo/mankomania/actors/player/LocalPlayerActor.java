@@ -8,6 +8,7 @@ import java.util.Random;
 import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
+import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
 /**
  * Created by pichlermarc on 19.05.2018.
@@ -28,8 +29,8 @@ public class LocalPlayerActor extends PlayerActor {
      * @param stageManager StageManager for pushing DiceStage.
      * @param stageFactory StageFactory for creating new Stages.
      */
-    public LocalPlayerActor(Image actorImage, int balance, StageManager stageManager, StageFactory stageFactory, GameStateManager gameStateManager) {
-        super(actorImage, balance);
+    public LocalPlayerActor(Image actorImage, int balance, StageManager stageManager, StageFactory stageFactory, GameStateManager gameStateManager, PlayerDetailActor playerDetailActor) {
+        super(actorImage, balance, playerDetailActor);
         this.stageManager = stageManager;
         this.stageFactory = stageFactory;
         this.gameStateManager = gameStateManager;

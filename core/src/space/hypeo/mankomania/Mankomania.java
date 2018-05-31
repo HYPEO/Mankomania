@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+import space.hypeo.mankomania.factories.ActorFactory;
+
 
 /**
  * The GDX Game class, called from the android project.
@@ -25,7 +27,7 @@ public class Mankomania extends ApplicationAdapter {
         ExtendViewport viewport = new ExtendViewport(480, 800, camera);
         manager = new StageManager();
 
-        StageFactory stageFactory = new StageFactory(viewport, manager, deviceStatePublisher);
+        StageFactory stageFactory = new StageFactory(viewport, manager, deviceStatePublisher, new ActorFactory(manager));
         manager.push(stageFactory.getMainMenu());
         manager.push(stageFactory.getTitleStage());
     }

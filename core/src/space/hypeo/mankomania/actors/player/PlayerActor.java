@@ -26,8 +26,9 @@ public class PlayerActor extends Group {
      * @param actorImage Image that represents the actor.
      * @param balance    The player's current balance (starting balance)
      */
-    public PlayerActor(Image actorImage, int balance) {
+    public PlayerActor(Image actorImage, int balance, PlayerDetailActor playerDetailActor) {
         this.actorImage = actorImage;
+        this.playerDetailActor = playerDetailActor;
         this.addActor(this.actorImage);
         this.balance = balance;
         this.isActive = false;
@@ -35,14 +36,11 @@ public class PlayerActor extends Group {
 
     /**
      * Initializes the starting-field and corresponding PlayerDetailActor.
+     *  @param currentField      The field this Player starts out at.
      *
-     * @param currentField      The field this Player starts out at.
-     * @param playerDetailActor The PlayerDetailActor that belongs to this player.
      */
-    public void initializeState(FieldActor currentField, PlayerDetailActor playerDetailActor) {
-        this.playerDetailActor = playerDetailActor;
+    public void initializeState(FieldActor currentField) {
         this.currentField = currentField;
-
         actorImage.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
         updateBounds();
     }

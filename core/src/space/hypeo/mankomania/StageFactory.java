@@ -1,5 +1,6 @@
 package space.hypeo.mankomania;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import space.hypeo.mankomania.actors.horse.HorseActor;
 import space.hypeo.mankomania.actors.player.LocalPlayerActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
+import space.hypeo.mankomania.factories.ActorFactory;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
@@ -29,42 +31,25 @@ public class StageFactory {
     private final Viewport viewport;
     private final StageManager stageManager;
     private IDeviceStatePublisher publisher;
+    private ActorFactory actorFactory;
 
-    public StageFactory(final Viewport viewport, final StageManager stageManager, final IDeviceStatePublisher publisher) {
+    public StageFactory(final Viewport viewport, final StageManager stageManager, final IDeviceStatePublisher publisher, ActorFactory actorFactory) {
         this.viewport = viewport;
         this.stageManager = stageManager;
         this.publisher = publisher;
+        this.actorFactory = actorFactory;
     }
 
     public Stage getMapStage()
     {
         GameStateManager gameStateManager = new OfflineGameStateManager(stageManager, this);
 
-        new LocalPlayerActor(new Image(new Texture("players/player_1.png")),
-                100,
-                stageManager,
-                this,
-                gameStateManager);
+        actorFactory.getPlayerActor("", "", Color.GREEN,true, gameStateManager, this);
+        actorFactory.getPlayerActor("", "", Color.CYAN,true, gameStateManager, this);
+        actorFactory.getPlayerActor("", "", Color.YELLOW,true, gameStateManager, this);
+        actorFactory.getPlayerActor("", "", Color.PINK,true, gameStateManager, this);
 
-        new LocalPlayerActor(new Image(new Texture("players/player_2.png")),
-                100,
-                stageManager,
-                this,
-                gameStateManager);
-
-        new LocalPlayerActor(new Image(new Texture("players/player_3.png")),
-                100,
-                stageManager,
-                this,
-                gameStateManager);
-
-        new LocalPlayerActor(new Image(new Texture("players/player_4.png")),
-                100,
-                stageManager,
-                this,
-                gameStateManager);
-
-        return new MapStage(viewport, stageManager, gameStateManager);
+        return new MapStage(viewport, gameStateManager, actorFactory);
     }
 
     public Stage getDiceResultStage(int moveFields) {
