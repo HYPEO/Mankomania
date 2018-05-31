@@ -1,16 +1,8 @@
 package space.hypeo.mankomania.actors.player;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.Random;
-
-import space.hypeo.mankomania.StageFactory;
-import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
@@ -22,91 +14,35 @@ public class PlayerActor extends Group {
 
     // Current player state.
     private int balance;
-    private boolean isLocal;
-    private FieldActor currentField;
+    protected FieldActor currentField;
+    protected boolean isActive;
 
-    // For dice feature
-    private float timeElapsed = 0;
-    private Random die = new Random();
-    private static final float EARTH_GRAVITY = 9.81f;
-    private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
 
-    // UI-Relevant Items.
-    private final StageManager manager;
+    // UI Relevant
     private PlayerDetailActor playerDetailActor;
     private Image actorImage;
-    private final StageFactory stageFactory;
 
     /**
-     * @param actorImage   Image that represents the actor.
-     * @param balance      The player's current balance (starting balance)
-     * @param isLocal      Defines whether this player is the local one (i.e the one controlled with this device)
-     * @param stageManager StageManager for pushing DiceStage.
-     * @param stageFactory StageFactory for creating new Stages.
+     * @param actorImage Image that represents the actor.
+     * @param balance    The player's current balance (starting balance)
      */
-    public PlayerActor(Image actorImage, int balance, boolean isLocal, final StageManager stageManager, StageFactory stageFactory) {
+    public PlayerActor(Image actorImage, int balance, PlayerDetailActor playerDetailActor) {
         this.actorImage = actorImage;
+        this.playerDetailActor = playerDetailActor;
         this.addActor(this.actorImage);
-
-        this.isLocal = isLocal;
-        this.stageFactory = stageFactory;
         this.balance = balance;
-        this.manager = stageManager;
+        this.isActive = false;
     }
 
     /**
      * Initializes the starting-field and corresponding PlayerDetailActor.
+     *  @param currentField      The field this Player starts out at.
      *
-     * @param currentField      The field this Player starts out at.
-     * @param playerDetailActor The PlayerDetailActor that belongs to this player.
      */
-    public void initializeState(FieldActor currentField, PlayerDetailActor playerDetailActor) {
-        this.playerDetailActor = playerDetailActor;
+    public void initializeState(FieldActor currentField) {
         this.currentField = currentField;
-
         actorImage.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
         updateBounds();
-    }
-
-    /**
-     * Defines whether this player is the local one (i.e the one controlled with this device)
-     *
-     * @return
-     */
-    public boolean isLocal() {
-        return this.isLocal;
-    }
-
-    @Override
-    public void act(float deltaTime) {
-
-
-        float xValue;
-        float yValue;
-        float zValue;
-        float gForce;
-
-        timeElapsed += deltaTime;
-        if (timeElapsed >= 0.18f) {
-            timeElapsed = 0;
-
-            xValue = Gdx.input.getAccelerometerX() / EARTH_GRAVITY;
-            yValue = Gdx.input.getAccelerometerY() / EARTH_GRAVITY;
-            zValue = Gdx.input.getAccelerometerZ() / EARTH_GRAVITY;
-
-            gForce = (float) Math.sqrt(xValue * xValue + yValue * yValue + zValue * zValue);
-
-            if (gForce > GRAVITY_FORCE_THRESHOLD) {
-
-                // TODO: check if it is the players turn, then move
-                int moveFields = die.nextInt(6) + 1;
-                this.move(moveFields);
-                manager.push(stageFactory.getDiceResultStage(moveFields));
-
-                // TODO: maybe cheat function here (for example: if other player is playing roulette)
-            }
-        }
-
     }
 
     /**
@@ -116,8 +52,6 @@ public class PlayerActor extends Group {
      */
     public void move(int steps) {
         currentField = currentField.getFollowingField(steps);
-        if (this.isLocal())
-            currentField.trigger(this);
         updateBounds();
     }
 
@@ -138,5 +72,21 @@ public class PlayerActor extends Group {
     public void setBalance(int balance) {
         this.balance = balance;
         this.playerDetailActor.updateBalance(balance);
+    }
+
+    public void changeBalance(int remittance) {
+        this.balance += remittance;
+    }
+
+    public void setActive() {
+        this.isActive = true;
+    }
+
+    public void setInactive() {
+        this.isActive = false;
+    }
+
+    public PlayerDetailActor getPlayerDetailActor() {
+        return this.playerDetailActor;
     }
 }
