@@ -69,4 +69,26 @@ public class PlayerSkeletonTest {
         assertEquals(playerSkeleton.getColor(), color);
     }
 
+    @Test
+    public void test_isActive_true() {
+        playerSkeleton.setActive(true);
+        assertEquals(playerSkeleton.isActive(), true);
+    }
+
+    @Test
+    public void test_isActive_false() {
+        playerSkeleton.setActive(false);
+        assertEquals(playerSkeleton.isActive(), false);
+    }
+
+    @Test
+    public void test_getBalance() {
+        assertEquals(playerSkeleton.getBalance(), PlayerFactory.START_BALANCE);
+    }
+
+    @Test
+    public void test_setBalance() {
+        playerSkeleton.setBalance(1);
+        assertEquals(playerSkeleton.getBalance(), 1);
+    }
 }

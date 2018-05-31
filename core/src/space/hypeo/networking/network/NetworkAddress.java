@@ -37,8 +37,6 @@ public final class NetworkAddress {
     public static String validateIpAddress(String ipAddress) {
         String validIpAddress = null;
 
-        Log.info("validate IP Address " + ipAddress);
-
         Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
         Matcher matcher = pattern.matcher(ipAddress);
 
@@ -47,9 +45,9 @@ public final class NetworkAddress {
         };
 
         if(validIpAddress != null) {
-            Log.info("validIpAddress: " + validIpAddress);
+            Log.info("IP " + validIpAddress + " is correct");
         } else {
-            Log.info(ipAddress + " violates IP address pattern");
+            Log.info("IP " + ipAddress + " violates IP address pattern");
         }
 
         return validIpAddress;
