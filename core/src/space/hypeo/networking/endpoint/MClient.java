@@ -21,7 +21,6 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
-import space.hypeo.networking.packages.Remittances;
 
 /**
  * This class represents the client process on the device.
@@ -220,9 +219,13 @@ public class MClient implements IEndpoint, IClientConnector {
     }
 
     @Override
-    public void changeBalance(Remittances remittances) {
-        // TODO: correct that process!
-        client.sendTCP(remittances);
+    public void changeBalance(String playerId, int balance) {
+        PlayerSkeleton found = playerManager.getLobby().getPlayerSkeleton(playerId);
+        if(found != null) {
+            found.setBalance(balance);
+            playerManager.getLobby().replacePlayerSkeleton(found);
+            broadCastLobby();
+        }
     }
 
     @Override

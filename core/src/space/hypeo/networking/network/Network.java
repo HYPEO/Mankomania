@@ -12,7 +12,6 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
-import space.hypeo.networking.packages.Remittances;
 
 /**
  * The class Network is a auxiliary class
@@ -52,7 +51,6 @@ public final class Network {
         kryo.register(PlayerConnect.class);
         kryo.register(PlayerDisconnect.class);
         kryo.register(PlayerHost.class);
-        kryo.register(Remittances.class);
 
         kryo.register(PlayerSkeleton.class);
         kryo.register(Lobby.class);

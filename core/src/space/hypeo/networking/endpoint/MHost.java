@@ -13,7 +13,6 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
-import space.hypeo.networking.packages.Remittances;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -189,12 +188,14 @@ public class MHost implements IEndpoint, IHostConnector {
     }
 
     @Override
-    public void changeBalance(Remittances remittances) {
-        // TODO: correct that process!
-        int connectionID = getConnectionID(remittances.getReceiverId());
-        server.sendToTCP(connectionID, remittances);
+    public void changeBalance(String playerId, int balance) {
+        PlayerSkeleton found = playerManager.getLobby().getPlayerSkeleton(playerId);
+        if(found != null) {
+            found.setBalance(balance);
+            playerManager.getLobby().replacePlayerSkeleton(found);
+            broadCastLobby();
+        }
     }
-
 
     public int getConnectionID(String playerId) {
 

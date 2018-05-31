@@ -6,6 +6,8 @@ import com.esotericsoftware.minlog.Log;
 
 import java.util.Set;
 
+import javax.print.DocFlavor;
+
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.Network;
@@ -111,5 +113,9 @@ public class PlayerManager {
         if(role == Role.HOST && playerNT != null) {
             playerNT.kickPlayerFromLobby(playerToKick);
         }
+    }
+
+    public void changeBalance(String playerId, int balance) {
+        playerNT.changeBalance(playerId, balance);
     }
 }
