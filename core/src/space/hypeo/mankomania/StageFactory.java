@@ -1,16 +1,14 @@
 package space.hypeo.mankomania;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.actors.horse.HorseActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
-import space.hypeo.mankomania.actors.player.LocalPlayerActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
+import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.factories.FieldFactory;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.stages.DiceResultStage;
@@ -61,7 +59,8 @@ public class StageFactory {
     }
 
     public Stage getMainMenu() {
-            return new MainMenuStage(stageManager, viewport, this, publisher);
+        ButtonFactory buttonFactory = new ButtonFactory();
+        return new MainMenuStage(stageManager, viewport, this, publisher, buttonFactory);
     }
 
     public Stage getSendMoneyStage() {

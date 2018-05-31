@@ -14,12 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.player.PlayerFactory;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.IDeviceStatePublisher;
 import space.hypeo.networking.network.Role;
 
@@ -36,21 +36,23 @@ public class MainMenuStage extends Stage {
 
     private StageFactory stageFactory;
     private IDeviceStatePublisher deviceStatePublisher;
+    private ButtonFactory buttonFactory;
 
     private PlayerManager playerManager;
 
     /**
      * Creates the Main Menu
-     *
-     * @param stageManager StageManager needed to switch between stages, create new ones, etc.
+     *  @param stageManager StageManager needed to switch between stages, create new ones, etc.
      * @param viewport     Viewport needed by Stage class.
+     * @param buttonFactory
      */
-    public MainMenuStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, IDeviceStatePublisher deviceStatePublisher) {
+    public MainMenuStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, IDeviceStatePublisher deviceStatePublisher, ButtonFactory buttonFactory) {
         super(viewport);
 
         this.stageManager = stageManager;
         this.stageFactory = stageFactory;
         this.deviceStatePublisher = deviceStatePublisher;
+        this.buttonFactory = buttonFactory;
 
         setUpBackground();
         createWidgets();
@@ -67,25 +69,9 @@ public class MainMenuStage extends Stage {
         titleTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         title = new Image(titleTexture);
 
-        launch = createButton("menu_buttons/play_offline.png", "menu_buttons/play_offline_clicked.png");
-        join = createButton("menu_buttons/join_game.png", "menu_buttons/join_game_clicked.png");
-        host = createButton("menu_buttons/host_game.png", "menu_buttons/host_game_clicked.png");
-    }
-
-    private Button createButton(String upTexture, String downTexture) {
-        Texture hostTextureUp = new Texture(Gdx.files.internal(upTexture));
-        hostTextureUp.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        Texture hostTextureDown = new Texture(Gdx.files.internal(downTexture));
-        hostTextureDown.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        TextureRegion hostTextureRegionUp = new TextureRegion(hostTextureUp);
-        TextureRegion hostTextureRegionDown = new TextureRegion(hostTextureDown);
-
-        TextureRegionDrawable hostTextureRegionDrawableUp = new TextureRegionDrawable(hostTextureRegionUp);
-        TextureRegionDrawable hostTextureRegionDrawableDown = new TextureRegionDrawable(hostTextureRegionDown);
-
-        return new ImageButton(hostTextureRegionDrawableUp, hostTextureRegionDrawableDown);
+        launch = buttonFactory.getButton("menu_buttons/play_offline.png", "menu_buttons/play_offline_clicked.png");
+        join = buttonFactory.getButton("menu_buttons/join_game.png", "menu_buttons/join_game_clicked.png");
+        host = buttonFactory.getButton("menu_buttons/host_game.png", "menu_buttons/host_game_clicked.png");
     }
 
     private ClickListener launchClickListener() {
