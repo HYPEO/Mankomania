@@ -17,7 +17,7 @@ import space.hypeo.mankomania.sensor.DiceSensorManager;
  * Created by pichlermarc on 11.05.2018.
  */
 public class ActorFactory {
-    private static final int INITIAL_BALANCE = 100;
+    private static final int INITIAL_BALANCE = 1000000;
     private StageManager stageManager;
 
     public ActorFactory(StageManager stageManager) {
