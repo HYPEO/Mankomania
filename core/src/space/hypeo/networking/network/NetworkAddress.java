@@ -37,13 +37,20 @@ public final class NetworkAddress {
     public static String validateIpAddress(String ipAddress) {
         String validIpAddress = null;
 
-        Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
+        Log.info("validate IP Address " + ipAddress);
 
+        Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
         Matcher matcher = pattern.matcher(ipAddress);
 
-        if( matcher.find() ) {
+        if(matcher.find()) {
             validIpAddress = matcher.group();
         };
+
+        if(validIpAddress != null) {
+            Log.info("validIpAddress: " + validIpAddress);
+        } else {
+            Log.info(ipAddress + " violates IP address pattern");
+        }
 
         return validIpAddress;
     }
@@ -100,7 +107,10 @@ public final class NetworkAddress {
             List<InetAddress> ipAddresses = NetworkAddress.getAllAvailableNetworkAddresses();
 
             for( InetAddress addr : ipAddresses ) {
-                ip = validateIpAddress(addr.getHostAddress());
+                ip = validateIpAddress(addr.getHostAddress().toString());
+                if(ip != null) {
+                    break;
+                }
             }
 
         } catch( SocketException e ) {
