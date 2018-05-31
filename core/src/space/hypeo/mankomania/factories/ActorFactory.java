@@ -11,6 +11,7 @@ import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 import space.hypeo.mankomania.actors.player.LocalPlayerActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
+import space.hypeo.mankomania.sensor.DiceSensorManager;
 
 /**
  * Created by pichlermarc on 11.05.2018.
@@ -59,11 +60,12 @@ public class ActorFactory {
         PlayerDetailActor detailActor = new PlayerDetailActor(new Texture(detailTexturePath));
         detailActor.positionActor(position);
 
+        DiceSensorManager sensorManager = new DiceSensorManager(stageManager, stageFactory);
+
         if (isLocal)
             return new LocalPlayerActor(new Image(new Texture(texturePath)),
                     INITIAL_BALANCE,
-                    stageManager,
-                    stageFactory,
+                    sensorManager,
                     gameStateManager,
                     detailActor);
         else

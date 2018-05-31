@@ -1,6 +1,5 @@
 package space.hypeo.mankomania.actors.player;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import org.junit.Before;
@@ -13,12 +12,9 @@ import org.mockito.junit.MockitoRule;
 
 import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.GameTest;
-import space.hypeo.mankomania.StageFactory;
-import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
-
-import static org.junit.Assert.assertEquals;
+import space.hypeo.mankomania.sensor.DiceSensorManager;
 
 /**
  * Created by pichlermarc on 20.05.2018.
@@ -29,17 +25,13 @@ public class LocalPlayerActorTest extends GameTest {
     @Mock
     private Image actorImage;
     @Mock
-    private Texture detailTexture;
-    @Mock
-    private StageManager stageManager;
-    @Mock
-    private StageFactory stageFactory;
-    @Mock
     private FieldActor fieldActor;
     @Mock
     private PlayerDetailActor playerDetailActor;
     @Mock
     private GameStateManager gameStateManager;
+    @Mock
+    private DiceSensorManager diceSensorManager;
 
     private PlayerActor playerActor;
 
@@ -48,7 +40,7 @@ public class LocalPlayerActorTest extends GameTest {
 
     @Before
     public void setUp() {
-        playerActor = new LocalPlayerActor(actorImage, BALANCE, stageManager, stageFactory, gameStateManager);
+        playerActor = new LocalPlayerActor(actorImage, BALANCE, diceSensorManager, gameStateManager, playerDetailActor);
         playerActor.initializeState(fieldActor);
     }
 

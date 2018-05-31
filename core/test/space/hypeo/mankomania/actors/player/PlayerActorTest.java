@@ -37,7 +37,7 @@ public class PlayerActorTest extends GameTest {
 
     @Before
     public void setUp() {
-        playerActor = new PlayerActor(actorImage, BALANCE);
+        playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor);
         playerActor.initializeState(fieldActor);
     }
 
@@ -46,7 +46,7 @@ public class PlayerActorTest extends GameTest {
 
         // SET-UP:
         // Set up nonlocal Player
-        playerActor = new PlayerActor(actorImage, BALANCE);
+        playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor);
         playerActor.initializeState(fieldActor);
 
         // Return predefined following field on method call.
