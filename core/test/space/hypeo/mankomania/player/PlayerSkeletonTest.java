@@ -34,17 +34,17 @@ public class PlayerSkeletonTest {
     public void test_getAddress() {
         Pattern pattern = Pattern.compile(NetworkAddress.IPADDRESS_PATTERN);
         Matcher matcher = pattern.matcher(playerSkeleton.getAddress());
-        assertEquals(matcher.find(), true);
+        assertEquals(true, matcher.find());
     }
 
     @Test
     public void test_getPlayerID() {
-        assertEquals(playerSkeleton.getPlayerID().length(), 4);
+        assertEquals(4, playerSkeleton.getPlayerID().length());
     }
 
     @Test
     public void test_getNickname() {
-        assertEquals(playerSkeleton.getNickname(), NICKNAME);
+        assertEquals(NICKNAME, playerSkeleton.getNickname());
     }
 
     @Test
@@ -69,4 +69,26 @@ public class PlayerSkeletonTest {
         assertEquals(playerSkeleton.getColor(), color);
     }
 
+    @Test
+    public void test_isActive_true() {
+        playerSkeleton.setActive(true);
+        assertEquals(true, playerSkeleton.isActive());
+    }
+
+    @Test
+    public void test_isActive_false() {
+        playerSkeleton.setActive(false);
+        assertEquals(false, playerSkeleton.isActive());
+    }
+
+    @Test
+    public void test_getBalance() {
+        assertEquals(PlayerFactory.START_BALANCE, playerSkeleton.getBalance());
+    }
+
+    @Test
+    public void test_setBalance() {
+        playerSkeleton.setBalance(1);
+        assertEquals(1, playerSkeleton.getBalance());
+    }
 }

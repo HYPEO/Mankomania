@@ -10,7 +10,6 @@ import space.hypeo.mankomania.player.IPlayerConnector;
 import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.networking.endpoint.IHostConnector;
 import space.hypeo.networking.network.Role;
-import space.hypeo.networking.packages.Remittances;
 
 /**
  * This class is a wrapper class for an endpoint.
@@ -38,8 +37,7 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
 
     @Override
     public void changeBalance(String playerID, int amount) {
-        Remittances remittances = new Remittances(this.getPlayerID(), playerID, amount);
-        endpoint.changeBalance(remittances);
+        endpoint.changeBalance(playerID, amount);
     }
 
     @Override

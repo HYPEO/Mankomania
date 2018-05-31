@@ -14,6 +14,8 @@ public class PlayerSkeleton {
     protected String address;       // IP address in W/LAN
 
     protected Color color;          // color on the map (unique)
+    protected boolean isActive;     // true when it is my turn
+    protected int balance;          // total amount of money
 
     /* NOTE: default constructor required for network traffic */
     public PlayerSkeleton() {}
@@ -34,6 +36,9 @@ public class PlayerSkeleton {
         address = currentIpAddr;
 
         color = null;
+
+        isActive = false;
+        balance = PlayerFactory.START_BALANCE;
     }
 
     /**
@@ -45,6 +50,8 @@ public class PlayerSkeleton {
             this.playerID = playerSkeleton.playerID;
             this.nickname = playerSkeleton.nickname;
             this.address = playerSkeleton.address;
+            this.isActive = playerSkeleton.isActive;
+            this.balance = playerSkeleton.balance;
         }
     }
 
@@ -69,6 +76,22 @@ public class PlayerSkeleton {
         Log.info("set my (" + nickname + ") color to " + color);
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
     /**
      * Gets ID for current player.
      * Take from UUID the last 4 characters.
@@ -86,7 +109,9 @@ public class PlayerSkeleton {
     @Override
     public String toString() {
         return "ID " + playerID + ", nick " + nickname + ", addr " + address +
-                (color != null ? color : "");
+                (color != null ? color : "") + ", " +
+                (isActive ? "active" : "inactive") +
+                ", balance " + balance + "€";
     }
 
     @Override

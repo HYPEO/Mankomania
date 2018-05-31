@@ -155,18 +155,50 @@ public class Lobby {
         return data.get(playerSkeleton);
     }
 
+    public PlayerSkeleton getPlayerSkeleton(PlayerSkeleton needlePlayerSkeleton) {
+        PlayerSkeleton found = null;
+
+        for(PlayerSkeleton playerInLobby : data.keySet()) {
+            if(playerInLobby.equals(needlePlayerSkeleton)) {
+                found = playerInLobby;
+                break;
+            }
+        }
+        return found;
+    }
+
+    public void replacePlayerSkeleton(PlayerSkeleton playerToReplace) {
+        Boolean readyStatus = getReadyStatus(playerToReplace);
+
+        if(readyStatus != null) {
+            data.put(playerToReplace, readyStatus);
+        }
+    }
+
+    public PlayerSkeleton getPlayerSkeleton(String needlePlayerId) {
+        PlayerSkeleton found = null;
+
+        for(PlayerSkeleton playerInLobby : data.keySet()) {
+            if(playerInLobby.getPlayerID().equals(needlePlayerId)) {
+                found = playerInLobby;
+                break;
+            }
+        }
+        return found;
+    }
+
     /**
      * Updates, meaning toggles, the status of the given player.
      * @param playerSkeleton toggles status for this player
      */
     public void toggleReadyStatus(PlayerSkeleton playerSkeleton) {
         Log.info("try to toggle ready status for " + playerSkeleton);
-        if( data.containsKey(playerSkeleton) && data.get(playerSkeleton) ) {
-            data.put(playerSkeleton, false);
-            Log.info("ready status: changed to false");
-        } else if( data.containsKey(playerSkeleton) && ! data.get(playerSkeleton) ) {
-            data.put(playerSkeleton, true);
-            Log.info("ready status: changed to true");
+
+        Boolean readyStatus = getReadyStatus(playerSkeleton);
+
+        if(readyStatus != null) {
+            readyStatus = !readyStatus;
+            data.put(playerSkeleton, readyStatus);
         }
     }
 
@@ -208,15 +240,54 @@ public class Lobby {
 
     /**
      * Updates, sets, the color of the given player.
-     * @param playerChangeColor color
+     * @param playerChangeColor player
+     * @param color new color
      */
     public void setColor(PlayerSkeleton playerChangeColor, Color color) {
         Log.info("set color for " + playerChangeColor);
 
-        for(PlayerSkeleton playerInLobby : data.keySet()) {
-            if(playerInLobby.equals(playerChangeColor)) {
-                playerInLobby.setColor(color);
-            }
+        PlayerSkeleton found = getPlayerSkeleton(playerChangeColor);
+
+        if(found != null) {
+            found.setColor(color);
+        }
+    }
+
+    public Boolean isActive(PlayerSkeleton playerSkeleton) {
+        Boolean isActive = null;
+
+        PlayerSkeleton found = getPlayerSkeleton(playerSkeleton);
+
+        if(found != null) {
+            isActive = found.isActive();
+        }
+        return isActive;
+    }
+
+    public void setActive(PlayerSkeleton playerSetActive, boolean isActive) {
+        PlayerSkeleton found = getPlayerSkeleton(playerSetActive);
+
+        if(found != null) {
+            found.setActive(isActive);
+        }
+    }
+
+    public Integer getBalance(PlayerSkeleton playerSkeleton) {
+        Integer balance = null;
+
+        PlayerSkeleton found = getPlayerSkeleton(playerSkeleton);
+
+        if(found != null) {
+            balance = found.getBalance();
+        }
+        return balance;
+    }
+
+    public void setBalance(PlayerSkeleton playerSetBalance, int balance) {
+        PlayerSkeleton found = getPlayerSkeleton(playerSetBalance);
+
+        if(found != null) {
+            found.setBalance(balance);
         }
     }
 }

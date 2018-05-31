@@ -1,8 +1,5 @@
 package space.hypeo.networking.endpoint;
 
-import space.hypeo.networking.packages.Remittances;
-
-
 /**
  * This class provides functionality for an endpoint of a connection.
  */
@@ -12,9 +9,10 @@ public interface IEndpoint {
 
     /**
      * Resends a received MoneyAmount from player to another player.
-     * @param remittances
+     * @param playerId player to change balance
+     * @param balance total amount of player balance
      */
-    public void changeBalance(Remittances remittances);
+    public void changeBalance(String playerId, int balance);
 
     public void broadCastLobby();
 }
