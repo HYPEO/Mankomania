@@ -16,6 +16,10 @@ import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 import space.hypeo.mankomania.sensor.DiceSensorManager;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.never;
+
+
 /**
  * Created by pichlermarc on 20.05.2018.
  */
@@ -45,7 +49,7 @@ public class LocalPlayerActorTest extends GameTest {
     }
 
     @Test
-    public void moveLocalActor() {
+    public void moveLocalActorNormal() {
 
         // SET-UP:
         Mockito.reset(actorImage);
@@ -62,5 +66,43 @@ public class LocalPlayerActorTest extends GameTest {
         Mockito.verify(targetFieldActor).trigger(playerActor);
         // Check if position has been updated.
         Mockito.verify(actorImage).setBounds(Mockito.anyFloat(), Mockito.anyFloat(), Mockito.anyFloat(), Mockito.anyFloat());
+        // Check if turn has ended.
+        Mockito.verify(gameStateManager).endTurn();
+    }
+
+    @Test
+    public void moveLocalActorNoMoney() {
+
+        // SET-UP:
+        playerActor.setBalance(0);
+        Mockito.reset(actorImage);
+
+        // Return predefined following field on method call.
+        FieldActor targetFieldActor = Mockito.mock(FieldActor.class);
+        Mockito.when(fieldActor.getFollowingField(4)).thenReturn(targetFieldActor);
+
+        // EXECUTION:
+        playerActor.move(4);
+
+        // VERIFICATION:
+        Mockito.verify(gameStateManager).setWinner(playerActor);
+    }
+
+    @Test
+    public void actNotActive(){
+       assertFalse(playerActor.isActive);
+       playerActor.setInactive();
+       assertFalse(playerActor.isActive);
+       playerActor.act(20);
+       Mockito.verify(diceSensorManager, never()).trigger(playerActor);
+    }
+
+    @Test
+    public void actActive(){
+        assertFalse(playerActor.isActive);
+        playerActor.setActive();
+        assertTrue(playerActor.isActive);
+        playerActor.act(20);
+        Mockito.verify(diceSensorManager, Mockito.times(1)).trigger(playerActor);
     }
 }
