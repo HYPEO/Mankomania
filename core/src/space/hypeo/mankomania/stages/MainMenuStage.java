@@ -1,26 +1,22 @@
 package space.hypeo.mankomania.stages;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import space.hypeo.mankomania.factories.ButtonFactory;
-import space.hypeo.mankomania.player.PlayerFactory;
-import space.hypeo.mankomania.player.PlayerManager;
+import space.hypeo.mankomania.IDeviceStatePublisher;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.mankomania.IDeviceStatePublisher;
+import space.hypeo.mankomania.factories.ButtonFactory;
+import space.hypeo.mankomania.player.PlayerFactory;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.networking.network.Role;
 
 /**

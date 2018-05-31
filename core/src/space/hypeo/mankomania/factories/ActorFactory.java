@@ -71,4 +71,16 @@ public class ActorFactory {
         else
             return new PlayerActor(new Image(new Texture(texturePath)), INITIAL_BALANCE, detailActor);
     }
+
+    public Image getImage(String path)
+    {
+        Texture imageTexture = new Texture(path);
+        imageTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        return new Image(imageTexture);
+    }
+
+    public Image getTitle()
+    {
+        return getImage("common/mankomania_logo_shadowed.png");
+    }
 }
