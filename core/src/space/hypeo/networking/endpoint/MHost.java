@@ -214,6 +214,7 @@ public class MHost implements IEndpoint, IHostConnector {
         Log.info("Host: send broadcast new lobby");
         server.sendToAllTCP(playerManager.getLobby());
 
+        // TODO: inject lobby as parameter?
         Log.info("Host: update own lobby");
         playerManager.updateLobbyStage();
     }
