@@ -12,6 +12,7 @@ import space.hypeo.networking.player.PlayerNT;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PlayerManagerTest {
 
@@ -48,5 +49,31 @@ public class PlayerManagerTest {
     public void test_setLobby_getLobby() {
         playerManager.setLobby(lobby);
         assertEquals(lobby, playerManager.getLobby());
+    }
+
+    @Test
+    public void test_setPlayerSkeleton_getPlayerSkeleton() {
+        playerManager.setPlayerSkeleton(playerSkeleton);
+        assertEquals(playerSkeleton, playerManager.getPlayerSkeleton());
+    }
+
+    @Test
+    public void test_setPlayerNT_getPlayerNT() {
+        playerManager.setPlayerNT(playerNT);
+        assertEquals(playerNT, playerManager.getPlayerNT());
+    }
+
+    @Test
+    public void test_isReady2startGame() {
+        playerManager.setPlayerSkeleton(playerSkeleton);
+        when(lobby.getReadyStatus(playerSkeleton)).thenReturn(true);
+        playerManager.setLobby(lobby);
+        assertEquals(true, playerManager.isReady2startGame());
+    }
+
+    @Test
+    public void test_toggleReadyStatus() {
+        playerManager.setPlayerSkeleton(playerSkeleton);
+
     }
 }

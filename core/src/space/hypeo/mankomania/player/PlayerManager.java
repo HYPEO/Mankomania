@@ -60,6 +60,7 @@ public class PlayerManager {
         Log.info(role + ": toggle ReadyStatus (old: " + lobby.getReadyStatus(playerSkeleton) + ")");
         lobby.toggleReadyStatus(playerSkeleton);
         Log.info(role + ": toggle ReadyStatus: " + lobby.getReadyStatus(playerSkeleton));
+        // TODO: do elsewhere -> no testing possible
         updateLobbyStage();
         broadCastLobby();
     }
@@ -106,6 +107,7 @@ public class PlayerManager {
     public void setColor(Color color) {
         playerSkeleton.setColor(color);
         lobby.setColor(playerSkeleton, color);
+        // TODO: do elsewhere -> no testing possible
         updateLobbyStage();
         broadCastLobby();
     }
