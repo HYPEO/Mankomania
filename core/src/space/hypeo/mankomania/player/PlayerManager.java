@@ -17,6 +17,8 @@ import space.hypeo.networking.network.Role;
 public class PlayerManager {
     private final StageManager stageManager;
 
+    // TODO: change fields of myself in playerSeleton; then update with lobby
+    // then broadcast
     private PlayerSkeleton playerSkeleton;
     private PlayerNT playerNT;
 
