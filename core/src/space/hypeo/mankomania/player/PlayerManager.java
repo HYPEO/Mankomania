@@ -6,8 +6,6 @@ import com.esotericsoftware.minlog.Log;
 
 import java.util.Set;
 
-import javax.print.DocFlavor;
-
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.Network;

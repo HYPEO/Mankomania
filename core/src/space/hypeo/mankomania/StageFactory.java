@@ -1,14 +1,11 @@
 package space.hypeo.mankomania;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.actors.horse.HorseActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
-import space.hypeo.mankomania.actors.player.LocalPlayerActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
 import space.hypeo.mankomania.factories.FieldFactory;
