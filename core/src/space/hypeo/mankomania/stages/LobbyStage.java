@@ -83,7 +83,7 @@ public class LobbyStage extends Stage {
     }
 
     private void setupLayout() {
-        Log.info(playerManager.getRole() + ": " + "Build LobbyStage ...");
+        Log.info(playerManager.getRole() + ": " + "LobbyStage:setupLayout() ...");
 
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 

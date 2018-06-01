@@ -103,6 +103,6 @@ public class StageFactory {
     }
 
     public Stage getSetColorStage(PlayerManager playerManager) {
-        return new SetColorStage(stageManager, viewport, this, playerManager);
+        return new SetColorStage(stageManager, viewport, playerManager);
     }
 }

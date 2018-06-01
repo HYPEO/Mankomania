@@ -16,14 +16,10 @@ import com.esotericsoftware.minlog.Log;
 
 import java.util.Set;
 
-import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.mankomania.player.Colors;
-import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.mankomania.player.PlayerManager;
-import space.hypeo.mankomania.player.PlayerSkeleton;
-import space.hypeo.networking.network.Role;
 
 /**
  * This stage is the view to set the player color.
@@ -32,13 +28,11 @@ import space.hypeo.networking.network.Role;
 public class SetColorStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
-    private final StageFactory stageFactory;
     private PlayerManager playerManager;
 
-    public SetColorStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, PlayerManager playerManager) {
+    public SetColorStage(StageManager stageManager, Viewport viewport, PlayerManager playerManager) {
         this.stageManager = stageManager;
         this.viewport = viewport;
-        this.stageFactory = stageFactory;
         this.playerManager = playerManager;
 
         setupBackground();
@@ -80,7 +74,7 @@ public class SetColorStage extends Stage {
         rootTable.row();
 
         /* buttons */
-        Set<Color> usedPlayerColors= playerManager.usedPlayerColors();
+        Set<Color> usedPlayerColors = playerManager.usedPlayerColors();
 
         /* inner table contains players from lobby: represented as button */
         Table btnTable = new Table();
