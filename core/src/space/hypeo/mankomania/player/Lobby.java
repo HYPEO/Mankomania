@@ -3,9 +3,9 @@ package space.hypeo.mankomania.player;
 import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.minlog.Log;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,10 +26,10 @@ public class Lobby {
     /**
      * The data structure that holds the players, that are connected.
      *
+     * PlayerId      ... identifies the player in the game
      * PlayerSkelton ... raw data of the player
-     * Boolean       ... if the player is ready to participate the game (out of the lobby)
      */
-    protected Map<PlayerSkeleton, Boolean> data;
+    protected Map<String, PlayerSkeleton> data;
 
     public Lobby() {
         data = new HashMap<>();
@@ -50,10 +50,15 @@ public class Lobby {
 
     /**
      * Associates the specified value with the specified key in this map.
+     * @param playerId ID of the player
      * @param p value, PlayerSkeleton
      */
-    public void add(PlayerSkeleton p) {
-        data.put(p, false);
+    public void put(String playerId, PlayerSkeleton p) {
+        data.put(playerId, p);
+    }
+
+    public PlayerSkeleton get(String playerId) {
+        return data.get(playerId);
     }
 
     /**
@@ -61,13 +66,7 @@ public class Lobby {
      * @param playerID ID to remove
      */
     public void remove(String playerID) {
-        Iterator it = data.keySet().iterator();
-        while( it.hasNext() ) {
-            PlayerSkeleton p = (PlayerSkeleton) it.next();
-            if( p.getPlayerID().equals(playerID) ) {
-                it.remove();
-            }
-        }
+        data.remove(playerID);
     }
 
     /**
@@ -78,26 +77,23 @@ public class Lobby {
         data.remove(player);
     }
 
-    public boolean contains(PlayerSkeleton player) {
-        return data.containsKey(player);
+    public boolean contains(String playerId) {
+        return data.containsKey(playerId);
     }
 
-    public PlayerSkeleton contains(String playerId) {
-        for( PlayerSkeleton p : data.keySet() ) {
-            if( p.getPlayerID().equals(playerId) ) {
-                return p;
-            }
-        }
-        return null;
+    public boolean contains(PlayerSkeleton player) {
+        return data.containsValue(player);
     }
 
     /**
      * Returns the raw data of that instance.
      * @return data Set
      */
-    public Set<PlayerSkeleton> getData() {
+    public Set<String> keySet() {
         return data.keySet();
     }
+
+    public Collection<PlayerSkeleton> values() { return data.values(); }
 
     /**
      * Returns true if this map contains no key-value mappings.
@@ -129,80 +125,6 @@ public class Lobby {
     }
 
     /**
-     * Loggs the string representation of that object to run-console.
-     */
-    public void log() {
-        Log.info("List of player contains:");
-
-        if( data.isEmpty() ) {
-            Log.info("NO ENTRIES");
-            return;
-        }
-
-        int index = 1;
-        for( PlayerSkeleton playerSkeleton : data.keySet() ) {
-            Log.info("  #" + index + ": '" + playerSkeleton +"'");
-            index++;
-        }
-    }
-
-    /**
-     * Returns the value, the ready status, for given player.
-     * @param playerSkeleton get status for
-     * @return ready status for player
-     */
-    public Boolean getReadyStatus(PlayerSkeleton playerSkeleton) {
-        return data.get(playerSkeleton);
-    }
-
-    public PlayerSkeleton getPlayerSkeleton(PlayerSkeleton needlePlayerSkeleton) {
-        PlayerSkeleton found = null;
-
-        for(PlayerSkeleton playerInLobby : data.keySet()) {
-            if(playerInLobby.equals(needlePlayerSkeleton)) {
-                found = playerInLobby;
-                break;
-            }
-        }
-        return found;
-    }
-
-    public void replacePlayerSkeleton(PlayerSkeleton playerToReplace) {
-        Boolean readyStatus = getReadyStatus(playerToReplace);
-
-        if(readyStatus != null) {
-            data.put(playerToReplace, readyStatus);
-        }
-    }
-
-    public PlayerSkeleton getPlayerSkeleton(String needlePlayerId) {
-        PlayerSkeleton found = null;
-
-        for(PlayerSkeleton playerInLobby : data.keySet()) {
-            if(playerInLobby.getPlayerID().equals(needlePlayerId)) {
-                found = playerInLobby;
-                break;
-            }
-        }
-        return found;
-    }
-
-    /**
-     * Updates, meaning toggles, the status of the given player.
-     * @param playerSkeleton toggles status for this player
-     */
-    public void toggleReadyStatus(PlayerSkeleton playerSkeleton) {
-        Log.info("try to toggle ready status for " + playerSkeleton);
-
-        Boolean readyStatus = getReadyStatus(playerSkeleton);
-
-        if(readyStatus != null) {
-            readyStatus = !readyStatus;
-            data.put(playerSkeleton, readyStatus);
-        }
-    }
-
-    /**
      * Checks if all player within the lobby are ready to start the game.
      * @return boolean
      */
@@ -211,8 +133,8 @@ public class Lobby {
             return false;
         }
 
-        for( Boolean isReady : data.values() ) {
-            if( ! isReady ) {
+        for(PlayerSkeleton playerInLobby : data.values() ) {
+            if(!playerInLobby.isReady()) {
                 return false;
             }
         }
@@ -225,10 +147,9 @@ public class Lobby {
      *         else: set of used colors.
      */
     public Set<Color> usedColors() {
-
         Set<Color> usedColorsAllPlayer = new HashSet<>();
 
-        for(PlayerSkeleton playerSkeleton : data.keySet()) {
+        for(PlayerSkeleton playerSkeleton : data.values()) {
             Color playerColor = playerSkeleton.getColor();
             if(playerColor != null) {
                 usedColorsAllPlayer.add(playerColor);
@@ -239,55 +160,20 @@ public class Lobby {
     }
 
     /**
-     * Updates, sets, the color of the given player.
-     * @param playerChangeColor player
-     * @param color new color
+     * Loggs the string representation of that object to run-console.
      */
-    public void setColor(PlayerSkeleton playerChangeColor, Color color) {
-        Log.info("set color for " + playerChangeColor);
+    public void log() {
+        Log.info("List of player contains:");
 
-        PlayerSkeleton found = getPlayerSkeleton(playerChangeColor);
-
-        if(found != null) {
-            found.setColor(color);
+        if( data.isEmpty() ) {
+            Log.info("NO ENTRIES");
+            return;
         }
-    }
 
-    public Boolean isActive(PlayerSkeleton playerSkeleton) {
-        Boolean isActive = null;
-
-        PlayerSkeleton found = getPlayerSkeleton(playerSkeleton);
-
-        if(found != null) {
-            isActive = found.isActive();
-        }
-        return isActive;
-    }
-
-    public void setActive(PlayerSkeleton playerSetActive, boolean isActive) {
-        PlayerSkeleton found = getPlayerSkeleton(playerSetActive);
-
-        if(found != null) {
-            found.setActive(isActive);
-        }
-    }
-
-    public Integer getBalance(PlayerSkeleton playerSkeleton) {
-        Integer balance = null;
-
-        PlayerSkeleton found = getPlayerSkeleton(playerSkeleton);
-
-        if(found != null) {
-            balance = found.getBalance();
-        }
-        return balance;
-    }
-
-    public void setBalance(PlayerSkeleton playerSetBalance, int balance) {
-        PlayerSkeleton found = getPlayerSkeleton(playerSetBalance);
-
-        if(found != null) {
-            found.setBalance(balance);
+        int index = 1;
+        for( PlayerSkeleton playerSkeleton : data.values() ) {
+            Log.info("  #" + index + ": '" + playerSkeleton +"'");
+            index++;
         }
     }
 }

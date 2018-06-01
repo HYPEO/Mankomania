@@ -183,7 +183,6 @@ public class MClient implements IEndpoint, IClientConnector {
     public void connectToHost(InetAddress hostAddress) {
 
         if( client != null && hostAddress != null ) {
-
             Log.info("Client: Try to connect to " + hostAddress.toString());
 
             try {
@@ -195,7 +194,6 @@ public class MClient implements IEndpoint, IClientConnector {
             }
 
             client.addListener(new ClientListener());
-
             // the client will be added to lobby after network handshake by server!
 
         } else {
@@ -216,16 +214,6 @@ public class MClient implements IEndpoint, IClientConnector {
     @Override
     public boolean joinGame(String playerID) {
         return false;
-    }
-
-    @Override
-    public void changeBalance(String playerId, int balance) {
-        PlayerSkeleton found = playerManager.getLobby().getPlayerSkeleton(playerId);
-        if(found != null) {
-            found.setBalance(balance);
-            playerManager.getLobby().replacePlayerSkeleton(found);
-            broadCastLobby();
-        }
     }
 
     @Override

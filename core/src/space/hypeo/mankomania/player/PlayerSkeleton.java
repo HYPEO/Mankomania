@@ -13,6 +13,7 @@ public class PlayerSkeleton {
     protected String nickname;      // nickname
     protected String address;       // IP address in W/LAN
 
+    protected boolean isReady;      // ready to start the game
     protected Color color;          // color on the map (unique)
     protected boolean isActive;     // true when it is my turn
     protected int balance;          // total amount of money
@@ -35,8 +36,8 @@ public class PlayerSkeleton {
         }
         address = currentIpAddr;
 
+        isReady = false;
         color = null;
-
         isActive = false;
         balance = PlayerFactory.START_BALANCE;
     }
@@ -65,6 +66,14 @@ public class PlayerSkeleton {
 
     public String getAddress() {
         return address;
+    }
+
+    public boolean isReady() {
+        return isReady;
+    }
+
+    public void setReady(boolean ready) {
+        isReady = ready;
     }
 
     public Color getColor() {

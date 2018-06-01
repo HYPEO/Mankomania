@@ -94,7 +94,7 @@ public class MHost implements IEndpoint, IHostConnector {
 
             } else if( object instanceof PlayerConnect) {
                 PlayerSkeleton newPlayer = (PlayerConnect) object;
-                playerManager.getLobby().add(newPlayer);
+                playerManager.getLobby().put(newPlayer.getPlayerID(), newPlayer);
 
                 Log.info("Host: player has been connected, add to lobby");
                 playerManager.getLobby().log();
@@ -187,19 +187,9 @@ public class MHost implements IEndpoint, IHostConnector {
         server.sendToAllTCP(new Notification("game will be closed now..."));
     }
 
-    @Override
-    public void changeBalance(String playerId, int balance) {
-        PlayerSkeleton found = playerManager.getLobby().getPlayerSkeleton(playerId);
-        if(found != null) {
-            found.setBalance(balance);
-            playerManager.getLobby().replacePlayerSkeleton(found);
-            broadCastLobby();
-        }
-    }
-
     public int getConnectionID(String playerId) {
 
-        PlayerSkeleton needle = playerManager.getLobby().contains(playerId);
+        PlayerSkeleton needle = playerManager.getLobby().get(playerId);
         int connectionID = 0;
 
         if( needle == null ) {

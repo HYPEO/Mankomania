@@ -91,4 +91,15 @@ public class PlayerSkeletonTest {
         playerSkeleton.setBalance(1);
         assertEquals(1, playerSkeleton.getBalance());
     }
+
+    @Test
+    public void test_isReady() {
+        assertEquals(false, playerSkeleton.isReady());
+    }
+
+    @Test
+    public void test_setReady() {
+        playerSkeleton.setReady(true);
+        assertEquals(true, playerSkeleton.isReady());
+    }
 }
