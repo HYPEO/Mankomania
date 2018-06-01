@@ -17,8 +17,6 @@ import java.util.Set;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -51,7 +49,7 @@ public class LobbyTest {
     private PlayerSkeleton getPlayerSkeletonMock() {
         PlayerSkeleton playerSkeleton = mock(PlayerSkeleton.class);
 
-        when( playerSkeleton.getPlayerID() ).thenReturn(PLAYER_ID + autoIncrementPlayerCounter);
+        //when( playerSkeleton.getPlayerID() ).thenReturn(PLAYER_ID + autoIncrementPlayerCounter);
 
         autoIncrementPlayerCounter++;
         return playerSkeleton;
@@ -84,6 +82,15 @@ public class LobbyTest {
         return ps;
     }
 
+    private PlayerSkeleton getPlayerSkeletonMockReady(boolean isReady) {
+        PlayerSkeleton ps = mock(PlayerSkeleton.class);
+
+        when(ps.isReady()).thenReturn(isReady);
+
+        autoIncrementPlayerCounter++;
+        return ps;
+    }
+
 
     @Test
     public void test_isEmpty() {
@@ -98,14 +105,14 @@ public class LobbyTest {
     @Test
     public void test_clear_zero() {
         lobby.clear();
-        assertThat(lobby.size(), is(0));
+        assertEquals(0, lobby.size());
     }
 
     @Test
     public void test_clear_one() {
-        lobby.add(playerSkeleton);
+        lobby.put(PLAYER_ID + 1, playerSkeleton);
         lobby.clear();
-        assertThat(lobby.size(), is(0));
+        assertEquals(0, lobby.size());
     }
 
     @Test
@@ -115,34 +122,34 @@ public class LobbyTest {
 
     @Test
     public void test_size_one() {
-        lobby.add(playerSkeleton);
-        assertThat(lobby.size(), is(1));
+        lobby.put(PLAYER_ID + 1, playerSkeleton);
+        assertEquals(1, lobby.size());
     }
 
     @Test
     public void test_remove_zero() {
         lobby.remove(playerSkeleton);
-        assertThat(lobby.size(), is(0));
+        assertEquals(0, lobby.size());
     }
 
     @Test
     public void test_add_one() {
-        lobby.add(playerSkeleton);
-        assertThat(lobby.size(), is(1));
+        lobby.put(PLAYER_ID + 1, playerSkeleton);
+        assertEquals(1, lobby.size());
     }
 
     @Test
     public void test_remove_by_playerID() {
-        lobby.add(playerSkeleton);
+        lobby.put(PLAYER_ID + 1, playerSkeleton);
         lobby.remove(PLAYER_ID + 1);
-        assertThat(lobby.size(), is(0));
+        assertEquals(0, lobby.size());
     }
 
     @Test
     public void test_remove_by_object() {
-        lobby.add(playerSkeleton);
-        lobby.remove(playerSkeleton);
-        assertThat(lobby.size(), is(0));
+        lobby.put(PLAYER_ID + 1, playerSkeleton);
+        lobby.remove(PLAYER_ID + 1);
+        assertEquals(0, lobby.size());
     }
 
     @Test
@@ -152,8 +159,8 @@ public class LobbyTest {
 
     @Test
     public void test_contains_object() {
-        lobby.add(playerSkeleton);
-        assertThat(lobby.contains(playerSkeleton), is(true));
+        lobby.put(PLAYER_ID + 1, playerSkeleton);
+        assertEquals(true, lobby.contains(playerSkeleton));
     }
 
     @Test
@@ -163,110 +170,54 @@ public class LobbyTest {
 
     @Test
     public void test_contains_playerID() {
-        lobby.add(playerSkeleton);
-        assertThat(lobby.contains(PLAYER_ID + 1), is(playerSkeleton));
+        lobby.put(PLAYER_ID + 1, playerSkeleton);
+        assertEquals(lobby.contains(PLAYER_ID + 1), true);
     }
 
     @Test
     public void test_isFull_not() {
-        lobby.add(playerSkeleton);
-        assertThat(lobby.isFull(), is(false));
+        lobby.put(PLAYER_ID +1, playerSkeleton);
+        assertEquals(false, lobby.isFull());
     }
 
     @Test
     public void test_isFull() {
         lobby = new Lobby(1);
         assertThat(lobby.getMaxPlayer(), is(1));
-        lobby.add(playerSkeleton);
-        assertThat(lobby.isFull(), is(true));
-    }
-
-    @Test
-    public void test_initStatus() {
-        lobby.add(playerSkeleton);
-        assertThat(lobby.getReadyStatus(playerSkeleton), is(false));
-    }
-
-    @Test
-    public void test_toggleStatus_oneTime() {
-        lobby.add(playerSkeleton);
-        lobby.toggleReadyStatus(playerSkeleton);
-        assertThat(lobby.getReadyStatus(playerSkeleton), is(true));
-    }
-
-    @Test
-    public void test_toggleStatus_twoTimes() {
-        lobby.add(playerSkeleton);
-        lobby.toggleReadyStatus(playerSkeleton);
-        lobby.toggleReadyStatus(playerSkeleton);
-        assertThat(lobby.getReadyStatus(playerSkeleton), is(false));
+        lobby.put(PLAYER_ID + 1, playerSkeleton);
+        assertEquals(true, lobby.isFull());
     }
 
     @Test
     public void test_areAllPlayerReady_emptyLobby() {
-        assertThat(lobby.areAllPlayerReady(), is(false));
+        assertEquals(false, lobby.areAllPlayerReady());
     }
 
     @Test
     public void test_areAllPlayerReady_onePlayer() {
-        lobby.add(playerSkeleton);
-        lobby.toggleReadyStatus(playerSkeleton);
-        assertThat(lobby.areAllPlayerReady(), is(true));
+        PlayerSkeleton playerSkeleton = getPlayerSkeletonMockReady(true);
+        lobby.put(PLAYER_ID + 1, playerSkeleton);
+        assertEquals(true, lobby.areAllPlayerReady());
     }
 
     @Test
     public void test_areAllPlayerReady_twoPlayer_notReady() {
-        lobby.add(playerSkeleton);
-        lobby.toggleReadyStatus(playerSkeleton);
+        PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMockReady(true);
+        PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMockReady(false);
+        lobby.put(PLAYER_ID + 1, playerSkeleton1);
+        lobby.put(PLAYER_ID + 2, playerSkeleton2);
 
-        PlayerSkeleton secondPlayer = getPlayerSkeletonMock();
-        lobby.add(secondPlayer);
-
-        assertThat(lobby.areAllPlayerReady(), is(false));
+        assertEquals(false, lobby.areAllPlayerReady());
     }
 
     @Test
     public void test_areAllPlayerReady_twoPlayer_ready() {
-        lobby.add(playerSkeleton);
-        lobby.toggleReadyStatus(playerSkeleton);
+        PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMockReady(true);
+        PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMockReady(true);
+        lobby.put(PLAYER_ID + 1, playerSkeleton1);
+        lobby.put(PLAYER_ID + 2, playerSkeleton2);
 
-        PlayerSkeleton secondPlayer = getPlayerSkeletonMock();
-        lobby.add(secondPlayer);
-        lobby.toggleReadyStatus(secondPlayer);
-
-        assertThat(lobby.areAllPlayerReady(), is(true));
-    }
-
-    @Test
-    public void test_setColorPlayerSkeleton() {
-        Color color = mock(Color.class);
-        PlayerSkeleton playerSkeleton = getPlayerSkeletonMockColor(color);
-        playerSkeleton.setColor(color);
-
-        verify(playerSkeleton).setColor(color);
-    }
-
-    @Test
-    public void test_setColor() {
-        Color color = mock(Color.class);
-        PlayerSkeleton playerSkeleton = getPlayerSkeletonMockColor(color);
-
-        lobby.add(playerSkeleton);
-        lobby.setColor(playerSkeleton,color);
-
-        verify(playerSkeleton).setColor(color);
-    }
-
-    @Test
-    public void test_setColor_fails() {
-        Color color1 = mock(Color.class);
-        Color color2 = mock(Color.class);
-        PlayerSkeleton playerSkeleton = getPlayerSkeletonMockColor(color1);
-
-        lobby.add(playerSkeleton);
-        lobby.setColor(playerSkeleton,color1);
-
-        verify(playerSkeleton, never()).setColor(color2);
+        assertEquals(true, lobby.areAllPlayerReady());
     }
 
     @Test
@@ -277,14 +228,8 @@ public class LobbyTest {
         PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMockColor(color1);
         PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMockColor(color2);
 
-        lobby.add(playerSkeleton1);
-        lobby.add(playerSkeleton2);
-
-        lobby.setColor(playerSkeleton1, color1);
-        lobby.setColor(playerSkeleton2, color2);
-
-        verify(playerSkeleton1).setColor(color1);
-        verify(playerSkeleton2).setColor(color2);
+        lobby.put(PLAYER_ID + 1, playerSkeleton1);
+        lobby.put(PLAYER_ID + 2, playerSkeleton2);
 
         Set<Color> expectedColors =
                 new HashSet<>(Arrays.asList(
@@ -297,21 +242,39 @@ public class LobbyTest {
     }
 
     @Test
-    public void test_getData() {
+    public void test_keySet() {
         PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMock();
         PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
         PlayerSkeleton playerSkeleton3 = getPlayerSkeletonMock();
 
-        lobby.add(playerSkeleton1);
-        lobby.add(playerSkeleton2);
-        lobby.add(playerSkeleton3);
+        lobby.put(PLAYER_ID + 1, playerSkeleton1);
+        lobby.put(PLAYER_ID + 2, playerSkeleton2);
+        lobby.put(PLAYER_ID + 3, playerSkeleton3);
+
+        Set<String> expectedPlayerIds =
+                new HashSet<>(Arrays.asList(
+                        PLAYER_ID + 1, PLAYER_ID + 2, PLAYER_ID + 3
+                ));
+
+        assertEquals(expectedPlayerIds, lobby.keySet());
+    }
+
+    @Test
+    public void test_values() {
+        PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMock();
+        PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
+        PlayerSkeleton playerSkeleton3 = getPlayerSkeletonMock();
+
+        lobby.put(PLAYER_ID + 1, playerSkeleton1);
+        lobby.put(PLAYER_ID + 2, playerSkeleton2);
+        lobby.put(PLAYER_ID + 3, playerSkeleton3);
 
         Set<PlayerSkeleton> expectedPlayerSkeleton =
                 new HashSet<>(Arrays.asList(
                         playerSkeleton1, playerSkeleton2, playerSkeleton3
                 ));
 
-        assertEquals(expectedPlayerSkeleton, lobby.getData());
+        assertEquals(expectedPlayerSkeleton, new HashSet<PlayerSkeleton>(lobby.values()));
     }
 
 
@@ -320,37 +283,14 @@ public class LobbyTest {
         PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMockColor(Color.RED);
         PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
 
-        lobby.add(playerSkeleton1);
-        lobby.add(playerSkeleton2);
+        lobby.put(PLAYER_ID + 1, playerSkeleton1);
+        lobby.put(PLAYER_ID + 2, playerSkeleton2);
 
         when(playerSkeleton1.getColor()).thenReturn(Color.BLUE);
 
-        lobby.replacePlayerSkeleton(playerSkeleton1);
+        lobby.put(PLAYER_ID + 1, playerSkeleton1);
 
-        assertEquals(Color.BLUE, lobby.getPlayerSkeleton(playerSkeleton1).getColor());
-    }
-
-    @Test
-    public void test_getPlayerSkeleton_byObject_found() {
-        PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMock();
-        PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
-
-        lobby.add(playerSkeleton1);
-        lobby.add(playerSkeleton2);
-
-        assertEquals(playerSkeleton1, lobby.getPlayerSkeleton(playerSkeleton1));
-    }
-
-    @Test
-    public void test_getPlayerSkeleton_byObject_notFound() {
-        PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMock();
-        PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
-        PlayerSkeleton playerSkeleton3 = getPlayerSkeletonMock();
-
-        lobby.add(playerSkeleton1);
-        lobby.add(playerSkeleton2);
-
-        assertEquals(null, lobby.getPlayerSkeleton(playerSkeleton3));
+        assertEquals(Color.BLUE, lobby.get(PLAYER_ID + 1).getColor());
     }
 
     @Test
@@ -358,10 +298,10 @@ public class LobbyTest {
         PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMock();
         PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
 
-        lobby.add(playerSkeleton1);
-        lobby.add(playerSkeleton2);
+        lobby.put(PLAYER_ID + 1, playerSkeleton1);
+        lobby.put(PLAYER_ID + 2, playerSkeleton2);
 
-        assertEquals(playerSkeleton1, lobby.getPlayerSkeleton(playerSkeleton1.getPlayerID()));
+        assertEquals(playerSkeleton1, lobby.get(PLAYER_ID + 1));
     }
 
     @Test
@@ -370,58 +310,9 @@ public class LobbyTest {
         PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
         PlayerSkeleton playerSkeleton3 = getPlayerSkeletonMock();
 
-        lobby.add(playerSkeleton1);
-        lobby.add(playerSkeleton2);
+        lobby.put(PLAYER_ID + 1, playerSkeleton1);
+        lobby.put(PLAYER_ID + 2, playerSkeleton2);
 
-        assertEquals(null, lobby.getPlayerSkeleton(playerSkeleton3.getPlayerID()));
+        assertEquals(null, lobby.get(PLAYER_ID + 3));
     }
-
-    @Test
-    public void test_isActive() {
-        PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMockActive(true);
-        PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
-
-        lobby.add(playerSkeleton1);
-        lobby.add(playerSkeleton2);
-
-        assertEquals(true, lobby.isActive(playerSkeleton1));
-    }
-
-    @Test
-    public void test_setActive() {
-        PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMockActive(true);
-        PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
-
-        lobby.add(playerSkeleton1);
-        lobby.add(playerSkeleton2);
-
-        lobby.setActive(playerSkeleton1, false);
-
-        verify(playerSkeleton1).setActive(false);
-    }
-
-    @Test
-    public void test_getBalance() {
-        PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMockBalance();
-        PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
-
-        lobby.add(playerSkeleton1);
-        lobby.add(playerSkeleton2);
-
-        assertEquals(PlayerFactory.START_BALANCE, (int)lobby.getBalance(playerSkeleton1));
-    }
-
-    @Test
-    public void test_setBalance() {
-        PlayerSkeleton playerSkeleton1 = getPlayerSkeletonMockBalance();
-        PlayerSkeleton playerSkeleton2 = getPlayerSkeletonMock();
-
-        lobby.add(playerSkeleton1);
-        lobby.add(playerSkeleton2);
-
-        lobby.setBalance(playerSkeleton1, 0);
-
-        verify(playerSkeleton1).setBalance(0);
-    }
-
 }

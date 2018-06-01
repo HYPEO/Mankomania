@@ -31,33 +31,8 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     }
 
     @Override
-    public Lobby getLobby() {
-        return playerManager.getLobby();
-    }
-
-    @Override
-    public void changeBalance(String playerID, int amount) {
-        endpoint.changeBalance(playerID, amount);
-    }
-
-    @Override
-    public void movePlayer(String playerID, int position) {
-        // TODO: move player on the map
-    }
-
-    @Override
     public void endTurn() {
         // TODO: end the current turn for this player
-    }
-
-    @Override
-    public int getPlayerBalance(String playerID) {
-        return 0;
-    }
-
-    @Override
-    public int getPlayerPosition(String playerID) {
-        return 0;
     }
 
     @Override
@@ -68,11 +43,6 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     @Override
     public void onStop() {
         endpoint.stop();
-    }
-
-    @Override
-    public String getPlayerID() {
-        return playerManager.getPlayerSkeleton().getPlayerID();
     }
 
     @Override

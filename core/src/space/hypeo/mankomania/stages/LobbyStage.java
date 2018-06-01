@@ -130,7 +130,7 @@ public class LobbyStage extends Stage {
 
         /* data rows */
         int index = 1;
-        for( PlayerSkeleton playerSkeleton : lobby.getData() ) {
+        for( PlayerSkeleton playerSkeleton : lobby.values() ) {
 
             PlayerSkeleton myself = playerManager.getPlayerSkeleton();
             Role myRole = playerManager.getRole();
@@ -138,7 +138,7 @@ public class LobbyStage extends Stage {
             Button btnIndex = new TextButton("" + index, skin);
             Button btnNick = new TextButton(playerSkeleton.getNickname(), skin);
             Button btnAddr = new TextButton(playerSkeleton.getAddress(), skin);
-            Button btnReady = new TextButton( (playerManager.getLobby().getReadyStatus(playerSkeleton) ? "YES" : "NO"), skin);
+            Button btnReady = new TextButton( (playerManager.getPlayerSkeleton().isReady() ? "YES" : "NO"), skin);
 
             Color color = playerSkeleton.getColor();
             if(color != null) {
