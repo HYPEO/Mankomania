@@ -74,7 +74,7 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stageManager.push(stageFactory.getMapStage());
+                stageManager.push(stageFactory.getMapStage(4));
             }
         };
     }

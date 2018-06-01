@@ -40,7 +40,7 @@ public class StageFactory {
         this.actorFactory = actorFactory;
     }
 
-    public Stage getMapStage()
+    public Stage getMapStage(int playerCount)
     {
         GameStateManager gameStateManager = new OfflineGameStateManager(stageManager, this);
 
