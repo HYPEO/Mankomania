@@ -83,8 +83,8 @@ public class StageFactory {
     public Stage getDiscoveredHostsStage(PlayerManager playerManager) {
         return new DiscoveredHostsStage(stageManager, viewport, this, playerManager);
     }
-    public static Stage getRouletteStage(final Viewport viewport, final StageManager stageManager) {
-        return new RouletteStage(viewport,stageManager);
+    public Stage getRouletteStage(PlayerActor playerActor) {
+        return new RouletteStage(viewport,stageManager, this, playerActor);
     }
 
     public Stage getSetColorStage(PlayerManager playerManager) {

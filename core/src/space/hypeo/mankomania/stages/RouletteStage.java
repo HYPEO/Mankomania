@@ -26,10 +26,13 @@ import space.hypeo.mankomania.DigitFilter;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
+import space.hypeo.mankomania.player.PlayerManager;
 
 public class RouletteStage extends Stage {
     private StageManager stageManager;
     private PlayerActor playerActor;
+    private PlayerManager playerManager;
+    private StageFactory stageFactory;
     private CheckBox greenField;
     private CheckBox redField;
     private CheckBox blackField;
@@ -51,11 +54,13 @@ public class RouletteStage extends Stage {
     private int numOfSpins;
 
     private Button spinRoulette;
-    public RouletteStage(Viewport viewport, StageManager stageManager)
+    public RouletteStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor)
     {
 
         //TODO: Roulette Sprite
         super(viewport);
+        //this.playerManager = playerManager;
+        this.stageFactory = stageFactory;
         this.playerActor = playerActor;
         green = "Green";
         black = "Black";

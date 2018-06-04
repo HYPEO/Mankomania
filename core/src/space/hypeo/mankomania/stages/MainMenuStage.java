@@ -31,6 +31,7 @@ public class MainMenuStage extends Stage {
     private Button launch;
     private Button host;
     private Button join;
+    private Button roulette;
     private Image title;
     private Table layout;
 
@@ -70,6 +71,7 @@ public class MainMenuStage extends Stage {
         launch = createButton("menu_buttons/play_offline.png", "menu_buttons/play_offline_clicked.png");
         join = createButton("menu_buttons/join_game.png", "menu_buttons/join_game_clicked.png");
         host = createButton("menu_buttons/host_game.png", "menu_buttons/host_game_clicked.png");
+        roulette = createButton("menu_buttons/host_game.png", "menu_buttons/host_game_clicked.png");
     }
 
     private Button createButton(String upTexture, String downTexture) {
@@ -87,7 +89,16 @@ public class MainMenuStage extends Stage {
 
         return new ImageButton(hostTextureRegionDrawableUp, hostTextureRegionDrawableDown);
     }
-
+    private ClickListener rouletteClickListener() {
+        return new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                PlayerActor pa;
+                pa = null;
+                stageManager.push(stageFactory.getRouletteStage(pa));
+            }
+        };
+    }
     private ClickListener launchClickListener() {
         return new ClickListener() {
             @Override
@@ -134,6 +145,7 @@ public class MainMenuStage extends Stage {
         launch.addListener(this.launchClickListener());
         host.addListener(this.hostClickListener());
         join.addListener(clientClickListener());
+        roulette.addListener(this.rouletteClickListener());
     }
 
     private void setupLayout() {
@@ -155,6 +167,8 @@ public class MainMenuStage extends Stage {
         layout.add(host).width(400).height(125);
         layout.row();
         layout.add(join).width(400).height(125);
+        layout.row();
+        layout.add(roulette).width(400).height(125);
         layout.row();
     }
 
