@@ -32,7 +32,7 @@ public class HorseRaceFieldActor extends FieldActor {
         this.stageManager = stageManager;
     }
     public HorseRaceFieldActor(float x, float y, int price, Texture texture, DetailActor detailActor, StageManager stageManager, StageFactory stageFactory) {
-        super(x, y, 40f, 40f, price, texture, new Texture("fields/loose_money.png"), detailActor);
+        super(x, y, 40f, 40f, price, new Texture("fields/loose_money.png"), texture, detailActor);
         this.stageFactory = stageFactory;
         this.stageManager = stageManager;
     }

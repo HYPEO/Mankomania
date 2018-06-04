@@ -36,12 +36,12 @@ public class FieldFactory {
         FieldActor currentField;
         if (random == 0) {
             currentField = new BuildHotel(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), detailActor, parentStage);
-        } else if (random > 1 && random <= 2) {
+        } else if (random >= 1 && random < 2) {
             currentField = new LoseMoneyFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("6dice.png"), randomGenerator.nextInt(10), detailActor);
-        } else if (random > 2 && random <= 3) {
+        } else if (random >= 2 && random < 3) {
             currentField = new EmptyFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), 0, detailActor);
         } else {
-            currentField = new HorseRaceFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), 0, new Texture("transparent. png"), detailActor, stageManager, stageFactory);
+            currentField = new HorseRaceFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), 0, new Texture("transparent.png"), detailActor, stageManager, stageFactory);
         }
         return currentField;
     }
