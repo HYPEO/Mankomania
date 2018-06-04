@@ -12,8 +12,8 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  */
 public abstract class GameStateManager {
 
-    PlayerActor activePlayer;
-    Queue<PlayerActor> playerActors;
+    protected PlayerActor activePlayer;
+    protected Queue<PlayerActor> playerActors;
     protected StageManager stageManager;
     protected StageFactory stageFactory;
 

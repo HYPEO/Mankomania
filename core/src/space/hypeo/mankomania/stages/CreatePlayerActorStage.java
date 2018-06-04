@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
@@ -60,8 +61,12 @@ public class CreatePlayerActorStage extends Stage {
         int btnHeight = 100;
         int btnWidth = 250;
 
+        Log.info(playerManager.getRole() + ": There are " + playerManager.getPlayers().size() + " in list.");
+
         /* data rows */
         for(PlayerActor playerActor : playerManager.getPlayers()) {
+
+            Log.info(playerManager.getRole() + ": " + playerActor);
 
             Button btnPlayer = new TextButton(playerActor.getName(), skin);
             btnPlayer.setColor(playerActor.getColor());

@@ -9,6 +9,7 @@ import java.util.Set;
 import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
+import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.Network;
@@ -185,17 +186,40 @@ public class PlayerManager extends GameStateManager {
             return;
         }
 
-        stageManager.push(stageFactory.getCreatePlayerActorStage(this));
-
         ActorFactory actorFactory = new ActorFactory(stageManager);
 
-        for(PlayerSkeleton ps : lobby.values()) {
-            addPlayer(
-                actorFactory.getPlayerActor(
-                        ps.getPlayerID(), ps.getNickname(), ps.getColor(),
-                        (ps.equals(playerSkeleton)) ? true : false,
-                        this, stageFactory)
-            );
+        Log.info(role + ": lobby contains " + lobby.size() + " player.");
+        lobby.log();
+
+        Log.info(role + ": playerActors contains " + playerActors.size() + " players.");
+
+        for(PlayerActor pa : playerActors) {
+            Log.info(" " + pa);
         }
+
+        Log.info(role + ": playerActors contains " + playerActors.size() + " players.");
+
+        for(PlayerActor pa : playerActors) {
+            Log.info(" " + pa);
+        }
+
+        for(PlayerSkeleton ps : lobby.values()) {
+            /* add all player except myself */
+            //if(!ps.equals(playerSkeleton)) {
+                Log.info("create from PlayerSkeleton " + ps + " a PlayerActor");
+                addPlayer(
+                        actorFactory.getPlayerActor(
+                                ps.getPlayerID(), ps.getNickname(), ps.getColor(),
+                                (ps.equals(playerSkeleton)) ? true : false,
+                                this, stageFactory)
+                );
+            //}
+        }
+
+        Log.info(role + ": playerActors contains " + playerActors.size() + " players.");
+
+        playerNT.startGame();
+
+        stageManager.push(stageFactory.getCreatePlayerActorStage(this));
     }
 }

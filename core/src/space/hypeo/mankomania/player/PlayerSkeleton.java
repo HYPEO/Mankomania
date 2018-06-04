@@ -119,7 +119,7 @@ public class PlayerSkeleton {
     public String toString() {
         return "ID " + playerID + ", nick " + nickname + ", addr " + address + ", " +
                 (isReady ? " " : " Not ") + "Ready, " +
-                (color != null ? color : "") + ", " +
+                (color != null ? color : "<no color>") + ", " +
                 (isActive ? "active" : "inactive") +
                 ", balance " + balance + "€";
     }

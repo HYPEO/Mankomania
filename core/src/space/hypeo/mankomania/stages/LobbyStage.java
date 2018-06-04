@@ -83,13 +83,13 @@ public class LobbyStage extends Stage {
     }
 
     private void setupLayout() {
-        Log.info(playerManager.getRole() + ": " + "LobbyStage:setupLayout() ...");
-
         Lobby lobby = playerManager.getLobby();
         Role role = playerManager.getRole();
         PlayerSkeleton myself = playerManager.getPlayerSkeleton();
 
-        if( lobby == null || role == Role.NOT_CONNECTED ) {
+        Log.info(role + ": " + "LobbyStage:setupLayout() ...");
+
+        if(lobby == null || role == Role.NOT_CONNECTED) {
             Log.error("LobbyStage: lobby must not be null!");
             stageManager.remove(LobbyStage.this);
             return;
@@ -201,8 +201,8 @@ public class LobbyStage extends Stage {
 
         /* only host can start the game */
         if(role == Role.HOST &&
-                playerManager.getLobby().areAllPlayerReady() &&
-                playerManager.getLobby().areAllPlayerColored()) {
+                lobby.areAllPlayerReady() &&
+                lobby.areAllPlayerColored()) {
 
             Table startTable = new Table();
 

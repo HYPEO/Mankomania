@@ -56,4 +56,12 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
             host.sendOrderToCloseConnection(playerToKick);
         }
     }
+
+    public void startGame() {
+        if(playerManager.getRole() == Role.HOST) {
+            Log.info("PlayerNT: Start the Game");
+            IHostConnector host = (IHostConnector) endpoint;
+            host.startGame();
+        }
+    }
 }
