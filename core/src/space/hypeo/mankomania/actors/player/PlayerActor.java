@@ -76,6 +76,7 @@ public class PlayerActor extends Group {
 
     public void changeBalance(int remittance) {
         this.balance += remittance;
+        this.playerDetailActor.updateBalance(balance);
     }
 
     public void setActive() {
