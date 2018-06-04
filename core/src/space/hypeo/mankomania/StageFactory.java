@@ -64,8 +64,8 @@ public class StageFactory {
         return new MainMenuStage(stageManager, viewport, this, publisher, buttonFactory);
     }
 
-    public Stage getSendMoneyStage() {
-        return new SendMoneyStage(viewport, stageManager);
+    public Stage getSendMoneyStage(PlayerManager playerManager) {
+        return new SendMoneyStage(viewport,stageManager,this,playerManager);
     }
 
 
