@@ -5,9 +5,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.util.Random;
 
+import space.hypeo.mankomania.StageFactory;
+import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.BuildHotel;
 import space.hypeo.mankomania.actors.fields.EmptyFieldActor;
 import space.hypeo.mankomania.actors.fields.FieldActor;
+import space.hypeo.mankomania.actors.fields.HorseRaceFieldActor;
 import space.hypeo.mankomania.actors.fields.LoseMoneyFieldActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
 
@@ -16,10 +19,12 @@ import space.hypeo.mankomania.actors.map.DetailActor;
  */
 public class FieldFactory {
     private DetailActor detailActor;
+    private StageManager stageManager;
 
-    public FieldFactory(DetailActor detailActor)
+    public FieldFactory(DetailActor detailActor, StageManager stageManager, StageFactory stageFactory)
     {
         this.detailActor = detailActor;
+        this.stageManager = stageManager;
     }
 
     public FieldActor generateField(int fieldIndex, float xDirection, float yDirection, float xMargin, float yMargin, Stage parentStage) {
