@@ -51,7 +51,7 @@ public class StageFactory {
         actorFactory.getPlayerActor("", "", Color.PINK,true, gameStateManager, this);
 
         DetailActor detailActor = actorFactory.getDetailActor();
-        FieldFactory fieldFactory = new FieldFactory(detailActor);
+        FieldFactory fieldFactory = new FieldFactory(detailActor, stageManager, this);
         return new MapStage(viewport, gameStateManager, detailActor, fieldFactory);
     }
 
