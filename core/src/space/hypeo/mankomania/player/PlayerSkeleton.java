@@ -1,5 +1,6 @@
 package space.hypeo.mankomania.player;
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.minlog.Log;
 
 import java.net.SocketException;
@@ -12,10 +13,18 @@ public class PlayerSkeleton {
     protected String nickname;      // nickname
     protected String address;       // IP address in W/LAN
 
+    protected boolean isReady;      // ready to start the game
+    protected Color color;          // color on the map (unique)
+    protected boolean isActive;     // true when it is my turn
+    protected int balance;          // total amount of money
+
+    /* NOTE: default constructor required for network traffic */
+    public PlayerSkeleton() {}
+
     public PlayerSkeleton(String nickname) {
         this.nickname = nickname;
 
-        this.playerID = generatePlayerID();
+        playerID = generatePlayerID();
 
         // fetch IP in W/LAN
         String currentIpAddr = "";
@@ -25,7 +34,12 @@ public class PlayerSkeleton {
         } catch(SocketException e) {
             Log.info(e.getMessage());
         }
-        this.address = currentIpAddr;
+        address = currentIpAddr;
+
+        isReady = false;
+        color = null;
+        isActive = false;
+        balance = PlayerFactory.START_BALANCE;
     }
 
     /**
@@ -37,6 +51,8 @@ public class PlayerSkeleton {
             this.playerID = playerSkeleton.playerID;
             this.nickname = playerSkeleton.nickname;
             this.address = playerSkeleton.address;
+            this.isActive = playerSkeleton.isActive;
+            this.balance = playerSkeleton.balance;
         }
     }
 
@@ -50,6 +66,39 @@ public class PlayerSkeleton {
 
     public String getAddress() {
         return address;
+    }
+
+    public boolean isReady() {
+        return isReady;
+    }
+
+    public void setReady(boolean ready) {
+        isReady = ready;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+        Log.info("set my (" + nickname + ") color to " + color);
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 
     /**
@@ -68,7 +117,10 @@ public class PlayerSkeleton {
      */
     @Override
     public String toString() {
-        return "ID " + playerID + ", nick " + nickname + ", addr " + address;
+        return "ID " + playerID + ", nick " + nickname + ", addr " + address +
+                (color != null ? color : "") + ", " +
+                (isActive ? "active" : "inactive") +
+                ", balance " + balance + "€";
     }
 
     @Override

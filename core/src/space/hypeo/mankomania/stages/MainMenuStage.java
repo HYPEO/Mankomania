@@ -19,6 +19,7 @@ import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.IDeviceStatePublisher;
 import space.hypeo.networking.network.Role;
 
@@ -101,9 +102,10 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                PlayerManager playerManager = new PlayerManager(Role.HOST);
+                playerManager = new PlayerManager(stageManager, Role.HOST);
                 PlayerFactory playerFactory = new PlayerFactory(playerManager);
-                playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("the_mighty_host"));
+                playerManager.setPlayerSkeleton(playerFactory.getPlayerSkeleton("the_mighty_host"));
+                playerManager.setPlayerNT(playerFactory.getPlayerNT());
 
                 deviceStatePublisher.subscribe(playerManager.getPlayerNT());
                 stageManager.push(stageFactory.getLobbyStage(playerManager));
@@ -115,10 +117,14 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                PlayerManager playerManager = new PlayerManager(Role.CLIENT);
-                PlayerFactory playerFactory = new PlayerFactory(playerManager);
-                playerManager.setPlayerBusiness(playerFactory.getPlayerBusiness("another_client"));
 
+                // TODO: BUG client is in lobby multiple times if returned to main menu
+                playerManager = new PlayerManager(stageManager, Role.CLIENT);
+                PlayerFactory playerFactory = new PlayerFactory(playerManager);
+                playerManager.setPlayerSkeleton(playerFactory.getPlayerSkeleton("another_client"));
+                playerManager.setPlayerNT(playerFactory.getPlayerNT());
+
+                deviceStatePublisher.subscribe(playerManager.getPlayerNT());
                 stageManager.push(stageFactory.getDiscoveredHostsStage(playerManager));
             }
         };

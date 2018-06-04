@@ -1,6 +1,7 @@
 package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
+import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
@@ -29,13 +31,15 @@ import space.hypeo.mankomania.player.Lobby;
 public class LobbyStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
+    private final StageFactory stageFactory;
     private PlayerManager playerManager;
     private boolean update;
 
-    public LobbyStage(StageManager stageManager, Viewport viewport, PlayerManager playerManager) {
+    public LobbyStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, PlayerManager playerManager) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
+        this.stageFactory = stageFactory;
         this.playerManager = playerManager;
         this.update = false;
         setupBackground();
@@ -55,7 +59,9 @@ public class LobbyStage extends Stage {
         {
             if(update) {
                 this.clear();
+                setupBackground();
                 setupLayout();
+                update = false;
             }
         }
     }
@@ -77,18 +83,15 @@ public class LobbyStage extends Stage {
     }
 
     private void setupLayout() {
+        Log.info(playerManager.getRole() + ": " + "Build LobbyStage ...");
+
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         /* very outer table for all widgets */
         Table rootTable = new Table();
-        rootTable.setDebug(true); // turn on all debug lines
+        //rootTable.setDebug(true); // turn on all debug lines
         rootTable.setFillParent(true);
         this.addActor(rootTable);
-
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
-        Log.info("current width = " + width);
-        Log.info("current height = " + height);
 
         Label title = new Label("GAME LOBBY", skin);
         title.setFontScaleX(2);
@@ -127,24 +130,50 @@ public class LobbyStage extends Stage {
 
         /* data rows */
         int index = 1;
-        for( PlayerSkeleton playerSkeleton : lobby.getData() ) {
+        for( PlayerSkeleton playerSkeleton : lobby.values() ) {
 
-            Log.info("Build GUI widgets for player " + playerSkeleton);
+            PlayerSkeleton myself = playerManager.getPlayerSkeleton();
+            Role myRole = playerManager.getRole();
 
             Button btnIndex = new TextButton("" + index, skin);
             Button btnNick = new TextButton(playerSkeleton.getNickname(), skin);
             Button btnAddr = new TextButton(playerSkeleton.getAddress(), skin);
-            Button btnReady = new TextButton("NO", skin);
+            Button btnReady = new TextButton( (playerManager.getPlayerSkeleton().isReady() ? "YES" : "NO"), skin);
 
-            btnIndex.scaleBy(2,2);
+            Color color = playerSkeleton.getColor();
+            if(color != null) {
+                btnNick.setColor(color);
+            }
 
-            btnReady.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    // TODO: code for change status "ready to play" will follow.
-                }
+            /* only host can kick clients */
+            if(myRole == Role.HOST && !playerSkeleton.equals(myself)) {
 
-            });
+                btnIndex.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        Log.info("invoke player manager to kick " + playerSkeleton);
+                        playerManager.kickPlayer(playerSkeleton);
+                    }
+                });
+            }
+
+            if( playerSkeleton.equals(myself)) {
+                btnReady.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        playerManager.toggleReadyStatus();
+                    }
+                });
+            }
+
+            if( playerSkeleton.equals(myself)) {
+                btnNick.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        stageManager.push(stageFactory.getSetColorStage(playerManager));
+                    }
+                });
+            }
 
             btnTable.add(btnIndex).height(btnHeight).width(60);
             btnTable.add(btnNick).height(btnHeight).width(180);
@@ -155,6 +184,7 @@ public class LobbyStage extends Stage {
             index++;
         }
 
+        /* add buttons */
         rootTable.add(btnTable);
 
         this.addActor(rootTable);

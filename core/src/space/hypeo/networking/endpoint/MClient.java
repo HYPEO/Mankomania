@@ -10,8 +10,8 @@ import java.net.InetAddress;
 import java.util.List;
 
 import space.hypeo.mankomania.player.PlayerManager;
-import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.mankomania.player.PlayerSkeleton;
+import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.networking.network.Network;
@@ -21,8 +21,6 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
-import space.hypeo.networking.packages.PlayerToggleReadyStatus;
-import space.hypeo.networking.packages.Remittances;
 
 /**
  * This class represents the client process on the device.
@@ -71,7 +69,7 @@ public class MClient implements IEndpoint, IClientConnector {
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            connection.sendTCP( new PlayerDisconnect(playerManager.getPlayerBusiness()) );
+            connection.sendTCP( new PlayerDisconnect(playerManager.getPlayerSkeleton()) );
 
             hostPlayer = null;
             connection.close();
@@ -86,6 +84,8 @@ public class MClient implements IEndpoint, IClientConnector {
         public void received(Connection connection, Object object) {
             super.received(connection, object);
 
+            PlayerSkeleton myself = playerManager.getPlayerSkeleton();
+
             if( object instanceof PingResponse) {
                 PingResponse pingResponse = (PingResponse) object;
                 Log.info("Ping time [ms] = " + (startPingRequest - pingResponse.getTime()));
@@ -95,21 +95,27 @@ public class MClient implements IEndpoint, IClientConnector {
                 Log.info("Client: Received notification: " + notification.toString());
 
             } else if( object instanceof Lobby ) {
-                /* receive new list of PlayerNT:
-                 * after connecting or disconnecting clients */
                 playerManager.setLobby( (Lobby) object );
                 Log.info("Client: Received updated lobby");
-
+                playerManager.updateLobbyStage();
 
             } else if( object instanceof Acknowledge ) {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: Received ACK from " + ack);
 
-                connection.sendTCP( new PlayerConnect(playerManager.getPlayerBusiness()) );
+                connection.sendTCP( new PlayerConnect(myself) );
 
             } else if( object instanceof PlayerHost) {
                 hostPlayer = (PlayerHost) object;
                 Log.info("Client: Received info of host, to be connected with: " + hostPlayer);
+
+            }  else if( object instanceof PlayerDisconnect) {
+                PlayerDisconnect playerDisconnect = (PlayerDisconnect) object;
+                Log.info("Client: Received order to disconnect from host");
+
+                Log.info("Client: Order is for me ");
+                client.sendTCP(playerDisconnect);
+                close();
 
             }
         }
@@ -164,6 +170,7 @@ public class MClient implements IEndpoint, IClientConnector {
     public List<InetAddress> discoverHosts() {
         // TODO: check if WLAN has "Wireless Isolation" enabled => no discovery possible
         // use UDP port for discovering hosts
+        Log.info("Client: Searching in WLAN for hosts...");
         List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
         return discoveredHosts;
@@ -176,7 +183,6 @@ public class MClient implements IEndpoint, IClientConnector {
     public void connectToHost(InetAddress hostAddress) {
 
         if( client != null && hostAddress != null ) {
-
             Log.info("Client: Try to connect to " + hostAddress.toString());
 
             try {
@@ -188,7 +194,6 @@ public class MClient implements IEndpoint, IClientConnector {
             }
 
             client.addListener(new ClientListener());
-
             // the client will be added to lobby after network handshake by server!
 
         } else {
@@ -212,14 +217,7 @@ public class MClient implements IEndpoint, IClientConnector {
     }
 
     @Override
-    public void toggleReadyStatus(PlayerSkeleton player2toggleReadyStatus) {
-        // TODO: correct that process!
-        client.sendTCP( new PlayerToggleReadyStatus(playerManager.getPlayerBusiness()) );
-    }
-
-    @Override
-    public void changeBalance(Remittances remittances) {
-        // TODO: correct that process!
-        client.sendTCP(remittances);
+    public void broadCastLobby() {
+        client.sendTCP(playerManager.getLobby());
     }
 }

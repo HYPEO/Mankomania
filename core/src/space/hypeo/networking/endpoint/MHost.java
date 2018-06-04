@@ -13,8 +13,6 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
-import space.hypeo.networking.packages.PlayerToggleReadyStatus;
-import space.hypeo.networking.packages.Remittances;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -24,7 +22,7 @@ import com.esotericsoftware.minlog.Log;
 /**
  * This class represents the host process on the device.
  */
-public class MHost  implements IEndpoint, IHostConnector {
+public class MHost implements IEndpoint, IHostConnector {
     private PlayerManager playerManager;
 
     // instance of the host
@@ -60,11 +58,11 @@ public class MHost  implements IEndpoint, IHostConnector {
 
             // send ack to client
             Log.info("Host: Send ack to requested client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new Acknowledge(playerManager.getPlayerBusiness()) );
+            connection.sendTCP( new Acknowledge(playerManager.getPlayerSkeleton()) );
 
             // send host info
             Log.info("Host: Send info of myself to client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new PlayerHost(playerManager.getPlayerBusiness().getPlayerID()) );
+            connection.sendTCP( new PlayerHost(playerManager.getPlayerSkeleton().getPlayerID()) );
         }
 
         /**
@@ -92,18 +90,16 @@ public class MHost  implements IEndpoint, IHostConnector {
 
             } else if( object instanceof Notification ) {
                 Notification notification = (Notification) object;
-                Log.info("Host received Notification: " + notification.toString());
+                Log.info("Host: received Notification: " + notification.toString());
 
             } else if( object instanceof PlayerConnect) {
                 PlayerSkeleton newPlayer = (PlayerConnect) object;
-                playerManager.getLobby().add(newPlayer);
+                playerManager.getLobby().put(newPlayer.getPlayerID(), newPlayer);
 
                 Log.info("Host: player has been connected, add to lobby");
                 playerManager.getLobby().log();
 
-                server.sendToAllTCP(playerManager.getLobby());
-
-                playerManager.updateLobby();
+                broadCastLobby();
 
             } else if( object instanceof PlayerDisconnect) {
                 PlayerSkeleton leavingPlayer = (PlayerDisconnect) object;
@@ -112,17 +108,17 @@ public class MHost  implements IEndpoint, IHostConnector {
                 Log.info("Host: player has been disconnected, removed from lobby");
                 playerManager.getLobby().log();
 
-                server.sendToAllTCP(playerManager.getLobby());
+                broadCastLobby();
 
-                playerManager.updateLobby();
+            } else if( object instanceof Lobby) {
+                Log.info("Host: Received updated lobby");
+                playerManager.setLobby( (Lobby) object );
 
-            } else if( object instanceof PlayerToggleReadyStatus) {
-                PlayerSkeleton toggleStatusPlayer = (PlayerSkeleton) object;
+                Log.info("Host: Broadcast updated lobby");
+                server.sendToAllExceptTCP(connection.getID(), (Lobby) object);
 
-                Log.info("Host: toggle ready status of player " + toggleStatusPlayer);
-                toggleReadyStatus(toggleStatusPlayer);
-
-                playerManager.updateLobby();
+                Log.info("Host: update own lobby");
+                playerManager.updateLobbyStage();
             }
         }
     }
@@ -155,7 +151,9 @@ public class MHost  implements IEndpoint, IHostConnector {
 
     @Override
     public void stop() {
-        stop();
+        if(server != null) {
+            server.stop();
+        }
     }
 
     public void close() {
@@ -163,6 +161,7 @@ public class MHost  implements IEndpoint, IHostConnector {
 
         try {
             server.close();
+            server = null;
 
         } catch( NullPointerException e ) {
             Log.warn("Server was NOT running - nothing to do!");
@@ -188,17 +187,9 @@ public class MHost  implements IEndpoint, IHostConnector {
         server.sendToAllTCP(new Notification("game will be closed now..."));
     }
 
-    @Override
-    public void changeBalance(Remittances remittances) {
-        // TODO: correct that process!
-        int connectionID = getConnectionID(remittances.getReceiverId());
-        server.sendToTCP(connectionID, remittances);
-    }
+    public int getConnectionID(String playerId) {
 
-
-    public int getConnectionID(String playerId) throws IllegalArgumentException {
-
-        PlayerSkeleton needle = playerManager.getLobby().contains(playerId);
+        PlayerSkeleton needle = playerManager.getLobby().get(playerId);
         int connectionID = 0;
 
         if( needle == null ) {
@@ -219,11 +210,22 @@ public class MHost  implements IEndpoint, IHostConnector {
     }
 
     @Override
-    public void toggleReadyStatus(PlayerSkeleton player2toggleReadyStatus) {
-        // TODO: correct that process!
-        Lobby lobby = playerManager.getLobby();
-        lobby.toggleReadyStatus(player2toggleReadyStatus);
+    public void broadCastLobby() {
+        Log.info("Host: send broadcast new lobby");
+        server.sendToAllTCP(playerManager.getLobby());
 
-        server.sendToAllTCP(lobby);
+        Log.info("Host: update own lobby");
+        playerManager.updateLobbyStage();
+    }
+
+    @Override
+    public void sendOrderToCloseConnection(PlayerSkeleton playerToKick) {
+        Log.info("MHost: Send order to client '" + playerToKick + "' to close connection to host");
+
+        int connectionID = getConnectionID(playerToKick.getPlayerID());
+        PlayerDisconnect playerDisconnect = new PlayerDisconnect(playerToKick);
+
+        // TODO: next line has no effect?!
+        server.sendToTCP(connectionID, playerDisconnect);
     }
 }

@@ -1,14 +1,9 @@
 package space.hypeo.mankomania.actors.player;
 
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-import java.util.Random;
-
-import space.hypeo.mankomania.GameStateManager;
-import space.hypeo.mankomania.StageFactory;
-import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
@@ -21,14 +16,7 @@ public class PlayerActor extends Group {
     // Current player state.
     private int balance;
     protected FieldActor currentField;
-    private float timeElapsed = 0;
-    private Random die = new Random();
     protected boolean isActive;
-    private static final float EARTH_GRAVITY = 9.81f;
-    private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
-    private StageManager stageManager;
-    private StageFactory stageFactory;
-    private GameStateManager gameStateManager;
 
 
     // UI Relevant
@@ -39,8 +27,10 @@ public class PlayerActor extends Group {
      * @param actorImage Image that represents the actor.
      * @param balance    The player's current balance (starting balance)
      */
-    public PlayerActor(Image actorImage, int balance) {
+
+    public PlayerActor(Image actorImage, int balance, PlayerDetailActor playerDetailActor) {
         this.actorImage = actorImage;
+        this.playerDetailActor = playerDetailActor;
         this.addActor(this.actorImage);
         this.balance = balance;
         this.isActive = false;
@@ -48,60 +38,16 @@ public class PlayerActor extends Group {
 
     /**
      * Initializes the starting-field and corresponding PlayerDetailActor.
+     *  @param currentField      The field this Player starts out at.
      *
-     * @param currentField      The field this Player starts out at.
-     * @param playerDetailActor The PlayerDetailActor that belongs to this player.
      */
-    public void initializeState(FieldActor currentField, PlayerDetailActor playerDetailActor) {
-        this.playerDetailActor = playerDetailActor;
+    public void initializeState(FieldActor currentField) {
         this.currentField = currentField;
-
         actorImage.setBounds(currentField.getX(), currentField.getY(), PLAYER_SCALE, PLAYER_SCALE);
         updateBounds();
     }
 
     /**
-     <<<<<<< HEAD
-     * Defines whether this player is the local one (i.e the one controlled with this device)
-     *
-     * @return
-     */
-
-
-    @Override
-    public void act(float deltaTime) {
-
-        float xValue;
-        float yValue;
-        float zValue;
-        float gForce;
-
-        timeElapsed += deltaTime;
-        if (timeElapsed >= 0.18f) {
-            timeElapsed = 0;
-
-            xValue = Gdx.input.getAccelerometerX() / EARTH_GRAVITY;
-            yValue = Gdx.input.getAccelerometerY() / EARTH_GRAVITY;
-            zValue = Gdx.input.getAccelerometerZ() / EARTH_GRAVITY;
-
-            gForce = (float) Math.sqrt(xValue * xValue + yValue * yValue + zValue * zValue);
-
-            if (gForce > GRAVITY_FORCE_THRESHOLD) {
-
-                // TODO: check if it is the players turn, then move
-                int moveFields = die.nextInt(6) + 1;
-                this.move(moveFields);
-                stageManager.push(stageFactory.getDiceResultStage(moveFields));
-
-                // TODO: maybe cheat function here (for example: if other player is playing roulette)
-            }
-        }
-
-    }
-
-    /**
-     =======
-     >>>>>>> ae092e7a79e765e4d4245e2a0bd85e0754ef1c06
      * Moves the player a specific amount of steps on the board.
      *
      * @param steps The amount of steps to move.
@@ -140,5 +86,9 @@ public class PlayerActor extends Group {
 
     public void setInactive() {
         this.isActive = false;
+    }
+
+    public PlayerDetailActor getPlayerDetailActor() {
+        return this.playerDetailActor;
     }
 }
