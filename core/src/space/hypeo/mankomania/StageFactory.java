@@ -8,6 +8,7 @@ import space.hypeo.mankomania.actors.horse.HorseActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
+import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.factories.FieldFactory;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.stages.CreatePlayerActorStage;
@@ -40,8 +41,9 @@ public class StageFactory {
         this.actorFactory = actorFactory;
     }
 
-    public Stage getMapStage()
+    public Stage getMapStage(int playerCount)
     {
+
         GameStateManager gameStateManager = new OfflineGameStateManager(stageManager, this);
 
         actorFactory.getPlayerActor("", "", Color.GREEN,true, gameStateManager, this);
@@ -50,7 +52,7 @@ public class StageFactory {
         actorFactory.getPlayerActor("", "", Color.PINK,true, gameStateManager, this);
 
         DetailActor detailActor = actorFactory.getDetailActor();
-        FieldFactory fieldFactory = new FieldFactory(detailActor);
+        FieldFactory fieldFactory = new FieldFactory(detailActor, stageManager, this);
         return new MapStage(viewport, gameStateManager, detailActor, fieldFactory);
     }
 
@@ -59,7 +61,8 @@ public class StageFactory {
     }
 
     public Stage getMainMenu() {
-            return new MainMenuStage(stageManager, viewport, this, publisher);
+        ButtonFactory buttonFactory = new ButtonFactory();
+        return new MainMenuStage(stageManager, viewport, this, publisher, buttonFactory);
     }
 
     public Stage getSendMoneyStage() {

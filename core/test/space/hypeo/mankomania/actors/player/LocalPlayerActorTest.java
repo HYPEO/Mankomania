@@ -12,13 +12,18 @@ import org.mockito.junit.MockitoRule;
 
 import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.GameTest;
+import space.hypeo.mankomania.StageFactory;
+import space.hypeo.mankomania.StageManager;
+import space.hypeo.mankomania.actors.fields.FieldActor;
+import space.hypeo.mankomania.actors.map.PlayerDetailActor;
+
+import static org.junit.Assert.assertEquals;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 import space.hypeo.mankomania.sensor.DiceSensorManager;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.never;
-
 
 /**
  * Created by pichlermarc on 20.05.2018.
@@ -66,6 +71,7 @@ public class LocalPlayerActorTest extends GameTest {
         Mockito.verify(targetFieldActor).trigger(playerActor);
         // Check if position has been updated.
         Mockito.verify(actorImage).setBounds(Mockito.anyFloat(), Mockito.anyFloat(), Mockito.anyFloat(), Mockito.anyFloat());
+
         // Check if turn has ended.
         Mockito.verify(gameStateManager).endTurn();
     }
