@@ -211,6 +211,7 @@ public class MHost implements IEndpoint, IHostConnector {
 
     @Override
     public void broadCastLobby() {
+        /* changed own lobby, then broadcast */
         Log.info("Host: send broadcast new lobby");
         server.sendToAllTCP(playerManager.getLobby());
 

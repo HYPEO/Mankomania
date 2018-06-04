@@ -54,7 +54,10 @@ public class Lobby {
      * @param p value, PlayerSkeleton
      */
     public void put(String playerId, PlayerSkeleton p) {
+        Log.info("Lobby contains " + data.size() + " player.");
+        Log.info("Insert or update ID '" + playerId + "'");
         data.put(playerId, p);
+        Log.info("Now Lobby contains " + data.size() + " player.");
     }
 
     public PlayerSkeleton get(String playerId) {

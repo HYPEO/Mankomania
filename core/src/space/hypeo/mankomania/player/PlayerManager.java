@@ -38,53 +38,6 @@ public class PlayerManager extends GameStateManager {
         this.role = role;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public Lobby getLobby() {
-        return lobby;
-    }
-
-    public void setLobby(Lobby lobby) {
-        this.lobby = lobby;
-        Log.info(role + ": new lobby object was set");
-
-        changeBalanceFromLobby();
-    }
-
-    /**
-     * Changes the balance of current player if lobby has changed.
-     * Case: Lobby received.
-     */
-    private void changeBalanceFromLobby() {
-        if(!lobby.isEmpty() && playerSkeleton != null) {
-            PlayerSkeleton found = lobby.get(playerSkeleton.getPlayerID());
-
-            if(found != null && playerSkeleton.getBalance() != found.getBalance()) {
-                playerSkeleton.setBalance(found.getBalance());
-            }
-            // TODO: do updateLobbyStage() here?
-        }
-    }
-
-    /**
-     * Changes the current player, then update the lobby.
-     * Case: Send lobby after updating.
-     * @param playerId
-     * @param balance
-     */
-    public void changeBalance(String playerId, int balance) {
-        if(playerSkeleton.getPlayerID().equals(playerId)) {
-            playerSkeleton.setBalance(balance);
-            lobby.put(playerId, playerSkeleton);
-        } else {
-            lobby.get(playerId).setBalance(balance);
-        }
-
-        broadCastLobby();
-    }
-
     public PlayerSkeleton getPlayerSkeleton() {
         return playerSkeleton;
     }
@@ -104,13 +57,71 @@ public class PlayerManager extends GameStateManager {
         this.playerNT = playerNT;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public Lobby getLobby() {
+        return lobby;
+    }
+
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
+        Log.info(role + ": new lobby object was set");
+
+        updatePlayerSkeleton();
+    }
+
+    /**
+     * Updates the PlayerSkeleton in the PlayerManager.
+     * Case: Lobby received.
+     */
+    private void updatePlayerSkeleton() {
+        Log.info(role + ": updatePlayerSkeleton");
+
+        if(playerSkeleton == null || lobby.isEmpty()) {
+            return;
+        }
+
+        PlayerSkeleton found = lobby.get(playerSkeleton.getPlayerID());
+
+        if(found == null) {
+            return;
+        }
+
+        /**
+         * Attributes: ID, Nick, Address, isReady, Color MUST NOT be change from outside!
+         */
+
+        /* balance */
+        if(playerSkeleton.getBalance() != found.getBalance()) {
+            Log.info(role + ": updatePlayerSkeleton-setBalance");
+            playerSkeleton.setBalance(found.getBalance());
+        }
+    }
+
+    /**
+     * Changes the current player, then update the lobby.
+     * Case: Send lobby after updating.
+     * @param playerId
+     * @param balance
+     */
+    public void changeBalance(String playerId, int balance) {
+        if(playerSkeleton.getPlayerID().equals(playerId)) {
+            playerSkeleton.setBalance(balance);
+        }
+
+        lobby.put(playerId, playerSkeleton);
+        broadCastLobby();
+    }
+
     public void updateLobbyStage() {
 
         Log.info(role + ": try to update LobbyStage");
 
         Stage currentStage = stageManager.getCurrentStage();
 
-        if (currentStage instanceof LobbyStage) {
+        if(currentStage instanceof LobbyStage) {
             Log.info(role + ": current stage is StageLobby -> update it!");
             ((LobbyStage) currentStage).updateLobby();
         }
@@ -126,6 +137,7 @@ public class PlayerManager extends GameStateManager {
         // TODO: do elsewhere -> better testing
         updateLobbyStage();
         broadCastLobby();
+
     }
 
     public void kickPlayer(PlayerSkeleton playerToKick) {
@@ -140,9 +152,13 @@ public class PlayerManager extends GameStateManager {
     }
 
     public void toggleReadyStatus() {
+        Log.info(playerSkeleton.toString());
         playerSkeleton.setReady(!playerSkeleton.isReady());
-        broadCastLobby();
+        Log.info(playerSkeleton.toString());
+
+        lobby.put(playerSkeleton.getPlayerID(), playerSkeleton);
         updateLobbyStage();
+        broadCastLobby();
     }
 
     private void broadCastLobby() {
