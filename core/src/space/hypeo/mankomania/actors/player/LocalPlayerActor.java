@@ -1,13 +1,8 @@
 package space.hypeo.mankomania.actors.player;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-import java.util.Random;
-
 import space.hypeo.mankomania.GameStateManager;
-import space.hypeo.mankomania.StageFactory;
-import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 import space.hypeo.mankomania.sensor.DiceSensorManager;
 
@@ -15,7 +10,6 @@ import space.hypeo.mankomania.sensor.DiceSensorManager;
  * Created by pichlermarc on 19.05.2018.
  */
 public class LocalPlayerActor extends PlayerActor {
-
     private DiceSensorManager diceSensorManager;
     private GameStateManager gameStateManager;
     private float timeElapsed;
@@ -36,6 +30,7 @@ public class LocalPlayerActor extends PlayerActor {
     public void move(int steps) {
         super.move(steps);
         currentField.trigger(this);
+
         if (this.getBalance() <= 0)
             gameStateManager.setWinner(this);
         gameStateManager.endTurn();
@@ -43,7 +38,6 @@ public class LocalPlayerActor extends PlayerActor {
 
     @Override
     public void act(float deltaTime) {
-
         if (this.isActive) {
             timeElapsed += deltaTime;
             if (timeElapsed >= 0.18f) {

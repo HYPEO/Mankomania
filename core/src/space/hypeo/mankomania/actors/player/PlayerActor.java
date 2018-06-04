@@ -1,5 +1,6 @@
 package space.hypeo.mankomania.actors.player;
 
+
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -26,6 +27,7 @@ public class PlayerActor extends Group {
      * @param actorImage Image that represents the actor.
      * @param balance    The player's current balance (starting balance)
      */
+
     public PlayerActor(Image actorImage, int balance, PlayerDetailActor playerDetailActor) {
         this.actorImage = actorImage;
         this.playerDetailActor = playerDetailActor;
