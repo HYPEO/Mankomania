@@ -142,6 +142,23 @@ public class Lobby {
     }
 
     /**
+     * Checks if all player within the lobby have already set their color.
+     * @return boolean
+     */
+    public boolean areAllPlayerColored() {
+        if( this.isEmpty() ) {
+            return false;
+        }
+
+        for(PlayerSkeleton playerInLobby : data.values() ) {
+            if(playerInLobby.getColor() == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Determines the used colors of all players connected to the lobby.
      * @return empty set if nobody has set their color yet.
      *         else: set of used colors.

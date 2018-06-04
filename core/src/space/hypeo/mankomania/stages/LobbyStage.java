@@ -192,7 +192,9 @@ public class LobbyStage extends Stage {
         rootTable.row();
 
         /* only host can start the game */
-        if(myRole == Role.HOST && playerManager.getLobby().areAllPlayerReady()) {
+        if(myRole == Role.HOST &&
+                playerManager.getLobby().areAllPlayerReady() &&
+                playerManager.getLobby().areAllPlayerColored()) {
 
             Table startTable = new Table();
 
