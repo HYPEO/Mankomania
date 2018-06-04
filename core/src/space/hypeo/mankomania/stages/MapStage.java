@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.mankomania.actors.fields.EmptyFieldActor;
@@ -32,10 +33,10 @@ public class MapStage extends Stage {
     private static final int MAX_PLAYERS = 4;
     private DetailActor detailActor;
 
-    public MapStage(Viewport viewport, StageManager stageManager, List<PlayerActor> playerActors) {
+    public MapStage(Viewport viewport, StageManager stageManager, GameStateManager gameStateManager) {
         super(viewport);
-        if(playerActors.size()> MAX_PLAYERS)
-            throw new IllegalArgumentException("playerActors must not contain more than "+ MAX_PLAYERS + " players.");
+        if(gameStateManager.registeredPlayerCount()> MAX_PLAYERS)
+            throw new IllegalArgumentException("gameStateManager must not contain more than "+ MAX_PLAYERS + " players.");
 
         setUpBackground();
         detailActor = ActorFactory.getDetailActor();
@@ -61,7 +62,7 @@ public class MapStage extends Stage {
         List<PlayerDetailActor> playerDetailActors = generateDetailActors();
 
         Iterator<PlayerDetailActor> playerDetailIterator = playerDetailActors.iterator();
-        for (PlayerActor actor : playerActors) {
+        for (PlayerActor actor : gameStateManager.getPlayers()) {
             PlayerDetailActor detail = playerDetailIterator.next();
             actor.initializeState(firstField, detail);
             this.addActor(actor);

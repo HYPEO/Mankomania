@@ -1,14 +1,12 @@
 package space.hypeo.mankomania.actors.player;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Random;
 
+import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.FieldActor;
@@ -22,36 +20,30 @@ public class PlayerActor extends Group {
 
     // Current player state.
     private int balance;
-    private boolean isLocal;
-    private FieldActor currentField;
-
-    // For dice feature
+    protected FieldActor currentField;
     private float timeElapsed = 0;
     private Random die = new Random();
+    protected boolean isActive;
     private static final float EARTH_GRAVITY = 9.81f;
     private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
+    private StageManager stageManager;
+    private StageFactory stageFactory;
+    private GameStateManager gameStateManager;
 
-    // UI-Relevant Items.
-    private final StageManager manager;
+
+    // UI Relevant
     private PlayerDetailActor playerDetailActor;
     private Image actorImage;
-    private final StageFactory stageFactory;
 
     /**
-     * @param actorImage   Image that represents the actor.
-     * @param balance      The player's current balance (starting balance)
-     * @param isLocal      Defines whether this player is the local one (i.e the one controlled with this device)
-     * @param stageManager StageManager for pushing DiceStage.
-     * @param stageFactory StageFactory for creating new Stages.
+     * @param actorImage Image that represents the actor.
+     * @param balance    The player's current balance (starting balance)
      */
-    public PlayerActor(Image actorImage, int balance, boolean isLocal, final StageManager stageManager, StageFactory stageFactory) {
+    public PlayerActor(Image actorImage, int balance) {
         this.actorImage = actorImage;
         this.addActor(this.actorImage);
-
-        this.isLocal = isLocal;
-        this.stageFactory = stageFactory;
         this.balance = balance;
-        this.manager = stageManager;
+        this.isActive = false;
     }
 
     /**
@@ -69,13 +61,12 @@ public class PlayerActor extends Group {
     }
 
     /**
+     <<<<<<< HEAD
      * Defines whether this player is the local one (i.e the one controlled with this device)
      *
      * @return
      */
-    public boolean isLocal() {
-        return this.isLocal;
-    }
+
 
     @Override
     public void act(float deltaTime) {
@@ -100,7 +91,7 @@ public class PlayerActor extends Group {
                 // TODO: check if it is the players turn, then move
                 int moveFields = die.nextInt(6) + 1;
                 this.move(moveFields);
-                manager.push(stageFactory.getDiceResultStage(moveFields));
+                stageManager.push(stageFactory.getDiceResultStage(moveFields));
 
                 // TODO: maybe cheat function here (for example: if other player is playing roulette)
             }
@@ -109,14 +100,14 @@ public class PlayerActor extends Group {
     }
 
     /**
+     =======
+     >>>>>>> ae092e7a79e765e4d4245e2a0bd85e0754ef1c06
      * Moves the player a specific amount of steps on the board.
      *
      * @param steps The amount of steps to move.
      */
     public void move(int steps) {
         currentField = currentField.getFollowingField(steps);
-        if (this.isLocal())
-            currentField.trigger(this);
         updateBounds();
     }
 
@@ -137,5 +128,17 @@ public class PlayerActor extends Group {
     public void setBalance(int balance) {
         this.balance = balance;
         this.playerDetailActor.updateBalance(balance);
+    }
+
+    public void changeBalance(int remittance) {
+        this.balance += remittance;
+    }
+
+    public void setActive() {
+        this.isActive = true;
+    }
+
+    public void setInactive() {
+        this.isActive = false;
     }
 }

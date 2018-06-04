@@ -5,12 +5,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import space.hypeo.mankomania.player.PlayerManager;
+import space.hypeo.mankomania.actors.horse.HorseActor;
+import space.hypeo.mankomania.actors.player.LocalPlayerActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
+import space.hypeo.mankomania.stages.HorseRaceResultStage;
+import space.hypeo.mankomania.stages.HorseRaceStage;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.MapStage;
 import space.hypeo.mankomania.stages.TitleStage;
@@ -34,13 +35,33 @@ public class StageFactory {
 
     public Stage getMapStage()
     {
-        List<PlayerActor> playerActors = new ArrayList<>();
-        playerActors.add(new PlayerActor(new Image(new Texture("players/player_1.png")),
+        GameStateManager gameStateManager = new OfflineGameStateManager();
+
+        new LocalPlayerActor(new Image(new Texture("players/player_1.png")),
                 1000000,
-                true,
                 stageManager,
-                this));
-        return new MapStage(viewport, stageManager, playerActors);
+                this,
+                gameStateManager);
+
+        new LocalPlayerActor(new Image(new Texture("players/player_2.png")),
+                1000000,
+                stageManager,
+                this,
+                gameStateManager);
+
+        new LocalPlayerActor(new Image(new Texture("players/player_3.png")),
+                1000000,
+                stageManager,
+                this,
+                gameStateManager);
+
+        new LocalPlayerActor(new Image(new Texture("players/player_4.png")),
+                1000000,
+                stageManager,
+                this,
+                gameStateManager);
+
+        return new MapStage(viewport, stageManager, gameStateManager);
     }
 
     public Stage getDiceResultStage(int moveFields) {
@@ -58,6 +79,14 @@ public class StageFactory {
 
     public Stage getTitleStage() {
             return new TitleStage(stageManager, viewport);
+    }
+
+    public Stage getHorseRaceStage(PlayerActor playerActor) {
+        return new HorseRaceStage(viewport, stageManager, this, playerActor);
+    }
+
+    public Stage getHorseRaceResultStage(int backedHorseID, int bet, HorseActor winningHorse) {
+        return new HorseRaceResultStage(viewport, stageManager, backedHorseID, bet, winningHorse);
     }
 
     /**
