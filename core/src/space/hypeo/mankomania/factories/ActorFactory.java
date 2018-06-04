@@ -36,22 +36,22 @@ public class ActorFactory {
         String detailTexturePath = "";
         PlayerDetailActor.ScreenPosition position = PlayerDetailActor.ScreenPosition.BOTTOM_LEFT;
 
-        if (playerColor == Color.GREEN) {
+        if (playerColor.equals(Color.GREEN)) {
             texturePath = "players/player_1.png";
             detailTexturePath = "map_assets/player_1.png";
             position = PlayerDetailActor.ScreenPosition.BOTTOM_LEFT;
         }
-        else if (playerColor == Color.CYAN) {
+        else if (playerColor.equals(Color.CYAN)) {
             texturePath = "players/player_2.png";
             detailTexturePath = "map_assets/player_2.png";
             position = PlayerDetailActor.ScreenPosition.BOTTOM_RIGHT;
         }
-        else if (playerColor == Color.YELLOW) {
+        else if (playerColor.equals(Color.YELLOW)) {
             texturePath = "players/player_3.png";
             detailTexturePath = "map_assets/player_3.png";
             position = PlayerDetailActor.ScreenPosition.TOP_RIGHT;
         }
-        else if (playerColor == Color.PINK){
+        else if (playerColor.equals(Color.PINK)){
             texturePath = "players/player_4.png";
             detailTexturePath = "map_assets/player_4.png";
             position = PlayerDetailActor.ScreenPosition.TOP_LEFT;
