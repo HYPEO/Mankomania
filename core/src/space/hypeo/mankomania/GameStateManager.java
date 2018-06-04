@@ -14,8 +14,8 @@ public abstract class GameStateManager {
 
     PlayerActor activePlayer;
     Queue<PlayerActor> playerActors;
-    private StageManager stageManager;
-    private StageFactory stageFactory;
+    protected StageManager stageManager;
+    protected StageFactory stageFactory;
 
     public GameStateManager(StageManager stageManager, StageFactory stageFactory)
     {
