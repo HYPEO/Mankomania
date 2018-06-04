@@ -1,6 +1,5 @@
 package space.hypeo.mankomania.player;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.esotericsoftware.minlog.Log;
@@ -16,12 +15,8 @@ import space.hypeo.networking.network.Network;
 import space.hypeo.networking.player.PlayerNT;
 import space.hypeo.networking.network.Role;
 
-public class PlayerManager {
-    private final StageManager stageManager;
-    private final StageFactory stageFactory;
+public class PlayerManager extends GameStateManager {
 
-    // TODO: change fields of myself in playerSeleton; then update with lobby
-    // then broadcast
     private PlayerSkeleton playerSkeleton;
     private PlayerNT playerNT;
 
@@ -36,8 +31,7 @@ public class PlayerManager {
 
     // TODO: inject playerSkeleton, playerNT by contructor?
     public PlayerManager(final StageManager stageManager, final StageFactory stageFactory, final Role role) {
-        this.stageManager = stageManager;
-        this.stageFactory = stageFactory;
+        super(stageManager, stageFactory);
 
         playerSkeleton = null;
         playerNT = null;
@@ -120,11 +114,6 @@ public class PlayerManager {
             Log.info(role + ": current stage is StageLobby -> update it!");
             ((LobbyStage) currentStage).updateLobby();
         }
-
-        if(lobby.areAllPlayerReady()) {
-            createPlayerActor();
-            stageManager.push(stageFactory.getCreatePlayerActorStage(this));
-        }
     }
 
     public Set<Color> usedPlayerColors() {
@@ -160,22 +149,37 @@ public class PlayerManager {
         playerNT.broadCastLobby();
     }
 
-    private void createPlayerActor() {
+    @Override
+    public void endTurn() {
+        nextPlayer();
+    }
+
+    private void nextPlayer() {
+        // TODO: complete method
+        /*playerActors.add(activePlayer);
+        activePlayer.setInactive();
+        activePlayer = playerActors.remove();
+        activePlayer.setActive();*/
+    }
+
+    public void createPlayerActor() {
+
+        if(!lobby.areAllPlayerReady()) {
+            Log.info("Not all player are ready to start game!");
+            return;
+        }
+
+        stageManager.push(stageFactory.getCreatePlayerActorStage(this));
 
         ActorFactory actorFactory = new ActorFactory(stageManager);
-        GameStateManager gameStateManager = new GameStateManager(stageManager, stageFactory) {
-            @Override
-            public void endTurn() {
-
-            }
-        };
 
         for(PlayerSkeleton ps : lobby.values()) {
-
-            actorFactory.getPlayerActor(ps.getPlayerID(), ps.getNickname(), ps.getColor(),
-                    (ps.equals(playerSkeleton)) ? true : false,
-                    gameStateManager, stageFactory);
-
+            addPlayer(
+                actorFactory.getPlayerActor(
+                        ps.getPlayerID(), ps.getNickname(), ps.getColor(),
+                        (ps.equals(playerSkeleton)) ? true : false,
+                        this, stageFactory)
+            );
         }
     }
 }

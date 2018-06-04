@@ -111,6 +111,6 @@ public class StageFactory {
     }
 
     public Stage getCreatePlayerActorStage(PlayerManager playerManager) {
-        return new CreatePlayerActorStage(stageManager, viewport, playerManager);
+        return new CreatePlayerActorStage(viewport, playerManager);
     }
 }

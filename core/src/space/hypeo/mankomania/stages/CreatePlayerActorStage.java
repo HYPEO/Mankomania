@@ -1,37 +1,27 @@
 package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.minlog.Log;
 
-import java.util.Set;
-
-import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.mankomania.factories.ActorFactory;
-import space.hypeo.mankomania.player.Colors;
+import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.player.PlayerManager;
 
 /*
  * There is NO interaction in this stage possible
  */
 public class CreatePlayerActorStage extends Stage {
-    private StageManager stageManager;
     private final Viewport viewport;
     private PlayerManager playerManager;
 
-    public CreatePlayerActorStage(StageManager stageManager, Viewport viewport, PlayerManager playerManager) {
-        this.stageManager = stageManager;
+    public CreatePlayerActorStage(Viewport viewport, PlayerManager playerManager) {
         this.viewport = viewport;
         this.playerManager = playerManager;
 
@@ -65,36 +55,19 @@ public class CreatePlayerActorStage extends Stage {
         rootTable.add(title).padTop(50).padBottom(50);
         rootTable.row();
 
-        /* buttons */
-        Set<Color> usedPlayerColors = playerManager.usedPlayerColors();
-
         /* inner table contains players from lobby: represented as button */
         Table btnTable = new Table();
         int btnHeight = 100;
         int btnWidth = 250;
 
         /* data rows */
-        for(Color color : Colors.getAvailableColors()) {
+        for(PlayerActor playerActor : playerManager.getPlayers()) {
 
-            /* colors, that are not used by other players, are selectable */
-            if(!usedPlayerColors.contains(color)) {
-                Button btnColor = new TextButton(color.toString(), skin);
-                btnColor.setColor(color);
+            Button btnPlayer = new TextButton(playerActor.getName(), skin);
+            btnPlayer.setColor(playerActor.getColor());
 
-                btnColor.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        Log.info("You changed your color to " + color);
-                        stageManager.remove(CreatePlayerActorStage.this);
-                        playerManager.setColor(color);
-                    }
-
-                });
-
-                btnTable.add(btnColor).height(btnHeight).width(btnWidth);
-                btnTable.row();
-            }
-
+            btnTable.add(btnPlayer).height(btnHeight).width(btnWidth);
+            btnTable.row();
         }
 
         /* add buttons */

@@ -128,12 +128,13 @@ public class LobbyStage extends Stage {
         btnTable.add(hReady).height(btnHeight).width(60).align(Align.right);
         btnTable.row();
 
+        Role myRole = playerManager.getRole();
+
         /* data rows */
         int index = 1;
         for( PlayerSkeleton playerSkeleton : lobby.values() ) {
 
             PlayerSkeleton myself = playerManager.getPlayerSkeleton();
-            Role myRole = playerManager.getRole();
 
             Button btnIndex = new TextButton("" + index, skin);
             Button btnNick = new TextButton(playerSkeleton.getNickname(), skin);
@@ -157,6 +158,7 @@ public class LobbyStage extends Stage {
                 });
             }
 
+            /* toggle own ready-to-play-status */
             if( playerSkeleton.equals(myself)) {
                 btnReady.addListener(new ClickListener() {
                     @Override
@@ -166,6 +168,7 @@ public class LobbyStage extends Stage {
                 });
             }
 
+            /* change own color */
             if( playerSkeleton.equals(myself)) {
                 btnNick.addListener(new ClickListener() {
                     @Override
@@ -186,6 +189,26 @@ public class LobbyStage extends Stage {
 
         /* add buttons */
         rootTable.add(btnTable);
+        rootTable.row();
+
+        /* only host can start the game */
+        if(myRole == Role.HOST && playerManager.getLobby().areAllPlayerReady()) {
+
+            Table startTable = new Table();
+
+            Button btnStartGame = new TextButton("START GAME", skin);
+            btnStartGame.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    playerManager.createPlayerActor();
+                }
+            });
+
+            startTable.add(btnStartGame).height(btnHeight).width(250);
+            startTable.row();
+
+            rootTable.add(startTable);
+        }
 
         this.addActor(rootTable);
     }
