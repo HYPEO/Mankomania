@@ -10,6 +10,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
 import space.hypeo.mankomania.factories.FieldFactory;
 import space.hypeo.mankomania.player.PlayerManager;
+import space.hypeo.mankomania.stages.CreatePlayerActorStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.EndGameStage;
@@ -104,5 +105,9 @@ public class StageFactory {
 
     public Stage getSetColorStage(PlayerManager playerManager) {
         return new SetColorStage(stageManager, viewport, playerManager);
+    }
+
+    public Stage getCreatePlayerActorStage(PlayerManager playerManager) {
+        return new CreatePlayerActorStage(stageManager, viewport, playerManager);
     }
 }

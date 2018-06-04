@@ -18,6 +18,7 @@ import java.util.Set;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.mankomania.factories.ActorFactory;
 import space.hypeo.mankomania.player.Colors;
 import space.hypeo.mankomania.player.PlayerManager;
 
@@ -73,7 +74,7 @@ public class CreatePlayerActorStage extends Stage {
         int btnWidth = 250;
 
         /* data rows */
-        for( Color color : Colors.getAvailableColors()) {
+        for(Color color : Colors.getAvailableColors()) {
 
             /* colors, that are not used by other players, are selectable */
             if(!usedPlayerColors.contains(color)) {
