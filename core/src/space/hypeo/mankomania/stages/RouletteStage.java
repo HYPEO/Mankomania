@@ -184,14 +184,14 @@ public class RouletteStage extends Stage {
         else
             winningColour = errorMessage;
         if(winningColour.equals(selectedColour)) {
-            //playerActor.changeBalance(money * factor);
+            playerActor.changeBalance(money * factor);
             return "You Won";
 
         }
         else if(winningColour.equals(errorMessage))
             return errorMessage;
         else {
-            //playerActor.changeBalance(money * (-1));
+            playerActor.changeBalance(money * (-1));
             return "You Lost";
         }
 
