@@ -1,6 +1,6 @@
 package space.hypeo.networking.packages;
 
-import space.hypeo.mankomania.player.PlayerBusiness;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 
 /**
  * This class is for the handshake between host and client.
@@ -16,7 +16,7 @@ public class Acknowledge {
      * Creates a new instance of Acknowledge with given host IP address.
      * @param host
      */
-    public Acknowledge(PlayerBusiness host) {
+    public Acknowledge(PlayerSkeleton host) {
         msg += host.getPlayerID();
     }
 

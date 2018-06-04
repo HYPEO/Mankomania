@@ -13,7 +13,10 @@ public class PlayerSkeleton {
     protected String nickname;      // nickname
     protected String address;       // IP address in W/LAN
 
-    protected Color color;
+    protected boolean isReady;      // ready to start the game
+    protected Color color;          // color on the map (unique)
+    protected boolean isActive;     // true when it is my turn
+    protected int balance;          // total amount of money
 
     /* NOTE: default constructor required for network traffic */
     public PlayerSkeleton() {}
@@ -33,7 +36,10 @@ public class PlayerSkeleton {
         }
         address = currentIpAddr;
 
+        isReady = false;
         color = null;
+        isActive = false;
+        balance = PlayerFactory.START_BALANCE;
     }
 
     /**
@@ -45,6 +51,8 @@ public class PlayerSkeleton {
             this.playerID = playerSkeleton.playerID;
             this.nickname = playerSkeleton.nickname;
             this.address = playerSkeleton.address;
+            this.isActive = playerSkeleton.isActive;
+            this.balance = playerSkeleton.balance;
         }
     }
 
@@ -60,6 +68,14 @@ public class PlayerSkeleton {
         return address;
     }
 
+    public boolean isReady() {
+        return isReady;
+    }
+
+    public void setReady(boolean ready) {
+        isReady = ready;
+    }
+
     public Color getColor() {
         return color;
     }
@@ -67,6 +83,22 @@ public class PlayerSkeleton {
     public void setColor(Color color) {
         this.color = color;
         Log.info("set my (" + nickname + ") color to " + color);
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 
     /**
@@ -86,7 +118,9 @@ public class PlayerSkeleton {
     @Override
     public String toString() {
         return "ID " + playerID + ", nick " + nickname + ", addr " + address +
-                (color != null ? color : "");
+                (color != null ? color : "") + ", " +
+                (isActive ? "active" : "inactive") +
+                ", balance " + balance + "€";
     }
 
     @Override

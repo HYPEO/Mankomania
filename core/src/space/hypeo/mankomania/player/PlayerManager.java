@@ -6,8 +6,9 @@ import com.esotericsoftware.minlog.Log;
 
 import java.util.Set;
 
+import javax.print.DocFlavor;
+
 import space.hypeo.mankomania.StageManager;
-import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.player.PlayerNT;
@@ -16,9 +17,10 @@ import space.hypeo.networking.network.Role;
 public class PlayerManager {
     private final StageManager stageManager;
 
-    private PlayerBusiness playerBusiness;
+    // TODO: change fields of myself in playerSeleton; then update with lobby
+    // then broadcast
+    private PlayerSkeleton playerSkeleton;
     private PlayerNT playerNT;
-    private PlayerActor playerActor;
 
     // identifies the endpoint due to its role in the connection
     private final Role role;
@@ -29,12 +31,12 @@ public class PlayerManager {
      */
     private Lobby lobby;
 
+    // TODO: inject playerSkeleton, playerNT by contructor?
     public PlayerManager(final StageManager stageManager, final Role role) {
         this.stageManager = stageManager;
 
-        playerBusiness = null;
+        playerSkeleton = null;
         playerNT = null;
-        playerActor = null;
         this.role = role;
     }
 
@@ -49,33 +51,51 @@ public class PlayerManager {
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
         Log.info(role + ": new lobby object was set");
+
+        changeBalanceFromLobby();
     }
 
-    public boolean isReady2startGame() {
-        return lobby.getReadyStatus(playerBusiness.getPlayerSkeleton());
+    /**
+     * Changes the balance of current player if lobby has changed.
+     * Case: Lobby received.
+     */
+    private void changeBalanceFromLobby() {
+        if(!lobby.isEmpty() && playerSkeleton != null) {
+            PlayerSkeleton found = lobby.get(playerSkeleton.getPlayerID());
+
+            if(found != null && playerSkeleton.getBalance() != found.getBalance()) {
+                playerSkeleton.setBalance(found.getBalance());
+            }
+            // TODO: do updateLobbyStage() here?
+        }
     }
 
-    public void toggleReadyStatus() {
-        Log.info(role + ": toggle ReadyStatus (old: " + lobby.getReadyStatus(playerBusiness.getPlayerSkeleton()) + ")");
-        lobby.toggleReadyStatus(playerBusiness.getPlayerSkeleton());
-        Log.info(role + ": toggle ReadyStatus: " + lobby.getReadyStatus(playerBusiness.getPlayerSkeleton()));
-        updateLobbyStage();
+    /**
+     * Changes the current player, then update the lobby.
+     * Case: Send lobby after updating.
+     * @param playerId
+     * @param balance
+     */
+    public void changeBalance(String playerId, int balance) {
+        if(playerSkeleton.getPlayerID().equals(playerId)) {
+            playerSkeleton.setBalance(balance);
+            lobby.put(playerId, playerSkeleton);
+        } else {
+            lobby.get(playerId).setBalance(balance);
+        }
+
         broadCastLobby();
     }
 
-    private void broadCastLobby() {
-        playerNT.broadCastLobby();
+    public PlayerSkeleton getPlayerSkeleton() {
+        return playerSkeleton;
     }
 
-    public PlayerBusiness getPlayerBusiness() {
-        return playerBusiness;
-    }
-
-    public void setPlayerBusiness(final PlayerBusiness playerBusiness) {
-        this.playerBusiness = playerBusiness;
+    public void setPlayerSkeleton(final PlayerSkeleton playerSkeleton) {
+        this.playerSkeleton = playerSkeleton;
 
         lobby = new Lobby(Network.MAX_PLAYER);
-        lobby.add(playerBusiness.getPlayerSkeleton());
+        lobby.put(playerSkeleton.getPlayerID(), playerSkeleton);
     }
 
     public PlayerNT getPlayerNT() {
@@ -84,14 +104,6 @@ public class PlayerManager {
 
     public void setPlayerNT(final PlayerNT playerNT) {
         this.playerNT = playerNT;
-    }
-
-    public PlayerActor getPlayerActor() {
-        return playerActor;
-    }
-
-    public void setPlayerActor(PlayerActor playerActor) {
-        this.playerActor = playerActor;
     }
 
     public void updateLobbyStage() {
@@ -111,8 +123,9 @@ public class PlayerManager {
     }
 
     public void setColor(Color color) {
-        playerBusiness.setColor(color);
-        lobby.setColor(playerBusiness.getPlayerSkeleton(), color);
+        playerSkeleton.setColor(color);
+        lobby.put(playerSkeleton.getPlayerID(), playerSkeleton);
+        // TODO: do elsewhere -> better testing
         updateLobbyStage();
         broadCastLobby();
     }
@@ -122,5 +135,21 @@ public class PlayerManager {
         if(role == Role.HOST && playerNT != null) {
             playerNT.kickPlayerFromLobby(playerToKick);
         }
+    }
+
+
+
+    public boolean isReady2startGame() {
+        return playerSkeleton.isReady();
+    }
+
+    public void toggleReadyStatus() {
+        playerSkeleton.setReady(!playerSkeleton.isReady());
+        broadCastLobby();
+        updateLobbyStage();
+    }
+
+    private void broadCastLobby() {
+        playerNT.broadCastLobby();
     }
 }

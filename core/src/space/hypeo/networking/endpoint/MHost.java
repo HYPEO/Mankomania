@@ -13,7 +13,6 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
-import space.hypeo.networking.packages.Remittances;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -59,11 +58,11 @@ public class MHost implements IEndpoint, IHostConnector {
 
             // send ack to client
             Log.info("Host: Send ack to requested client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new Acknowledge(playerManager.getPlayerBusiness()) );
+            connection.sendTCP( new Acknowledge(playerManager.getPlayerSkeleton()) );
 
             // send host info
             Log.info("Host: Send info of myself to client ip " + connection.getRemoteAddressTCP().toString());
-            connection.sendTCP( new PlayerHost(playerManager.getPlayerBusiness().getPlayerID()) );
+            connection.sendTCP( new PlayerHost(playerManager.getPlayerSkeleton().getPlayerID()) );
         }
 
         /**
@@ -95,7 +94,7 @@ public class MHost implements IEndpoint, IHostConnector {
 
             } else if( object instanceof PlayerConnect) {
                 PlayerSkeleton newPlayer = (PlayerConnect) object;
-                playerManager.getLobby().add(newPlayer);
+                playerManager.getLobby().put(newPlayer.getPlayerID(), newPlayer);
 
                 Log.info("Host: player has been connected, add to lobby");
                 playerManager.getLobby().log();
@@ -153,7 +152,7 @@ public class MHost implements IEndpoint, IHostConnector {
     @Override
     public void stop() {
         if(server != null) {
-            stop();
+            server.stop();
         }
     }
 
@@ -188,17 +187,9 @@ public class MHost implements IEndpoint, IHostConnector {
         server.sendToAllTCP(new Notification("game will be closed now..."));
     }
 
-    @Override
-    public void changeBalance(Remittances remittances) {
-        // TODO: correct that process!
-        int connectionID = getConnectionID(remittances.getReceiverId());
-        server.sendToTCP(connectionID, remittances);
-    }
-
-
     public int getConnectionID(String playerId) {
 
-        PlayerSkeleton needle = playerManager.getLobby().contains(playerId);
+        PlayerSkeleton needle = playerManager.getLobby().get(playerId);
         int connectionID = 0;
 
         if( needle == null ) {

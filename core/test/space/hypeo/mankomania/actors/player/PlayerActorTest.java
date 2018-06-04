@@ -1,6 +1,5 @@
 package space.hypeo.mankomania.actors.player;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import org.junit.Before;
@@ -12,8 +11,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import space.hypeo.mankomania.GameTest;
-import space.hypeo.mankomania.StageFactory;
-import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
@@ -29,12 +26,6 @@ public class PlayerActorTest extends GameTest {
     @Mock
     private Image actorImage;
     @Mock
-    private Texture detailTexture;
-    @Mock
-    private StageManager stageManager;
-    @Mock
-    private StageFactory stageFactory;
-    @Mock
     private FieldActor fieldActor;
     @Mock
     private PlayerDetailActor playerDetailActor;
@@ -46,28 +37,8 @@ public class PlayerActorTest extends GameTest {
 
     @Before
     public void setUp() {
-        playerActor = new PlayerActor(actorImage, BALANCE, true, stageManager, stageFactory);
-        playerActor.initializeState(fieldActor, playerDetailActor);
-    }
-
-    @Test
-    public void moveLocalActor() {
-
-        // SET-UP:
-        Mockito.reset(actorImage);
-
-        // Return predefined following field on method call.
-        FieldActor targetFieldActor = Mockito.mock(FieldActor.class);
-        Mockito.when(fieldActor.getFollowingField(4)).thenReturn(targetFieldActor);
-
-        // EXECUTION:
-        playerActor.move(4);
-
-        // VERIFICATION:
-        // Check if targetFieldActor has been triggered.
-        Mockito.verify(targetFieldActor).trigger(playerActor);
-        // Check if position has been updated.
-        Mockito.verify(actorImage).setBounds(Mockito.anyFloat(), Mockito.anyFloat(), Mockito.anyFloat(), Mockito.anyFloat());
+        playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor);
+        playerActor.initializeState(fieldActor);
     }
 
     @Test
@@ -75,8 +46,8 @@ public class PlayerActorTest extends GameTest {
 
         // SET-UP:
         // Set up nonlocal Player
-        playerActor = new PlayerActor(actorImage, BALANCE, false, stageManager, stageFactory);
-        playerActor.initializeState(fieldActor, playerDetailActor);
+        playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor);
+        playerActor.initializeState(fieldActor);
 
         // Return predefined following field on method call.
         FieldActor targetFieldActor = Mockito.mock(FieldActor.class);
@@ -114,5 +85,18 @@ public class PlayerActorTest extends GameTest {
         Mockito.verify(playerDetailActor).updateBalance(20000);
     }
 
+    @Test
+    public void changeBalance(){
+        playerActor.setBalance(100);
+        playerActor.changeBalance(-10);
+        assertEquals(90, playerActor.getBalance());
+        playerActor.changeBalance(20);
+        assertEquals(110, playerActor.getBalance());
+    }
+
+    @Test
+    public void playerDetailActorNotNull(){
+        assertEquals(playerDetailActor, playerActor.getPlayerDetailActor());
+    }
 
 }

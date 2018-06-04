@@ -21,7 +21,6 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
-import space.hypeo.networking.packages.Remittances;
 
 /**
  * This class represents the client process on the device.
@@ -70,7 +69,7 @@ public class MClient implements IEndpoint, IClientConnector {
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            connection.sendTCP( new PlayerDisconnect(playerManager.getPlayerBusiness()) );
+            connection.sendTCP( new PlayerDisconnect(playerManager.getPlayerSkeleton()) );
 
             hostPlayer = null;
             connection.close();
@@ -85,7 +84,7 @@ public class MClient implements IEndpoint, IClientConnector {
         public void received(Connection connection, Object object) {
             super.received(connection, object);
 
-            PlayerSkeleton myself = playerManager.getPlayerBusiness().getPlayerSkeleton();
+            PlayerSkeleton myself = playerManager.getPlayerSkeleton();
 
             if( object instanceof PingResponse) {
                 PingResponse pingResponse = (PingResponse) object;
@@ -184,7 +183,6 @@ public class MClient implements IEndpoint, IClientConnector {
     public void connectToHost(InetAddress hostAddress) {
 
         if( client != null && hostAddress != null ) {
-
             Log.info("Client: Try to connect to " + hostAddress.toString());
 
             try {
@@ -196,7 +194,6 @@ public class MClient implements IEndpoint, IClientConnector {
             }
 
             client.addListener(new ClientListener());
-
             // the client will be added to lobby after network handshake by server!
 
         } else {
@@ -217,12 +214,6 @@ public class MClient implements IEndpoint, IClientConnector {
     @Override
     public boolean joinGame(String playerID) {
         return false;
-    }
-
-    @Override
-    public void changeBalance(Remittances remittances) {
-        // TODO: correct that process!
-        client.sendTCP(remittances);
     }
 
     @Override

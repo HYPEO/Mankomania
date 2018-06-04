@@ -7,6 +7,8 @@ import space.hypeo.networking.player.PlayerNT;
 public class PlayerFactory {
     private final PlayerManager playerManager;
 
+    public final static int START_BALANCE = 1000000;
+
     public PlayerFactory(final PlayerManager playerManager) {
         this.playerManager = playerManager;
     }
@@ -15,9 +17,8 @@ public class PlayerFactory {
         return playerManager;
     }
 
-    public PlayerBusiness getPlayerBusiness(final String nickname) {
-
-        return new PlayerBusiness(nickname, playerManager);
+    public PlayerSkeleton getPlayerSkeleton(String nick) {
+        return new PlayerSkeleton(nick);
     }
 
     public PlayerNT getPlayerNT() {
