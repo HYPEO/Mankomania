@@ -29,6 +29,31 @@ public final class NetworkAddress {
             "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
 
     /**
+     * Validates the IP Address.
+     * @param ipAddress given IP Address
+     * @return IP address if valide
+     *          null if IP address violates pattern
+     */
+    public static String validateIpAddress(String ipAddress) {
+        String validIpAddress = null;
+
+        Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
+        Matcher matcher = pattern.matcher(ipAddress);
+
+        if(matcher.find()) {
+            validIpAddress = matcher.group();
+        }
+
+        if(validIpAddress != null) {
+            Log.info("IP " + validIpAddress + " is correct");
+        } else {
+            Log.info("IP " + ipAddress + " violates IP address pattern");
+        }
+
+        return validIpAddress;
+    }
+
+    /**
      * Gets all available network addresses for a device.
      * Filters loopback and inactive addresses out.
      * @return List of available network addresses.
@@ -76,16 +101,13 @@ public final class NetworkAddress {
 
         String ip = "";
 
-        Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
-
         try {
             List<InetAddress> ipAddresses = NetworkAddress.getAllAvailableNetworkAddresses();
 
             for( InetAddress addr : ipAddresses ) {
-                Matcher matcher = pattern.matcher(addr.getHostAddress());
-
-                if( matcher.find() ) {
-                    ip = matcher.group();
+                ip = validateIpAddress(addr.getHostAddress());
+                if(ip != null) {
+                    break;
                 }
             }
 

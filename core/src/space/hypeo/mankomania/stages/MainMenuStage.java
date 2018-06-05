@@ -1,23 +1,22 @@
 package space.hypeo.mankomania.stages;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import space.hypeo.mankomania.IDeviceStatePublisher;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.networking.network.NetworkPlayer;
+import space.hypeo.mankomania.factories.ButtonFactory;
+import space.hypeo.mankomania.player.PlayerFactory;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.networking.network.Role;
 
 /**
@@ -30,19 +29,26 @@ public class MainMenuStage extends Stage {
     private Button join;
     private Image title;
     private Table layout;
-    private final Viewport viewport;
+
+    private StageFactory stageFactory;
+    private IDeviceStatePublisher deviceStatePublisher;
+    private ButtonFactory buttonFactory;
+
+    private PlayerManager playerManager;
 
     /**
      * Creates the Main Menu
-     *
-     * @param stageManager StageManager needed to switch between stages, create new ones, etc.
+     *  @param stageManager StageManager needed to switch between stages, create new ones, etc.
      * @param viewport     Viewport needed by Stage class.
+     * @param buttonFactory
      */
-    public MainMenuStage(StageManager stageManager, Viewport viewport) {
+    public MainMenuStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, IDeviceStatePublisher deviceStatePublisher, ButtonFactory buttonFactory) {
         super(viewport);
 
         this.stageManager = stageManager;
-        this.viewport = viewport;
+        this.stageFactory = stageFactory;
+        this.deviceStatePublisher = deviceStatePublisher;
+        this.buttonFactory = buttonFactory;
 
         setUpBackground();
         createWidgets();
@@ -59,32 +65,16 @@ public class MainMenuStage extends Stage {
         titleTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         title = new Image(titleTexture);
 
-        launch = createButton("menu_buttons/play_offline.png", "menu_buttons/play_offline_clicked.png");
-        join = createButton("menu_buttons/join_game.png", "menu_buttons/join_game_clicked.png");
-        host = createButton("menu_buttons/host_game.png", "menu_buttons/host_game_clicked.png");
-    }
-
-    private Button createButton(String upTexture, String downTexture) {
-        Texture hostTextureUp = new Texture(Gdx.files.internal(upTexture));
-        hostTextureUp.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        Texture hostTextureDown = new Texture(Gdx.files.internal(downTexture));
-        hostTextureDown.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        TextureRegion hostTextureRegionUp = new TextureRegion(hostTextureUp);
-        TextureRegion hostTextureRegionDown = new TextureRegion(hostTextureDown);
-
-        TextureRegionDrawable hostTextureRegionDrawableUp = new TextureRegionDrawable(hostTextureRegionUp);
-        TextureRegionDrawable hostTextureRegionDrawableDown = new TextureRegionDrawable(hostTextureRegionDown);
-
-        return new ImageButton(hostTextureRegionDrawableUp, hostTextureRegionDrawableDown);
+        launch = buttonFactory.getButton("menu_buttons/play_offline.png", "menu_buttons/play_offline_clicked.png");
+        join = buttonFactory.getButton("menu_buttons/join_game.png", "menu_buttons/join_game_clicked.png");
+        host = buttonFactory.getButton("menu_buttons/host_game.png", "menu_buttons/host_game_clicked.png");
     }
 
     private ClickListener launchClickListener() {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stageManager.push(StageFactory.getMapStage(viewport, stageManager));
+                stageManager.push(stageFactory.getMapStage(4));
             }
         };
     }
@@ -94,8 +84,14 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                NetworkPlayer hostPlayer = new NetworkPlayer("the_mighty_host", Role.HOST, stageManager);
-                stageManager.push(StageFactory.getLobbyStage(viewport, stageManager, hostPlayer));
+                // TODO: deligate that to PlayerManager in Business Layer
+                playerManager = new PlayerManager(stageManager, stageFactory, Role.HOST);
+                PlayerFactory playerFactory = new PlayerFactory(playerManager);
+                playerManager.setPlayerSkeleton(playerFactory.getPlayerSkeleton("the_mighty_host"));
+                playerManager.setPlayerNT(playerFactory.getPlayerNT());
+
+                deviceStatePublisher.subscribe(playerManager.getPlayerNT());
+                stageManager.push(stageFactory.getLobbyStage(playerManager));
             }
         };
     }
@@ -105,8 +101,14 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                NetworkPlayer clientPlayer = new NetworkPlayer("another_client", Role.CLIENT, stageManager);
-                stageManager.push(StageFactory.getDiscoveredHostsStage(viewport, stageManager, clientPlayer));
+                // TODO: BUG client is in lobby multiple times if returned to main menu
+                playerManager = new PlayerManager(stageManager, stageFactory, Role.CLIENT);
+                PlayerFactory playerFactory = new PlayerFactory(playerManager);
+                playerManager.setPlayerSkeleton(playerFactory.getPlayerSkeleton("another_client"));
+                playerManager.setPlayerNT(playerFactory.getPlayerNT());
+
+                deviceStatePublisher.subscribe(playerManager.getPlayerNT());
+                stageManager.push(stageFactory.getDiscoveredHostsStage(playerManager));
             }
         };
     }

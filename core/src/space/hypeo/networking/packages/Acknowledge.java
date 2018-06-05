@@ -1,6 +1,6 @@
 package space.hypeo.networking.packages;
 
-import space.hypeo.networking.network.RawPlayer;
+import space.hypeo.mankomania.player.PlayerSkeleton;
 
 /**
  * This class is for the handshake between host and client.
@@ -9,16 +9,14 @@ import space.hypeo.networking.network.RawPlayer;
 public class Acknowledge {
     private String msg = "Connection accepted from host ";
 
-    /**
-     * Default constructor.
-     */
+    /* NOTE: default constructor is required for network traffic */
     public Acknowledge() {}
 
     /**
      * Creates a new instance of Acknowledge with given host IP address.
      * @param host
      */
-    public Acknowledge(RawPlayer host) {
+    public Acknowledge(PlayerSkeleton host) {
         msg += host.getPlayerID();
     }
 
