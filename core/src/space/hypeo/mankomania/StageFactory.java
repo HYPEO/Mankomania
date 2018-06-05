@@ -23,6 +23,7 @@ import space.hypeo.mankomania.stages.MapStage;
 import space.hypeo.mankomania.stages.RouletteStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
 import space.hypeo.mankomania.stages.SetColorStage;
+import space.hypeo.mankomania.stages.SlotMachineStage;
 import space.hypeo.mankomania.stages.TitleStage;
 
 /**
@@ -113,5 +114,9 @@ public class StageFactory {
 
     public Stage getCreatePlayerActorStage(PlayerManager playerManager) {
         return new CreatePlayerActorStage(viewport, playerManager);
+    }
+
+    public Stage getSlotMachineStage(PlayerActor playerActor) {
+        return new SlotMachineStage(viewport, stageManager, this, playerActor);
     }
 }
