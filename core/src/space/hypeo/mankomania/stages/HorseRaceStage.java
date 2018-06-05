@@ -162,9 +162,9 @@ public class HorseRaceStage extends Stage {
         // Calculate time for each horse and avoid horses with same time
         do {
             horse1Actor.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime);
-            horse1Actor.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime);
-            horse1Actor.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime);
-            horse1Actor.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime);
+            horse2Actor.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime);
+            horse3Actor.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime);
+            horse4Actor.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime);
         } while (!checkUniqueHorseTimes(horse1Actor.getRaceTime(), horse2Actor.getRaceTime(), horse3Actor.getRaceTime(),
                 horse4Actor.getRaceTime()));
 
