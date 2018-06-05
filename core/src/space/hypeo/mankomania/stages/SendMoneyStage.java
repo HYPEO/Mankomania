@@ -66,6 +66,8 @@ public class SendMoneyStage extends Stage {
 
     }
     private void setUpTable(){
+        table = new Table();
+        moneyButtonTable = new Table();
         table.setWidth(this.getWidth());
         table.align(Align.center);
         table.setPosition(0, this.getHeight() - 200);
@@ -98,8 +100,8 @@ public class SendMoneyStage extends Stage {
         button30000 = new TextButton("30.000€", skin);
         button50000 = new TextButton("50.000€", skin);
         button100000 = new TextButton("100.000€", skin);
-        SelectBox playersBox = new SelectBox(skin);
-        TextField moneyToSend = new TextField("", skin);
+        playersBox = new SelectBox(skin);
+        moneyToSend = new TextField("", skin);
         moneyToSend.setTextFieldFilter(new DigitFilter());
     }
     private void setUpListeners()
