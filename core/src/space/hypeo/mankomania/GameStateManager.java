@@ -5,17 +5,16 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import space.hypeo.mankomania.actors.player.PlayerActor;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Created by pichlermarc on 19.05.2018.
  */
 public abstract class GameStateManager {
 
-    PlayerActor activePlayer;
-    Queue<PlayerActor> playerActors;
-    private StageManager stageManager;
-    private StageFactory stageFactory;
+    protected PlayerActor activePlayer;
+    protected Queue<PlayerActor> playerActors;
+    protected StageManager stageManager;
+    protected StageFactory stageFactory;
 
     public GameStateManager(StageManager stageManager, StageFactory stageFactory)
     {

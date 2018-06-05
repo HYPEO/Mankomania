@@ -4,10 +4,10 @@ package space.hypeo.mankomania;
  * Created by pichlermarc on 20.05.2018.
  */
 public class OfflineGameStateManager extends GameStateManager{
+
     public OfflineGameStateManager(StageManager stageManager, StageFactory stageFactory) {
         super(stageManager, stageFactory);
     }
-
 
     @Override
     public void endTurn() {

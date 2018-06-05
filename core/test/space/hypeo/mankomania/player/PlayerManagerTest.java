@@ -1,6 +1,7 @@
 package space.hypeo.mankomania.player;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import org.junit.After;
 import org.junit.Before;
@@ -8,7 +9,9 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
+import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.Role;
 import space.hypeo.networking.player.PlayerNT;
 
@@ -24,6 +27,7 @@ public class PlayerManagerTest {
     private PlayerManager playerManager;
 
     @Mock private StageManager stageManager;
+    @Mock private StageFactory stageFactory;
     @Mock private PlayerSkeleton playerSkeleton;
     @Mock private PlayerNT playerNT;
     @Mock private Role role;
@@ -32,11 +36,12 @@ public class PlayerManagerTest {
     @Before
     public void setup() {
         stageManager = mock(StageManager.class);
+        stageFactory = mock(StageFactory.class);
         playerSkeleton = mock(PlayerSkeleton.class);
         playerNT = mock(PlayerNT.class);
         role = mock(Role.class);
         lobby = mock(Lobby.class);
-        playerManager = new PlayerManager(stageManager, role);
+        playerManager = new PlayerManager(stageManager, stageFactory, role);
     }
 
     @After
@@ -99,6 +104,8 @@ public class PlayerManagerTest {
         playerManager.toggleReadyStatus();
         verify(playerSkeleton).setReady(false);
         verify(playerNT).broadCastLobby();
+        verify(playerNT).broadCastLobby();
+        verify(stageManager).getCurrentStage();
     }
 
     @Test

@@ -10,23 +10,23 @@ public interface IHostConnector {
     /**
      * Advertises a new Game that other players can join.
      */
-    public void advertiseGame();
+    void advertiseGame();
 
     /**
      * Starts the game (requires that a game has been advertised by this player)
      */
-    public boolean startGame();
+    boolean startGame();
 
     /**
      * Ends the game.
      * Release all resources and close all open connections.
      */
-    public void endGame();
+    void endGame();
 
     /**
      * Send client the order to close its connection to the host.
      * @param playerToKick
      */
-    public void sendOrderToCloseConnection(PlayerSkeleton playerToKick);
+    void sendOrderToCloseConnection(PlayerSkeleton playerToKick);
 
 }

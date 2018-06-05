@@ -23,6 +23,7 @@ public class MapStage extends Stage {
     private static final float FIELD_DISTANCE = 45f;
     private static final int MAX_PLAYERS = 4;
 
+
     public MapStage(Viewport viewport, GameStateManager gameStateManager, DetailActor detailActor, FieldFactory fieldFactory) {
         super(viewport);
         if(gameStateManager.registeredPlayerCount()> MAX_PLAYERS)
@@ -46,6 +47,7 @@ public class MapStage extends Stage {
 
         // Link the last field with the first one to create a full loop.
         previousField.setNextField(firstField);
+
 
         for (PlayerActor actor : gameStateManager.getPlayers()) {
             actor.initializeState(firstField);
