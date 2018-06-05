@@ -8,4 +8,6 @@ public interface IEndpoint {
     void stop();
 
     void broadCastLobby();
+
+    void sendHorseRaceResult(String horseName);
 }
