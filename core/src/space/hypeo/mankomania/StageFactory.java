@@ -43,6 +43,7 @@ public class StageFactory {
 
     public Stage getMapStage(int playerCount)
     {
+        // TODO: player counter is implemented in Lobby!
 
         GameStateManager gameStateManager = new OfflineGameStateManager(stageManager, this);
 

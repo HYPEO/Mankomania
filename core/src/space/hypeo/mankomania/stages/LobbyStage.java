@@ -89,7 +89,7 @@ public class LobbyStage extends Stage {
 
         Log.info(role + ": " + "LobbyStage:setupLayout() ...");
 
-        if(lobby == null || role == Role.NOT_CONNECTED) {
+        if(lobby == null) {
             Log.error("LobbyStage: lobby must not be null!");
             stageManager.remove(LobbyStage.this);
             return;
