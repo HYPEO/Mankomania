@@ -15,11 +15,16 @@ public interface IPlayerConnector {
     /**
      * Ends the current turn.
      */
-    public void endTurn();
+    void endTurn();
 
     /**
      * Sends the Game Lobby broadcast.
      */
-    public void broadCastLobby();
+    void broadCastLobby();
 
+    /**
+     * Sends the name of the winning horse over the network.
+     * @param horseName name of the winning horse.
+     */
+    void sendHorseRaceResult(String horseName);
 }
