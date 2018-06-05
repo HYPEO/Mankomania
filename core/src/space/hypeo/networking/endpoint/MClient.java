@@ -15,12 +15,14 @@ import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.networking.network.Network;
+import space.hypeo.networking.packages.HorseRaceResult;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.RouletteResult;
 import space.hypeo.networking.packages.StartGame;
 
 /**
@@ -87,30 +89,30 @@ public class MClient implements IEndpoint, IClientConnector {
 
             PlayerSkeleton myself = playerManager.getPlayerSkeleton();
 
-            if( object instanceof PingResponse) {
+            if(object instanceof PingResponse) {
                 PingResponse pingResponse = (PingResponse) object;
                 Log.info("Ping time [ms] = " + (startPingRequest - pingResponse.getTime()));
 
-            } else if( object instanceof Notification) {
+            } else if(object instanceof Notification) {
                 Notification notification = (Notification) object;
                 Log.info("Client: Received notification: " + notification.toString());
 
-            } else if( object instanceof Lobby ) {
+            } else if(object instanceof Lobby) {
                 playerManager.setLobby( (Lobby) object );
                 Log.info("Client: Received updated lobby");
                 playerManager.updateLobbyStage();
 
-            } else if( object instanceof Acknowledge ) {
+            } else if(object instanceof Acknowledge) {
                 Acknowledge ack = (Acknowledge) object;
                 Log.info("Client: Received ACK from " + ack);
 
-                connection.sendTCP( new PlayerConnect(myself) );
+                connection.sendTCP(new PlayerConnect(myself));
 
-            } else if( object instanceof PlayerHost) {
+            } else if(object instanceof PlayerHost) {
                 hostPlayer = (PlayerHost) object;
                 Log.info("Client: Received info of host, to be connected with: " + hostPlayer);
 
-            } else if( object instanceof PlayerDisconnect) {
+            } else if(object instanceof PlayerDisconnect) {
                 PlayerDisconnect playerDisconnect = (PlayerDisconnect) object;
                 Log.info("Client: Received order to disconnect from host");
 
@@ -120,7 +122,19 @@ public class MClient implements IEndpoint, IClientConnector {
 
             } else if(object instanceof StartGame) {
                 Log.info("Client: Received order to start the game");
+                // TODO: test next line, buggy: crashes at client side
                 //playerManager.createPlayerActor();
+
+            } else if(object instanceof HorseRaceResult) {
+                Log.info("Client: Received new winner of horse race.");
+                HorseRaceResult winner = (HorseRaceResult) object;
+                playerManager.showHorseRaceResultStage(winner.getHorseName());
+
+            } else if(object instanceof RouletteResult) {
+                Log.info("Client: Received new winner slot of roulette.");
+                RouletteResult winnerSlotId = (RouletteResult) object;
+                playerManager.showRouletteResultStage(winnerSlotId.getResultNo());
+
             }
         }
     }
@@ -223,5 +237,19 @@ public class MClient implements IEndpoint, IClientConnector {
     @Override
     public void broadCastLobby() {
         client.sendTCP(playerManager.getLobby());
+    }
+
+    @Override
+    public void sendHorseRaceResult(String horseName) {
+        HorseRaceResult winner = new HorseRaceResult(playerManager.getPlayerSkeleton());
+        winner.setHorseName(horseName);
+        client.sendTCP(winner);
+    }
+
+    @Override
+    public void sendRouletteResult(int slotId) {
+        RouletteResult winnerSlotId = new RouletteResult(playerManager.getPlayerSkeleton());
+        winnerSlotId.setResultNo(slotId);
+        client.sendTCP(winnerSlotId);
     }
 }
