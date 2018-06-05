@@ -12,6 +12,7 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.StartGame;
 
 /**
  * The class Network is a auxiliary class
@@ -56,6 +57,8 @@ public final class Network {
         kryo.register(Lobby.class);
 
         kryo.register(com.badlogic.gdx.graphics.Color.class);
+
+        kryo.register(StartGame.class);
     }
 
 }

@@ -5,7 +5,7 @@ package space.hypeo.networking.endpoint;
  */
 public interface IEndpoint {
 
-    public void stop();
+    void stop();
 
-    public void broadCastLobby();
+    void broadCastLobby();
 }

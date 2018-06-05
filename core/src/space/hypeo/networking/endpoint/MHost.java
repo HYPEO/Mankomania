@@ -13,6 +13,7 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.StartGame;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -179,7 +180,8 @@ public class MHost implements IEndpoint, IHostConnector {
     @Override
     public boolean startGame() {
         server.sendToAllTCP(new Notification("game starts in 5sec..."));
-        return false;
+        server.sendToAllTCP(new StartGame());
+        return true;
     }
 
     @Override
@@ -211,9 +213,11 @@ public class MHost implements IEndpoint, IHostConnector {
 
     @Override
     public void broadCastLobby() {
+        /* changed own lobby, then broadcast */
         Log.info("Host: send broadcast new lobby");
         server.sendToAllTCP(playerManager.getLobby());
 
+        // TODO: inject lobby as parameter?
         Log.info("Host: update own lobby");
         playerManager.updateLobbyStage();
     }

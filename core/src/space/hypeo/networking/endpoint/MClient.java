@@ -21,6 +21,7 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.StartGame;
 
 /**
  * This class represents the client process on the device.
@@ -109,7 +110,7 @@ public class MClient implements IEndpoint, IClientConnector {
                 hostPlayer = (PlayerHost) object;
                 Log.info("Client: Received info of host, to be connected with: " + hostPlayer);
 
-            }  else if( object instanceof PlayerDisconnect) {
+            } else if( object instanceof PlayerDisconnect) {
                 PlayerDisconnect playerDisconnect = (PlayerDisconnect) object;
                 Log.info("Client: Received order to disconnect from host");
 
@@ -117,6 +118,9 @@ public class MClient implements IEndpoint, IClientConnector {
                 client.sendTCP(playerDisconnect);
                 close();
 
+            } else if(object instanceof StartGame) {
+                Log.info("Client: Received order to start the game");
+                //playerManager.createPlayerActor();
             }
         }
     }

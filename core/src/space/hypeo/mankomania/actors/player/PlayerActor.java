@@ -91,4 +91,15 @@ public class PlayerActor extends Group {
     public PlayerDetailActor getPlayerDetailActor() {
         return this.playerDetailActor;
     }
+
+    @Override
+    public String toString() {
+        return "PlayerActor{" +
+                "balance=" + balance +
+                ", currentField=" + currentField +
+                ", isActive=" + isActive +
+                ", playerDetailActor=" + playerDetailActor +
+                ", actorImage=" + actorImage +
+                '}';
+    }
 }

@@ -117,8 +117,9 @@ public class PlayerSkeleton {
      */
     @Override
     public String toString() {
-        return "ID " + playerID + ", nick " + nickname + ", addr " + address +
-                (color != null ? color : "") + ", " +
+        return "ID " + playerID + ", nick " + nickname + ", addr " + address + ", " +
+                (isReady ? " " : " Not ") + "Ready, " +
+                (color != null ? color : "<no color>") + ", " +
                 (isActive ? "active" : "inactive") +
                 ", balance " + balance + "€";
     }

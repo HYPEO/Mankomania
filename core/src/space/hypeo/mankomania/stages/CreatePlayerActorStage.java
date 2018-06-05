@@ -1,37 +1,28 @@
 package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
-import java.util.Set;
-
-import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.mankomania.player.Colors;
+import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.player.PlayerManager;
 
-/**
- * This stage is the view to set the player color.
- * It will be called out of the LobbyStage.
+/*
+ * There is NO interaction in this stage possible
  */
-public class SetColorStage extends Stage {
-    private StageManager stageManager;
+public class CreatePlayerActorStage extends Stage {
     private final Viewport viewport;
     private PlayerManager playerManager;
 
-    public SetColorStage(StageManager stageManager, Viewport viewport, PlayerManager playerManager) {
-        this.stageManager = stageManager;
+    public CreatePlayerActorStage(Viewport viewport, PlayerManager playerManager) {
         this.viewport = viewport;
         this.playerManager = playerManager;
 
@@ -43,14 +34,6 @@ public class SetColorStage extends Stage {
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
         // Set up background.
         background.setColor(237f/255f, 30f/255f, 121f/255f, 1f);
-
-        // Add listener for click on background events.
-        background.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                stageManager.remove(SetColorStage.this);
-            }
-        });
 
         this.addActor(background);
     }
@@ -64,7 +47,7 @@ public class SetColorStage extends Stage {
         rootTable.setFillParent(true);
         this.addActor(rootTable);
 
-        Label title = new Label("CHOOSE YOUR COLOR", skin);
+        Label title = new Label("CREATE PLAYER", skin);
         title.setFontScaleX(2);
         title.setFontScaleY(2);
         title.setAlignment(Align.center);
@@ -73,36 +56,23 @@ public class SetColorStage extends Stage {
         rootTable.add(title).padTop(50).padBottom(50);
         rootTable.row();
 
-        /* buttons */
-        Set<Color> usedPlayerColors = playerManager.usedPlayerColors();
-
         /* inner table contains players from lobby: represented as button */
         Table btnTable = new Table();
         int btnHeight = 100;
         int btnWidth = 250;
 
+        Log.info(playerManager.getRole() + ": There are " + playerManager.getPlayers().size() + " in list.");
+
         /* data rows */
-        for( Color color : Colors.getAvailableColors()) {
+        for(PlayerActor playerActor : playerManager.getPlayers()) {
 
-            /* colors, that are not used by other players, are selectable */
-            if(!usedPlayerColors.contains(color)) {
-                Button btnColor = new TextButton(color.toString(), skin);
-                btnColor.setColor(color);
+            Log.info(playerManager.getRole() + ": " + playerActor);
 
-                btnColor.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        Log.info("You changed your color to " + color);
-                        stageManager.remove(SetColorStage.this);
-                        playerManager.setColor(color);
-                    }
+            Button btnPlayer = new TextButton(playerActor.getName(), skin);
+            btnPlayer.setColor(playerActor.getColor());
 
-                });
-
-                btnTable.add(btnColor).height(btnHeight).width(btnWidth);
-                btnTable.row();
-            }
-
+            btnTable.add(btnPlayer).height(btnHeight).width(btnWidth);
+            btnTable.row();
         }
 
         /* add buttons */

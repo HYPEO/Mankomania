@@ -7,7 +7,7 @@ import space.hypeo.networking.player.PlayerNT;
 public class PlayerFactory {
     private final PlayerManager playerManager;
 
-    public final static int START_BALANCE = 1000000;
+    public static final int START_BALANCE = 1000000;
 
     public PlayerFactory(final PlayerManager playerManager) {
         this.playerManager = playerManager;
