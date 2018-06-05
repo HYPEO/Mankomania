@@ -14,6 +14,7 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.RouletteResult;
 import space.hypeo.networking.packages.StartGame;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -128,7 +129,14 @@ public class MHost implements IEndpoint, IHostConnector {
                 HorseRaceResult winner = (HorseRaceResult) object;
 
                 server.sendToAllExceptTCP(connection.getID(), winner);
-                playerManager.showHorseRaceResult(winner.getHorseName());
+                playerManager.showHorseRaceResultStage(winner.getHorseName());
+
+            } else if(object instanceof RouletteResult) {
+                Log.info("Host: Received new winner slot of roulette.");
+                RouletteResult winnerSlotId = (RouletteResult) object;
+
+                server.sendToAllExceptTCP(connection.getID(), winnerSlotId);
+                playerManager.showRouletteResultStage(winnerSlotId.getResultNo());
             }
         }
     }
@@ -247,5 +255,12 @@ public class MHost implements IEndpoint, IHostConnector {
         HorseRaceResult winner = new HorseRaceResult(playerManager.getPlayerSkeleton());
         winner.setHorseName(horseName);
         server.sendToAllTCP(winner);
+    }
+
+    @Override
+    public void sendRouletteResult(int slotId) {
+        RouletteResult winnerSlotId = new RouletteResult(playerManager.getPlayerSkeleton());
+        winnerSlotId.setResultNo(slotId);
+        server.sendToAllTCP(slotId);
     }
 }

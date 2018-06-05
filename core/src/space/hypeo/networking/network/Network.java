@@ -13,6 +13,7 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.RouletteResult;
 import space.hypeo.networking.packages.StartGame;
 
 /**
@@ -60,6 +61,7 @@ public final class Network {
         kryo.register(StartGame.class);
 
         kryo.register(HorseRaceResult.class);
+        kryo.register(RouletteResult.class);
     }
 
 }
