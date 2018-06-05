@@ -14,7 +14,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 public class DiceSensorManager {
     private Random die = new Random();
     private static final float EARTH_GRAVITY = 9.81f;
-    private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
+    private static final float GRAVITY_FORCE_THRESHOLD = 1.2f; //TODO: set back to 1.9
     private StageManager stageManager;
     private StageFactory stageFactory;
 
