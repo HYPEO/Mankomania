@@ -22,6 +22,7 @@ import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.RouletteResult;
 import space.hypeo.networking.packages.StartGame;
 
 /**
@@ -121,16 +122,21 @@ public class MClient implements IEndpoint, IClientConnector {
 
             } else if(object instanceof StartGame) {
                 Log.info("Client: Received order to start the game");
+                // TODO: test next line, buggy: crashes at client side
                 //playerManager.createPlayerActor();
 
             } else if(object instanceof HorseRaceResult) {
                 Log.info("Client: Received new winner of horse race.");
                 HorseRaceResult winner = (HorseRaceResult) object;
-                playerManager.showHorseRaceResult(winner.getHorseName());
+                playerManager.showHorseRaceResultStage(winner.getHorseName());
+
+            } else if(object instanceof RouletteResult) {
+                Log.info("Client: Received new winner slot of roulette.");
+                RouletteResult winnerSlotId = (RouletteResult) object;
+                playerManager.showRouletteResultStage(winnerSlotId.getResultNo());
 
             }
         }
-
     }
 
     /**
@@ -238,5 +244,12 @@ public class MClient implements IEndpoint, IClientConnector {
         HorseRaceResult winner = new HorseRaceResult(playerManager.getPlayerSkeleton());
         winner.setHorseName(horseName);
         client.sendTCP(winner);
+    }
+
+    @Override
+    public void sendRouletteResult(int slotId) {
+        RouletteResult winnerSlotId = new RouletteResult(playerManager.getPlayerSkeleton());
+        winnerSlotId.setResultNo(slotId);
+        client.sendTCP(winnerSlotId);
     }
 }
