@@ -69,7 +69,7 @@ public class ActorFactory {
                     gameStateManager,
                     detailActor);
         else
-            return new PlayerActor(new Image(new Texture(texturePath)), INITIAL_BALANCE, detailActor);
+            return new PlayerActor(new Image(new Texture(texturePath)), INITIAL_BALANCE, detailActor, gameStateManager);
     }
 
     public Image getImage(String path)

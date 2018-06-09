@@ -4,6 +4,7 @@ package space.hypeo.mankomania.actors.player;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
@@ -23,14 +24,20 @@ public class PlayerActor extends Group {
     private PlayerDetailActor playerDetailActor;
     private Image actorImage;
 
+    protected GameStateManager gameStateManager;
+
+
     /**
      * @param actorImage Image that represents the actor.
      * @param balance    The player's current balance (starting balance)
+     * @param gameStateManager
      */
 
-    public PlayerActor(Image actorImage, int balance, PlayerDetailActor playerDetailActor) {
+    public PlayerActor(Image actorImage, int balance, PlayerDetailActor playerDetailActor, GameStateManager gameStateManager) {
         this.actorImage = actorImage;
         this.playerDetailActor = playerDetailActor;
+        this.gameStateManager = gameStateManager;
+        this.gameStateManager.addPlayer(this);
         this.addActor(this.actorImage);
         this.balance = balance;
         this.isActive = false;
@@ -77,7 +84,7 @@ public class PlayerActor extends Group {
     }
 
     public void changeBalance(int remittance) {
-        this.balance += remittance;
+        setBalance(this.balance+remittance);
     }
 
     public void setActive() {

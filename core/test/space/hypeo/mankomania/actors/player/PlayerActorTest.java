@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.GameTest;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
@@ -29,6 +30,8 @@ public class PlayerActorTest extends GameTest {
     private FieldActor fieldActor;
     @Mock
     private PlayerDetailActor playerDetailActor;
+    @Mock
+    private GameStateManager gameStateManager;
 
     private PlayerActor playerActor;
 
@@ -37,7 +40,7 @@ public class PlayerActorTest extends GameTest {
 
     @Before
     public void setUp() {
-        playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor);
+        playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor, gameStateManager);
         playerActor.initializeState(fieldActor);
     }
 
@@ -46,7 +49,7 @@ public class PlayerActorTest extends GameTest {
 
         // SET-UP:
         // Set up nonlocal Player
-        playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor);
+        playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor, gameStateManager);
         playerActor.initializeState(fieldActor);
 
         // Return predefined following field on method call.
