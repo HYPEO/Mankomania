@@ -130,9 +130,11 @@ public class PlayerActor extends Group {
     @Override
     public void act(float deltaTime) {
         // Prevent excessive use of locked resources...
-        timeSinceLastUpdate+=deltaTime;
-        if(timeSinceLastUpdate > 1f/PLAYER_UPDATE_FREQUENCY)
+        timeSinceLastUpdate += deltaTime;
+        if (timeSinceLastUpdate > 1f / PLAYER_UPDATE_FREQUENCY) {
             this.gameStateManager.updatePlayer(this);
+            timeSinceLastUpdate = 0;
+        }
 
         this.playerDetailActor.updateBalance(this.getBalance());
     }
