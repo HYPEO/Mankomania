@@ -37,6 +37,7 @@ public class LocalPlayerActor extends PlayerActor {
 
     @Override
     public void act(float deltaTime) {
+        super.act(deltaTime);
         if (this.isActive) {
             timeElapsed += deltaTime;
             if (timeElapsed >= 0.18f) {

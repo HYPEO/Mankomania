@@ -30,8 +30,8 @@ public class PlayerActor extends Group {
 
 
     /**
-     * @param actorImage Image that represents the actor.
-     * @param balance    The player's current balance (starting balance)
+     * @param actorImage       Image that represents the actor.
+     * @param balance          The player's current balance (starting balance)
      * @param gameStateManager
      * @param id
      * @param nickname
@@ -51,8 +51,8 @@ public class PlayerActor extends Group {
 
     /**
      * Initializes the starting-field and corresponding PlayerDetailActor.
-     *  @param currentField      The field this Player starts out at.
      *
+     * @param currentField The field this Player starts out at.
      */
     public void initializeState(FieldActor currentField) {
         this.currentField = currentField;
@@ -87,10 +87,11 @@ public class PlayerActor extends Group {
     public void setBalance(int balance) {
         this.balance = balance;
         this.playerDetailActor.updateBalance(balance);
+        this.gameStateManager.updatePlayer(this);
     }
 
     public void changeBalance(int remittance) {
-        setBalance(this.balance+remittance);
+        setBalance(this.balance + remittance);
     }
 
     public void setActive() {
@@ -114,5 +115,19 @@ public class PlayerActor extends Group {
                 ", playerDetailActor=" + playerDetailActor +
                 ", actorImage=" + actorImage +
                 '}';
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    @Override
+    public void act(float deltaTime) {
+        gameStateManager.updatePlayer(this);
+        this.playerDetailActor.updateBalance(this.getBalance());
     }
 }

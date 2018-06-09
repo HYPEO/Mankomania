@@ -57,4 +57,6 @@ public abstract class GameStateManager {
         else
             return playerActors.size()+1;
     }
+
+    public abstract void updatePlayer(PlayerActor playerActor);
 }
