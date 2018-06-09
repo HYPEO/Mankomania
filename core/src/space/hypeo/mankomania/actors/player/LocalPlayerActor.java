@@ -16,9 +16,11 @@ public class LocalPlayerActor extends PlayerActor {
     /**
      * @param actorImage Image that represents the actor.
      * @param balance    The player's current balance (starting balance)
+     * @param id
+     * @param nickname
      */
-    public LocalPlayerActor(Image actorImage, int balance, DiceSensorManager diceSensorManager, GameStateManager gameStateManager, PlayerDetailActor playerDetailActor) {
-        super(actorImage, balance, playerDetailActor, gameStateManager);
+    public LocalPlayerActor(Image actorImage, int balance, DiceSensorManager diceSensorManager, GameStateManager gameStateManager, PlayerDetailActor playerDetailActor, String id, String nickname) {
+        super(actorImage, balance, playerDetailActor, gameStateManager, id, nickname);
         this.diceSensorManager = diceSensorManager;
         timeElapsed = 0;
     }

@@ -25,18 +25,24 @@ public class PlayerActor extends Group {
     private Image actorImage;
 
     protected GameStateManager gameStateManager;
+    private String id;
+    private String nickname;
 
 
     /**
      * @param actorImage Image that represents the actor.
      * @param balance    The player's current balance (starting balance)
      * @param gameStateManager
+     * @param id
+     * @param nickname
      */
 
-    public PlayerActor(Image actorImage, int balance, PlayerDetailActor playerDetailActor, GameStateManager gameStateManager) {
+    public PlayerActor(Image actorImage, int balance, PlayerDetailActor playerDetailActor, GameStateManager gameStateManager, String id, String nickname) {
         this.actorImage = actorImage;
         this.playerDetailActor = playerDetailActor;
         this.gameStateManager = gameStateManager;
+        this.id = id;
+        this.nickname = nickname;
         this.gameStateManager.addPlayer(this);
         this.addActor(this.actorImage);
         this.balance = balance;
