@@ -13,6 +13,7 @@ import space.hypeo.mankomania.actors.map.PlayerDetailActor;
  */
 public class PlayerActor extends Group {
     private static final float PLAYER_SCALE = 60f;
+    private static final float PLAYER_UPDATE_FREQUENCY = 2f;
 
     // Current player state.
     private int balance;
@@ -27,7 +28,7 @@ public class PlayerActor extends Group {
     protected GameStateManager gameStateManager;
     private String id;
     private String nickname;
-
+    private float timeSinceLastUpdate;
 
     /**
      * @param actorImage       Image that represents the actor.
@@ -47,6 +48,7 @@ public class PlayerActor extends Group {
         this.addActor(this.actorImage);
         this.balance = balance;
         this.isActive = false;
+        this.timeSinceLastUpdate = 0f;
     }
 
     /**
@@ -127,7 +129,11 @@ public class PlayerActor extends Group {
 
     @Override
     public void act(float deltaTime) {
-        gameStateManager.updatePlayer(this);
+        // Prevent excessive use of locked resources...
+        timeSinceLastUpdate+=deltaTime;
+        if(timeSinceLastUpdate > 1f/PLAYER_UPDATE_FREQUENCY)
+            this.gameStateManager.updatePlayer(this);
+
         this.playerDetailActor.updateBalance(this.getBalance());
     }
 }
