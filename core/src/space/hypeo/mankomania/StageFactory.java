@@ -41,10 +41,8 @@ public class StageFactory {
         this.actorFactory = actorFactory;
     }
 
-    public Stage getMapStage(int playerCount)
+    public Stage getMapStage()
     {
-        // TODO: player counter is implemented in Lobby!
-
         GameStateManager gameStateManager = new OfflineGameStateManager(stageManager, this);
 
         actorFactory.getPlayerActor("", "", Color.GREEN,true, gameStateManager, this);
@@ -52,6 +50,11 @@ public class StageFactory {
         actorFactory.getPlayerActor("", "", Color.YELLOW,true, gameStateManager, this);
         actorFactory.getPlayerActor("", "", Color.PINK,true, gameStateManager, this);
 
+        return getMapStage(gameStateManager);
+    }
+
+    public Stage getMapStage(GameStateManager gameStateManager)
+    {
         DetailActor detailActor = actorFactory.getDetailActor();
         FieldFactory fieldFactory = new FieldFactory(detailActor, stageManager, this);
         return new MapStage(viewport, gameStateManager, detailActor, fieldFactory);
