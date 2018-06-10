@@ -44,11 +44,11 @@ public class PlayerActor extends Group {
         this.gameStateManager = gameStateManager;
         this.id = id;
         this.nickname = nickname;
-        this.gameStateManager.addPlayer(this);
         this.addActor(this.actorImage);
         this.balance = balance;
         this.isActive = false;
         this.timeSinceLastUpdate = 0f;
+        this.gameStateManager.addPlayer(this);
     }
 
     /**
