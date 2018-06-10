@@ -243,46 +243,14 @@ public class PlayerManager extends GameStateManager {
     }
 
     public void createPlayerActor() {
+        Log.info(role + ": try to get LobbyStage");
 
-        String logStr = "%s: %s contains %d player";
-        String lobbyStr = "Lobby";
-        String playerActorsStr = "playerActors";
+        Stage currentStage = stageManager.getCurrentStage();
 
-        if (!lobby.areAllPlayerReady()) {
-            Log.info("Not all player are ready to start game!");
-            return;
+        if (currentStage instanceof LobbyStage) {
+            Log.info(role + ": current stage is StageLobby -> create MapStage!");
+            ((LobbyStage) currentStage).triggerMapStage();
         }
-
-        ActorFactory actorFactory = new ActorFactory(stageManager);
-
-
-        Log.info(String.format(logStr, role, lobbyStr, lobby.size()));
-        lobby.log();
-
-        Log.info(String.format(logStr, role, playerActorsStr, lobby.size()));
-
-        for (PlayerActor pa : playerActors) {
-            Log.info(" " + pa);
-        }
-        Log.info(String.format(logStr, role, playerActorsStr, lobby.size()));
-
-        for (PlayerSkeleton ps : lobby.values()) {
-            /* add all player except myself */
-            //if(!ps.equals(playerSkeleton)) {
-            Log.info("create from PlayerSkeleton " + ps + " a PlayerActor");
-
-            actorFactory.getPlayerActor(
-                    ps.getPlayerID(), ps.getNickname(), ps.getColor(),
-                    ps.equals(playerSkeleton),
-                    this, stageFactory);
-            //}
-        }
-
-        Log.info(String.format(logStr, role, playerActorsStr, lobby.size()));
-
-        playerNT.startGame();
-        this.startGame();
-        stageManager.push(stageFactory.getMapStage(this));
     }
 
     /**
@@ -325,6 +293,7 @@ public class PlayerManager extends GameStateManager {
 
     @Override
     public void startGame(){
+        playerNT.startGame();
         if(this.role == Role.HOST) {
             lobby.values().iterator().next().setActive(true);
             broadCastLobby();
