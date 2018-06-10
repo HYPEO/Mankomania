@@ -19,8 +19,7 @@ public class PlayerActor extends Group {
     private int balance;
     protected FieldActor currentField;
     protected boolean isActive;
-
-
+    
     // UI Relevant
     private PlayerDetailActor playerDetailActor;
     private Image actorImage;
@@ -148,5 +147,21 @@ public class PlayerActor extends Group {
 
     public boolean hasPlayerBalanceChanged() {
         return playerBalanceChanged;
+    }
+
+    public float getActorImageX(){
+        return actorImage.getX();
+    }
+
+    public void setActorImageX(float x){
+        actorImage.setX(x);
+    }
+
+    public float getActorImageY(){
+        return actorImage.getY();
+    }
+
+    public void setActorImageY(float y){
+        actorImage.setY(y);
     }
 }

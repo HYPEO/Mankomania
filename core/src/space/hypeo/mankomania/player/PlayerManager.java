@@ -10,7 +10,6 @@ import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
-import space.hypeo.mankomania.factories.ActorFactory;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.player.PlayerNT;
@@ -159,6 +158,13 @@ public class PlayerManager extends GameStateManager {
         // Make sure nobody changes this while checking for the next player.
         synchronized (this)
         {
+            for(PlayerActor playerActor : this.getPlayers())
+            {
+                PlayerSkeleton player = lobby.get(playerActor.getId());
+                player.setxImagePosition(playerActor.getActorImageX());
+                player.setyImagePosition(playerActor.getActorImageY());
+            }
+
             PlayerSkeleton nextPlayer = null;
             PlayerSkeleton currentPlayer = null;
 
@@ -215,6 +221,11 @@ public class PlayerManager extends GameStateManager {
                 playerActor.setActive();
             else
                 playerActor.setInactive();
+
+            if(playerSkeleton.getxImagePosition()!=0) {
+                playerActor.setActorImageX(playerSkeleton.getxImagePosition());
+                playerActor.setActorImageY(playerSkeleton.getyImagePosition());
+            }
         }
     }
 
