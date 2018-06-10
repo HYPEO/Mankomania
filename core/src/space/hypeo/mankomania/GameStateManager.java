@@ -59,4 +59,6 @@ public abstract class GameStateManager {
     }
 
     public abstract void updatePlayer(PlayerActor playerActor);
+
+    public abstract void startGame();
 }

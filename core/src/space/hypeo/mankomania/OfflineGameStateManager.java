@@ -27,4 +27,9 @@ public class OfflineGameStateManager extends GameStateManager{
         activePlayer = playerActors.remove();
         activePlayer.setActive();
     }
+
+    @Override
+    public void startGame(){
+        // do nothing, game already started...
+    }
 }
