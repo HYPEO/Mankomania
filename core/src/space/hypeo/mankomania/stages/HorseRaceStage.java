@@ -17,6 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import space.hypeo.mankomania.StageFactory;
@@ -43,6 +46,7 @@ public class HorseRaceStage extends Stage {
     private HorseActor horse2Actor;
     private HorseActor horse3Actor;
     private HorseActor horse4Actor;
+    private HorseActor winningHorse;
 
     private MoveToAction horse1Movement;
     private MoveToAction horse2Movement;
@@ -53,7 +57,6 @@ public class HorseRaceStage extends Stage {
     private Label currentAmount;
     private float selectedHorseQuote;
     private int slectedHorseID;
-    private int winningHorseID;
 
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
     final Slider amount = new Slider(5000, 50000, 1000, false, skin);
@@ -158,81 +161,56 @@ public class HorseRaceStage extends Stage {
 
         // Calculate time for each horse and avoid horses with same time
         do {
-            horse1Time = ((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime;
-            horse2Time = ((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime;
-            horse3Time = ((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime;
-            horse4Time = ((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime;
-        } while (!checkUniqueHorseTimes(horse1Time, horse2Time, horse3Time, horse4Time));
+            horse1Actor.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime);
+            horse2Actor.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime);
+            horse3Actor.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime);
+            horse4Actor.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1Actor.getQuote()) / avgQuoteTime);
+        } while (!checkUniqueHorseTimes(horse1Actor.getRaceTime(), horse2Actor.getRaceTime(), horse3Actor.getRaceTime(),
+                horse4Actor.getRaceTime()));
 
-        calculateWinningHorse(horse1Time, horse2Time, horse3Time, horse4Time);
+        winningHorse = calculateWinningHorse(horse1Actor, horse2Actor, horse3Actor, horse4Actor);
 
         // Create MoveToActions for each horse with it's time
         // Horse 1
         horse1Movement = new MoveToAction();
         horse1Movement.setPosition(this.getWidth() - horse1Actor.getWidth(),
                 this.getHeight() - horse1Actor.getHeight());
-        horse1Movement.setDuration(horse1Time);
+        horse1Movement.setDuration(horse1Actor.getRaceTime());
         horse1Movement.setInterpolation(Interpolation.fade);
 
         // Horse 2
         horse2Movement = new MoveToAction();
         horse2Movement.setPosition(this.getWidth() - horse2Actor.getWidth(),
                 this.getHeight() - horse2Actor.getHeight() * 2);
-        horse2Movement.setDuration(horse2Time);
+        horse2Movement.setDuration(horse2Actor.getRaceTime());
         horse2Movement.setInterpolation(Interpolation.fade);
 
         // Horse 3
         horse3Movement = new MoveToAction();
         horse3Movement.setPosition(this.getWidth() - horse2Actor.getWidth(),
                 this.getHeight() - horse3Actor.getHeight() * 3);
-        horse3Movement.setDuration(horse3Time);
+        horse3Movement.setDuration(horse3Actor.getRaceTime());
         horse3Movement.setInterpolation(Interpolation.fade);
 
         // Horse 4
         horse4Movement = new MoveToAction();
         horse4Movement.setPosition(this.getWidth() - horse2Actor.getWidth(),
                 this.getHeight() - horse4Actor.getHeight() * 4);
-        horse4Movement.setDuration(horse4Time);
+        horse4Movement.setDuration(horse4Actor.getRaceTime());
         horse4Movement.setInterpolation(Interpolation.fade);
     }
 
-    private void calculateWinningHorse(float horse1, float horse2, float horse3, float horse4) {
-        if(horse1 < horse2) {
-            if (horse3 < horse4) {
-                if (horse1 < horse3) {
-                    winningHorseID = 1;
-                }
-                else {
-                    winningHorseID = 3;
-                }
-            }
-            else {
-                if (horse1 < horse4) {
-                    winningHorseID = 1;
-                }
-                else {
-                    winningHorseID = 4;
-                }
-            }
-        }
-        else {
-            if (horse3 < horse4) {
-                if (horse2 < horse3) {
-                    winningHorseID = 2;
-                }
-                else {
-                    winningHorseID = 3;
-                }
-            }
-            else {
-                if (horse2 < horse4) {
-                    winningHorseID = 2;
-                }
-                else {
-                    winningHorseID = 4;
-                }
-            }
-        }
+    private HorseActor calculateWinningHorse(HorseActor horse1, HorseActor horse2, HorseActor horse3, HorseActor horse4) {
+        List<HorseActor> competingHorses = new ArrayList<>();
+
+        competingHorses.add(horse1);
+        competingHorses.add(horse2);
+        competingHorses.add(horse3);
+        competingHorses.add(horse4);
+
+        Collections.sort(competingHorses);
+
+        return competingHorses.get(0);
     }
 
     private boolean checkUniqueHorseTimes(float horse1, float horse2, float horse3, float horse4) {
@@ -292,7 +270,7 @@ public class HorseRaceStage extends Stage {
                         startRace.setText("get Results");
                     } else {
                         // calculate race result and change the player's balance
-                        if(winningHorseID == slectedHorseID) {
+                        if(winningHorse.getId() == slectedHorseID) {
                             // player won, increase balance
                             playerActor.changeBalance(Math.round(amount.getValue() * selectedHorseQuote));
                         }
@@ -306,7 +284,7 @@ public class HorseRaceStage extends Stage {
 
                         // push ResultStage
                         stageManager.push(stageFactory.getHorseRaceResultStage(
-                                slectedHorseID, ((int) amount.getValue()), getWinningHorse(winningHorseID)));
+                                slectedHorseID, ((int) amount.getValue()), winningHorse));
                     }
                 } else {
                     startRace.setText("Select a Horse and GO!!");

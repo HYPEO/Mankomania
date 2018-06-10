@@ -95,6 +95,8 @@ public class PlayerActorTest extends GameTest {
         assertEquals(90, playerActor.getBalance());
         playerActor.changeBalance(20);
         assertEquals(110, playerActor.getBalance());
+
+        Mockito.verify(playerDetailActor).updateBalance(110);
     }
 
     @Test
