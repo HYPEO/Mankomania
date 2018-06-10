@@ -29,6 +29,7 @@ public class PlayerActor extends Group {
     private String id;
     private String nickname;
     private float timeSinceLastUpdate;
+    private boolean playerBalanceChanged;
 
     /**
      * @param actorImage       Image that represents the actor.
@@ -48,6 +49,7 @@ public class PlayerActor extends Group {
         this.balance = balance;
         this.isActive = false;
         this.timeSinceLastUpdate = 0f;
+        this.playerBalanceChanged = false;
         this.gameStateManager.addPlayer(this);
     }
 
@@ -86,9 +88,15 @@ public class PlayerActor extends Group {
         return balance;
     }
 
+    public void updateBalance(int balance){
+        this.balance = balance;
+        this.playerDetailActor.updateBalance(balance);
+    }
+
     public void setBalance(int balance) {
         this.balance = balance;
         this.playerDetailActor.updateBalance(balance);
+        this.playerBalanceChanged = true;
     }
 
     public void changeBalance(int remittance) {
@@ -136,5 +144,9 @@ public class PlayerActor extends Group {
         }
 
         this.playerDetailActor.updateBalance(this.getBalance());
+    }
+
+    public boolean hasPlayerBalanceChanged() {
+        return playerBalanceChanged;
     }
 }

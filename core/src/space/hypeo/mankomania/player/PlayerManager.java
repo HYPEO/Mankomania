@@ -103,33 +103,6 @@ public class PlayerManager extends GameStateManager {
         }
     }
 
-    /**
-     * Changes the current player, then update the lobby.
-     * Case: Send lobby after updating.
-     *
-     * @param playerId
-     * @param balance
-     */
-    public void changeBalance(String playerId, int balance) {
-
-        if (playerSkeleton.getPlayerID().equals(playerId)) {
-            /* change own balanace */
-            playerSkeleton.setBalance(balance);
-            lobby.put(playerId, playerSkeleton);
-
-        } else {
-            /* change balance of other player */
-            PlayerSkeleton p2changeBalance = lobby.get(playerId);
-            if(p2changeBalance != null) {
-                p2changeBalance.setBalance(balance);
-                lobby.put(playerId, p2changeBalance);
-            }
-        }
-
-        /* publish changes in lobby */
-        broadCastLobby();
-    }
-
     public void updateLobbyStage() {
 
         Log.info(role + ": try to update LobbyStage");
@@ -228,11 +201,14 @@ public class PlayerManager extends GameStateManager {
             PlayerSkeleton playerSkeleton = this.lobby.get(playerActor.getId());
 
             // Check if local player needs to broadcast balance changes.
-            if (playerSkeleton.getBalance() != playerActor.getBalance()) {
-                this.changeBalance(playerActor.getId(), playerActor.getBalance());
+            if (playerActor.hasPlayerBalanceChanged()) {
+                playerSkeleton.setBalance(playerActor.getBalance());
+                this.broadCastLobby();
             }
 
-            playerActor.setBalance(playerSkeleton.getBalance());
+            // Update the the player's balance.
+            playerActor.updateBalance(playerSkeleton.getBalance());
+
 
             // Update active status.
             if (playerSkeleton.isActive())
