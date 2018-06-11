@@ -122,9 +122,7 @@ public class MClient implements IEndpoint, IClientConnector {
 
             } else if(object instanceof StartGame) {
                 Log.info("Client: Received order to start the game");
-                // TODO: test next line, buggy: crashes at client side
-                //playerManager.createPlayerActor();
-
+                playerManager.createPlayerActor();
             } else if(object instanceof HorseRaceResult) {
                 Log.info("Client: Received new winner of horse race.");
                 HorseRaceResult winner = (HorseRaceResult) object;

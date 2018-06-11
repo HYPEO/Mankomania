@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
 import space.hypeo.mankomania.StageFactory;
+import space.hypeo.mankomania.actors.player.PlayerActor;
+import space.hypeo.mankomania.factories.ActorFactory;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
@@ -34,6 +36,7 @@ public class LobbyStage extends Stage {
     private final StageFactory stageFactory;
     private PlayerManager playerManager;
     private boolean update;
+    private boolean triggerMapStage;
 
     public LobbyStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, PlayerManager playerManager) {
         super(viewport);
@@ -42,6 +45,7 @@ public class LobbyStage extends Stage {
         this.stageFactory = stageFactory;
         this.playerManager = playerManager;
         this.update = false;
+        this.triggerMapStage = false;
         setupBackground();
         setupLayout();
     }
@@ -62,6 +66,10 @@ public class LobbyStage extends Stage {
                 setupBackground();
                 setupLayout();
                 update = false;
+            }
+            if(triggerMapStage)
+            {
+                createMapStage();
             }
         }
     }
@@ -223,4 +231,31 @@ public class LobbyStage extends Stage {
         this.addActor(rootTable);
     }
 
+    private void createMapStage(){
+        if (!playerManager.getLobby().areAllPlayerReady()) {
+            Log.info("Not all player are ready to start game!");
+            return;
+        }
+
+        ActorFactory actorFactory = new ActorFactory(stageManager);
+
+        for (PlayerSkeleton ps : playerManager.getLobby().values()) {
+            /* add all player except myself */
+            Log.info("create from PlayerSkeleton " + ps + " a PlayerActor");
+
+            actorFactory.getPlayerActor(
+                    ps.getPlayerID(), ps.getNickname(), ps.getColor(),
+                    ps.equals(playerManager.getPlayerSkeleton()),
+                    playerManager, stageFactory);
+        }
+
+        playerManager.startGame();
+        stageManager.push(stageFactory.getMapStage(playerManager));
+    }
+
+    public void triggerMapStage(){
+        synchronized (this) {
+            triggerMapStage = true;
+        }
+    }
 }

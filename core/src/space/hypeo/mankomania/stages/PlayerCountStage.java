@@ -63,7 +63,7 @@ public class PlayerCountStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.remove(stageManager.getCurrentStage());
-                stageManager.push(stageFactory.getMapStage(playerCount));
+                stageManager.push(stageFactory.getMapStage());
             }
         };
     }
