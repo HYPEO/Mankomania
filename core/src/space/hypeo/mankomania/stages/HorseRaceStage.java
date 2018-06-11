@@ -133,6 +133,9 @@ public class HorseRaceStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 raceLogic.setSelectedHorse(1);
+
+                clearButtonFormatting();
+                horse1Button.getLabel().setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
             }
         };
     }
@@ -141,6 +144,9 @@ public class HorseRaceStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 raceLogic.setSelectedHorse(2);
+
+                clearButtonFormatting();
+                horse2Button.getLabel().setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
             }
         };
     }
@@ -149,6 +155,9 @@ public class HorseRaceStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 raceLogic.setSelectedHorse(3);
+
+                clearButtonFormatting();
+                horse3Button.getLabel().setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
             }
         };
     }
@@ -157,6 +166,9 @@ public class HorseRaceStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 raceLogic.setSelectedHorse(4);
+
+                clearButtonFormatting();
+                horse4Button.getLabel().setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
             }
         };
     }
@@ -206,5 +218,12 @@ public class HorseRaceStage extends Stage {
                         Float.toString(amount.getValue()).length() - 2) + " Euro");
             }
         };
+    }
+
+    private void clearButtonFormatting() {
+        horse1Button.getLabel().setColor(Color.WHITE);
+        horse2Button.getLabel().setColor(Color.WHITE);
+        horse3Button.getLabel().setColor(Color.WHITE);
+        horse4Button.getLabel().setColor(Color.WHITE);
     }
 }

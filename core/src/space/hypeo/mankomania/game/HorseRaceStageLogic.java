@@ -57,6 +57,7 @@ public class HorseRaceStageLogic {
         rand = new Random();
 
         calculateRaceTimes();
+        calculateMovements();
     }
 
     public void calculateRaceTimes() {
