@@ -1,5 +1,6 @@
 package space.hypeo.mankomania.game;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 
@@ -40,7 +41,7 @@ public class HorseRaceStageLogic {
     float stageWidth;
 
     // Bet Info
-    int selectedHorse = 0;
+    int selectedHorse;
 
     public HorseRaceStageLogic(float stageHeight, float stageWidth) {
         this.stageHeight = stageHeight;
@@ -51,6 +52,25 @@ public class HorseRaceStageLogic {
         horse3 = new HorseActor(3, "Salami", 1.8f);
         horse4 = new HorseActor(4, "Plumbum", 2.2f);
 
+        selectedHorse = 0;
+        minTime = 1.5f;
+        maxTime = 3.5f; // note for adjustments: maxTime <= maxTime - minTime
+        avgQuote = (horse1.getQuote() + horse2.getQuote() + horse3.getQuote() + horse4.getQuote()) / 4;
+        rand = new Random();
+
+        calculateRaceTimes();
+        calculateMovements();
+    }
+    public HorseRaceStageLogic(float stageHeight, float stageWidth, Texture texture) {
+        this.stageHeight = stageHeight;
+        this.stageWidth = stageWidth;
+
+        horse1 = new HorseActor(1, "La Tartaruga", 1f, texture);
+        horse2 = new HorseActor(2, "Schnecki", 1.5f, texture);
+        horse3 = new HorseActor(3, "Salami", 1.8f, texture);
+        horse4 = new HorseActor(4, "Plumbum", 2.2f, texture);
+
+        selectedHorse = 0;
         minTime = 1.5f;
         maxTime = 3.5f; // note for adjustments: maxTime <= maxTime - minTime
         avgQuote = (horse1.getQuote() + horse2.getQuote() + horse3.getQuote() + horse4.getQuote()) / 4;

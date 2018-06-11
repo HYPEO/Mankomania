@@ -20,6 +20,13 @@ public class HorseActor extends Image implements Comparable<HorseActor> {
         this.quote = quote;
     }
 
+    public HorseActor(int horseID, String name, float quote, Texture texture) {
+        super(texture);
+        this.id = horseID;
+        this.horseName = name;
+        this.quote = quote;
+    }
+
     public int getId() {
         return id;
     }
