@@ -21,6 +21,7 @@ import space.hypeo.mankomania.stages.HorseRaceStage;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.mankomania.stages.MapStage;
+import space.hypeo.mankomania.stages.RouletteResultStage;
 import space.hypeo.mankomania.stages.RouletteStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
 import space.hypeo.mankomania.stages.SetColorStage;
@@ -99,6 +100,9 @@ public class StageFactory {
     }
     public Stage getRouletteStage(PlayerActor playerActor) {
         return new RouletteStage(viewport,stageManager, this, playerActor);
+    }
+    public Stage getRouletteResultStage(PlayerActor playerActor, int numOfSpins, boolean cheated, int money) {
+        return new RouletteResultStage(viewport,stageManager, this, playerActor, numOfSpins,cheated,money);
     }
 
     public Stage getEndGameStage(PlayerActor winningPlayer) {

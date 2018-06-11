@@ -23,10 +23,12 @@ import com.esotericsoftware.minlog.Log;
 import java.util.Random;
 
 import space.hypeo.mankomania.DigitFilter;
+import space.hypeo.mankomania.Roulette;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.player.PlayerManager;
+import space.hypeo.mankomania.sensor.DiceSensorManager;
 
 public class RouletteStage extends Stage {
     private StageManager stageManager;
@@ -53,7 +55,11 @@ public class RouletteStage extends Stage {
     private Random randomizeSpin;
     private int numOfSpins;
 
+    private static final float EARTH_GRAVITY = 9.81f;
+    private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
+
     private Button spinRoulette;
+    private Roulette roulette;
     public RouletteStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor)
     {
 
@@ -62,6 +68,7 @@ public class RouletteStage extends Stage {
         //this.playerManager = playerManager;
         this.stageFactory = stageFactory;
         this.playerActor = playerActor;
+
         green = "Green";
         black = "Black";
         red = "Red";
@@ -84,13 +91,15 @@ public class RouletteStage extends Stage {
             public void clicked(InputEvent event, float x, float y) {
                 numOfSpins = randomizeSpin.nextInt((184 - 73) + 1) + 73;
                 float spinningDegrees = (360/37) * numOfSpins;
-
+                roulette = new Roulette(playerActor, numOfSpins);
                 spinImage.addAction(Actions.parallel(Actions.moveTo(group.getWidth() / 2f - spinImage.getWidth() / 2f, group.getHeight() / 2f - spinImage.getHeight() / 2f ,3), Actions.rotateBy(spinningDegrees, 3)));
                 spinImage.setOrigin(266/2f, 266/2f);
 
-                wonOrLost.setText(getResult(Integer.parseInt(betMoney.getText()),betButtons.getChecked().getName()));
+                wonOrLost.setText(roulette.getResult(Integer.parseInt(betMoney.getText()),betButtons.getChecked().getName()));
                 Log.info("Number of Spins: " + numOfSpins);
                 spinRoulette.setDisabled(true);
+
+
             }
         });
         close.addListener(new ClickListener() {
@@ -161,40 +170,11 @@ public class RouletteStage extends Stage {
         table.row();
         table.add(close);
     }
-    public String getResult(Integer money, String selectedColour)
+    public boolean cheat()
     {
-        //TODO: Change Player Balance
-        String winningColour;
-        int factor = 0;
-        if(numOfSpins % 37 == 0)
-        {
-            winningColour = green;
-            factor = 14;
-        }
-        else if((numOfSpins % 2 == 1 && numOfSpins/37 % 2 == 0) || (numOfSpins % 2 == 0 && numOfSpins/37 % 2 == 1))
-        {
-            winningColour = black;
-            factor = 2;
-        }
-        else if((numOfSpins % 2 == 0 && numOfSpins/37 % 2 == 0) || (numOfSpins % 2 == 1 && numOfSpins/37 % 2 == 1))
-        {
-            winningColour = red;
-            factor = 2;
-        }
-        else
-            winningColour = errorMessage;
-        if(winningColour.equals(selectedColour)) {
-            playerActor.changeBalance(money * factor);
-            return "You Won";
-
-        }
-        else if(winningColour.equals(errorMessage))
-            return errorMessage;
-        else {
-            playerActor.changeBalance(money * (-1));
-            return "You Lost";
-        }
-
+        float spinOneTime = 360/37;
+        spinImage.addAction(Actions.parallel(Actions.moveTo(group.getWidth() / 2f - spinImage.getWidth() / 2f, group.getHeight() / 2f - spinImage.getHeight() / 2f ,3), Actions.rotateBy(spinOneTime, 0)));
+        return true;
     }
 
 }
