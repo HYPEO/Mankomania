@@ -7,12 +7,14 @@ import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.network.Network;
+import space.hypeo.networking.packages.HorseRaceResult;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.RouletteResult;
 import space.hypeo.networking.packages.StartGame;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -84,16 +86,16 @@ public class MHost implements IEndpoint, IHostConnector {
         public void received(Connection connection, Object object) {
             super.received(connection, object);
 
-            if( object instanceof PingRequest ) {
-                PingRequest pingRequest = (PingRequest)object;
+            if(object instanceof PingRequest) {
+                PingRequest pingRequest = (PingRequest) object;
                 PingResponse pingResponse = new PingResponse(pingRequest.getTime());
                 connection.sendTCP(pingResponse);
 
-            } else if( object instanceof Notification ) {
+            } else if(object instanceof Notification) {
                 Notification notification = (Notification) object;
                 Log.info("Host: received Notification: " + notification.toString());
 
-            } else if( object instanceof PlayerConnect) {
+            } else if(object instanceof PlayerConnect) {
                 PlayerSkeleton newPlayer = (PlayerConnect) object;
                 playerManager.getLobby().put(newPlayer.getPlayerID(), newPlayer);
 
@@ -102,7 +104,7 @@ public class MHost implements IEndpoint, IHostConnector {
 
                 broadCastLobby();
 
-            } else if( object instanceof PlayerDisconnect) {
+            } else if(object instanceof PlayerDisconnect) {
                 PlayerSkeleton leavingPlayer = (PlayerDisconnect) object;
                 playerManager.getLobby().remove(leavingPlayer);
 
@@ -113,13 +115,28 @@ public class MHost implements IEndpoint, IHostConnector {
 
             } else if( object instanceof Lobby) {
                 Log.info("Host: Received updated lobby");
-                playerManager.setLobby( (Lobby) object );
+                Lobby lobby = (Lobby) object;
+                playerManager.setLobby(lobby);
 
                 Log.info("Host: Broadcast updated lobby");
-                server.sendToAllExceptTCP(connection.getID(), (Lobby) object);
+                server.sendToAllExceptTCP(connection.getID(), lobby);
 
                 Log.info("Host: update own lobby");
                 playerManager.updateLobbyStage();
+
+            } else if(object instanceof HorseRaceResult) {
+                Log.info("Host: Received new winner of horse race.");
+                HorseRaceResult winner = (HorseRaceResult) object;
+
+                server.sendToAllExceptTCP(connection.getID(), winner);
+                playerManager.showHorseRaceResultStage(winner.getHorseName());
+
+            } else if(object instanceof RouletteResult) {
+                Log.info("Host: Received new winner slot of roulette.");
+                RouletteResult winnerSlotId = (RouletteResult) object;
+
+                server.sendToAllExceptTCP(connection.getID(), winnerSlotId);
+                playerManager.showRouletteResultStage(winnerSlotId.getResultNo());
             }
         }
     }
@@ -231,5 +248,19 @@ public class MHost implements IEndpoint, IHostConnector {
 
         // TODO: next line has no effect?!
         server.sendToTCP(connectionID, playerDisconnect);
+    }
+
+    @Override
+    public void sendHorseRaceResult(String horseName) {
+        HorseRaceResult winner = new HorseRaceResult(playerManager.getPlayerSkeleton());
+        winner.setHorseName(horseName);
+        server.sendToAllTCP(winner);
+    }
+
+    @Override
+    public void sendRouletteResult(int slotId) {
+        RouletteResult winnerSlotId = new RouletteResult(playerManager.getPlayerSkeleton());
+        winnerSlotId.setResultNo(slotId);
+        server.sendToAllTCP(slotId);
     }
 }

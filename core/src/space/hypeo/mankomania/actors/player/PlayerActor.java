@@ -4,6 +4,7 @@ package space.hypeo.mankomania.actors.player;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
@@ -12,34 +13,49 @@ import space.hypeo.mankomania.actors.map.PlayerDetailActor;
  */
 public class PlayerActor extends Group {
     private static final float PLAYER_SCALE = 60f;
+    private static final float PLAYER_UPDATE_FREQUENCY = 2f;
 
     // Current player state.
     private int balance;
     protected FieldActor currentField;
     protected boolean isActive;
-
-
+    
     // UI Relevant
     private PlayerDetailActor playerDetailActor;
     private Image actorImage;
 
+    protected GameStateManager gameStateManager;
+    private String id;
+    private String nickname;
+    private float timeSinceLastUpdate;
+    private boolean playerBalanceChanged;
+
     /**
-     * @param actorImage Image that represents the actor.
-     * @param balance    The player's current balance (starting balance)
+     * @param actorImage       Image that represents the actor.
+     * @param balance          The player's current balance (starting balance)
+     * @param gameStateManager
+     * @param id
+     * @param nickname
      */
 
-    public PlayerActor(Image actorImage, int balance, PlayerDetailActor playerDetailActor) {
+    public PlayerActor(Image actorImage, int balance, PlayerDetailActor playerDetailActor, GameStateManager gameStateManager, String id, String nickname) {
         this.actorImage = actorImage;
         this.playerDetailActor = playerDetailActor;
+        this.gameStateManager = gameStateManager;
+        this.id = id;
+        this.nickname = nickname;
         this.addActor(this.actorImage);
         this.balance = balance;
         this.isActive = false;
+        this.timeSinceLastUpdate = 0f;
+        this.playerBalanceChanged = false;
+        this.gameStateManager.addPlayer(this);
     }
 
     /**
      * Initializes the starting-field and corresponding PlayerDetailActor.
-     *  @param currentField      The field this Player starts out at.
      *
+     * @param currentField The field this Player starts out at.
      */
     public void initializeState(FieldActor currentField) {
         this.currentField = currentField;
@@ -71,13 +87,19 @@ public class PlayerActor extends Group {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void updateBalance(int balance){
         this.balance = balance;
         this.playerDetailActor.updateBalance(balance);
     }
 
+    public void setBalance(int balance) {
+        this.balance = balance;
+        this.playerDetailActor.updateBalance(balance);
+        this.playerBalanceChanged = true;
+    }
+
     public void changeBalance(int remittance) {
-        this.balance += remittance;
+        setBalance(this.balance + remittance);
     }
 
     public void setActive() {
@@ -101,5 +123,45 @@ public class PlayerActor extends Group {
                 ", playerDetailActor=" + playerDetailActor +
                 ", actorImage=" + actorImage +
                 '}';
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    @Override
+    public void act(float deltaTime) {
+        // Prevent excessive use of locked resources...
+        timeSinceLastUpdate += deltaTime;
+        if (timeSinceLastUpdate > 1f / PLAYER_UPDATE_FREQUENCY) {
+            this.gameStateManager.updatePlayer(this);
+            timeSinceLastUpdate = 0;
+        }
+
+        this.playerDetailActor.updateBalance(this.getBalance());
+    }
+
+    public boolean hasPlayerBalanceChanged() {
+        return playerBalanceChanged;
+    }
+
+    public float getActorImageX(){
+        return actorImage.getX();
+    }
+
+    public void setActorImageX(float x){
+        actorImage.setX(x);
+    }
+
+    public float getActorImageY(){
+        return actorImage.getY();
+    }
+
+    public void setActorImageY(float y){
+        actorImage.setY(y);
     }
 }
