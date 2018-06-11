@@ -83,9 +83,9 @@ public class HorseRaceStageLogic {
     public void calculateRaceTimes() {
         do {
             horse1.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1.getQuote()) / avgQuote);
-            horse2.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1.getQuote()) / avgQuote);
-            horse3.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1.getQuote()) / avgQuote);
-            horse4.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1.getQuote()) / avgQuote);
+            horse2.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse2.getQuote()) / avgQuote);
+            horse3.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse3.getQuote()) / avgQuote);
+            horse4.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse4.getQuote()) / avgQuote);
         } while (!checkUniqueHorseTimes(horse1.getRaceTime(), horse2.getRaceTime(), horse3.getRaceTime(), horse4.getRaceTime()));
 
         winningHorse = calculateWinningHorse(horse1, horse2, horse3, horse4);
