@@ -105,7 +105,7 @@ public class HorseRaceStageLogicTest extends GameTest {
         assertEquals(raceLogic.getSelectedHorseQuote(), 1.8f, 0f);
 
         raceLogic.setSelectedHorse(4);
-        assertEquals(raceLogic.getSelectedHorseQuote(), 2.2f, 0f);
+        assertEquals(raceLogic.getSelectedHorseQuote(), 2f, 0f);
 
         assertEquals(raceLogic.getSelectedHorse(), 4);
     }
