@@ -68,12 +68,10 @@ public class RouletteStage extends Stage {
         //this.playerManager = playerManager;
         this.stageFactory = stageFactory;
         this.playerActor = playerActor;
-
         green = "Green";
         black = "Black";
         red = "Red";
         errorMessage = "Error occured";
-        this.stageManager = stageManager;
         randomizeSpin = new Random();
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
@@ -90,8 +88,9 @@ public class RouletteStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 numOfSpins = randomizeSpin.nextInt((184 - 73) + 1) + 73;
-                float spinningDegrees = (360/37) * numOfSpins;
                 roulette = new Roulette(playerActor, numOfSpins);
+                float spinningDegrees = (360/37f) * numOfSpins;
+
                 spinImage.addAction(Actions.parallel(Actions.moveTo(group.getWidth() / 2f - spinImage.getWidth() / 2f, group.getHeight() / 2f - spinImage.getHeight() / 2f ,3), Actions.rotateBy(spinningDegrees, 3)));
                 spinImage.setOrigin(266/2f, 266/2f);
 

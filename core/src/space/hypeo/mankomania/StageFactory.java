@@ -1,18 +1,17 @@
 package space.hypeo.mankomania;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.actors.horse.HorseActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
-import space.hypeo.mankomania.actors.player.LocalPlayerActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
+import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.factories.FieldFactory;
 import space.hypeo.mankomania.player.PlayerManager;
+import space.hypeo.mankomania.stages.CreatePlayerActorStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.EndGameStage;
@@ -43,8 +42,10 @@ public class StageFactory {
         this.actorFactory = actorFactory;
     }
 
-    public Stage getMapStage()
+    public Stage getMapStage(int playerCount)
     {
+        // TODO: player counter is implemented in Lobby!
+
         GameStateManager gameStateManager = new OfflineGameStateManager(stageManager, this);
 
         actorFactory.getPlayerActor("", "", Color.GREEN,true, gameStateManager, this);
@@ -53,7 +54,7 @@ public class StageFactory {
         actorFactory.getPlayerActor("", "", Color.PINK,true, gameStateManager, this);
 
         DetailActor detailActor = actorFactory.getDetailActor();
-        FieldFactory fieldFactory = new FieldFactory(detailActor);
+        FieldFactory fieldFactory = new FieldFactory(detailActor, stageManager, this);
         return new MapStage(viewport, gameStateManager, detailActor, fieldFactory);
     }
 
@@ -62,7 +63,8 @@ public class StageFactory {
     }
 
     public Stage getMainMenu() {
-            return new MainMenuStage(stageManager, viewport, this, publisher);
+        ButtonFactory buttonFactory = new ButtonFactory();
+        return new MainMenuStage(stageManager, viewport, this, publisher, buttonFactory);
     }
 
     public Stage getSendMoneyStage() {
@@ -110,6 +112,10 @@ public class StageFactory {
     }
 
     public Stage getSetColorStage(PlayerManager playerManager) {
-        return new SetColorStage(stageManager, viewport, this, playerManager);
+        return new SetColorStage(stageManager, viewport, playerManager);
+    }
+
+    public Stage getCreatePlayerActorStage(PlayerManager playerManager) {
+        return new CreatePlayerActorStage(viewport, playerManager);
     }
 }

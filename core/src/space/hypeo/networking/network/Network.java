@@ -6,12 +6,15 @@ import com.esotericsoftware.kryonet.EndPoint;
 import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.packages.Acknowledge;
+import space.hypeo.networking.packages.HorseRaceResult;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.RouletteResult;
+import space.hypeo.networking.packages.StartGame;
 
 /**
  * The class Network is a auxiliary class
@@ -54,8 +57,11 @@ public final class Network {
 
         kryo.register(PlayerSkeleton.class);
         kryo.register(Lobby.class);
-
         kryo.register(com.badlogic.gdx.graphics.Color.class);
+        kryo.register(StartGame.class);
+
+        kryo.register(HorseRaceResult.class);
+        kryo.register(RouletteResult.class);
     }
 
 }
