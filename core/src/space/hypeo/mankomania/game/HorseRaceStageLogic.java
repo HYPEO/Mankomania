@@ -68,7 +68,7 @@ public class HorseRaceStageLogic {
         horse1 = new HorseActor(1, "La Tartaruga", 1f, texture);
         horse2 = new HorseActor(2, "Schnecki", 1.5f, texture);
         horse3 = new HorseActor(3, "Salami", 1.8f, texture);
-        horse4 = new HorseActor(4, "Plumbum", 2.2f, texture);
+        horse4 = new HorseActor(4, "Plumbum", 2f, texture);
 
         selectedHorse = 0;
         minTime = 1.5f;
@@ -82,10 +82,10 @@ public class HorseRaceStageLogic {
 
     public void calculateRaceTimes() {
         do {
-            horse1.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse1.getQuote()) / avgQuote);
-            horse2.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse2.getQuote()) / avgQuote);
-            horse3.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse3.getQuote()) / avgQuote);
-            horse4.setRaceTime(((rand.nextFloat() * maxTime + minTime) * horse4.getQuote()) / avgQuote);
+            horse1.setRaceTime((rand.nextFloat() * maxTime * horse1.getQuote() + minTime) / (avgQuote * 1.5f));
+            horse2.setRaceTime((rand.nextFloat() * maxTime * horse2.getQuote() + minTime) / (avgQuote * 1.5f));
+            horse3.setRaceTime((rand.nextFloat() * maxTime * horse3.getQuote() + minTime) / (avgQuote * 1.5f));
+            horse4.setRaceTime((rand.nextFloat() * maxTime * horse4.getQuote() + minTime) / (avgQuote * 1.5f));
         } while (!checkUniqueHorseTimes(horse1.getRaceTime(), horse2.getRaceTime(), horse3.getRaceTime(), horse4.getRaceTime()));
 
         winningHorse = calculateWinningHorse(horse1, horse2, horse3, horse4);
@@ -125,7 +125,7 @@ public class HorseRaceStageLogic {
         horse2Movement = new MoveToAction();
         horse2Movement.setPosition(stageWidth - horse2.getWidth(),stageHeight - horse2.getHeight() * 2);
         horse2Movement.setDuration(horse2.getRaceTime());
-        horse2Movement.setInterpolation(Interpolation.fade);
+        horse2Movement.setInterpolation(Interpolation.pow3);
 
         // Horse 3
         horse3Movement = new MoveToAction();
@@ -137,7 +137,7 @@ public class HorseRaceStageLogic {
         horse4Movement = new MoveToAction();
         horse4Movement.setPosition(stageWidth - horse2.getWidth(),stageHeight - horse4.getHeight() * 4);
         horse4Movement.setDuration(horse4.getRaceTime());
-        horse4Movement.setInterpolation(Interpolation.fade);
+        horse4Movement.setInterpolation(Interpolation.pow5);
     }
 
     public HorseActor getHorse1() {
