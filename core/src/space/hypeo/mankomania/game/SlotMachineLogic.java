@@ -1,7 +1,5 @@
 package space.hypeo.mankomania.game;
 
-import com.sun.tools.javac.util.List;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -24,15 +22,19 @@ public class SlotMachineLogic {
 
     public SlotMachineLogic() {
         results = new ArrayList<>();
+        random = new Random();
+
+        calculateResult();
     }
 
     public void calculateResult() {
-        symbol1 = random.nextInt(5) + 1;
-        symbol2 = random.nextInt(5) + 1;
-        symbol3 = random.nextInt(5) + 1;
+        symbol1 = random.nextInt(4) + 1;
+        symbol2 = random.nextInt(4) + 1;
+        symbol3 = random.nextInt(4) + 1;
     }
 
     public int getPrice() {
+        results.clear();
         results.add(symbol1);
         results.add(symbol2);
         results.add(symbol3);
@@ -40,7 +42,7 @@ public class SlotMachineLogic {
         Collections.sort(results);
 
         // all 3 symbols are $
-        if (results.get(0) == 1) {
+        if (results.get(2) == 1) {
             return GRAND_PRICE;
         }
 
@@ -79,5 +81,17 @@ public class SlotMachineLogic {
 
     public void setSymbol3(int symbol3) {
         this.symbol3 = symbol3;
+    }
+
+    public static int getGrandPrice() {
+        return GRAND_PRICE;
+    }
+
+    public static int getBigPrice() {
+        return BIG_PRICE;
+    }
+
+    public static int getSmallPrice() {
+        return SMALL_PRICE;
     }
 }
