@@ -64,4 +64,14 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
             host.startGame();
         }
     }
+
+    @Override
+    public void sendHorseRaceResult(String horseName) {
+        endpoint.sendHorseRaceResult(horseName);
+    }
+
+    @Override
+    public void sendRouletteResult(int slotId) {
+        endpoint.sendRouletteResult(slotId);
+    }
 }

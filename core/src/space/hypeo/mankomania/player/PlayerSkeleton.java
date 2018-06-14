@@ -18,6 +18,9 @@ public class PlayerSkeleton {
     protected boolean isActive;     // true when it is my turn
     protected int balance;          // total amount of money
 
+    protected float xImagePosition;
+    protected float yImagePosition;
+
     /* NOTE: default constructor required for network traffic */
     public PlayerSkeleton() {}
 
@@ -40,6 +43,10 @@ public class PlayerSkeleton {
         color = null;
         isActive = false;
         balance = PlayerFactory.START_BALANCE;
+
+        xImagePosition = 0;
+        yImagePosition = 0;
+
     }
 
     /**
@@ -99,6 +106,22 @@ public class PlayerSkeleton {
 
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+
+    public float getxImagePosition() {
+        return xImagePosition;
+    }
+
+    public void setxImagePosition(float xImagePosition) {
+        this.xImagePosition = xImagePosition;
+    }
+
+    public float getyImagePosition() {
+        return yImagePosition;
+    }
+
+    public void setyImagePosition(float yImagePosition) {
+        this.yImagePosition = yImagePosition;
     }
 
     /**
