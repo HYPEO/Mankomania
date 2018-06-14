@@ -18,28 +18,28 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.game.SlotMachineLogic;
 
 /**
- * Created by manuelegger on 05.06.18.
+ * Created by manuelegger on 14.06.18.
  */
 
-public class SlotMachineStage extends Stage {
+public class SlotMachineResultStage extends Stage {
     private StageManager stageManager;
     private StageFactory stageFactory;
     private PlayerActor playerActor;
     private SlotMachineLogic slotMachineLogic;
 
-    private TextButton startGameButton;
-    private TextButton exitGameButton;
-    private Label playerInfo;
+    private TextButton backButton;
+    private Label resultInfo;
 
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
 
-    public SlotMachineStage (Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor) {
+    public SlotMachineResultStage (Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor,
+                                   SlotMachineLogic slotMachineLogic) {
         super(viewport);
         this.stageManager = stageManager;
         this.stageFactory = stageFactory;
         this.playerActor = playerActor;
-        slotMachineLogic = new SlotMachineLogic();
+        this.slotMachineLogic = slotMachineLogic;
 
         // Set up Stage
         setUpBackground();
@@ -55,50 +55,41 @@ public class SlotMachineStage extends Stage {
 
         this.addActor(background);
     }
+
     private void createWidgets() {
-        startGameButton = new TextButton("Start Game", skin);
-        exitGameButton = new TextButton("exit Game", skin);
-        playerInfo = new Label("By playing with the slotmachine you have to bet 25.000", skin);
+        backButton = new TextButton("Back", skin);
+
+        if (slotMachineLogic.isGameWon()) {
+            resultInfo = new Label("We are very sorry you lost your bet of 25.000", skin);
+        } else {
+            resultInfo = new Label("Congratulations you got the " + slotMachineLogic.getPriceType() + "\n and won"
+                    + slotMachineLogic.getPrice(), skin);
+        }
+
     }
+
     private void setUpClickListeners() {
-        startGameButton.addListener(startGameClickListener());
-        exitGameButton.addListener(exitGameClickListener());
+        backButton.addListener(backClickListener());
     }
+
     private void setUpLayout() {
         Table layout = new Table();
         layout.setWidth(this.getWidth());
         layout.align(Align.bottom);
         layout.setPosition(0, 0);
-        layout.add(playerInfo).colspan(2).padBottom(10);
+        layout.add(resultInfo).padBottom(10);
         layout.row();
-        layout.add(startGameButton).width(200).height(100).padRight(10).padLeft(5).padBottom(10);
-        layout.add(exitGameButton).width(200).height(100).padRight(10).padBottom(10);
+        layout.add(backButton).height(100).padRight(10).padBottom(10);
         layout.row();
 
         this.addActor(layout);
     }
 
-
-    private ClickListener startGameClickListener() {
+    private ClickListener backClickListener() {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (startGameButton.getLabel().textEquals("Start Game")) {
-                    exitGameButton.setWidth(0);
-                    startGameButton.setWidth(startGameButton.getWidth() * 2);
-                    startGameButton.setText("get Results");
-                }
-                else {
-                    //open Result Stage
-                }
-            }
-        };
-    }
-    private ClickListener exitGameClickListener() {
-        return new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                stageManager.remove(SlotMachineStage.this);
+                stageManager.remove(SlotMachineResultStage.this);
             }
         };
     }

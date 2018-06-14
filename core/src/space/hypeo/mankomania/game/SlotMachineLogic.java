@@ -16,6 +16,7 @@ public class SlotMachineLogic {
     int symbol1;
     int symbol2;
     int symbol3;
+    String priceType;
     ArrayList<Integer> results;
 
     Random random;
@@ -43,20 +44,31 @@ public class SlotMachineLogic {
 
         // all 3 symbols are $
         if (results.get(2) == 1) {
+            priceType = "Grand Price";
             return GRAND_PRICE;
         }
 
         // all 3 symbols are the same
         if (results.get(0) == results.get(1) && results.get(1) == results.get(2)) {
+            priceType = "Big Price";
             return BIG_PRICE;
         }
 
         // 2 symbols are the same
         if (results.get(0) == results.get(1) || results.get(1) == results.get(2)) {
+            priceType = "Small Price";
             return SMALL_PRICE;
         }
 
+        priceType = "";
         return 0;
+    }
+
+    public boolean isGameWon() {
+        if (priceType == "") {
+            return false;
+        }
+        return true;
     }
 
     public int getSymbol1() {
@@ -93,5 +105,9 @@ public class SlotMachineLogic {
 
     public static int getSmallPrice() {
         return SMALL_PRICE;
+    }
+
+    public String getPriceType() {
+        return priceType;
     }
 }

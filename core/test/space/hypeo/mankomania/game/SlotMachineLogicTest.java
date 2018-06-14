@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import space.hypeo.mankomania.GameTest;
 
+import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -36,7 +38,9 @@ public class SlotMachineLogicTest extends GameTest {
         slotMachineLogic.setSymbol2(1);
         slotMachineLogic.setSymbol3(1);
 
-        Assert.assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getGrandPrice());
+        assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getGrandPrice());
+        assertTrue(slotMachineLogic.isGameWon());
+        assertEquals(slotMachineLogic.getPriceType(), "Grand Price");
     }
 
     @Test
@@ -45,19 +49,22 @@ public class SlotMachineLogicTest extends GameTest {
         slotMachineLogic.setSymbol2(2);
         slotMachineLogic.setSymbol3(2);
 
-        Assert.assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getBigPrice());
+        assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getBigPrice());
 
         slotMachineLogic.setSymbol1(3);
         slotMachineLogic.setSymbol2(3);
         slotMachineLogic.setSymbol3(3);
 
-        Assert.assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getBigPrice());
+        assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getBigPrice());
 
         slotMachineLogic.setSymbol1(4);
         slotMachineLogic.setSymbol2(4);
         slotMachineLogic.setSymbol3(4);
 
-        Assert.assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getBigPrice());
+        assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getBigPrice());
+
+        assertTrue(slotMachineLogic.isGameWon());
+        assertEquals(slotMachineLogic.getPriceType(), "Big Price");
     }
 
     @Test
@@ -66,31 +73,34 @@ public class SlotMachineLogicTest extends GameTest {
         slotMachineLogic.setSymbol2(1);
         slotMachineLogic.setSymbol3(2);
 
-        Assert.assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getSmallPrice());
+        assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getSmallPrice());
 
         slotMachineLogic.setSymbol1(2);
         slotMachineLogic.setSymbol2(1);
         slotMachineLogic.setSymbol3(1);
 
-        Assert.assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getSmallPrice());
+        assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getSmallPrice());
 
         slotMachineLogic.setSymbol1(4);
         slotMachineLogic.setSymbol2(3);
         slotMachineLogic.setSymbol3(4);
 
-        Assert.assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getSmallPrice());
+        assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getSmallPrice());
 
         slotMachineLogic.setSymbol1(1);
         slotMachineLogic.setSymbol2(3);
         slotMachineLogic.setSymbol3(1);
 
-        Assert.assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getSmallPrice());
+        assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getSmallPrice());
 
         slotMachineLogic.setSymbol1(1);
         slotMachineLogic.setSymbol2(3);
         slotMachineLogic.setSymbol3(1);
 
-        Assert.assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getSmallPrice());
+        assertEquals(slotMachineLogic.getPrice(), slotMachineLogic.getSmallPrice());
+
+        assertTrue(slotMachineLogic.isGameWon());
+        assertEquals(slotMachineLogic.getPriceType(), "Small Price");
     }
 
     @Test
@@ -99,18 +109,21 @@ public class SlotMachineLogicTest extends GameTest {
         slotMachineLogic.setSymbol2(2);
         slotMachineLogic.setSymbol3(3);
 
-        Assert.assertEquals(slotMachineLogic.getPrice(), 0);
+        assertEquals(slotMachineLogic.getPrice(), 0);
 
         slotMachineLogic.setSymbol1(4);
         slotMachineLogic.setSymbol2(2);
         slotMachineLogic.setSymbol3(1);
 
-        Assert.assertEquals(slotMachineLogic.getPrice(), 0);
+        assertEquals(slotMachineLogic.getPrice(), 0);
 
         slotMachineLogic.setSymbol1(3);
         slotMachineLogic.setSymbol2(4);
         slotMachineLogic.setSymbol3(1);
 
-        Assert.assertEquals(slotMachineLogic.getPrice(), 0);
+        assertEquals(slotMachineLogic.getPrice(), 0);
+
+        assertFalse(slotMachineLogic.isGameWon());
+        assertEquals(slotMachineLogic.getPriceType(), "");
     }
 }
