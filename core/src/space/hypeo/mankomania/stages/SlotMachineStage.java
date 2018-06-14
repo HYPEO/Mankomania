@@ -57,7 +57,9 @@ public class SlotMachineStage extends Stage {
     }
     private void createWidgets() {
         startGameButton = new TextButton("Start Game", skin);
+        startGameButton.setWidth(200);
         exitGameButton = new TextButton("exit Game", skin);
+        exitGameButton.setWidth(200);
         playerInfo = new Label("By playing with the slotmachine you have to bet 25.000", skin);
     }
     private void setUpClickListeners() {
@@ -69,7 +71,7 @@ public class SlotMachineStage extends Stage {
         layout.setWidth(this.getWidth());
         layout.align(Align.bottom);
         layout.setPosition(0, 0);
-        layout.add(playerInfo).colspan(2).padBottom(10);
+        layout.add(playerInfo).colspan(2).padBottom(10);git
         layout.row();
         layout.add(startGameButton).width(200).height(100).padRight(10).padLeft(5).padBottom(10);
         layout.add(exitGameButton).width(200).height(100).padRight(10).padBottom(10);
@@ -89,7 +91,8 @@ public class SlotMachineStage extends Stage {
                     startGameButton.setText("get Results");
                 }
                 else {
-                    //open Result Stage
+                    stageManager.remove(SlotMachineStage.this);
+                    stageManager.push(stageFactory.getSlotMachineResultStage(playerActor, slotMachineLogic));
                 }
             }
         };

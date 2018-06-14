@@ -10,6 +10,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
 import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.factories.FieldFactory;
+import space.hypeo.mankomania.game.SlotMachineLogic;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.stages.CreatePlayerActorStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
@@ -23,6 +24,7 @@ import space.hypeo.mankomania.stages.MapStage;
 import space.hypeo.mankomania.stages.RouletteStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
 import space.hypeo.mankomania.stages.SetColorStage;
+import space.hypeo.mankomania.stages.SlotMachineResultStage;
 import space.hypeo.mankomania.stages.SlotMachineStage;
 import space.hypeo.mankomania.stages.TitleStage;
 
@@ -121,5 +123,9 @@ public class StageFactory {
 
     public Stage getSlotMachineStage(PlayerActor playerActor) {
         return new SlotMachineStage(viewport, stageManager, this, playerActor);
+    }
+
+    public Stage getSlotMachineResultStage(PlayerActor playerActor, SlotMachineLogic slotMachineLogic) {
+        return new SlotMachineResultStage(viewport, stageManager, this, playerActor, slotMachineLogic);
     }
 }
