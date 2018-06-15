@@ -75,7 +75,7 @@ public class SlotMachineResultStage extends Stage {
             resultInfo = new Label("Congratulations you got the " + slotMachineLogic.getPriceType() + "\n and won "
                     + slotMachineLogic.getPrice(), skin);
         } else {
-            resultInfo = new Label("We are very sorry you lost your bet of 25.000", skin);
+            resultInfo = new Label("We are very sorry you lost your bet of 20.000", skin);
         }
 
     }

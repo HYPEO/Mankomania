@@ -12,6 +12,7 @@ import space.hypeo.mankomania.actors.fields.EmptyFieldActor;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.fields.HorseRaceFieldActor;
 import space.hypeo.mankomania.actors.fields.LoseMoneyFieldActor;
+import space.hypeo.mankomania.actors.fields.SlotMachineFieldActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
 
 /**
@@ -43,7 +44,7 @@ public class FieldFactory {
         } else if (random >= 3 && random < 4){
             currentField = new HorseRaceFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), 0, new Texture("transparent.png"), detailActor, stageManager, stageFactory);
         } else {
-            currentField = new HorseRaceFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), 0, new Texture("transparent.png"), detailActor, stageManager, stageFactory);
+            currentField = new SlotMachineFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), 0, new Texture("transparent.png"), detailActor, stageFactory, stageManager);
         }
         return currentField;
     }

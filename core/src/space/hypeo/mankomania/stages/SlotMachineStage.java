@@ -73,7 +73,7 @@ public class SlotMachineStage extends Stage {
         startGameButton.setWidth(200);
         exitGameButton = new TextButton("exit Game", skin);
         exitGameButton.setWidth(200);
-        playerInfo = new Label("By playing with the slotmachine you have to bet 25.000", skin);
+        playerInfo = new Label("By playing with the slotmachine you have to bet 20.000", skin);
     }
     private void setUpClickListeners() {
         startGameButton.addListener(startGameClickListener());
@@ -144,7 +144,7 @@ public class SlotMachineStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (startGameButton.getLabel().textEquals("Start Game")) {
-                    playerActor.changeBalance(-25000);
+                    playerActor.changeBalance(-20000);
 
                     setUpResultLayout();
                     startGameButton.setText("get Results");

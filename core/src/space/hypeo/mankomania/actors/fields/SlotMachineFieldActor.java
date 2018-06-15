@@ -18,16 +18,13 @@ public class SlotMachineFieldActor extends FieldActor {
     /**
      * @param x             X position of the Actor.
      * @param y             Y position of the Actor.
-     * @param width         Width of the Actor
-     * @param height        Height of the Actor
      * @param price         Price of this field.
-     * @param texture       Texture that represents the field on screen.
      * @param detailTexture Detail texture of this field.
      * @param detailActor   The image is shown inside, and replaced by detailTexture.
      */
-    public SlotMachineFieldActor(float x, float y, float width, float height, int price, Texture texture,
-                                 Texture detailTexture, DetailActor detailActor, StageFactory stageFactory, StageManager stageManager) {
-        super(x, y, width, height, price, texture, detailTexture, detailActor);
+    public SlotMachineFieldActor(float x, float y, int price, Texture detailTexture, DetailActor detailActor,
+                                 StageFactory stageFactory, StageManager stageManager) {
+        super(x, y, 40f, 40f, price, new Texture("fields/loose_money.png"), detailTexture, detailActor);
         this.stageFactory = stageFactory;
         this.stageManager = stageManager;
     }
