@@ -80,6 +80,22 @@ public class SlotMachineStage extends Stage {
         exitGameButton.addListener(exitGameClickListener());
     }
     private void setUpLayout() {
+        //show fist symbol 3 times before game start
+        symbol1Actor = new SymbolActor(1);
+        symbol1Actor.setPosition(this.getWidth() / 2 - symbol1Actor.getWidth() / 2 - symbol1Actor.getWidth(),
+                this.getHeight() - symbol1Actor.getHeight() * 2.5f);
+        this.addActor(symbol1Actor);
+
+        symbol1Actor = new SymbolActor(1);
+        symbol1Actor.setPosition(this.getWidth() / 2 - symbol1Actor.getWidth() / 2,
+                this.getHeight() - symbol1Actor.getHeight() * 2.5f);
+        this.addActor(symbol1Actor);
+
+        symbol1Actor = new SymbolActor(1);
+        symbol1Actor.setPosition(this.getWidth() / 2 - symbol1Actor.getWidth() / 2 + symbol1Actor.getWidth(),
+                this.getHeight() - symbol1Actor.getHeight() * 2.5f);
+        this.addActor(symbol1Actor);
+
         Table layout = new Table();
         layout.setWidth(this.getWidth());
         layout.align(Align.bottom);
@@ -128,10 +144,14 @@ public class SlotMachineStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (startGameButton.getLabel().textEquals("Start Game")) {
+                    playerActor.changeBalance(-25000);
+
                     setUpResultLayout();
                     startGameButton.setText("get Results");
                 }
                 else {
+                    playerActor.changeBalance(slotMachineLogic.getPrice());
+
                     stageManager.remove(SlotMachineStage.this);
                     stageManager.push(stageFactory.getSlotMachineResultStage(playerActor, slotMachineLogic));
                 }
