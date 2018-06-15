@@ -3,6 +3,7 @@ package space.hypeo.mankomania.stages;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -71,7 +72,7 @@ public class SlotMachineStage extends Stage {
         layout.setWidth(this.getWidth());
         layout.align(Align.bottom);
         layout.setPosition(0, 0);
-        layout.add(playerInfo).colspan(2).padBottom(10);git
+        layout.add(playerInfo).colspan(2).padBottom(10);
         layout.row();
         layout.add(startGameButton).width(200).height(100).padRight(10).padLeft(5).padBottom(10);
         layout.add(exitGameButton).width(200).height(100).padRight(10).padBottom(10);
@@ -86,8 +87,6 @@ public class SlotMachineStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (startGameButton.getLabel().textEquals("Start Game")) {
-                    exitGameButton.setWidth(0);
-                    startGameButton.setWidth(startGameButton.getWidth() * 2);
                     startGameButton.setText("get Results");
                 }
                 else {

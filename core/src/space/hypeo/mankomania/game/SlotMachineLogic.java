@@ -26,6 +26,7 @@ public class SlotMachineLogic {
         random = new Random();
 
         calculateResult();
+        getPrice();
     }
 
     public void calculateResult() {
