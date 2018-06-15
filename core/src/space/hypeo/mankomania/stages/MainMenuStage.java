@@ -85,7 +85,6 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                /*
                 // TODO: deligate that to PlayerManager in Business Layer
                 playerManager = new PlayerManager(stageManager, stageFactory, Role.HOST);
                 PlayerFactory playerFactory = new PlayerFactory(playerManager);
@@ -94,8 +93,6 @@ public class MainMenuStage extends Stage {
 
                 deviceStatePublisher.subscribe(playerManager.getPlayerNT());
                 stageManager.push(stageFactory.getLobbyStage(playerManager));
-                */
-                stageManager.push(stageFactory.getSlotMachineStage(null));
             }
         };
     }
