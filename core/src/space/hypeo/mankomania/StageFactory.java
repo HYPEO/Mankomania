@@ -82,9 +82,9 @@ public class StageFactory {
         return new HorseRaceResultStage(viewport, stageManager, backedHorseID, bet, winningHorse);
     }
 
-    public Stage getLotteryStage(PlayerActor playerActor)
+    public LotteryStage getLotteryStage(PlayerActor playerActor, boolean pay)
      {
-        return new LotteryStage(viewport, stageManager, this, playerActor);
+        return new LotteryStage(viewport, stageManager, this, playerActor, pay);
     }
 
     /**
