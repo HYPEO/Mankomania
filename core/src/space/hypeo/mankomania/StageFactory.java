@@ -18,6 +18,7 @@ import space.hypeo.mankomania.stages.EndGameStage;
 import space.hypeo.mankomania.stages.HorseRaceResultStage;
 import space.hypeo.mankomania.stages.HorseRaceStage;
 import space.hypeo.mankomania.stages.LobbyStage;
+import space.hypeo.mankomania.stages.LotteryStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.mankomania.stages.MapStage;
 import space.hypeo.mankomania.stages.RouletteStage;
@@ -84,6 +85,11 @@ public class StageFactory {
 
     public Stage getHorseRaceResultStage(int backedHorseID, int bet, HorseActor winningHorse) {
         return new HorseRaceResultStage(viewport, stageManager, backedHorseID, bet, winningHorse);
+    }
+
+    public LotteryStage getLotteryStage(PlayerActor playerActor, boolean pay)
+     {
+        return new LotteryStage(viewport, stageManager, this, playerActor, pay);
     }
 
     /**
