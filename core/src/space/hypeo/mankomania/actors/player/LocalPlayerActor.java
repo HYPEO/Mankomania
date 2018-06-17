@@ -11,18 +11,17 @@ import space.hypeo.mankomania.sensor.DiceSensorManager;
  */
 public class LocalPlayerActor extends PlayerActor {
     private DiceSensorManager diceSensorManager;
-    private GameStateManager gameStateManager;
     private float timeElapsed;
 
     /**
      * @param actorImage Image that represents the actor.
      * @param balance    The player's current balance (starting balance)
+     * @param id
+     * @param nickname
      */
-    public LocalPlayerActor(Image actorImage, int balance, DiceSensorManager diceSensorManager, GameStateManager gameStateManager, PlayerDetailActor playerDetailActor) {
-        super(actorImage, balance, playerDetailActor);
+    public LocalPlayerActor(Image actorImage, int balance, DiceSensorManager diceSensorManager, GameStateManager gameStateManager, PlayerDetailActor playerDetailActor, String id, String nickname) {
+        super(actorImage, balance, playerDetailActor, gameStateManager, id, nickname);
         this.diceSensorManager = diceSensorManager;
-        this.gameStateManager = gameStateManager;
-        this.gameStateManager.addPlayer(this);
         timeElapsed = 0;
     }
 
@@ -38,6 +37,7 @@ public class LocalPlayerActor extends PlayerActor {
 
     @Override
     public void act(float deltaTime) {
+        super.act(deltaTime);
         if (this.isActive) {
             timeElapsed += deltaTime;
             if (timeElapsed >= 0.18f) {

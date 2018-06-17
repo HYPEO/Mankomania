@@ -25,14 +25,12 @@ import space.hypeo.networking.endpoint.MClient;
 
 public class DiscoveredHostsStage extends Stage {
     private final Viewport viewport;
-    private PlayerManager playerManager;
 
     private List<InetAddress> foundHosts;
 
     public DiscoveredHostsStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, PlayerManager playerManager) {
         super(viewport);
         this.viewport = viewport;
-        this.playerManager = playerManager;
 
         this.foundHosts = ((MClient) playerManager.getPlayerNT().getEndpoint()).discoverHosts();
 

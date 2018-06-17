@@ -23,13 +23,9 @@ import com.esotericsoftware.minlog.Log;
 import java.util.Random;
 
 import space.hypeo.mankomania.DigitFilter;
-import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
-import space.hypeo.mankomania.actors.player.PlayerActor;
 
 public class RouletteStage extends Stage {
-    private StageManager stageManager;
-    private PlayerActor playerActor;
     private CheckBox greenField;
     private CheckBox redField;
     private CheckBox blackField;
@@ -56,12 +52,10 @@ public class RouletteStage extends Stage {
 
         //TODO: Roulette Sprite
         super(viewport);
-        this.playerActor = playerActor;
         green = "Green";
         black = "Black";
         red = "Red";
         errorMessage = "Error occured";
-        this.stageManager = stageManager;
         randomizeSpin = new Random();
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
@@ -78,7 +72,7 @@ public class RouletteStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 numOfSpins = randomizeSpin.nextInt((184 - 73) + 1) + 73;
-                float spinningDegrees = (360/37) * numOfSpins;
+                float spinningDegrees = (360/37f) * numOfSpins;
 
                 spinImage.addAction(Actions.parallel(Actions.moveTo(group.getWidth() / 2f - spinImage.getWidth() / 2f, group.getHeight() / 2f - spinImage.getHeight() / 2f ,3), Actions.rotateBy(spinningDegrees, 3)));
                 spinImage.setOrigin(266/2f, 266/2f);

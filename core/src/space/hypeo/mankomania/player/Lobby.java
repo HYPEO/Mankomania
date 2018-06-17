@@ -54,7 +54,10 @@ public class Lobby {
      * @param p value, PlayerSkeleton
      */
     public void put(String playerId, PlayerSkeleton p) {
+        Log.info("Lobby contains " + data.size() + " player.");
+        Log.info("Insert or update ID '" + playerId + "'");
         data.put(playerId, p);
+        Log.info("Now Lobby contains " + data.size() + " player.");
     }
 
     public PlayerSkeleton get(String playerId) {
@@ -135,6 +138,23 @@ public class Lobby {
 
         for(PlayerSkeleton playerInLobby : data.values() ) {
             if(!playerInLobby.isReady()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if all player within the lobby have already set their color.
+     * @return boolean
+     */
+    public boolean areAllPlayerColored() {
+        if( this.isEmpty() ) {
+            return false;
+        }
+
+        for(PlayerSkeleton playerInLobby : data.values() ) {
+            if(playerInLobby.getColor() == null) {
                 return false;
             }
         }

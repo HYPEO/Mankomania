@@ -18,6 +18,9 @@ public class PlayerSkeleton {
     protected boolean isActive;     // true when it is my turn
     protected int balance;          // total amount of money
 
+    protected float xImagePosition;
+    protected float yImagePosition;
+
     /* NOTE: default constructor required for network traffic */
     public PlayerSkeleton() {}
 
@@ -40,6 +43,10 @@ public class PlayerSkeleton {
         color = null;
         isActive = false;
         balance = PlayerFactory.START_BALANCE;
+
+        xImagePosition = 0;
+        yImagePosition = 0;
+
     }
 
     /**
@@ -101,6 +108,22 @@ public class PlayerSkeleton {
         this.balance = balance;
     }
 
+    public float getxImagePosition() {
+        return xImagePosition;
+    }
+
+    public void setxImagePosition(float xImagePosition) {
+        this.xImagePosition = xImagePosition;
+    }
+
+    public float getyImagePosition() {
+        return yImagePosition;
+    }
+
+    public void setyImagePosition(float yImagePosition) {
+        this.yImagePosition = yImagePosition;
+    }
+
     /**
      * Gets ID for current player.
      * Take from UUID the last 4 characters.
@@ -117,8 +140,9 @@ public class PlayerSkeleton {
      */
     @Override
     public String toString() {
-        return "ID " + playerID + ", nick " + nickname + ", addr " + address +
-                (color != null ? color : "") + ", " +
+        return "ID " + playerID + ", nick " + nickname + ", addr " + address + ", " +
+                (isReady ? " " : " Not ") + "Ready, " +
+                (color != null ? color : "<no color>") + ", " +
                 (isActive ? "active" : "inactive") +
                 ", balance " + balance + "€";
     }
