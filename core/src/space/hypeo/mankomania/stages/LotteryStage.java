@@ -1,7 +1,6 @@
 package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -18,6 +17,7 @@ import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
+import space.hypeo.mankomania.game.LotteryStageLogic;
 
 public class LotteryStage extends Stage {
     int moneypool;
@@ -31,13 +31,7 @@ public class LotteryStage extends Stage {
     private Label nameLabel;
     private Label moneyLabel;
     private Boolean pay;
-    private String textTrue = "Sorry, you lost: " + money + "";
-    private String textFalse = "Congratulations! You won: " + moneypool + "";
-    Preferences prefs = Gdx.app.getPreferences("Lottery");
-
-    private final float targetFPS = 100f;
-    private final long targetDelay = 1000 / (long) targetFPS;
-    private long diff, start;
+    private LotteryStageLogic eco;
 
     public LotteryStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor, Boolean pay) {
         super(viewport);
@@ -46,68 +40,37 @@ public class LotteryStage extends Stage {
         this.playerActor = playerActor;
         this.pay = pay;
 
-        Log.info(moneypool+"");
+        eco = new LotteryStageLogic(playerActor, "Lottery");
         setUpBackground();
 
-        moneypool=prefs.getInteger("moneypool",0);
+        moneypool = eco.getPrefs("moneypool");
+        Log.info(moneypool+"");
 
+        choose();
+
+    }
+
+    private void choose() {
         if (!pay && moneypool > 0) {
-            setUpElements(textFalse);
+            pay();
+            setUpElements("Congratulations! You won: " + moneypool + "");
+
         } else {
-            setUpElements(textTrue);
+            get();
+            setUpElements("Sorry, you lost: " + money + "");
 
-        }
-
-
-    }
-
-    private ClickListener buttonClick() {
-        return new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!pay && moneypool > 0) {
-                    Log.info("pay");
-                    // animation(moneypool);
-                    playerActor.setBalance(playerActor.getBalance() + moneypool);
-                    moneyLabel.setText("your current money is: " + playerActor.getBalance() + "");
-                    prefs.putInteger("moneypool", 0);
-
-                } else {
-                    Log.info("else");
-                    //animation(money);
-                    playerActor.setBalance(playerActor.getBalance() - money);
-                    moneyLabel.setText("your current money is: " + playerActor.getBalance() + "");
-                    prefs.putInteger("moneypool", moneypool += money);
-                    Log.info(money+" "+moneypool);
-
-                }
-                prefs.flush();
-
-                stageManager.remove(LotteryStage.this);
-            }
-        };
-    }
-
-    private void animation(int x) {
-        for (int i = 0; i < x/30; i++) {
-            // TODO: Animation
-            moneyLabel.setText("your current money is: " + (playerActor.getBalance() - i*30) + "");
-            limitFPS();
         }
     }
 
-    private void limitFPS() {
-        diff = System.currentTimeMillis() - start;
 
-        if (diff < targetDelay) {
-            try {
-                Thread.sleep(targetDelay - diff);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    private void pay(){
+        eco.getMoney(money);
+        eco.setPrefs("moneypool", 0);
+    }
 
-        start = System.currentTimeMillis();
+    private void get(){
+        eco.payMoney(money);
+        eco.setPrefs("moneypool", moneypool += money);
     }
 
 
@@ -148,5 +111,15 @@ public class LotteryStage extends Stage {
 
         addActor(background);
 
+    }
+
+    private ClickListener buttonClick() {
+        return new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Log.info(moneypool+"");
+                stageManager.remove(LotteryStage.this);
+            }
+        };
     }
 }
