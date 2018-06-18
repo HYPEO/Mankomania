@@ -20,14 +20,14 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class LotteryStageLogicTest extends GameTest {
+public class EconomicStageLogicTest extends GameTest {
 
 
     private static final int BALANCE = 100000;
     private static final String testName="money";
 
     @Mock
-    private LotteryStageLogic eco;
+    private EconomicStageLogic eco;
     @Mock
     private Image actorImage;
     @Mock
@@ -46,7 +46,7 @@ public class LotteryStageLogicTest extends GameTest {
     public void setUp() {
         playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor, gameStateManager, "", "");
         playerActor.initializeState(fieldActor);
-        eco = new LotteryStageLogic(playerActor, "test");
+        eco = new EconomicStageLogic(playerActor, "test");
 
     }
 

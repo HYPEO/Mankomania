@@ -37,7 +37,7 @@ public class FieldFactory {
         // Create new Field
         FieldActor currentField;
         if (random == 0) {
-            currentField = new BuildHotel(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), detailActor, parentStage);
+            currentField = new BuildHotel(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), detailActor, stageManager, stageFactory);
         } else if (random >= 1 && random < 2) {
             currentField = new LoseMoneyFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("6dice.png"), randomGenerator.nextInt(10), detailActor);
         } else if (random >= 2 && random < 3) {

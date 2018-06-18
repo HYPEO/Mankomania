@@ -5,17 +5,17 @@ import com.badlogic.gdx.Preferences;
 
 import space.hypeo.mankomania.actors.player.PlayerActor;
 
-public class LotteryStageLogic {
+public class EconomicStageLogic {
 
     private PlayerActor playerActor;
     public Preferences pref;
 
-    public LotteryStageLogic(PlayerActor playerActor, String pref) {
+    public EconomicStageLogic(PlayerActor playerActor, String pref) {
         this.playerActor = playerActor;
         initPref(pref);
     }
 
-    public LotteryStageLogic(PlayerActor playerActor){
+    public EconomicStageLogic(PlayerActor playerActor){
         this.playerActor=playerActor;
     }
 

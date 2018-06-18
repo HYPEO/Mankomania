@@ -25,6 +25,9 @@ import space.hypeo.mankomania.stages.RouletteStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
 import space.hypeo.mankomania.stages.SetColorStage;
 import space.hypeo.mankomania.stages.TitleStage;
+import space.hypeo.mankomania.stages.FinishedHotelStage;
+import space.hypeo.mankomania.actors.fields.BuildHotel;
+import space.hypeo.mankomania.stages.BuildHotelStage;
 
 /**
  * Creates all the stages (views) for the game.
@@ -123,4 +126,12 @@ public class StageFactory {
     public Stage getCreatePlayerActorStage(PlayerManager playerManager) {
         return new CreatePlayerActorStage(viewport, playerManager);
     }
+    public Stage BuildHotelStage(PlayerActor player, BuildHotel build) {
+        return  new BuildHotelStage(viewport,stageManager,this,player,build);
+    }
+
+    public Stage FinishedHotelStage(PlayerActor player, boolean owner, String playerID) {
+        return new FinishedHotelStage(viewport,stageManager,this,player,owner, playerID );
+    }
+
 }
