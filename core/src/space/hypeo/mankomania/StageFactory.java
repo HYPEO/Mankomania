@@ -10,6 +10,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
 import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.factories.FieldFactory;
+import space.hypeo.mankomania.game.SlotMachineLogic;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.stages.CreatePlayerActorStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
@@ -18,12 +19,18 @@ import space.hypeo.mankomania.stages.EndGameStage;
 import space.hypeo.mankomania.stages.HorseRaceResultStage;
 import space.hypeo.mankomania.stages.HorseRaceStage;
 import space.hypeo.mankomania.stages.LobbyStage;
+import space.hypeo.mankomania.stages.LotteryStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.mankomania.stages.MapStage;
 import space.hypeo.mankomania.stages.RouletteStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
 import space.hypeo.mankomania.stages.SetColorStage;
+import space.hypeo.mankomania.stages.SlotMachineResultStage;
+import space.hypeo.mankomania.stages.SlotMachineStage;
 import space.hypeo.mankomania.stages.TitleStage;
+import space.hypeo.mankomania.stages.FinishedHotelStage;
+import space.hypeo.mankomania.actors.fields.BuildHotel;
+import space.hypeo.mankomania.stages.BuildHotelStage;
 
 /**
  * Creates all the stages (views) for the game.
@@ -86,6 +93,11 @@ public class StageFactory {
         return new HorseRaceResultStage(viewport, stageManager, backedHorseID, bet, winningHorse);
     }
 
+    public LotteryStage getLotteryStage(PlayerActor playerActor, boolean pay)
+     {
+        return new LotteryStage(viewport, stageManager, this, playerActor, pay);
+    }
+
     /**
      * Shows the network-lobby for client and host.
      * @return stage/view of lobby
@@ -116,5 +128,21 @@ public class StageFactory {
 
     public Stage getCreatePlayerActorStage(PlayerManager playerManager) {
         return new CreatePlayerActorStage(viewport, playerManager);
+    }
+
+    public Stage getSlotMachineStage(PlayerActor playerActor) {
+        return new SlotMachineStage(viewport, stageManager, this, playerActor);
+    }
+
+    public Stage getSlotMachineResultStage(PlayerActor playerActor, SlotMachineLogic slotMachineLogic) {
+        return new SlotMachineResultStage(viewport, stageManager, this, playerActor, slotMachineLogic);
+    }
+
+    public Stage BuildHotelStage(PlayerActor player, BuildHotel build) {
+        return  new BuildHotelStage(viewport,stageManager,this,player,build);
+    }
+
+    public Stage FinishedHotelStage(PlayerActor player, boolean owner, String playerID) {
+        return new FinishedHotelStage(viewport,stageManager,this,player,owner, playerID );
     }
 }
