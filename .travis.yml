@@ -12,7 +12,5 @@ android:
 script:
     - ./gradlew build
     - ./gradlew test
-    - ls -al
-    - ls -al core
-    - ls -al build
+    - ./gradlew jacocoTestReport
     - ./gradlew sonarqube -Dsonar.organization=hypeo -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dsonar.branch.name=$TRAVIS_BRANCH -Dsonar.jacoco.reportPaths=./core/build/jacoco/test.exec
