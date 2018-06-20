@@ -89,12 +89,12 @@ public class PlayerActor extends Group {
 
     public void updateBalance(int balance){
         this.balance = balance;
-        this.playerDetailActor.updateBalance(balance);
+        this.playerDetailActor.updateDetails(balance, this.nickname);
     }
 
     public void setBalance(int balance) {
         this.balance = balance;
-        this.playerDetailActor.updateBalance(balance);
+        this.playerDetailActor.updateDetails(balance, this.nickname);
         this.playerBalanceChanged = true;
     }
 
@@ -142,7 +142,7 @@ public class PlayerActor extends Group {
             timeSinceLastUpdate = 0;
         }
 
-        this.playerDetailActor.updateBalance(this.getBalance());
+        this.playerDetailActor.updateDetails(this.getBalance(), this.nickname);
     }
 
     public boolean hasPlayerBalanceChanged() {
