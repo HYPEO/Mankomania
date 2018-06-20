@@ -85,7 +85,7 @@ public class PlayerActorTest extends GameTest {
         // VERIFICATION:
         assertEquals(20000, playerActor.getBalance());
         // Verify that playerDetailActor has been notified to update.s
-        Mockito.verify(playerDetailActor).updateDetails(20000, "nickname");
+        Mockito.verify(playerDetailActor).updateDetails(20000, "");
     }
 
     @Test
@@ -96,7 +96,7 @@ public class PlayerActorTest extends GameTest {
         playerActor.changeBalance(20);
         assertEquals(110, playerActor.getBalance());
 
-        Mockito.verify(playerDetailActor).updateDetails(110, "nickname");
+        Mockito.verify(playerDetailActor).updateDetails(110, "");
     }
 
     @Test
