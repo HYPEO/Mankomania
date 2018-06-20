@@ -62,7 +62,9 @@ public class PlayerManager extends GameStateManager {
     }
 
     public Lobby getLobby() {
-        return lobby;
+        synchronized (this) {
+            return lobby;
+        }
     }
 
     public void setLobby(Lobby lobby) {
