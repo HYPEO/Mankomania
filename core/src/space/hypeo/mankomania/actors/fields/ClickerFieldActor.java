@@ -13,7 +13,7 @@ public class ClickerFieldActor extends  FieldActor {
 
 
     public ClickerFieldActor(float x, float y, Texture texture, int price, DetailActor detailActor, StageManager stageManager, StageFactory stageFactory){
-        super(x, y, 40f, 40f, price, new Texture("fields/lottery_clicked.png"), texture, detailActor);
+        super(x, y, 40f, 40f, price, new Texture("fields/clicker.png"), texture, detailActor);
         this.stageFactory = stageFactory;
         this.stageManager = stageManager;
     }

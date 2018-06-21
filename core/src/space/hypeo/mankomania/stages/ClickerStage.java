@@ -23,8 +23,8 @@ public class ClickerStage extends Stage {
     private StageManager stageManager;
     private StageFactory stageFactory;
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-    private Texture einkaufstasche1 = new Texture(Gdx.files.internal("clicker/einkaufstasche1.jpg"));
-    private Texture einkaufstasche2= new Texture(Gdx.files.internal("clicker/einkaufstasche2.jpg"));
+    private Texture einkaufstasche1 = new Texture(Gdx.files.internal("clicker/einkaufstasche1.png"));
+    private Texture einkaufstasche2= new Texture(Gdx.files.internal("clicker/einkaufstasche2.png"));
     Label scoreLabel;
     int score=0;
 
@@ -64,7 +64,7 @@ public class ClickerStage extends Stage {
 
                            }
                        }
-                , 37f       //    (delay)
+                , 20f       //    (delay)
                 , 1.5f     //    (seconds)
                 ,0
 

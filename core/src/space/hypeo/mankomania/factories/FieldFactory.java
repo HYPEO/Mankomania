@@ -39,7 +39,7 @@ public class FieldFactory {
             currentField = new BuildHotel(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), detailActor, stageManager, stageFactory);
         } else if (random >= 1 && random < 2) {
             currentField = new LoseMoneyFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("6dice.png"), randomGenerator.nextInt(10), detailActor);
-        }/* else if (random >= 2 && random < 3) {
+        } else if (random >= 2 && random < 3) {
             currentField = new EmptyFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), 0, detailActor);
         } else if (random >= 3 && random < 4) {
             currentField = new LotteryFieldGet(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), randomGenerator.nextInt(10), new Texture("transparent.png"), detailActor, stageManager, stageFactory);
@@ -47,7 +47,7 @@ public class FieldFactory {
             currentField = new LotteryFieldPay(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), randomGenerator.nextInt(10), new Texture("transparent.png"), detailActor, stageManager, stageFactory);
         } else if (random >= 5 && random < 6){
             currentField = new HorseRaceFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), 0, new Texture("transparent.png"), detailActor, stageManager, stageFactory);
-        } */else {
+        } else {
             currentField = new ClickerFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), detailActor, stageManager, stageFactory);
         }
         return currentField;
