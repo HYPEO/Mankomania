@@ -28,7 +28,7 @@ public class ClickerStageEndscreen extends Stage {
     private Label nameLabel;
     private Label moneyLabel;
     private EconomicStageLogic eco;
-    int score;
+    private int score;
 
 
     public ClickerStageEndscreen(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor, int score) {

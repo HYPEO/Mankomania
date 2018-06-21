@@ -25,8 +25,8 @@ public class ClickerStage extends Stage {
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
     private Texture einkaufstasche1 = new Texture(Gdx.files.internal("clicker/einkaufstasche1.png"));
     private Texture einkaufstasche2= new Texture(Gdx.files.internal("clicker/einkaufstasche2.png"));
-    Label scoreLabel;
-    int score=0;
+    private Label scoreLabel;
+    private int score=0;
 
 
     public ClickerStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor) {
@@ -44,15 +44,27 @@ public class ClickerStage extends Stage {
         this.addActor(scoreLabel);
 
 
+
         Timer.schedule(new Timer.Task(){
                            @Override
                            public void run() {
-                               render();
+                               cheapbag();
                            }
                        }
                 , 1f       //    (delay)
-                , 1.5f     //    (seconds)
+                , 1f     //    (seconds)
                 ,30
+
+        );
+        Timer.schedule(new Timer.Task(){
+                           @Override
+                           public void run() {
+                               expensivebag();
+                           }
+                       }
+                , 1f       //    (delay)
+                , 3f     //    (seconds)
+                ,15
 
         );
 
@@ -64,7 +76,7 @@ public class ClickerStage extends Stage {
 
                            }
                        }
-                , 20f       //    (delay)
+                , 37f       //    (delay)
                 , 1.5f     //    (seconds)
                 ,0
 
@@ -73,21 +85,42 @@ public class ClickerStage extends Stage {
 
 
     }
-
-    public void render(){
-        Image einkaufImage = new Image(einkaufstasche1);
+    private void expensivebag(){
+        Image expensivebag = new Image(einkaufstasche2);
         float x = MathUtils.random(0, 480-64);
-        einkaufImage.setX(x);//MathUtils.random(0, 800-64)
-        einkaufImage.setY(800);
-        einkaufImage.setWidth(64);
-        einkaufImage.setHeight(64);
+        expensivebag.setX(x);
+        expensivebag.setY(800);
+        expensivebag.setWidth(64);
+        expensivebag.setHeight(64);
 
-        einkaufImage.addAction(Actions.moveTo(x,-64,3f));
-
-        einkaufImage.addListener( new ClickListener() {
+        expensivebag.addAction(Actions.moveTo(x,-64,1.5f));
+        expensivebag.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                einkaufImage.remove();
+                expensivebag.remove();
+                score+=200;
+                scoreLabel.setX(getWidth()/2-scoreLabel.getWidth());
+                scoreLabel.setText(score+"");
+            }
+        } );
+
+        this.addActor(expensivebag);
+    }
+
+    public void cheapbag(){
+        Image cheapbag = new Image(einkaufstasche1);
+        float x = MathUtils.random(0, 480-64);
+        cheapbag.setX(x);//MathUtils.random(0, 800-64)
+        cheapbag.setY(800);
+        cheapbag.setWidth(90);
+        cheapbag.setHeight(90);
+
+        cheapbag.addAction(Actions.moveTo(x,-64,2.5f));
+
+        cheapbag.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                cheapbag.remove();
                 score+=100;
                 scoreLabel.setX(getWidth()/2-scoreLabel.getWidth());
                 scoreLabel.setText(score+"");
@@ -95,7 +128,7 @@ public class ClickerStage extends Stage {
         } );
 
 
-        this.addActor(einkaufImage);
+        this.addActor(cheapbag);
 
     }
 
