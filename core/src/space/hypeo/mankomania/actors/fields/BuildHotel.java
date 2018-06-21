@@ -40,7 +40,7 @@ public class BuildHotel extends FieldActor {
         if (!isBought) {
             stageManager.push(stageFactory.BuildHotelStage(player,this));
             playerID = player.getId();
-            Log.info("PlayerID OWner "+playerID);
+            Log.info("PlayerID Owner "+playerID);
         } else {
             Log.info("PlayerID Else "+player.getId());
             if (!playerID.equals(player.getId())) {

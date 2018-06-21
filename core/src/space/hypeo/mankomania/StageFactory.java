@@ -3,7 +3,6 @@ package space.hypeo.mankomania;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import space.hypeo.mankomania.actors.horse.HorseActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
@@ -28,6 +27,7 @@ import space.hypeo.mankomania.stages.TitleStage;
 import space.hypeo.mankomania.stages.FinishedHotelStage;
 import space.hypeo.mankomania.actors.fields.BuildHotel;
 import space.hypeo.mankomania.stages.BuildHotelStage;
+import space.hypeo.mankomania.stages.ClickerStage;
 
 /**
  * Creates all the stages (views) for the game.
@@ -133,5 +133,9 @@ public class StageFactory {
     public Stage FinishedHotelStage(PlayerActor player, boolean owner, String playerID) {
         return new FinishedHotelStage(viewport,stageManager,this,player,owner, playerID );
     }
+    public Stage ClickerStage(PlayerActor player) {
+        return new ClickerStage(viewport,stageManager,this,player);
+    }
+
 
 }
