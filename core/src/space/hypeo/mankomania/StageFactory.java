@@ -52,10 +52,10 @@ public class StageFactory {
     {
         GameStateManager gameStateManager = new OfflineGameStateManager(stageManager, this);
 
-        actorFactory.getPlayerActor("", "", Color.GREEN,true, gameStateManager, this);
-        actorFactory.getPlayerActor("", "", Color.CYAN,true, gameStateManager, this);
-        actorFactory.getPlayerActor("", "", Color.YELLOW,true, gameStateManager, this);
-        actorFactory.getPlayerActor("", "", Color.PINK,true, gameStateManager, this);
+        actorFactory.getPlayerActor("Player 1", "Player 1", Color.GREEN,true, gameStateManager, this);
+        actorFactory.getPlayerActor("Player 2", "Player 2", Color.CYAN,true, gameStateManager, this);
+        actorFactory.getPlayerActor("Player 3", "Player 3", Color.YELLOW,true, gameStateManager, this);
+        actorFactory.getPlayerActor("Player 4", "Player 4", Color.PINK,true, gameStateManager, this);
 
         return getMapStage(gameStateManager);
     }
