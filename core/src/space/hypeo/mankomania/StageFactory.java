@@ -28,6 +28,7 @@ import space.hypeo.mankomania.stages.FinishedHotelStage;
 import space.hypeo.mankomania.actors.fields.BuildHotel;
 import space.hypeo.mankomania.stages.BuildHotelStage;
 import space.hypeo.mankomania.stages.ClickerStage;
+import space.hypeo.mankomania.stages.ClickerStageEndscreen;
 
 /**
  * Creates all the stages (views) for the game.
@@ -135,6 +136,9 @@ public class StageFactory {
     }
     public Stage ClickerStage(PlayerActor player) {
         return new ClickerStage(viewport,stageManager,this,player);
+    }
+    public Stage ClickerStageEndscreen(PlayerActor playerActor, int score) {
+        return new ClickerStageEndscreen(viewport,stageManager,this,playerActor,score);
     }
 
 
