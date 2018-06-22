@@ -31,8 +31,8 @@ public class DiscoveredHostsStage extends Stage {
     public DiscoveredHostsStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, PlayerManager playerManager) {
         super(viewport);
         this.viewport = viewport;
-
-        this.foundHosts = ((MClient) playerManager.getPlayerNT().getEndpoint()).discoverHosts();
+        
+        foundHosts = playerManager.discoverHosts();
 
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());

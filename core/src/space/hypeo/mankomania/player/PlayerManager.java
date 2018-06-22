@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.esotericsoftware.minlog.Log;
 
 import java.net.InetAddress;
+import java.util.List;
 import java.util.Set;
 
 import space.hypeo.mankomania.GameStateManager;
@@ -311,6 +312,20 @@ public class PlayerManager extends GameStateManager {
     public void disconnect() {
         if(playerNT != null) {
             playerNT.disconnect();
+        }
+    }
+
+    /**
+     * Discovers the network for available hosts.
+     * @return list of IP addresses
+     */
+    public List<InetAddress> discoverHosts() {
+        if(playerNT != null) {
+            return playerNT.discoverHosts();
+
+        } else {
+            Log.info(role + ": PlayerNT must not be null!");
+            return null;
         }
     }
 }
