@@ -113,6 +113,7 @@ public class LobbyStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.remove(LobbyStage.this);
+                playerManager.disconnect();
             }
         });
 

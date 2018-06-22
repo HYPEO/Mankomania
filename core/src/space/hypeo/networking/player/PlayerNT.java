@@ -98,4 +98,9 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
             Log.info(role + ": PLayerNT: Can NOT connect to myself!");
         }
     }
+
+    @Override
+    public void disconnect() {
+        endpoint.disconnect();
+    }
 }

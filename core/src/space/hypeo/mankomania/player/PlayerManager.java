@@ -289,10 +289,12 @@ public class PlayerManager extends GameStateManager {
 
     @Override
     public void startGame(){
-        playerNT.startGame();
-        if(this.role == Role.HOST) {
-            lobby.values().iterator().next().setActive(true);
-            broadCastLobby();
+        if(playerNT != null) {
+            playerNT.startGame();
+            if (this.role == Role.HOST) {
+                lobby.values().iterator().next().setActive(true);
+                broadCastLobby();
+            }
         }
     }
 
@@ -304,5 +306,11 @@ public class PlayerManager extends GameStateManager {
 
     public void showLobbyStage() {
         stageManager.push(stageFactory.getLobbyStage(this));
+    }
+
+    public void disconnect() {
+        if(playerNT != null) {
+            playerNT.disconnect();
+        }
     }
 }

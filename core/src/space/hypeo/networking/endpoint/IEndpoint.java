@@ -26,4 +26,9 @@ public interface IEndpoint {
      * @param slotId number of the winning slot.
      */
     void sendRouletteResult(int slotId);
+
+    /**
+     * Disconnects the current endpoint from the network.
+     */
+    void disconnect();
 }
