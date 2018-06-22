@@ -117,7 +117,7 @@ public class LobbyStage extends Stage {
 
                 Stage currentStage = stageManager.getCurrentStage();
                 if(currentStage instanceof DiscoveredHostsStage) {
-                    // TODO: update DiscoveredHostStage like LobbyStage
+                    stageManager.remove(currentStage);
                 }
             }
         });
