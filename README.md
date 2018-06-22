@@ -7,6 +7,7 @@
 ## Description
 
 Mankomania is a software project on university that was created by students.
+
 It is an Android application for Android mobile phones. 
 
 !Show a screenshot of the start-screen!
@@ -54,12 +55,12 @@ Android version 16
 Clone the master branch from github.
 
 ### Gradle build
-Run gradle build in project root dir: `gradlew clean && gradlew build`.
+Run gradle build in project root directory by `gradlew clean && gradlew build`.
 
 ### Tests
 Tests are going to execute automatically when `gradlew build` is executed.
-But test execution can be triggered separatly with `gradlew test`.
-Or run a specified test with `gradlew -Dtest.single=PlayerNTTest`.
+But test execution can be triggered separatly by `gradlew test`.
+Or run a specified test by `gradlew -Dtest.single=PlayerNTTest`.
 
 ### Contributing
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) carefully befor start contributing process.
@@ -82,3 +83,4 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) carefully befor start contributin
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
