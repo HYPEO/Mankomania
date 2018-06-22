@@ -2,13 +2,12 @@
 ![Travis Badge](https://travis-ci.org/HYPEO/Mankomania.svg?branch=master)
 ![Sonarcloud Badge](https://sonarcloud.io/api/project_badges/measure?project=Mankomania&metric=alert_status)
 
-![](./android/assets/hypeo.ai?raw=true)
+![](./android/assets/hypeo.ai?raw=true "Hypeo Game Studios &copy; &trade;")
 
 ## Description
 
-Mankomania is a software project on university that was created by students.
-
-It is an Android application for Android mobile phones. 
+Mankomania is a software project on university that was created by students. The group of contributing developer founded the group **Hypeo Game Studios &copy; &trade;**.
+Mankomania, the first product of Hypeo Game Studios &copy; &trade;, is an Android application for Android mobile phones. 
 
 !Show a screenshot of the start-screen!
 
@@ -52,7 +51,7 @@ Android version 16
 ## Installation
 
 ### Clone
-Clone the master branch from github.
+Clone the `master` branch from github.
 
 ### Gradle build
 Run gradle build in project root directory by `gradlew clean && gradlew build`.
