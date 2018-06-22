@@ -3,6 +3,7 @@ package space.hypeo.networking.player;
 import com.esotericsoftware.minlog.Log;
 
 import java.net.InetAddress;
+import java.util.List;
 
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
@@ -96,6 +97,28 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
 
         } else {
             Log.info(role + ": PLayerNT: Can NOT connect to myself!");
+        }
+    }
+
+    @Override
+    public void disconnect() {
+        endpoint.disconnect();
+    }
+
+    /**
+     * Discovers the network for available hosts.
+     * @return list of IP addresses
+     */
+    public List<InetAddress> discoverHosts() {
+        Role role = playerManager.getRole();
+
+        if(role == Role.CLIENT) {
+            Log.info(role + ": Discover available hosts in network...");
+            IClientConnector client = (IClientConnector) endpoint;
+            return client.discoverHosts();
+        } else {
+            Log.info(role + ": No need for discover hosts!");
+            return null;
         }
     }
 }

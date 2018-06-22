@@ -34,6 +34,9 @@ public class MClient implements IEndpoint, IClientConnector {
     // instance of the client
     private com.esotericsoftware.kryonet.Client client;
 
+    // is connected to host?
+    private boolean isConnected;
+
     // host, that the client is connected to
     private PlayerHost hostPlayer;
 
@@ -46,6 +49,7 @@ public class MClient implements IEndpoint, IClientConnector {
     public MClient(PlayerManager playerManager) {
         this.playerManager = playerManager;
         this.start();
+        isConnected = false;
     }
 
     /**
@@ -116,9 +120,7 @@ public class MClient implements IEndpoint, IClientConnector {
                 PlayerDisconnect playerDisconnect = (PlayerDisconnect) object;
                 Log.info("Client: Received order to disconnect from host");
 
-                Log.info("Client: Order is for me ");
-                client.sendTCP(playerDisconnect);
-                close();
+                disconnect();
 
             } else if(object instanceof StartGame) {
                 Log.info("Client: Received order to start the game");
@@ -180,6 +182,7 @@ public class MClient implements IEndpoint, IClientConnector {
     public void close() {
         Log.info("Client will be closed.");
         client.close();
+        isConnected = false;
     }
 
     @Override
@@ -204,6 +207,7 @@ public class MClient implements IEndpoint, IClientConnector {
             try {
                 client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_TCP, Network.PORT_UDP);
                 Log.info("Client: Connection to host " + hostAddress + " established");
+                isConnected = true;
 
             } catch (IOException e) {
                 Log.error(e.getMessage());
@@ -249,5 +253,18 @@ public class MClient implements IEndpoint, IClientConnector {
         RouletteResult winnerSlotId = new RouletteResult(playerManager.getPlayerSkeleton());
         winnerSlotId.setResultNo(slotId);
         client.sendTCP(winnerSlotId);
+    }
+
+    @Override
+    public boolean isConnected() {
+        return isConnected;
+    }
+
+    @Override
+    public void disconnect() {
+        if(isConnected) {
+            client.sendTCP(new PlayerDisconnect(playerManager.getPlayerSkeleton()));
+            close();
+        }
     }
 }

@@ -36,4 +36,8 @@ public interface IPlayerConnector {
      */
     void sendRouletteResult(int slotId);
 
+    /**
+     * Disconnects current player.
+     */
+    void disconnect();
 }
