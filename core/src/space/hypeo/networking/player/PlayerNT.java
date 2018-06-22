@@ -87,11 +87,12 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
         Role role = playerManager.getRole();
 
         if(role == Role.CLIENT) {
+            /* NOTE: it is important to show the LobbyStage before update it! */
+            playerManager.showLobbyStage();
+
             IClientConnector client = (IClientConnector) endpoint;
             client.connectToHost(hostAddr);
             Log.info(role + ": PlayerNT: Connect to host " + hostAddr);
-
-            playerManager.showLobbyStage();
 
         } else {
             Log.info(role + ": PLayerNT: Can NOT connect to myself!");
