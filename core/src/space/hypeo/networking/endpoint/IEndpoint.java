@@ -5,8 +5,14 @@ package space.hypeo.networking.endpoint;
  */
 public interface IEndpoint {
 
+    /**
+     * Stops the endpoint.
+     */
     void stop();
 
+    /**
+     * Sends the lobby broadcast over the network.
+     */
     void broadCastLobby();
 
     /**
