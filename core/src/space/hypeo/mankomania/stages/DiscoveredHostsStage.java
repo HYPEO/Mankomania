@@ -70,9 +70,10 @@ public class DiscoveredHostsStage extends Stage {
 
                         Log.info("Try to connect to host " + hostAddr + "...");
 
-                        ((MClient) playerManager.getPlayerNT().getEndpoint()).connectToHost(hostAddr);
+                        //((MClient) playerManager.getPlayerNT().getEndpoint()).connectToHost(hostAddr);
+                        playerManager.connectToHost(hostAddr);
 
-                        stageManager.push(stageFactory.getLobbyStage(playerManager));
+                        //stageManager.push(stageFactory.getLobbyStage(playerManager));
                     }
 
                 });
