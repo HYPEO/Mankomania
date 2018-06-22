@@ -26,4 +26,9 @@ public interface IClientConnector {
      */
     public List<InetAddress> discoverHosts();
 
+    /**
+     * Connects the client to the host.
+     * @param hostAddr IP address of host
+     */
+    public void connectToHost(InetAddress hostAddr);
 }

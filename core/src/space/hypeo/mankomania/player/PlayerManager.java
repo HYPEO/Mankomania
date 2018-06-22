@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.esotericsoftware.minlog.Log;
 
+import java.net.InetAddress;
 import java.util.Set;
 
 import space.hypeo.mankomania.GameStateManager;
@@ -110,6 +111,8 @@ public class PlayerManager extends GameStateManager {
         Log.info(role + ": Lobby contains " + lobby.size() + " player(s).");
 
         Stage currentStage = stageManager.getCurrentStage();
+
+        // TODO: Client says: LobbyStage is not on display now ???
 
         if (currentStage instanceof LobbyStage) {
             Log.info(role + ": current stage is StageLobby -> update it!");
@@ -291,5 +294,15 @@ public class PlayerManager extends GameStateManager {
             lobby.values().iterator().next().setActive(true);
             broadCastLobby();
         }
+    }
+
+    public void connectToHost(InetAddress hostAddr) {
+        if(playerNT != null) {
+            playerNT.connectToHost(hostAddr);
+        }
+    }
+
+    public void showLobbyStage() {
+        stageManager.push(stageFactory.getLobbyStage(this));
     }
 }
