@@ -38,15 +38,18 @@ public class LocalPlayerActorTest extends GameTest {
     private GameStateManager gameStateManager;
     @Mock
     private DiceSensorManager diceSensorManager;
+    @Mock
+    private Image yourTurnImage;
 
     private PlayerActor playerActor;
+
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Before
     public void setUp() {
-        playerActor = new LocalPlayerActor(actorImage, BALANCE, diceSensorManager, gameStateManager, playerDetailActor, "", "");
+        playerActor = new LocalPlayerActor(actorImage, BALANCE, diceSensorManager, gameStateManager, playerDetailActor, "", "", yourTurnImage);
         playerActor.initializeState(fieldActor);
     }
 

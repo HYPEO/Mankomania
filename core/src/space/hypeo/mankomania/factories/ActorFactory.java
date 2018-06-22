@@ -62,12 +62,20 @@ public class ActorFactory {
 
         DiceSensorManager sensorManager = new DiceSensorManager(stageManager, stageFactory);
 
+        Image yourTurn = new Image(new Texture("map_assets/your_turn.png"));
+
+        yourTurn.setHeight(300);
+        yourTurn.setWidth(300);
+        yourTurn.setX(240 - 150);
+        yourTurn.setY(-30);
+
         if (isLocal)
             return new LocalPlayerActor(new Image(new Texture(texturePath)),
                     INITIAL_BALANCE,
                     sensorManager,
                     gameStateManager,
-                    detailActor, id, nickname);
+                    detailActor, id, nickname, yourTurn
+                    );
         else
             return new PlayerActor(new Image(new Texture(texturePath)), INITIAL_BALANCE, detailActor, gameStateManager, id, nickname);
     }

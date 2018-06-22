@@ -23,6 +23,8 @@ public class PlayerDetailActor extends Group {
     private final Image playerDetail;
     private final Label balanceLabel;
     private final Image balanceIcon;
+    private final Label nameLabel;
+
 
     public PlayerDetailActor(Texture playerTexture) {
         playerTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -32,6 +34,9 @@ public class PlayerDetailActor extends Group {
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         balanceLabel = new Label("1000000", skin);
         this.addActor(balanceLabel);
+
+        nameLabel = new Label("",skin);
+        this.addActor(nameLabel);
 
         balanceIcon = new Image(new Texture("common/500_eur_banknote.png"));
         this.addActor(balanceIcon);
@@ -54,6 +59,8 @@ public class PlayerDetailActor extends Group {
             balanceIcon.setBounds(120f, 45f, balanceIcon.getWidth() * 0.1f, balanceIcon.getHeight() * 0.1f);
             balanceLabel.setX(balanceIcon.getX() + 30f);
             balanceLabel.setY(balanceIcon.getY() - 5f);
+            nameLabel.setX(balanceLabel.getX());
+            nameLabel.setY(balanceLabel.getY() -10 );
         } else if (position == ScreenPosition.BOTTOM_RIGHT) {
             playerDetail.rotateBy(32f);
             playerDetail.setX(480 - playerDetail.getWidth() + 47f);
@@ -61,6 +68,8 @@ public class PlayerDetailActor extends Group {
             balanceIcon.setBounds(480 - 120f - balanceIcon.getWidth() * 0.1f, 45f, balanceIcon.getWidth() * 0.1f, balanceIcon.getHeight() * 0.1f);
             balanceLabel.setX(balanceIcon.getX() + 30f - 100f);
             balanceLabel.setY(balanceIcon.getY() - 5f);
+            nameLabel.setX(balanceLabel.getX());
+            nameLabel.setY(balanceLabel.getY() -10 );
         } else if (position == ScreenPosition.TOP_LEFT) {
             playerDetail.rotateBy(212f);
             playerDetail.setX(-47);
@@ -68,6 +77,8 @@ public class PlayerDetailActor extends Group {
             balanceIcon.setBounds(120f, 800 - 45f - balanceIcon.getHeight() * 0.1f, balanceIcon.getWidth() * 0.1f, balanceIcon.getHeight() * 0.1f);
             balanceLabel.setX(balanceIcon.getX() + 30f);
             balanceLabel.setY(balanceIcon.getY() - 5f);
+            nameLabel.setX(balanceLabel.getX());
+            nameLabel.setY(balanceLabel.getY() +33 );
         } else if (position == ScreenPosition.TOP_RIGHT) {
             playerDetail.rotateBy(150f);
             playerDetail.setX(480 - playerDetail.getWidth() + 56f);
@@ -75,6 +86,8 @@ public class PlayerDetailActor extends Group {
             balanceIcon.setBounds(480 - 120f - balanceIcon.getWidth() * 0.1f, 800 - 45f - balanceIcon.getHeight() * 0.1f, balanceIcon.getWidth() * 0.1f, balanceIcon.getHeight() * 0.1f);
             balanceLabel.setX(balanceIcon.getX() + 30f - 100f);
             balanceLabel.setY(balanceIcon.getY() - 5f);
+            nameLabel.setX(balanceLabel.getX());
+            nameLabel.setY(balanceLabel.getY() +33 );
         } else if (position == ScreenPosition.CENTERED) {
             playerDetail.setRotation(0f);
             playerDetail.setBounds(0, 0, playerDetail.getWidth() * 4, playerDetail.getHeight() * 4);
@@ -82,10 +95,14 @@ public class PlayerDetailActor extends Group {
             playerDetail.setY((800 - playerDetail.getHeight())/2f);
             this.removeActor(balanceLabel);
             this.removeActor(balanceIcon);
+            this.removeActor(nameLabel);
         }
+        //nameLabel.setX(balanceLabel.getX());
+        //nameLabel.setY(balanceLabel.getY()- 20);
     }
 
-    public void updateBalance(int balance) {
+    public void updateDetails(int balance, String name) {
         balanceLabel.setText(Integer.toString(balance));
+        nameLabel.setText(name);
     }
 }

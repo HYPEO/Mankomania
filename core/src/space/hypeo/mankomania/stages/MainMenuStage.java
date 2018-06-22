@@ -14,6 +14,7 @@ import space.hypeo.mankomania.IDeviceStatePublisher;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.player.PlayerFactory;
 import space.hypeo.mankomania.player.PlayerManager;

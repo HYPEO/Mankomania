@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -18,6 +17,7 @@ import java.util.Set;
 
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.player.Colors;
 import space.hypeo.mankomania.player.PlayerManager;
 
@@ -31,6 +31,7 @@ public class SetColorStage extends Stage {
     private PlayerManager playerManager;
 
     public SetColorStage(StageManager stageManager, Viewport viewport, PlayerManager playerManager) {
+        super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
         this.playerManager = playerManager;
@@ -43,7 +44,6 @@ public class SetColorStage extends Stage {
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
         // Set up background.
         background.setColor(237f/255f, 30f/255f, 121f/255f, 1f);
-
         // Add listener for click on background events.
         background.addListener(new ClickListener() {
             @Override
@@ -78,15 +78,15 @@ public class SetColorStage extends Stage {
 
         /* inner table contains players from lobby: represented as button */
         Table btnTable = new Table();
-        int btnHeight = 100;
-        int btnWidth = 250;
+        int btnHeight = 150;
+        int btnWidth = 150;
 
         /* data rows */
         for( Color color : Colors.getAvailableColors()) {
 
             /* colors, that are not used by other players, are selectable */
             if(!usedPlayerColors.contains(color)) {
-                Button btnColor = new TextButton(color.toString(), skin);
+                Button btnColor = ButtonFactory.getPlayerButton(color);
                 btnColor.setColor(color);
 
                 btnColor.addListener(new ClickListener() {

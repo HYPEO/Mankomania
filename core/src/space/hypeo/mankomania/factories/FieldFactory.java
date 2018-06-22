@@ -10,6 +10,7 @@ import space.hypeo.mankomania.actors.fields.EmptyFieldActor;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.fields.HorseRaceFieldActor;
 import space.hypeo.mankomania.actors.fields.LoseMoneyFieldActor;
+import space.hypeo.mankomania.actors.fields.SlotMachineFieldActor;
 import space.hypeo.mankomania.actors.fields.LotteryFieldGet;
 import space.hypeo.mankomania.actors.fields.LotteryFieldPay;
 import space.hypeo.mankomania.actors.map.DetailActor;
@@ -45,7 +46,7 @@ public class FieldFactory {
             currentField = new LotteryFieldGet(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), randomGenerator.nextInt(10), new Texture("transparent.png"), detailActor, stageManager, stageFactory);
         } else if (random >= 4 && random < 5) {
             currentField = new LotteryFieldPay(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), randomGenerator.nextInt(10), new Texture("transparent.png"), detailActor, stageManager, stageFactory);
-        } else if (random >= 5 && random < 6){
+        } else if (random >= 6 && random < 7){
             currentField = new HorseRaceFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), 0, new Texture("transparent.png"), detailActor, stageManager, stageFactory);
         } else {
             currentField = new ClickerFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), detailActor, stageManager, stageFactory);
