@@ -62,7 +62,9 @@ public class PlayerManager extends GameStateManager {
     }
 
     public Lobby getLobby() {
-        return lobby;
+        synchronized (this) {
+            return lobby;
+        }
     }
 
     public void setLobby(Lobby lobby) {
@@ -105,12 +107,16 @@ public class PlayerManager extends GameStateManager {
     public void updateLobbyStage() {
 
         Log.info(role + ": try to update LobbyStage");
+        Log.info(role + ": Lobby contains " + lobby.size() + " player(s).");
 
         Stage currentStage = stageManager.getCurrentStage();
 
         if (currentStage instanceof LobbyStage) {
             Log.info(role + ": current stage is StageLobby -> update it!");
             ((LobbyStage) currentStage).updateLobby();
+
+        } else {
+            Log.info(role + ": LobbyStage is not on display now.");
         }
     }
 
