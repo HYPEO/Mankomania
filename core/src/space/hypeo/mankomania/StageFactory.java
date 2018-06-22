@@ -44,7 +44,7 @@ public class StageFactory {
 
     public StageFactory(final Viewport viewport, final StageManager stageManager, final IDeviceStatePublisher publisher, ActorFactory actorFactory) {
         this.viewport = viewport;
-        this.stageManager = stageManager;<
+        this.stageManager = stageManager;
         this.publisher = publisher;
         this.actorFactory = actorFactory;
     }

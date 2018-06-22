@@ -67,7 +67,6 @@ public class ClickerStage extends Stage {
                 ,15
 
         );
-
         Timer.schedule(new Timer.Task(){
                            @Override
                            public void run() {
