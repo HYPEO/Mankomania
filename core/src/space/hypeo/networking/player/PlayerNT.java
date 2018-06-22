@@ -2,12 +2,16 @@ package space.hypeo.networking.player;
 
 import com.esotericsoftware.minlog.Log;
 
+import java.net.InetAddress;
+
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
+import space.hypeo.networking.endpoint.IClientConnector;
 import space.hypeo.networking.endpoint.IEndpoint;
 import space.hypeo.mankomania.IDeviceStateSubscriber;
 import space.hypeo.mankomania.player.IPlayerConnector;
 import space.hypeo.networking.endpoint.IHostConnector;
+import space.hypeo.networking.endpoint.MClient;
 import space.hypeo.networking.network.Role;
 
 /**
@@ -73,5 +77,25 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     @Override
     public void sendRouletteResult(int slotId) {
         endpoint.sendRouletteResult(slotId);
+    }
+
+    /**
+     * Connects the client to the host.
+     * @param hostAddr IP address of host
+     */
+    public void connectToHost(InetAddress hostAddr) {
+        Role role = playerManager.getRole();
+
+        if(role == Role.CLIENT) {
+            /* NOTE: it is important to show the LobbyStage before update it! */
+            playerManager.showLobbyStage();
+
+            IClientConnector client = (IClientConnector) endpoint;
+            client.connectToHost(hostAddr);
+            Log.info(role + ": PlayerNT: Connect to host " + hostAddr);
+
+        } else {
+            Log.info(role + ": PLayerNT: Can NOT connect to myself!");
+        }
     }
 }
