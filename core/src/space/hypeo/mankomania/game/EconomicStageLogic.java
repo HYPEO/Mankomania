@@ -8,7 +8,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 public class EconomicStageLogic {
 
     private PlayerActor playerActor;
-    public Preferences pref;
+    private Preferences pref;
 
     public EconomicStageLogic(PlayerActor playerActor, String pref) {
         this.playerActor = playerActor;

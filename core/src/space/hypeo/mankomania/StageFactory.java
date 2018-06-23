@@ -96,7 +96,7 @@ public class StageFactory {
 
     public LotteryStage getLotteryStage(PlayerActor playerActor, boolean pay)
      {
-        return new LotteryStage(viewport, stageManager, this, playerActor, pay);
+        return new LotteryStage(viewport, stageManager, playerActor, pay);
     }
 
     /**
@@ -140,17 +140,17 @@ public class StageFactory {
     }
 
     public Stage BuildHotelStage(PlayerActor player, BuildHotel build) {
-        return  new BuildHotelStage(viewport,stageManager,this,player,build);
+        return  new BuildHotelStage(viewport,stageManager,player,build);
     }
 
-    public Stage FinishedHotelStage(PlayerActor player, boolean owner, String playerID) {
-        return new FinishedHotelStage(viewport,stageManager,this,player,owner, playerID );
+    public Stage FinishedHotelStage(PlayerActor player, boolean owner) {
+        return new FinishedHotelStage(viewport,stageManager,player,owner );
     }
     public Stage ClickerStage(PlayerActor player) {
         return new ClickerStage(viewport,stageManager,this,player);
     }
     public Stage ClickerStageEndscreen(PlayerActor playerActor, int score) {
-        return new ClickerStageEndscreen(viewport,stageManager,this,playerActor,score);
+        return new ClickerStageEndscreen(viewport,stageManager, playerActor,score);
     }
 
 }
