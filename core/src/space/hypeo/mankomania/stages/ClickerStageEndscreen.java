@@ -20,7 +20,6 @@ import space.hypeo.mankomania.game.EconomicStageLogic;
 public class ClickerStageEndscreen extends Stage {
 
     private StageManager stageManager;
-    private StageFactory stageFactory;
     private PlayerActor playerActor;
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
     private TextButton buttonTrue;
@@ -31,16 +30,14 @@ public class ClickerStageEndscreen extends Stage {
     private int score;
 
 
-    public ClickerStageEndscreen(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor, int score) {
+    public ClickerStageEndscreen(Viewport viewport, StageManager stageManager,  PlayerActor playerActor, int score) {
         super(viewport);
         this.stageManager = stageManager;
-        this.stageFactory = stageFactory;
         this.playerActor = playerActor;
         this.score = score;
 
         eco= new EconomicStageLogic(playerActor);
 
-        Log.info("Counter");
 
         setUpBackground();
         pay();

@@ -22,7 +22,6 @@ import space.hypeo.mankomania.game.EconomicStageLogic;
 public class FinishedHotelStage extends Stage {
 
     private StageManager stageManager;
-    private StageFactory stageFactory;
     private PlayerActor playerActor;
     private Table table = new Table();
     private Label nameLabel;
@@ -32,17 +31,14 @@ public class FinishedHotelStage extends Stage {
     private TextButton buttonTrue;
     private boolean owner;
     private int money=1000;
-    private String playerID;
-   EconomicStageLogic eco;
+    private EconomicStageLogic eco;
 
 
-    public FinishedHotelStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor,boolean owner, String playerID) {
+    public FinishedHotelStage(Viewport viewport, StageManager stageManager, PlayerActor playerActor,boolean owner) {
         super(viewport);
         this.stageManager = stageManager;
-        this.stageFactory = stageFactory;
         this.playerActor = playerActor;
         this.owner=owner;
-        this.playerID=playerID;
 
         eco= new EconomicStageLogic(playerActor);
 
@@ -53,7 +49,7 @@ public class FinishedHotelStage extends Stage {
     private void choose(){
         if(owner){
             setUpOwner();
-            pay(-BuildHotel.costs);
+            pay(-BuildHotel.getCosts());
 
         }else{
             pay(money);
@@ -71,7 +67,7 @@ public class FinishedHotelStage extends Stage {
         table.add(nameLabel).width(300).height(100).align(Align.center);
         table.row();
 
-        infoLabel = new Label(BuildHotel.costs+ " bekommen", skin);
+        infoLabel = new Label(BuildHotel.getCosts()+ " bekommen", skin);
         infoLabel.setFontScale((float) 1.5);
         table.add(infoLabel).width(300).height(100).align(Align.center);
         table.row();
@@ -82,7 +78,7 @@ public class FinishedHotelStage extends Stage {
         table.add(buttonTrue).width(100);
         table.row();
 
-        moneyLabel = new Label("your current money is: " + (playerActor.getBalance()-BuildHotel.costs) + "", skin);
+        moneyLabel = new Label("your current money is: " + (playerActor.getBalance()-BuildHotel.getCosts()) + "", skin);
         moneyLabel.setFontScale((float) 1.5);
         table.add(moneyLabel).width(300).height(100).align(Align.center);
         table.row();
@@ -128,7 +124,7 @@ public class FinishedHotelStage extends Stage {
 
     private void pay(int money){
         eco.getMoney(money);
-        BuildHotel.costs+=money;
+        BuildHotel.setCosts(BuildHotel.getCosts()+money);
 
     }
 

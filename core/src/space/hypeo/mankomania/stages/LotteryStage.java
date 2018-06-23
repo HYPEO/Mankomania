@@ -23,7 +23,6 @@ public class LotteryStage extends Stage {
     int moneypool;
     int money = 1000;
     private StageManager stageManager;
-    private StageFactory stageFactory;
     private PlayerActor playerActor;
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
     private TextButton buttonTrue;
@@ -33,10 +32,9 @@ public class LotteryStage extends Stage {
     private Boolean pay;
     private EconomicStageLogic eco;
 
-    public LotteryStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor, Boolean pay) {
+    public LotteryStage(Viewport viewport, StageManager stageManager, PlayerActor playerActor, Boolean pay) {
         super(viewport);
         this.stageManager = stageManager;
-        this.stageFactory = stageFactory;
         this.playerActor = playerActor;
         this.pay = pay;
 
@@ -117,9 +115,9 @@ public class LotteryStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Log.info(moneypool+"");
                 stageManager.remove(LotteryStage.this);
             }
         };
+
     }
 }

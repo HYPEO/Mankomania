@@ -20,26 +20,16 @@ import space.hypeo.mankomania.game.EconomicStageLogic;
 
 public class BuildHotelStage extends Stage {
     private StageManager stageManager;
-    private StageFactory stageFactory;
-    private PlayerActor playerActor;
-    private Table table = new Table();
-    private Label nameLabel;
-    private Label moneyLabel;
-    private Label balance;
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-    private TextButton buttonTrue;
-    private TextButton buttonFalse;
     private int kosten = 1000;
-   EconomicStageLogic eco;
-    BuildHotel build;
+    private EconomicStageLogic eco;
+    private BuildHotel build;
 
 
 
-    public BuildHotelStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor,BuildHotel build) {
+    public BuildHotelStage(Viewport viewport, StageManager stageManager, PlayerActor playerActor,BuildHotel build) {
         super(viewport);
         this.stageManager = stageManager;
-        this.stageFactory = stageFactory;
-        this.playerActor = playerActor;
         this.build=build;
 
         eco= new EconomicStageLogic(playerActor);
@@ -51,31 +41,31 @@ public class BuildHotelStage extends Stage {
 
 
     private void setUpElements() {
-
+        Table table = new Table();
 
         table.setWidth(this.getWidth());
         table.align(Align.bottom);
         table.setPosition(0, 200);
 
-        nameLabel = new Label("Willst du das Hotel kaufen?", skin);
+        Label nameLabel = new Label("Willst du das Hotel kaufen?", skin);
         nameLabel.setFontScale((float) 1.5);
         table.add(nameLabel).width(300).height(100).align(Align.center);
         table.row();
 
-        buttonTrue = new TextButton("Ja", skin);
+        TextButton buttonTrue = new TextButton("Ja", skin);
         buttonTrue.addListener(buttonClickTrue());
         table.add(buttonTrue).width(100);
-        buttonFalse = new TextButton("Nein", skin);
+        TextButton buttonFalse = new TextButton("Nein", skin);
         buttonFalse.addListener(buttonClickFalse());
         table.add(buttonFalse).width(100);
         table.row();
 
-        moneyLabel = new Label("Kosten" + kosten + "", skin);
+        Label moneyLabel = new Label("Kosten" + kosten + "", skin);
         moneyLabel.setFontScale((float) 1.5);
         table.add(moneyLabel).width(300).height(100).align(Align.center);
         table.row();
 
-        balance = new Label("Guthaben" + eco.getBalance() + "", skin);
+        Label balance = new Label("Guthaben" + eco.getBalance() + "", skin);
         balance.setFontScale((float) 1.5);
         table.add(balance).width(300).height(100).align(Align.center);
         table.row();
