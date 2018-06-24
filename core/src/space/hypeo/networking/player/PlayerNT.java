@@ -49,6 +49,14 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
         endpoint.stop();
     }
 
+    public void stop() {
+        endpoint.stop();
+    }
+
+    public void close() {
+        endpoint.close();
+    }
+
     @Override
     public void broadCastLobby() {
         endpoint.broadCastLobby();
@@ -103,6 +111,11 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     @Override
     public void disconnect() {
         endpoint.disconnect();
+        if(playerManager.getRole() == Role.HOST) {
+            /* wait till every client has diconnected */
+            while (playerManager.getLobby().size() > 1) { /* LOOP BODY EMPTY */ }
+            Log.info("Now lobby is empty!");
+        }
     }
 
     /**
@@ -121,4 +134,6 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
             return null;
         }
     }
+
+
 }

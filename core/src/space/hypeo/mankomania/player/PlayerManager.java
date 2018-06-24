@@ -14,6 +14,7 @@ import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.LobbyStage;
+import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.networking.network.Network;
 import space.hypeo.networking.network.Role;
 import space.hypeo.networking.player.PlayerNT;
@@ -391,6 +392,8 @@ public class PlayerManager extends GameStateManager {
         if(playerNT != null) {
             playerNT.disconnect();
         }
+
+        returnToMainMenuStage();
     }
 
     /**
@@ -405,5 +408,51 @@ public class PlayerManager extends GameStateManager {
             Log.info(role + ": PlayerNT must not be null!");
             return new ArrayList<>();
         }
+    }
+
+    /**
+     * Stops the running endpoint.
+     */
+    public void stop() {
+        if(playerNT != null) {
+            playerNT.stop();
+        }
+    }
+
+    /**
+     * Closes the running endpoint.
+     */
+    public void close() {
+        if(playerNT != null) {
+            playerNT.close();
+        }
+    }
+
+    /**
+     * Returns to MenuStage.
+     */
+    public void returnToMainMenuStage() {
+        Stage currentStage = stageManager.getCurrentStage();
+
+        if(currentStage instanceof MainMenuStage) {
+            return;
+        }
+
+        if(currentStage instanceof LobbyStage) {
+            updateLobbyStage();
+            stageManager.getCurrentStage();
+        }
+
+        /** TODO: BUG
+         * 1. If player is connected to host as client
+         * 2. Host press "return to Main Menu" in Lobby
+         * 3. Client crashes at the next statement
+         */
+        stageManager.push(stageFactory.getMainMenu());
+    }
+
+    public void signalDisconneced() {
+        Log.info(role + ": Host disconnected, close my connection too.");
+        disconnect();
     }
 }

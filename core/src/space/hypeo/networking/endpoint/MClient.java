@@ -69,17 +69,15 @@ public class MClient implements IEndpoint, IClientConnector {
         }
 
         /**
-         * If has diconnected from host.
+         * If has diconnected from host or call methode client.close().
          * @param connection
          */
         @Override
         public void disconnected(Connection connection) {
             super.disconnected(connection);
 
-            connection.sendTCP( new PlayerDisconnect(playerManager.getPlayerSkeleton()) );
+            Log.info("MClient: Method disconnected()");
 
-            hostPlayer = null;
-            connection.close();
         }
 
         /**
@@ -117,10 +115,9 @@ public class MClient implements IEndpoint, IClientConnector {
                 Log.info("Client: Received info of host, to be connected with: " + hostPlayer);
 
             } else if(object instanceof PlayerDisconnect) {
-                PlayerDisconnect playerDisconnect = (PlayerDisconnect) object;
                 Log.info("Client: Received order to disconnect from host");
 
-                disconnect();
+                playerManager.signalDisconneced();
 
             } else if(object instanceof StartGame) {
                 Log.info("Client: Received order to start the game");
@@ -183,6 +180,7 @@ public class MClient implements IEndpoint, IClientConnector {
         Log.info("Client will be closed.");
         client.close();
         isConnected = false;
+        hostPlayer = null;
     }
 
     @Override
@@ -263,6 +261,7 @@ public class MClient implements IEndpoint, IClientConnector {
     @Override
     public void disconnect() {
         if(isConnected) {
+            Log.info("MClient: Send PlayerDisconnect() to host");
             client.sendTCP(new PlayerDisconnect(playerManager.getPlayerSkeleton()));
             close();
         }

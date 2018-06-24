@@ -266,6 +266,7 @@ public class MHost implements IEndpoint, IHostConnector {
 
     @Override
     public void disconnect() {
+        Log.info("MHost: Send PlayerDisconnect() broadcast.");
         for(Connection connection : server.getConnections()) {
             connection.sendTCP(new PlayerDisconnect());
         }

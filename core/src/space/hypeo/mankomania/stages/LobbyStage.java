@@ -284,6 +284,7 @@ public class LobbyStage extends Stage {
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.remove(LobbyStage.this);
                 playerManager.disconnect();
+                playerManager.close();
 
                 Stage currentStage = stageManager.getCurrentStage();
                 if(currentStage instanceof DiscoveredHostsStage) {
