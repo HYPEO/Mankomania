@@ -3,6 +3,7 @@ package space.hypeo.mankomania.stages;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -14,8 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 
 import java.util.Random;
 
@@ -24,6 +27,7 @@ import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.player.PlayerManager;
+import space.hypeo.mankomania.sensor.DiceSensorManager;
 
 public class RouletteResultStage extends Stage {
     private StageManager stageManager;
@@ -57,28 +61,38 @@ public class RouletteResultStage extends Stage {
     private Roulette roulette;
     private boolean cheated;
 
-    public RouletteResultStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor, int numOfSpins, boolean cheated, int money){
+    public RouletteResultStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor, boolean cheated, int money, String selectedColour){
         super(viewport);
         this.cheated = cheated;
         //this.playerManager = playerManager;
         this.stageFactory = stageFactory;
         this.playerActor = playerActor;
         this.stageManager = stageManager;
+        this.selectedColour = selectedColour;
+        randomizeSpin = new Random();
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-        this.numOfSpins = numOfSpins;
-        setUpRoulette();
-        setUpRoulette();
         Texture rouletteWheel = new Texture("roulette_wheel.png");
         rouletteImage = new Image(rouletteWheel);
         Texture spinCircle = new Texture("roulette_spincircle.png");
         spinImage = new Image(spinCircle);
+        setUpRoulette();
+        setUpTable();
 
-        float spinningDegrees = (360/37) * numOfSpins;
+
+        numOfSpins = randomizeSpin.nextInt((184 - 73) + 1) + 73;
         roulette = new Roulette(playerActor, numOfSpins);
-        spinImage.addAction(Actions.parallel(Actions.moveTo(group.getWidth() / 2f - spinImage.getWidth() / 2f, group.getHeight() / 2f - spinImage.getHeight() / 2f ,3), Actions.rotateBy(spinningDegrees, 0)));
+        float spinningDegrees = (360/37f) * numOfSpins;
+        spinImage.addAction(Actions.parallel(Actions.moveTo(group.getWidth() / 2f - spinImage.getWidth() / 2f, group.getHeight() / 2f - spinImage.getHeight() / 2f ,3), Actions.rotateBy(spinningDegrees, 3)));
         spinImage.setOrigin(266/2f, 266/2f);
+        this.addActor(table);
 
+        buttonCheater.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                cheat();
 
+            }
+        });
     }
 
     public void setUpRoulette()
@@ -101,20 +115,44 @@ public class RouletteResultStage extends Stage {
         Table buttonTable = new Table();
         table.setWidth(this.getWidth());
         table.setHeight(this.getHeight());
-        table.add(group).padBottom(-200).padTop(-100);
+        table.add(group).padBottom(-100).padTop(-50);
         table.row();
-        table.add(buttonTable).padTop(5);
-        table.row();
+        table.add(buttonTable).padTop(-100);
         table.row();
         setUpButtons();
-        table.add(buttonCheater).width(300).height(80).padTop(30);
-        table.add(close).width(300).height(80).padTop(30);
+        buttonTable.add(wonOrLost);
+        //Non Active Roulette player
+        buttonTable.row();
+        buttonTable.add(buttonCheater).width(300).height(80).padTop(20);
+        buttonTable.row();
+        //Active Roulette player
+        buttonTable.add(close).width(300).height(80).padTop(20);
     }
     public void setUpButtons()
     {
-        buttonCheater = new TextButton("Cheater",skin);
-        close = new TextButton("Close",skin);
-    }
 
+        //Only for active Roulette Player
+        close = new TextButton("Close",skin);
+        buttonCheater = new TextButton("Cheater",skin);
+
+        //for all players
+        wonOrLost = new Label("Good Luck",skin);
+    }
+    public void cheat()
+    {
+        Log.info("CHEATING");
+        float spinOneTime = 360f/37f;
+        spinImage.addAction(Actions.parallel(Actions.moveTo(group.getWidth() / 2f - spinImage.getWidth() / 2f, group.getHeight() / 2f - spinImage.getHeight() / 2f ,0), Actions.rotateBy(spinOneTime, 0)));
+        //return true;
+    }
+    /*
+    @Override
+    public void act()
+    {
+        Log.info("ACTING!!");
+        DiceSensorManager diceSensorManager = new DiceSensorManager(stageManager,stageFactory);
+        if(diceSensorManager.cheatShake(playerActor))
+            cheat();
+    }*/
 
 }

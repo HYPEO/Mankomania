@@ -46,5 +46,24 @@ public class DiceSensorManager {
             // TODO: maybe cheat function here (for example: if other player is playing roulette)
         }
     }
+    public boolean cheatShake(PlayerActor playerActor)
+    {
+        float xValue;
+        float yValue;
+        float zValue;
+        float gForce;
+
+
+        xValue = Gdx.input.getAccelerometerX() / EARTH_GRAVITY;
+        yValue = Gdx.input.getAccelerometerY() / EARTH_GRAVITY;
+        zValue = Gdx.input.getAccelerometerZ() / EARTH_GRAVITY;
+
+        gForce = (float) Math.sqrt(xValue * xValue + yValue * yValue + zValue * zValue);
+
+        if (gForce > GRAVITY_FORCE_THRESHOLD) {
+            return true;
+        }
+        return false;
+    }
 
 }

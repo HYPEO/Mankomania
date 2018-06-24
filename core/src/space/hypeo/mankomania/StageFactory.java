@@ -103,8 +103,8 @@ public class StageFactory {
     public Stage getRouletteStage(PlayerActor playerActor) {
         return new RouletteStage(viewport,stageManager, this, playerActor);
     }
-    public Stage getRouletteResultStage(PlayerActor playerActor, int numOfSpins, boolean cheated, int money) {
-        return new RouletteResultStage(viewport,stageManager, this, playerActor, numOfSpins,cheated,money);
+    public Stage getRouletteResultStage(PlayerActor playerActor, boolean cheated, int money, String selectedColour) {
+        return new RouletteResultStage(viewport,stageManager, this, playerActor, cheated,money,selectedColour);
     }
 
     public Stage getEndGameStage(PlayerActor winningPlayer) {

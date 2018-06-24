@@ -46,4 +46,7 @@ public class Roulette {
             return "You Lost";
         }
     }
+
+    public void cheat() {
+    }
 }
