@@ -14,12 +14,10 @@ import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.GameTest;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
-
-import static org.junit.Assert.assertEquals;
-
 import space.hypeo.mankomania.sensor.DiceSensorManager;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.never;
 
 /**

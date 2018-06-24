@@ -1,6 +1,7 @@
 package space.hypeo.mankomania.actors.fields;
 
 import com.badlogic.gdx.graphics.Texture;
+
 import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.game.EconomicStageLogic;

@@ -1,16 +1,16 @@
 package space.hypeo.networking.player;
 
-import com.esotericsoftware.minlog.Log;
-
 import java.net.InetAddress;
 import java.util.List;
 
+import com.esotericsoftware.minlog.Log;
+
+import space.hypeo.mankomania.IDeviceStateSubscriber;
+import space.hypeo.mankomania.player.IPlayerConnector;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.endpoint.IClientConnector;
 import space.hypeo.networking.endpoint.IEndpoint;
-import space.hypeo.mankomania.IDeviceStateSubscriber;
-import space.hypeo.mankomania.player.IPlayerConnector;
 import space.hypeo.networking.endpoint.IHostConnector;
 import space.hypeo.networking.endpoint.MClient;
 import space.hypeo.networking.network.Role;

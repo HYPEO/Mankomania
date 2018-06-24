@@ -14,8 +14,8 @@ import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.Network;
-import space.hypeo.networking.player.PlayerNT;
 import space.hypeo.networking.network.Role;
+import space.hypeo.networking.player.PlayerNT;
 
 public class PlayerManager extends GameStateManager {
 
