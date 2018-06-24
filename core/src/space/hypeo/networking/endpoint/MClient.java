@@ -75,9 +75,7 @@ public class MClient implements IEndpoint, IClientConnector {
         @Override
         public void disconnected(Connection connection) {
             super.disconnected(connection);
-
-            Log.info("MClient: Method disconnected()");
-
+            Log.info("MClient: Callback disconnected()");
         }
 
         /**
@@ -185,8 +183,11 @@ public class MClient implements IEndpoint, IClientConnector {
 
     @Override
     public List<InetAddress> discoverHosts() {
-        // TODO: check if WLAN has "Wireless Isolation" enabled => no discovery possible
-        // use UDP port for discovering hosts
+        /* TODO
+         *          1. check if WLAN is on (at device)
+         *          2. check if WLAN has "Wireless Isolation" enabled => no discovery possible
+         */
+        /* NOTE: use UDP port for discovering hosts! */
         Log.info("Client: Searching in WLAN for hosts...");
         List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
@@ -227,11 +228,6 @@ public class MClient implements IEndpoint, IClientConnector {
         startPingRequest = pingRequest.getTime();
 
         client.sendTCP(pingRequest);
-    }
-
-    @Override
-    public boolean joinGame(String playerID) {
-        return false;
     }
 
     @Override
