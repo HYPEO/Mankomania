@@ -36,19 +36,20 @@ We adopted the original game's turn-based concept and extended it by the followi
 The following techniques, technologies and tools were used:
 
 ### Build management tool
-Gradle
+[Gradle Build Tool](https://gradle.org/)
 
 ### Coding Language
-Java v1.8
+[Java SE Development Kit 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
 ### Graphics Framework
-LibGDX
+[LibGDX](https://libgdx.badlogicgames.com/)
 
 ### Network Framework
-Kryonet
+[Kryonet - TCP/UDP client/server library for Java](https://github.com/EsotericSoftware/kryonet)
 
 ### Requirements
-Android version 16
+* Minimum: [Android SDK Version 16](https://developer.android.com/about/versions/android-4.1)
+* Built for: [Android SDK Version 25](https://developer.android.com/studio/releases/platforms)
 
 ## Installation
 The game is very easy to install, simply follow the instructions.
@@ -67,12 +68,12 @@ Or run a specified test by `gradlew -Dtest.single=PlayerNTTest`.
 ### Contributing
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) carefully befor start contributing process.
 
-0. Change into `develop` branch by `git checkout develop`
-1. Fork a new feature branch from develop branch by `git checkout -b feature/my-new-feature`
-2. Make your changes
-3. Commit your changes by `git commit -am "Add some feature"`
-4. Push to the branch by `git push origin feature/my-new-feature`
-5. Submit a pull request on github page
+1. Change into `develop` branch by `git checkout develop`
+2. Fork a new feature branch from develop branch by `git checkout -b feature/my-new-feature`
+3. Make your changes
+4. Commit your changes by `git commit -am "Add some feature"`
+5. Push to the branch by `git push origin feature/my-new-feature`
+6. Submit a pull request on github page
 
 ## Developers
 
