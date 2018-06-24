@@ -7,8 +7,15 @@ public interface IEndpoint {
 
     /**
      * Stops the endpoint.
+     * Endpoint can connect later again w/o start.
      */
     void stop();
+
+    /**
+     * Closes the endpoint.
+     * Endpoint has to be restarted before connecting again.
+     */
+    void close();
 
     /**
      * Sends the lobby broadcast over the network.

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
@@ -19,9 +20,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 
 public class ClickerStage extends Stage {
 
-    private PlayerActor playerActor;
-    private StageManager stageManager;
-    private StageFactory stageFactory;
+
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
     private Texture einkaufstasche1 = new Texture(Gdx.files.internal("clicker/einkaufstasche1.png"));
     private Texture einkaufstasche2= new Texture(Gdx.files.internal("clicker/einkaufstasche2.png"));
@@ -31,10 +30,6 @@ public class ClickerStage extends Stage {
 
     public ClickerStage(Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor) {
         super(viewport);
-        this.stageManager = stageManager;
-        this.stageFactory = stageFactory;
-        this.playerActor = playerActor;
-
 
         setUpBackground();
         scoreLabel = new Label(score+"",skin);
@@ -71,7 +66,7 @@ public class ClickerStage extends Stage {
                            @Override
                            public void run() {
                                stageManager.remove(ClickerStage.this);
-                               stageManager.push(stageFactory.ClickerStageEndscreen(playerActor,score));
+                               stageManager.push(stageFactory.clickerStageEndscreen(playerActor,score));
 
                            }
                        }
@@ -92,7 +87,7 @@ public class ClickerStage extends Stage {
         expensivebag.setWidth(64);
         expensivebag.setHeight(64);
 
-        expensivebag.addAction(Actions.moveTo(x,-64,1.5f));
+        expensivebag.addAction(Actions.moveTo(x,-128,2f));
         expensivebag.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -114,7 +109,7 @@ public class ClickerStage extends Stage {
         cheapbag.setWidth(90);
         cheapbag.setHeight(90);
 
-        cheapbag.addAction(Actions.moveTo(x,-64,2.5f));
+        cheapbag.addAction(Actions.moveTo(x,-128,3.5f));
 
         cheapbag.addListener( new ClickListener() {
             @Override

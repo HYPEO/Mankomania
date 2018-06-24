@@ -1,7 +1,6 @@
 package space.hypeo.mankomania.player;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import org.junit.After;
 import org.junit.Before;
@@ -11,11 +10,10 @@ import org.mockito.Mock;
 
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
-import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.networking.network.Role;
 import space.hypeo.networking.player.PlayerNT;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;

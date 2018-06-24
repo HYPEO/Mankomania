@@ -2,11 +2,9 @@ package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -17,15 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.mankomania.actors.horse.HorseActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.game.HorseRaceStageLogic;
 
@@ -73,13 +65,15 @@ public class HorseRaceStage extends Stage {
     }
 
     private void createWidgets() {
-        horse1Button = new TextButton(raceLogic.getHorse1().getHorseName() + "\n Quote: " +
+        final String quote = "\n Quote: ";
+
+        horse1Button = new TextButton(raceLogic.getHorse1().getHorseName() + quote +
                 Float.toString(raceLogic.getHorse1().getQuote()), skin);
-        horse2Button = new TextButton(raceLogic.getHorse2().getHorseName() + "\n Quote: " +
+        horse2Button = new TextButton(raceLogic.getHorse2().getHorseName() + quote +
                 Float.toString(raceLogic.getHorse2().getQuote()), skin);
-        horse3Button = new TextButton(raceLogic.getHorse3().getHorseName() + "\n Quote: " +
+        horse3Button = new TextButton(raceLogic.getHorse3().getHorseName() + quote +
                 Float.toString(raceLogic.getHorse3().getQuote()), skin);
-        horse4Button = new TextButton(raceLogic.getHorse4().getHorseName() + "\n Quote: " +
+        horse4Button = new TextButton(raceLogic.getHorse4().getHorseName() + quote +
                 Float.toString(raceLogic.getHorse4().getQuote()), skin);
 
         startRace = new TextButton("GO!!!", skin);

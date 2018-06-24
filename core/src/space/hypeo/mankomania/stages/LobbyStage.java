@@ -2,8 +2,6 @@ package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -17,15 +15,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
 import space.hypeo.mankomania.StageFactory;
-import space.hypeo.mankomania.actors.player.PlayerActor;
-import space.hypeo.mankomania.factories.ActorFactory;
-import space.hypeo.mankomania.factories.ButtonFactory;
-import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.mankomania.factories.ActorFactory;
+import space.hypeo.mankomania.factories.ButtonFactory;
+import space.hypeo.mankomania.player.Lobby;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.network.Role;
-import space.hypeo.mankomania.player.Lobby;
 
 
 /**
@@ -38,24 +35,38 @@ public class LobbyStage extends Stage {
     private final Viewport viewport;
     private final StageFactory stageFactory;
     private PlayerManager playerManager;
-    private boolean update;
+    private boolean triggerUpdate;
     private boolean triggerMapStage;
 
+    /* very outer table for all widgets */
+    private Table rootTable;
+    private int btnHeight;
+
+    /**
+     * Creates new instance.
+     * @param stageManager
+     * @param viewport
+     * @param stageFactory
+     * @param playerManager
+     */
     public LobbyStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, PlayerManager playerManager) {
         super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
         this.stageFactory = stageFactory;
         this.playerManager = playerManager;
-        this.update = false;
+        this.triggerUpdate = false;
         this.triggerMapStage = false;
         setupBackground();
         setupLayout();
     }
 
-    public void updateLobby() {
+    /**
+     * Updates LobbyStage from outside.
+     */
+    public void triggerUpdate() {
         synchronized (this) {
-            update = true;
+            triggerUpdate = true;
         }
     }
 
@@ -64,11 +75,11 @@ public class LobbyStage extends Stage {
     {
         synchronized (this)
         {
-            if(update) {
+            if(triggerUpdate) {
                 this.clear();
                 setupBackground();
                 setupLayout();
-                update = false;
+                triggerUpdate = false;
             }
             if(triggerMapStage)
             {
@@ -77,6 +88,9 @@ public class LobbyStage extends Stage {
         }
     }
 
+    /**
+     * Sets the background color.
+     */
     private void setupBackground() {
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
         // Set up background.
@@ -84,11 +98,13 @@ public class LobbyStage extends Stage {
         this.addActor(background);
     }
 
+    /**
+     * Sets the layout of the stage.
+     */
     private void setupLayout() {
 
-
-        Lobby lobby = playerManager.getLobby();
         Role role = playerManager.getRole();
+        Lobby lobby = playerManager.getLobby();
         PlayerSkeleton myself = playerManager.getPlayerSkeleton();
 
         Log.info(role + ": " + "LobbyStage:setupLayout() ...");
@@ -101,33 +117,36 @@ public class LobbyStage extends Stage {
 
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
+        /* init button dimensions for layout table */
+        btnHeight = 60;
+
         /* very outer table for all widgets */
-        Table rootTable = new Table();
+        rootTable = new Table();
         //rootTable.setDebug(true); // turn on all debug lines
         rootTable.setFillParent(true);
         this.addActor(rootTable);
 
-        Button btnBack = ButtonFactory.getButton("common/back_to_main_menu.png", "common/back_to_main_menu_clicked.png");
-        btnBack.setTransform(true);
-        btnBack.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                stageManager.remove(LobbyStage.this);
-                playerManager.disconnect();
+        setupLayoutHeader(skin, role);
+        setupLayoutData(skin, role, lobby, myself);
+        rootTable.row();
+        setupLayoutFooter(skin, role, lobby);
 
-                Stage currentStage = stageManager.getCurrentStage();
-                if(currentStage instanceof DiscoveredHostsStage) {
-                    stageManager.remove(currentStage);
-                }
-            }
-        });
+        this.addActor(rootTable);
+    }
 
+    /**
+     * Sets the header, the first part of the layout.
+     * @param skin
+     * @param role
+     */
+    private void setupLayoutHeader(Skin skin, Role role)
+    {
+        /* add title */
         Label title = new Label("GAME LOBBY", skin);
         title.setFontScaleX(2);
         title.setFontScaleY(2);
         title.setAlignment(Align.center);
 
-        /* add title */
         rootTable.add(title).padTop(50).padBottom(50);
         rootTable.row();
 
@@ -140,10 +159,19 @@ public class LobbyStage extends Stage {
 
         rootTable.add(subTitleTable);
         rootTable.row();
+    }
 
+    /**
+     * Sets the main content of the layout.
+     * @param skin
+     * @param role
+     * @param lobby
+     * @param myself
+     */
+    private void setupLayoutData(Skin skin, Role role, Lobby lobby, PlayerSkeleton myself)
+    {
         /* inner table contains players from lobby: represented as button */
         Table btnTable = new Table();
-        int btnHeight = 60;
 
         /* header row */
         Label hIndex = new Label("#", skin);
@@ -217,7 +245,16 @@ public class LobbyStage extends Stage {
         /* add buttons */
         rootTable.add(btnTable);
         rootTable.row();
+    }
 
+    /**
+     * Sets the footer, the last part of the layout.
+     * @param skin
+     * @param role
+     * @param lobby
+     */
+    private void setupLayoutFooter(Skin skin, Role role, Lobby lobby)
+    {
         /* only host can start the game */
         if(role == Role.HOST &&
                 lobby.areAllPlayerReady() &&
@@ -238,12 +275,31 @@ public class LobbyStage extends Stage {
 
             rootTable.add(startTable);
         }
-        rootTable.row();
+
+        /* return to MenuStage */
+        Button btnBack = ButtonFactory.getButton("common/back_to_main_menu.png", "common/back_to_main_menu_clicked.png");
+        btnBack.setTransform(true);
+        btnBack.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageManager.remove(LobbyStage.this);
+                playerManager.disconnect();
+                playerManager.close();
+
+                Stage currentStage = stageManager.getCurrentStage();
+                if(currentStage instanceof DiscoveredHostsStage) {
+                    stageManager.remove(currentStage);
+                }
+            }
+        });
+
         rootTable.add(btnBack).width(400).height(125);
         rootTable.row();
-        this.addActor(rootTable);
     }
 
+    /**
+     * Creates the MapStage with all needed actors.
+     */
     private void createMapStage(){
         if (!playerManager.getLobby().areAllPlayerReady()) {
             Log.info("Not all player are ready to start game!");
@@ -266,6 +322,9 @@ public class LobbyStage extends Stage {
         stageManager.push(stageFactory.getMapStage(playerManager));
     }
 
+    /**
+     * Triggers the creation of MapStage from outside.
+     */
     public void triggerMapStage(){
         synchronized (this) {
             triggerMapStage = true;
