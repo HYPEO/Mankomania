@@ -5,7 +5,6 @@ package space.hypeo.mankomania.player;
  * Created by pichlermarc on 07.04.2018.
  */
 
-
 /**
  * Interface provides service methods to fetch data that are relevant for each player
  */

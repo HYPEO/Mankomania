@@ -2,7 +2,6 @@ package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.GameStateManager;
@@ -11,7 +10,6 @@ import space.hypeo.mankomania.actors.fields.EmptyFieldActor;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
-import space.hypeo.mankomania.actors.player.YourTurnIndicator;
 import space.hypeo.mankomania.factories.FieldFactory;
 
 /**

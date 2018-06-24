@@ -13,7 +13,7 @@ import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.endpoint.IEndpoint;
 import space.hypeo.networking.endpoint.IHostConnector;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 

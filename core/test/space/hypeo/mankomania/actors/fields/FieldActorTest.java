@@ -1,7 +1,6 @@
 package space.hypeo.mankomania.actors.fields;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,9 +16,7 @@ import space.hypeo.mankomania.GameTest;
 import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by pichlermarc on 11.05.2018.
