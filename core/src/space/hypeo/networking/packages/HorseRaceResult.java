@@ -7,8 +7,7 @@ public class HorseRaceResult extends PlayerSkeleton {
     private String horseName;
 
     /* NOTE: default constructor is required for network traffic */
-    public HorseRaceResult() {
-    }
+    public HorseRaceResult() {}
 
     public HorseRaceResult(String nickname) {
         super(nickname);

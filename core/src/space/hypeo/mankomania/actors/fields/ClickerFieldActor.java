@@ -22,6 +22,6 @@ public class ClickerFieldActor extends  FieldActor {
 
     @Override
     public void trigger(PlayerActor player) {
-        stageManager.push(stageFactory.ClickerStage(player));
+        stageManager.push(stageFactory.clickerStage(player));
     }
 }

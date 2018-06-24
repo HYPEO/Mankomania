@@ -18,13 +18,14 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.game.EconomicStageLogic;
 
 public class LotteryStage extends Stage {
-    int moneypool;
-    int money = 1000;
+    private int moneypool;
+    private int money = 1000;
     private StageManager stageManager;
     private PlayerActor playerActor;
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
     private Boolean pay;
     private EconomicStageLogic eco;
+    private final String strMoneypool;
 
     public LotteryStage(Viewport viewport, StageManager stageManager, PlayerActor playerActor, Boolean pay) {
         super(viewport);
@@ -35,7 +36,9 @@ public class LotteryStage extends Stage {
         eco = new EconomicStageLogic(playerActor, "Lottery");
         setUpBackground();
 
-        moneypool = eco.getPrefs("moneypool");
+        strMoneypool = "moneypool";
+
+        moneypool = eco.getPrefs(strMoneypool);
         Log.info(moneypool+"");
 
         choose();
@@ -57,12 +60,13 @@ public class LotteryStage extends Stage {
 
     private void pay(){
         eco.getMoney(money);
-        eco.setPrefs("moneypool", 0);
+        eco.setPrefs(strMoneypool, 0);
     }
 
     private void get(){
         eco.payMoney(money);
-        eco.setPrefs("moneypool", moneypool += money);
+        moneypool += money;
+        eco.setPrefs(strMoneypool, moneypool);
     }
 
 

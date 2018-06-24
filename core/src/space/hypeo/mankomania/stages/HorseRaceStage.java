@@ -65,13 +65,15 @@ public class HorseRaceStage extends Stage {
     }
 
     private void createWidgets() {
-        horse1Button = new TextButton(raceLogic.getHorse1().getHorseName() + "\n Quote: " +
+        final String quote = "\n Quote: ";
+
+        horse1Button = new TextButton(raceLogic.getHorse1().getHorseName() + quote +
                 Float.toString(raceLogic.getHorse1().getQuote()), skin);
-        horse2Button = new TextButton(raceLogic.getHorse2().getHorseName() + "\n Quote: " +
+        horse2Button = new TextButton(raceLogic.getHorse2().getHorseName() + quote +
                 Float.toString(raceLogic.getHorse2().getQuote()), skin);
-        horse3Button = new TextButton(raceLogic.getHorse3().getHorseName() + "\n Quote: " +
+        horse3Button = new TextButton(raceLogic.getHorse3().getHorseName() + quote +
                 Float.toString(raceLogic.getHorse3().getQuote()), skin);
-        horse4Button = new TextButton(raceLogic.getHorse4().getHorseName() + "\n Quote: " +
+        horse4Button = new TextButton(raceLogic.getHorse4().getHorseName() + quote +
                 Float.toString(raceLogic.getHorse4().getQuote()), skin);
 
         startRace = new TextButton("GO!!!", skin);

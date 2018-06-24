@@ -8,11 +8,6 @@ import space.hypeo.mankomania.player.PlayerSkeleton;
 public interface IHostConnector {
 
     /**
-     * Advertises a new Game that other players can join.
-     */
-    void advertiseGame();
-
-    /**
      * Starts the game (requires that a game has been advertised by this player)
      */
     boolean startGame();

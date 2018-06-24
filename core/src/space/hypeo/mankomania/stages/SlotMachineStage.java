@@ -152,7 +152,7 @@ public class SlotMachineStage extends Stage {
                     playerActor.changeBalance(slotMachineLogic.getPrice());
 
                     stageManager.remove(SlotMachineStage.this);
-                    stageManager.push(stageFactory.getSlotMachineResultStage(playerActor, slotMachineLogic));
+                    stageManager.push(stageFactory.getSlotMachineResultStage(slotMachineLogic));
                 }
             }
         };

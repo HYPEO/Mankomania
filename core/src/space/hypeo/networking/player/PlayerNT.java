@@ -1,6 +1,7 @@
 package space.hypeo.networking.player;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.esotericsoftware.minlog.Log;
@@ -12,7 +13,6 @@ import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.endpoint.IClientConnector;
 import space.hypeo.networking.endpoint.IEndpoint;
 import space.hypeo.networking.endpoint.IHostConnector;
-import space.hypeo.networking.endpoint.MClient;
 import space.hypeo.networking.network.Role;
 
 /**
@@ -36,7 +36,7 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
 
     @Override
     public void endTurn() {
-        // TODO: end the current turn for this player
+        throw new UnsupportedOperationException("PlayerNT: Method 'endturn()' not implemented yet!");
     }
 
     @Override
@@ -47,6 +47,14 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     @Override
     public void onStop() {
         endpoint.stop();
+    }
+
+    public void stop() {
+        endpoint.stop();
+    }
+
+    public void close() {
+        endpoint.close();
     }
 
     @Override
@@ -103,6 +111,11 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     @Override
     public void disconnect() {
         endpoint.disconnect();
+        if(playerManager.getRole() == Role.HOST) {
+            /* wait till every client has diconnected */
+            while (playerManager.getLobby().size() > 1) { /* LOOP BODY EMPTY */ }
+            Log.info("Now lobby is empty!");
+        }
     }
 
     /**
@@ -118,7 +131,9 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
             return client.discoverHosts();
         } else {
             Log.info(role + ": No need for discover hosts!");
-            return null;
+            return new ArrayList<>();
         }
     }
+
+
 }

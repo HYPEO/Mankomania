@@ -66,7 +66,7 @@ public class ClickerStage extends Stage {
                            @Override
                            public void run() {
                                stageManager.remove(ClickerStage.this);
-                               stageManager.push(stageFactory.ClickerStageEndscreen(playerActor,score));
+                               stageManager.push(stageFactory.clickerStageEndscreen(playerActor,score));
 
                            }
                        }

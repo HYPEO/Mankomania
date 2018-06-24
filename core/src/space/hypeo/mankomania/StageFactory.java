@@ -9,7 +9,6 @@ import space.hypeo.mankomania.actors.horse.HorseActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
-import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.factories.FieldFactory;
 import space.hypeo.mankomania.game.SlotMachineLogic;
 import space.hypeo.mankomania.player.PlayerManager;
@@ -74,8 +73,7 @@ public class StageFactory {
     }
 
     public Stage getMainMenu() {
-        ButtonFactory buttonFactory = new ButtonFactory();
-        return new MainMenuStage(stageManager, viewport, this, publisher, buttonFactory);
+        return new MainMenuStage(stageManager, viewport, this, publisher);
     }
 
     public Stage getSendMoneyStage() {
@@ -136,21 +134,21 @@ public class StageFactory {
         return new SlotMachineStage(viewport, stageManager, this, playerActor);
     }
 
-    public Stage getSlotMachineResultStage(PlayerActor playerActor, SlotMachineLogic slotMachineLogic) {
-        return new SlotMachineResultStage(viewport, stageManager, this, playerActor, slotMachineLogic);
+    public Stage getSlotMachineResultStage(SlotMachineLogic slotMachineLogic) {
+        return new SlotMachineResultStage(viewport, stageManager, slotMachineLogic);
     }
 
-    public Stage BuildHotelStage(PlayerActor player, BuildHotel build) {
+    public Stage buildHotelStage(PlayerActor player, BuildHotel build) {
         return  new BuildHotelStage(viewport,stageManager,player,build);
     }
 
-    public Stage FinishedHotelStage(PlayerActor player, boolean owner) {
+    public Stage finishedHotelStage(PlayerActor player, boolean owner) {
         return new FinishedHotelStage(viewport,stageManager,player,owner );
     }
-    public Stage ClickerStage(PlayerActor player) {
+    public Stage clickerStage(PlayerActor player) {
         return new ClickerStage(viewport,stageManager,this,player);
     }
-    public Stage ClickerStageEndscreen(PlayerActor playerActor, int score) {
+    public Stage clickerStageEndscreen(PlayerActor playerActor, int score) {
         return new ClickerStageEndscreen(viewport,stageManager, playerActor,score);
     }
 

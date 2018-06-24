@@ -69,17 +69,13 @@ public class MClient implements IEndpoint, IClientConnector {
         }
 
         /**
-         * If has diconnected from host.
+         * If has diconnected from host or call methode client.close().
          * @param connection
          */
         @Override
         public void disconnected(Connection connection) {
             super.disconnected(connection);
-
-            connection.sendTCP( new PlayerDisconnect(playerManager.getPlayerSkeleton()) );
-
-            hostPlayer = null;
-            connection.close();
+            Log.info("MClient: Callback disconnected()");
         }
 
         /**
@@ -117,10 +113,9 @@ public class MClient implements IEndpoint, IClientConnector {
                 Log.info("Client: Received info of host, to be connected with: " + hostPlayer);
 
             } else if(object instanceof PlayerDisconnect) {
-                PlayerDisconnect playerDisconnect = (PlayerDisconnect) object;
                 Log.info("Client: Received order to disconnect from host");
 
-                disconnect();
+                playerManager.signalDisconneced();
 
             } else if(object instanceof StartGame) {
                 Log.info("Client: Received order to start the game");
@@ -183,12 +178,16 @@ public class MClient implements IEndpoint, IClientConnector {
         Log.info("Client will be closed.");
         client.close();
         isConnected = false;
+        hostPlayer = null;
     }
 
     @Override
     public List<InetAddress> discoverHosts() {
-        // TODO: check if WLAN has "Wireless Isolation" enabled => no discovery possible
-        // use UDP port for discovering hosts
+        /* TODO
+         *          1. check if WLAN is on (at device)
+         *          2. check if WLAN has "Wireless Isolation" enabled => no discovery possible
+         */
+        /* NOTE: use UDP port for discovering hosts! */
         Log.info("Client: Searching in WLAN for hosts...");
         List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
@@ -232,11 +231,6 @@ public class MClient implements IEndpoint, IClientConnector {
     }
 
     @Override
-    public boolean joinGame(String playerID) {
-        return false;
-    }
-
-    @Override
     public void broadCastLobby() {
         client.sendTCP(playerManager.getLobby());
     }
@@ -263,6 +257,7 @@ public class MClient implements IEndpoint, IClientConnector {
     @Override
     public void disconnect() {
         if(isConnected) {
+            Log.info("MClient: Send PlayerDisconnect() to host");
             client.sendTCP(new PlayerDisconnect(playerManager.getPlayerSkeleton()));
             close();
         }

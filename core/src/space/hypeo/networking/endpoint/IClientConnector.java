@@ -3,19 +3,10 @@ package space.hypeo.networking.endpoint;
 import java.net.InetAddress;
 import java.util.List;
 
-import space.hypeo.networking.packages.PlayerDisconnect;
-
 /**
  * Interface provides service methods for player that is game-client
  */
 public interface IClientConnector {
-
-    /**
-     * Joins the game another host has set up.
-     * @param playerID
-     * @return
-     */
-    boolean joinGame(String playerID);
 
     /**
      * discover host (run as server) in LAN and WLAN.

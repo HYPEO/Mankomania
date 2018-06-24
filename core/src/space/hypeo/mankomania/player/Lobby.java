@@ -30,6 +30,9 @@ public class Lobby {
      */
     protected Map<String, PlayerSkeleton> data;
 
+    /**
+     * Creates new instance of Lobby.
+     */
     public Lobby() {
         data = new HashMap<>();
         maxPlayer = MAX_PLAYER;
@@ -43,6 +46,10 @@ public class Lobby {
         this.maxPlayer = maxPlayer;
     }
 
+    /**
+     * Gets player limit.
+     * @return player limit
+     */
     public int getMaxPlayer() {
         return maxPlayer;
     }
@@ -59,6 +66,11 @@ public class Lobby {
         Log.info("Now Lobby contains " + data.size() + " player.");
     }
 
+    /**
+     * Gets PlayerSkeleton for player ID.
+     * @param playerId
+     * @return
+     */
     public PlayerSkeleton get(String playerId) {
         return data.get(playerId);
     }
@@ -79,10 +91,20 @@ public class Lobby {
         data.remove(player);
     }
 
+    /**
+     * Does lobby contain player with specified ID?
+     * @param playerId
+     * @return
+     */
     public boolean contains(String playerId) {
         return data.containsKey(playerId);
     }
 
+    /**
+     * Does lobby contain player that matches specified PlayerSkeleton object?
+     * @param player
+     * @return
+     */
     public boolean contains(PlayerSkeleton player) {
         return data.containsValue(player);
     }
@@ -95,6 +117,10 @@ public class Lobby {
         return data.keySet();
     }
 
+    /**
+     * Gets all player in Lobby.
+     * @return
+     */
     public Collection<PlayerSkeleton> values() { return data.values(); }
 
     /**

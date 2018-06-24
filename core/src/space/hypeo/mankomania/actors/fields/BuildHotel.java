@@ -37,15 +37,15 @@ public class BuildHotel extends FieldActor {
         Log.info(isBought + "");
         Log.info(isReady + "");
         if (!isBought) {
-            stageManager.push(stageFactory.BuildHotelStage(player,this));
+            stageManager.push(stageFactory.buildHotelStage(player,this));
             playerID = player.getId();
             Log.info("PlayerID Owner "+playerID);
         } else {
             Log.info("PlayerID Else "+player.getId());
             if (!playerID.equals(player.getId())) {
-                stageManager.push(stageFactory.FinishedHotelStage(player, false));
+                stageManager.push(stageFactory.finishedHotelStage(player, false));
             } else {
-                stageManager.push(stageFactory.FinishedHotelStage(player, true));
+                stageManager.push(stageFactory.finishedHotelStage(player, true));
             }
 
         }

@@ -190,11 +190,6 @@ public class MHost implements IEndpoint, IHostConnector {
     }
 
     @Override
-    public void advertiseGame() {
-        // TODO: start out of the lobby here if each player is ready
-    }
-
-    @Override
     public boolean startGame() {
         server.sendToAllTCP(new Notification("game starts in 5sec..."));
         server.sendToAllTCP(new StartGame());
@@ -266,6 +261,7 @@ public class MHost implements IEndpoint, IHostConnector {
 
     @Override
     public void disconnect() {
+        Log.info("MHost: Send PlayerDisconnect() broadcast.");
         for(Connection connection : server.getConnections()) {
             connection.sendTCP(new PlayerDisconnect());
         }
