@@ -2,7 +2,6 @@ package space.hypeo.mankomania.actors.fields;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.esotericsoftware.minlog.Log;
 
@@ -18,8 +17,8 @@ public class BuildHotel extends FieldActor {
     private static final float FIELD_SCALE = 40f;
     private static final String TEXTURE_PATH = "fields/hotel.png";
     private String playerID = "";
-    public boolean isBought = false;
-    public boolean isReady = false;
+    private boolean isBought = false;
+    private boolean isReady = false;
     private StageFactory stageFactory;
     private StageManager stageManager;
     private static int costs=0;

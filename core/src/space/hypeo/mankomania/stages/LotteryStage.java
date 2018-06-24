@@ -12,8 +12,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
-
-import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
@@ -25,10 +23,6 @@ public class LotteryStage extends Stage {
     private StageManager stageManager;
     private PlayerActor playerActor;
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-    private TextButton buttonTrue;
-    private Table table = new Table();
-    private Label nameLabel;
-    private Label moneyLabel;
     private Boolean pay;
     private EconomicStageLogic eco;
 
@@ -74,7 +68,10 @@ public class LotteryStage extends Stage {
 
     private void setUpElements(String text) {
 
-
+        TextButton buttonTrue;
+        Table table = new Table();
+        Label nameLabel;
+        Label moneyLabel;
         table.setWidth(this.getWidth());
         table.align(Align.bottom);
         table.setPosition(0, 200);

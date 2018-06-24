@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.network.Network;
 
 /**

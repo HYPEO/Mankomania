@@ -9,19 +9,19 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
+import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
+import space.hypeo.networking.network.Network;
 import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.packages.Acknowledge;
-import space.hypeo.mankomania.player.Lobby;
-import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.HorseRaceResult;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
-import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.RouletteResult;
 import space.hypeo.networking.packages.StartGame;
 

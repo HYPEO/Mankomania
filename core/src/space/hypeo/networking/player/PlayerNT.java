@@ -2,11 +2,11 @@ package space.hypeo.networking.player;
 
 import com.esotericsoftware.minlog.Log;
 
+import space.hypeo.mankomania.IDeviceStateSubscriber;
+import space.hypeo.mankomania.player.IPlayerConnector;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.endpoint.IEndpoint;
-import space.hypeo.mankomania.IDeviceStateSubscriber;
-import space.hypeo.mankomania.player.IPlayerConnector;
 import space.hypeo.networking.endpoint.IHostConnector;
 import space.hypeo.networking.network.Role;
 

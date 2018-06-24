@@ -2,8 +2,6 @@ package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -17,15 +15,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
 import space.hypeo.mankomania.StageFactory;
-import space.hypeo.mankomania.actors.player.PlayerActor;
-import space.hypeo.mankomania.factories.ActorFactory;
-import space.hypeo.mankomania.factories.ButtonFactory;
-import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.mankomania.factories.ActorFactory;
+import space.hypeo.mankomania.factories.ButtonFactory;
+import space.hypeo.mankomania.player.Lobby;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.network.Role;
-import space.hypeo.mankomania.player.Lobby;
 
 
 /**

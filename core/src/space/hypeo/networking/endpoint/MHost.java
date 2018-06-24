@@ -1,12 +1,17 @@
 package space.hypeo.networking.endpoint;
 
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
+
 import java.io.IOException;
 
-import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.Lobby;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
-import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.network.Network;
+import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.HorseRaceResult;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
@@ -16,11 +21,6 @@ import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.RouletteResult;
 import space.hypeo.networking.packages.StartGame;
-
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
-import com.esotericsoftware.minlog.Log;
 
 /**
  * This class represents the host process on the device.
