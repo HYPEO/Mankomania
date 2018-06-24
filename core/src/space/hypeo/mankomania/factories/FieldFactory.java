@@ -2,9 +2,7 @@ package space.hypeo.mankomania.factories;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
 import java.util.Random;
-
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.BuildHotel;
@@ -16,6 +14,7 @@ import space.hypeo.mankomania.actors.fields.SlotMachineFieldActor;
 import space.hypeo.mankomania.actors.fields.LotteryFieldGet;
 import space.hypeo.mankomania.actors.fields.LotteryFieldPay;
 import space.hypeo.mankomania.actors.map.DetailActor;
+import space.hypeo.mankomania.actors.fields.ClickerFieldActor;
 
 /**
  * Created by pichlermarc on 31.05.2018.
@@ -37,21 +36,10 @@ public class FieldFactory {
         int random = randomGenerator.nextInt(9);
         // Create new Field
         FieldActor currentField;
-        if (random == 0) {
-            currentField = new BuildHotel(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), detailActor, stageManager, stageFactory);
-        } else if (random >= 1 && random < 2) {
-            currentField = new LoseMoneyFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("6dice.png"), randomGenerator.nextInt(10), detailActor);
-        } else if (random >= 2 && random < 3) {
-            currentField = new EmptyFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), 0, detailActor);
-        } else if (random >= 3 && random < 4) {
-            currentField = new LotteryFieldGet(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), randomGenerator.nextInt(10), new Texture("transparent.png"), detailActor, stageManager, stageFactory);
-        } else if (random >= 4 && random < 6) {
-            currentField = new LotteryFieldPay(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), randomGenerator.nextInt(10), new Texture("transparent.png"), detailActor, stageManager, stageFactory);
-        } else if (random >= 6 && random < 8) {
-            currentField = new HorseRaceFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), 0, new Texture("transparent.png"), detailActor, stageManager, stageFactory);
-        } else {
-            currentField = new SlotMachineFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), 0, new Texture("transparent.png"), detailActor, stageFactory, stageManager);
-        }
+
+        currentField = new ClickerFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), detailActor,stageManager,stageFactory);
+
+
         return currentField;
     }
 

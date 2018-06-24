@@ -17,12 +17,12 @@ public class BuildHotel extends FieldActor {
 
     private static final float FIELD_SCALE = 40f;
     private static final String TEXTURE_PATH = "fields/hotel.png";
-    String playerID = "";
+    private String playerID = "";
     public boolean isBought = false;
     public boolean isReady = false;
-    public static int costs;
     private StageFactory stageFactory;
     private StageManager stageManager;
+    private static int costs=0;
 
 
     public BuildHotel(float x, float y, Texture texture, int price, DetailActor detailActor, StageManager stageManager, StageFactory stageFactory) {
@@ -40,13 +40,13 @@ public class BuildHotel extends FieldActor {
         if (!isBought) {
             stageManager.push(stageFactory.BuildHotelStage(player,this));
             playerID = player.getId();
-            Log.info("PlayerID OWner "+playerID);
+            Log.info("PlayerID Owner "+playerID);
         } else {
             Log.info("PlayerID Else "+player.getId());
             if (!playerID.equals(player.getId())) {
-                stageManager.push(stageFactory.FinishedHotelStage(player, false, playerID));
+                stageManager.push(stageFactory.FinishedHotelStage(player, false));
             } else {
-                stageManager.push(stageFactory.FinishedHotelStage(player, true, playerID));
+                stageManager.push(stageFactory.FinishedHotelStage(player, true));
             }
 
         }
@@ -62,6 +62,15 @@ public class BuildHotel extends FieldActor {
     public void setBought(boolean bought) {
         isBought = bought;
     }
+
+    public static int getCosts() {
+        return costs;
+    }
+
+    public static void setCosts(int costs) {
+        BuildHotel.costs = costs;
+    }
+
 
 }
 

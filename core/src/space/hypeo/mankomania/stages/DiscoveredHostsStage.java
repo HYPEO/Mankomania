@@ -16,6 +16,7 @@ import com.esotericsoftware.minlog.Log;
 import java.net.InetAddress;
 import java.util.List;
 
+import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
@@ -31,8 +32,8 @@ public class DiscoveredHostsStage extends Stage {
     public DiscoveredHostsStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, PlayerManager playerManager) {
         super(viewport);
         this.viewport = viewport;
-
-        this.foundHosts = ((MClient) playerManager.getPlayerNT().getEndpoint()).discoverHosts();
+        
+        foundHosts = playerManager.discoverHosts();
 
         // Create actors.
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
@@ -70,9 +71,7 @@ public class DiscoveredHostsStage extends Stage {
 
                         Log.info("Try to connect to host " + hostAddr + "...");
 
-                        ((MClient) playerManager.getPlayerNT().getEndpoint()).connectToHost(hostAddr);
-
-                        stageManager.push(stageFactory.getLobbyStage(playerManager));
+                        playerManager.connectToHost(hostAddr);
                     }
 
                 });
@@ -102,6 +101,19 @@ public class DiscoveredHostsStage extends Stage {
             layout.row();
         }
 
+        Button btnBack = ButtonFactory.getButton("common/back_to_main_menu.png", "common/back_to_main_menu_clicked.png");
+        btnBack.setTransform(true);
+        btnBack.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageManager.remove(DiscoveredHostsStage.this);
+            }
+        });
+
+        layout.row();
+        layout.add(btnBack).width(400).height(125);
+        layout.row();
+
         // Set up background.
         background.setColor(237f/255f, 30f/255f, 121f/255f, 1f);
 
@@ -109,12 +121,5 @@ public class DiscoveredHostsStage extends Stage {
         this.addActor(background);
         this.addActor(layout);
 
-        // Add listener for click events.
-        this.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                stageManager.remove(DiscoveredHostsStage.this);
-            }
-        });
     }
 }

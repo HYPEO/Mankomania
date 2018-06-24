@@ -8,7 +8,6 @@ import space.hypeo.mankomania.game.EconomicStageLogic;
 public class LoseMoneyFieldActor extends FieldActor {
     private static final float FIELD_SCALE = 40f;
     private static final String TEXTURE_PATH = "fields/loose_money.png";
-    private EconomicStageLogic eco;
 
     public LoseMoneyFieldActor(float x, float y, Texture texture, int price, DetailActor fieldDetail) {
         super(x, y, FIELD_SCALE, FIELD_SCALE, price, new Texture(TEXTURE_PATH), texture, fieldDetail);
@@ -16,7 +15,7 @@ public class LoseMoneyFieldActor extends FieldActor {
 
     @Override
     public void trigger(PlayerActor player) {
-        eco= new EconomicStageLogic(player);
+        EconomicStageLogic eco= new EconomicStageLogic(player);
         eco.payMoney(200);
         detailActor.showDetail(this);
     }

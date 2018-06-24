@@ -5,8 +5,14 @@ package space.hypeo.networking.endpoint;
  */
 public interface IEndpoint {
 
+    /**
+     * Stops the endpoint.
+     */
     void stop();
 
+    /**
+     * Sends the lobby broadcast over the network.
+     */
     void broadCastLobby();
 
     /**
@@ -20,4 +26,9 @@ public interface IEndpoint {
      * @param slotId number of the winning slot.
      */
     void sendRouletteResult(int slotId);
+
+    /**
+     * Disconnects the current endpoint from the network.
+     */
+    void disconnect();
 }

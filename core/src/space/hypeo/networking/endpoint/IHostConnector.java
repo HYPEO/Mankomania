@@ -29,4 +29,8 @@ public interface IHostConnector {
      */
     void sendOrderToCloseConnection(PlayerSkeleton playerToKick);
 
+    /**
+     * Disconnects all connected client from server.
+     */
+    void disconnect();
 }

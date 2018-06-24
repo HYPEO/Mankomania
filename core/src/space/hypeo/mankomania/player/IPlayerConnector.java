@@ -5,6 +5,8 @@ package space.hypeo.mankomania.player;
  * Created by pichlermarc on 07.04.2018.
  */
 
+import java.net.InetAddress;
+
 import space.hypeo.mankomania.player.Lobby;
 
 /**
@@ -33,4 +35,9 @@ public interface IPlayerConnector {
      * @param slotId number of the winning slot.
      */
     void sendRouletteResult(int slotId);
+
+    /**
+     * Disconnects current player.
+     */
+    void disconnect();
 }

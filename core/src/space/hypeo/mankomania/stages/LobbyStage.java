@@ -2,6 +2,8 @@ package space.hypeo.mankomania.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -17,6 +19,7 @@ import com.esotericsoftware.minlog.Log;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
+import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
@@ -78,19 +81,12 @@ public class LobbyStage extends Stage {
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
         // Set up background.
         background.setColor(237f/255f, 30f/255f, 121f/255f, 1f);
-
-        // Add listener for click on background events.
-        background.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                stageManager.remove(LobbyStage.this);
-            }
-        });
-
         this.addActor(background);
     }
 
     private void setupLayout() {
+
+
         Lobby lobby = playerManager.getLobby();
         Role role = playerManager.getRole();
         PlayerSkeleton myself = playerManager.getPlayerSkeleton();
@@ -110,6 +106,21 @@ public class LobbyStage extends Stage {
         //rootTable.setDebug(true); // turn on all debug lines
         rootTable.setFillParent(true);
         this.addActor(rootTable);
+
+        Button btnBack = ButtonFactory.getButton("common/back_to_main_menu.png", "common/back_to_main_menu_clicked.png");
+        btnBack.setTransform(true);
+        btnBack.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageManager.remove(LobbyStage.this);
+                playerManager.disconnect();
+
+                Stage currentStage = stageManager.getCurrentStage();
+                if(currentStage instanceof DiscoveredHostsStage) {
+                    stageManager.remove(currentStage);
+                }
+            }
+        });
 
         Label title = new Label("GAME LOBBY", skin);
         title.setFontScaleX(2);
@@ -227,7 +238,9 @@ public class LobbyStage extends Stage {
 
             rootTable.add(startTable);
         }
-
+        rootTable.row();
+        rootTable.add(btnBack).width(400).height(125);
+        rootTable.row();
         this.addActor(rootTable);
     }
 

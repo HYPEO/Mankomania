@@ -10,64 +10,62 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.mankomania.actors.fields.BuildHotel;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.game.EconomicStageLogic;
 
-public class BuildHotelStage extends Stage {
+public class ClickerStageEndscreen extends Stage {
+
     private StageManager stageManager;
-    private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-    private int kosten = 1000;
+    private PlayerActor playerActor;
     private EconomicStageLogic eco;
-    private BuildHotel build;
+    private int score;
 
 
-
-    public BuildHotelStage(Viewport viewport, StageManager stageManager, PlayerActor playerActor,BuildHotel build) {
+    public ClickerStageEndscreen(Viewport viewport, StageManager stageManager,  PlayerActor playerActor, int score) {
         super(viewport);
         this.stageManager = stageManager;
-        this.build=build;
+        this.playerActor = playerActor;
+        this.score = score;
 
         eco= new EconomicStageLogic(playerActor);
 
+
         setUpBackground();
+        pay();
         setUpElements();
     }
 
-
+    private void pay(){
+        eco.payMoney(score);
+    }
 
     private void setUpElements() {
-        Table table = new Table();
+       Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
+        Table table = new Table();
         table.setWidth(this.getWidth());
         table.align(Align.bottom);
         table.setPosition(0, 200);
 
-        Label nameLabel = new Label("Willst du das Hotel kaufen?", skin);
+
+        Label nameLabel;
+        Label moneyLabel;
+        nameLabel = new Label("Du hast "+score +" ausgegeben", skin);
         nameLabel.setFontScale((float) 1.5);
         table.add(nameLabel).width(300).height(100).align(Align.center);
         table.row();
 
-        TextButton buttonTrue = new TextButton("Ja", skin);
-        buttonTrue.addListener(buttonClickTrue());
+        TextButton buttonTrue;
+        buttonTrue = new TextButton("Okay", skin);
+        buttonTrue.addListener(buttonClick());
         table.add(buttonTrue).width(100);
-        TextButton buttonFalse = new TextButton("Nein", skin);
-        buttonFalse.addListener(buttonClickFalse());
-        table.add(buttonFalse).width(100);
         table.row();
 
-        Label moneyLabel = new Label("Kosten" + kosten + "", skin);
+        moneyLabel = new Label("your current money is: " + playerActor.getBalance() + "", skin);
         moneyLabel.setFontScale((float) 1.5);
         table.add(moneyLabel).width(300).height(100).align(Align.center);
-        table.row();
-
-        Label balance = new Label("Guthaben" + eco.getBalance() + "", skin);
-        balance.setFontScale((float) 1.5);
-        table.add(balance).width(300).height(100).align(Align.center);
         table.row();
 
 
@@ -87,27 +85,12 @@ public class BuildHotelStage extends Stage {
 
     }
 
-    private ClickListener buttonClickTrue() {
+    private ClickListener buttonClick() {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                eco.payMoney(kosten);
-                build.setBought(true);
-                build.bought();
-                stageManager.remove(BuildHotelStage.this);
+                stageManager.remove(ClickerStageEndscreen.this);
             }
         };
     }
-
-    private ClickListener buttonClickFalse() {
-        return new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                build.setBought(false);
-                stageManager.remove(BuildHotelStage.this);
-            }
-        };
-    }
-
-
 }
