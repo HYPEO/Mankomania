@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.esotericsoftware.minlog.Log;
 
+import java.net.InetAddress;
+import java.util.List;
 import java.util.Set;
 
 import space.hypeo.mankomania.GameStateManager;
@@ -62,7 +64,9 @@ public class PlayerManager extends GameStateManager {
     }
 
     public Lobby getLobby() {
-        return lobby;
+        synchronized (this) {
+            return lobby;
+        }
     }
 
     public void setLobby(Lobby lobby) {
@@ -105,12 +109,18 @@ public class PlayerManager extends GameStateManager {
     public void updateLobbyStage() {
 
         Log.info(role + ": try to update LobbyStage");
+        Log.info(role + ": Lobby contains " + lobby.size() + " player(s).");
 
         Stage currentStage = stageManager.getCurrentStage();
+
+        // TODO: Client says: LobbyStage is not on display now ???
 
         if (currentStage instanceof LobbyStage) {
             Log.info(role + ": current stage is StageLobby -> update it!");
             ((LobbyStage) currentStage).updateLobby();
+
+        } else {
+            Log.info(role + ": LobbyStage is not on display now.");
         }
     }
 
@@ -280,10 +290,42 @@ public class PlayerManager extends GameStateManager {
 
     @Override
     public void startGame(){
-        playerNT.startGame();
-        if(this.role == Role.HOST) {
-            lobby.values().iterator().next().setActive(true);
-            broadCastLobby();
+        if(playerNT != null) {
+            playerNT.startGame();
+            if (this.role == Role.HOST) {
+                lobby.values().iterator().next().setActive(true);
+                broadCastLobby();
+            }
+        }
+    }
+
+    public void connectToHost(InetAddress hostAddr) {
+        if(playerNT != null) {
+            playerNT.connectToHost(hostAddr);
+        }
+    }
+
+    public void showLobbyStage() {
+        stageManager.push(stageFactory.getLobbyStage(this));
+    }
+
+    public void disconnect() {
+        if(playerNT != null) {
+            playerNT.disconnect();
+        }
+    }
+
+    /**
+     * Discovers the network for available hosts.
+     * @return list of IP addresses
+     */
+    public List<InetAddress> discoverHosts() {
+        if(playerNT != null) {
+            return playerNT.discoverHosts();
+
+        } else {
+            Log.info(role + ": PlayerNT must not be null!");
+            return null;
         }
     }
 }

@@ -3,6 +3,8 @@ package space.hypeo.networking.endpoint;
 import java.net.InetAddress;
 import java.util.List;
 
+import space.hypeo.networking.packages.PlayerDisconnect;
+
 /**
  * Interface provides service methods for player that is game-client
  */
@@ -13,7 +15,7 @@ public interface IClientConnector {
      * @param playerID
      * @return
      */
-    public boolean joinGame(String playerID);
+    boolean joinGame(String playerID);
 
     /**
      * discover host (run as server) in LAN and WLAN.
@@ -24,6 +26,22 @@ public interface IClientConnector {
      *  + LAN: discovery only works on a LAN with the same subnet.
      *  + WLAN: discovery not possible if client-isolation-settings of the hotspot.
      */
-    public List<InetAddress> discoverHosts();
+    List<InetAddress> discoverHosts();
 
+    /**
+     * Connects the client to the host.
+     * @param hostAddr IP address of host
+     */
+    void connectToHost(InetAddress hostAddr);
+
+    /**
+     * Has client been established connection with host?
+     * @return true when connected to host
+     */
+    boolean isConnected();
+
+    /**
+     * Disconnects the client from the host.
+     */
+    void disconnect();
 }

@@ -1,13 +1,18 @@
 package space.hypeo.networking.player;
 
+import java.net.InetAddress;
+import java.util.List;
+
 import com.esotericsoftware.minlog.Log;
 
 import space.hypeo.mankomania.IDeviceStateSubscriber;
 import space.hypeo.mankomania.player.IPlayerConnector;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
+import space.hypeo.networking.endpoint.IClientConnector;
 import space.hypeo.networking.endpoint.IEndpoint;
 import space.hypeo.networking.endpoint.IHostConnector;
+import space.hypeo.networking.endpoint.MClient;
 import space.hypeo.networking.network.Role;
 
 /**
@@ -73,5 +78,47 @@ public class PlayerNT implements IPlayerConnector, IDeviceStateSubscriber {
     @Override
     public void sendRouletteResult(int slotId) {
         endpoint.sendRouletteResult(slotId);
+    }
+
+    /**
+     * Connects the client to the host.
+     * @param hostAddr IP address of host
+     */
+    public void connectToHost(InetAddress hostAddr) {
+        Role role = playerManager.getRole();
+
+        if(role == Role.CLIENT) {
+            /* NOTE: it is important to show the LobbyStage before update it! */
+            playerManager.showLobbyStage();
+
+            IClientConnector client = (IClientConnector) endpoint;
+            client.connectToHost(hostAddr);
+            Log.info(role + ": PlayerNT: Connect to host " + hostAddr);
+
+        } else {
+            Log.info(role + ": PLayerNT: Can NOT connect to myself!");
+        }
+    }
+
+    @Override
+    public void disconnect() {
+        endpoint.disconnect();
+    }
+
+    /**
+     * Discovers the network for available hosts.
+     * @return list of IP addresses
+     */
+    public List<InetAddress> discoverHosts() {
+        Role role = playerManager.getRole();
+
+        if(role == Role.CLIENT) {
+            Log.info(role + ": Discover available hosts in network...");
+            IClientConnector client = (IClientConnector) endpoint;
+            return client.discoverHosts();
+        } else {
+            Log.info(role + ": No need for discover hosts!");
+            return null;
+        }
     }
 }

@@ -83,8 +83,7 @@ public class MainMenuStage extends Stage {
         return new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
-                // TODO: deligate that to PlayerManager in Business Layer
+                
                 playerManager = new PlayerManager(stageManager, stageFactory, Role.HOST);
                 PlayerFactory playerFactory = new PlayerFactory(playerManager);
                 playerManager.setPlayerSkeleton(playerFactory.getPlayerSkeleton("the_mighty_host"));
@@ -101,7 +100,6 @@ public class MainMenuStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                // TODO: BUG client is in lobby multiple times if returned to main menu
                 playerManager = new PlayerManager(stageManager, stageFactory, Role.CLIENT);
                 PlayerFactory playerFactory = new PlayerFactory(playerManager);
                 playerManager.setPlayerSkeleton(playerFactory.getPlayerSkeleton("another_client"));

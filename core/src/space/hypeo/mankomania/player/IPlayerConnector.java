@@ -31,4 +31,9 @@ public interface IPlayerConnector {
      * @param slotId number of the winning slot.
      */
     void sendRouletteResult(int slotId);
+
+    /**
+     * Disconnects current player.
+     */
+    void disconnect();
 }

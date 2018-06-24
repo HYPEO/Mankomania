@@ -263,4 +263,11 @@ public class MHost implements IEndpoint, IHostConnector {
         winnerSlotId.setResultNo(slotId);
         server.sendToAllTCP(slotId);
     }
+
+    @Override
+    public void disconnect() {
+        for(Connection connection : server.getConnections()) {
+            connection.sendTCP(new PlayerDisconnect());
+        }
+    }
 }
