@@ -2,13 +2,17 @@
 ![Travis Badge](https://travis-ci.org/HYPEO/Mankomania.svg?branch=master)
 ![Sonarcloud Badge](https://sonarcloud.io/api/project_badges/measure?project=Mankomania&metric=alert_status)
 
-![](./android/assets/hypeo.ai?raw=true "Hypeo Game Studios")
 
 ## Description
-Mankomania is a software project that was created university students. The five contributors founded the group **Hypeo Game Studios**.
-Mankomania, their first product, is an Android application for Android mobile phones. 
+Mankomania is a software project that was created by university students.
+
+![](./android/assets/Hypeo_Logo_small.png?raw=true "Hypeo Game Studios")
+
+The five contributors founded the group **Hypeo Game Studios**.
 
 ![](./android/assets/Mankomania_MenuStage.png?raw=true "Mankomania")
+
+Mankomania, their first product, is an Android application for Android mobile phones. 
 
 ## The Game
 
