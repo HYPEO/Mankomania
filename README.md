@@ -8,7 +8,7 @@
 Mankomania is a software project that was created university students. The five contributors founded the group **Hypeo Game Studios**.
 Mankomania, their first product, is an Android application for Android mobile phones. 
 
-!Show a screenshot of the start-screen!
+![](./android/assets/Mankomania_MenuStage.png?raw=true "Mankomania")
 
 ## The Game
 
