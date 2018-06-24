@@ -16,25 +16,25 @@ import com.esotericsoftware.minlog.Log;
 import java.net.InetAddress;
 import java.util.List;
 
-
 import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.player.PlayerManager;
-
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.mankomania.player.PlayerManager;
-import space.hypeo.networking.endpoint.MClient;
-
 
 public class DiscoveredHostsStage extends Stage {
-    private final Viewport viewport;
 
     private List<InetAddress> foundHosts;
 
+    /**
+     * Creates new instance.
+     * @param stageManager
+     * @param viewport
+     * @param stageFactory
+     * @param playerManager
+     */
     public DiscoveredHostsStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, PlayerManager playerManager) {
         super(viewport);
-        this.viewport = viewport;
         
         foundHosts = playerManager.discoverHosts();
 
@@ -61,7 +61,6 @@ public class DiscoveredHostsStage extends Stage {
 
         if( foundHosts != null && ! foundHosts.isEmpty() ) {
 
-            // TODO: create clickable, scrolable list
             int index = 1;
             for (InetAddress hostAddr : foundHosts) {
                 Log.info("  " + index + ". host: " + hostAddr);

@@ -158,7 +158,7 @@ public class PlayerManager extends GameStateManager {
 
         if (currentStage instanceof LobbyStage) {
             Log.info(role + ": current stage is StageLobby -> update it!");
-            ((LobbyStage) currentStage).updateLobby();
+            ((LobbyStage) currentStage).triggerUpdate();
 
         } else {
             Log.info(role + ": LobbyStage is not on display now.");
