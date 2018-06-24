@@ -13,6 +13,7 @@ import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
+import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.networking.network.Network;
@@ -392,8 +393,6 @@ public class PlayerManager extends GameStateManager {
         if(playerNT != null) {
             playerNT.disconnect();
         }
-
-        returnToMainMenuStage();
     }
 
     /**
@@ -448,11 +447,22 @@ public class PlayerManager extends GameStateManager {
          * 2. Host press "return to Main Menu" in Lobby
          * 3. Client crashes at the next statement
          */
-        stageManager.push(stageFactory.getMainMenu());
+        //stageManager.push(stageFactory.getMainMenu());
     }
 
     public void signalDisconneced() {
         Log.info(role + ": Host disconnected, close my connection too.");
         disconnect();
+        close();
+
+        Stage currentStage = stageManager.getCurrentStage();
+        if(currentStage instanceof LobbyStage) {
+            stageManager.remove(currentStage);
+
+            currentStage = stageManager.getCurrentStage();
+            if(currentStage instanceof DiscoveredHostsStage) {
+                stageManager.remove(currentStage);
+            }
+        }
     }
 }
