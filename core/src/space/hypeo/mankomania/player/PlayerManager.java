@@ -428,28 +428,9 @@ public class PlayerManager extends GameStateManager {
     }
 
     /**
-     * Returns to MenuStage.
+     * Disconnects the endpoint from the network.
+     * This methode is the disconnect-interface from layer below.
      */
-    public void returnToMainMenuStage() {
-        Stage currentStage = stageManager.getCurrentStage();
-
-        if(currentStage instanceof MainMenuStage) {
-            return;
-        }
-
-        if(currentStage instanceof LobbyStage) {
-            updateLobbyStage();
-            stageManager.getCurrentStage();
-        }
-
-        /** TODO: BUG
-         * 1. If player is connected to host as client
-         * 2. Host press "return to Main Menu" in Lobby
-         * 3. Client crashes at the next statement
-         */
-        //stageManager.push(stageFactory.getMainMenu());
-    }
-
     public void signalDisconneced() {
         Log.info(role + ": Host disconnected, close my connection too.");
         disconnect();

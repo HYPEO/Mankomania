@@ -11,10 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
-import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.actors.symbol.SymbolActor;
 import space.hypeo.mankomania.game.SlotMachineLogic;
 
@@ -24,8 +22,6 @@ import space.hypeo.mankomania.game.SlotMachineLogic;
 
 public class SlotMachineResultStage extends Stage {
     private StageManager stageManager;
-    private StageFactory stageFactory;
-    private PlayerActor playerActor;
     private SlotMachineLogic slotMachineLogic;
 
     private TextButton backButton;
@@ -41,12 +37,10 @@ public class SlotMachineResultStage extends Stage {
     private Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
 
-    public SlotMachineResultStage (Viewport viewport, StageManager stageManager, StageFactory stageFactory, PlayerActor playerActor,
+    public SlotMachineResultStage (Viewport viewport, StageManager stageManager,
                                    SlotMachineLogic slotMachineLogic) {
         super(viewport);
         this.stageManager = stageManager;
-        this.stageFactory = stageFactory;
-        this.playerActor = playerActor;
         this.slotMachineLogic = slotMachineLogic;
 
         symbol1ID = slotMachineLogic.getSymbol1();

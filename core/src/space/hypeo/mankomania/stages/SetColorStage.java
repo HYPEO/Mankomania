@@ -30,6 +30,12 @@ public class SetColorStage extends Stage {
     private final Viewport viewport;
     private PlayerManager playerManager;
 
+    /**
+     * Creates new instance.
+     * @param stageManager
+     * @param viewport
+     * @param playerManager
+     */
     public SetColorStage(StageManager stageManager, Viewport viewport, PlayerManager playerManager) {
         super(viewport);
         this.stageManager = stageManager;
@@ -40,6 +46,9 @@ public class SetColorStage extends Stage {
         setupLayout();
     }
 
+    /**
+     * Sets the background color.
+     */
     private void setupBackground() {
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
         // Set up background.
@@ -55,6 +64,9 @@ public class SetColorStage extends Stage {
         this.addActor(background);
     }
 
+    /**
+     * Sets the layout of the stage.
+     */
     private void setupLayout() {
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 

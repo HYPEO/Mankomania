@@ -32,23 +32,20 @@ public class MainMenuStage extends Stage {
 
     private StageFactory stageFactory;
     private IDeviceStatePublisher deviceStatePublisher;
-    private ButtonFactory buttonFactory;
 
     private PlayerManager playerManager;
 
     /**
      * Creates the Main Menu
-     *  @param stageManager StageManager needed to switch between stages, create new ones, etc.
+     * @param stageManager StageManager needed to switch between stages, create new ones, etc.
      * @param viewport     Viewport needed by Stage class.
-     * @param buttonFactory
      */
-    public MainMenuStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, IDeviceStatePublisher deviceStatePublisher, ButtonFactory buttonFactory) {
+    public MainMenuStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, IDeviceStatePublisher deviceStatePublisher) {
         super(viewport);
 
         this.stageManager = stageManager;
         this.stageFactory = stageFactory;
         this.deviceStatePublisher = deviceStatePublisher;
-        this.buttonFactory = buttonFactory;
 
         setUpBackground();
         createWidgets();
@@ -65,11 +62,15 @@ public class MainMenuStage extends Stage {
         titleTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         title = new Image(titleTexture);
 
-        launch = buttonFactory.getButton("menu_buttons/play_offline.png", "menu_buttons/play_offline_clicked.png");
-        join = buttonFactory.getButton("menu_buttons/join_game.png", "menu_buttons/join_game_clicked.png");
-        host = buttonFactory.getButton("menu_buttons/host_game.png", "menu_buttons/host_game_clicked.png");
+        launch = ButtonFactory.getButton("menu_buttons/play_offline.png", "menu_buttons/play_offline_clicked.png");
+        join = ButtonFactory.getButton("menu_buttons/join_game.png", "menu_buttons/join_game_clicked.png");
+        host = ButtonFactory.getButton("menu_buttons/host_game.png", "menu_buttons/host_game_clicked.png");
     }
 
+    /**
+     * Behavior for Launch-Button "Play Offline".
+     * @return
+     */
     private ClickListener launchClickListener() {
         return new ClickListener() {
             @Override
@@ -79,6 +80,10 @@ public class MainMenuStage extends Stage {
         };
     }
 
+    /**
+     * Behavior for Host-Button "Host Game".
+     * @return
+     */
     private ClickListener hostClickListener() {
         return new ClickListener() {
             @Override
@@ -95,6 +100,10 @@ public class MainMenuStage extends Stage {
         };
     }
 
+    /**
+     * Behavior for Client-Button "Join Game".
+     * @return
+     */
     private ClickListener clientClickListener() {
         return new ClickListener() {
             @Override
