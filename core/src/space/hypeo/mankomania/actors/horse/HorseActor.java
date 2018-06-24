@@ -68,4 +68,14 @@ public class HorseActor extends Image implements Comparable<HorseActor> {
         }
         return 0;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }

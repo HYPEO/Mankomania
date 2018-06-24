@@ -27,9 +27,6 @@ public class SlotMachineResultStage extends Stage {
     private TextButton backButton;
     private Label resultInfo;
 
-    private SymbolActor symbol1Actor;
-    private SymbolActor symbol2Actor;
-    private SymbolActor symbol3Actor;
     private int symbol1ID;
     private int symbol2ID;
     private int symbol3ID;
@@ -79,6 +76,10 @@ public class SlotMachineResultStage extends Stage {
     }
 
     private void setUpLayout() {
+        SymbolActor symbol1Actor;
+        SymbolActor symbol2Actor;
+        SymbolActor symbol3Actor;
+
         symbol1Actor = new SymbolActor(symbol1ID);
         symbol1Actor.setPosition(this.getWidth() / 2 - symbol1Actor.getWidth() / 2 - symbol1Actor.getWidth(),
                 this.getHeight() - symbol1Actor.getHeight() * 2.5f);

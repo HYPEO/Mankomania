@@ -38,12 +38,9 @@ public class DiceSensorManager {
         gForce = (float) Math.sqrt(xValue * xValue + yValue * yValue + zValue * zValue);
 
         if (gForce > GRAVITY_FORCE_THRESHOLD) {
-
             int moveFields = die.nextInt(6) + 1;
             playerActor.move(moveFields);
             stageManager.push(stageFactory.getDiceResultStage(moveFields));
-
-            // TODO: maybe cheat function here (for example: if other player is playing roulette)
         }
     }
 
