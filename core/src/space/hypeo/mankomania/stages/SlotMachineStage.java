@@ -32,9 +32,6 @@ public class SlotMachineStage extends Stage {
     private TextButton exitGameButton;
     private Label playerInfo;
 
-    private SymbolActor symbol1Actor;
-    private SymbolActor symbol2Actor;
-    private SymbolActor symbol3Actor;
     private int symbol1ID;
     private int symbol2ID;
     private int symbol3ID;
@@ -79,6 +76,8 @@ public class SlotMachineStage extends Stage {
         exitGameButton.addListener(exitGameClickListener());
     }
     private void setUpLayout() {
+        SymbolActor symbol1Actor;
+
         //show fist symbol 3 times before game start
         symbol1Actor = new SymbolActor(1);
         symbol1Actor.setPosition(this.getWidth() / 2 - symbol1Actor.getWidth() / 2 - symbol1Actor.getWidth(),
@@ -108,6 +107,10 @@ public class SlotMachineStage extends Stage {
         this.addActor(layout);
     }
     private void setUpResultLayout() {
+        SymbolActor symbol1Actor;
+        SymbolActor symbol2Actor;
+        SymbolActor symbol3Actor;
+
         this.clear();
         setUpBackground();
         createWidgets();

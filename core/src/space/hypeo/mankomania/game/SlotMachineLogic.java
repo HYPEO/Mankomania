@@ -66,10 +66,7 @@ public class SlotMachineLogic {
     }
 
     public boolean isGameWon() {
-        if (priceType == "") {
-            return false;
-        }
-        return true;
+        return priceType != "";
     }
 
     public int getSymbol1() {
