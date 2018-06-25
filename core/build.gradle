@@ -10,3 +10,20 @@ sourceSets.test.java.srcDirs = [ "test/" ]
 eclipse.project {
     name = appName + "-core"
 }
+
+jacocoTestReport {
+    reports {
+        html {
+            enabled true
+        }
+    }
+
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    '**/*packages**',
+                    '**/stages**'
+            ])
+        })
+    }
+}
