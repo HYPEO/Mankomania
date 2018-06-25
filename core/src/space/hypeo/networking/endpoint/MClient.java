@@ -12,7 +12,7 @@ import java.util.List;
 import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
-import space.hypeo.networking.network.Network;
+import space.hypeo.networking.network.NetworkRegistration;
 import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.HorseRaceResult;
@@ -149,7 +149,7 @@ public class MClient implements IEndpoint, IClientConnector {
         client = new Client();
         client.start();
         // register classes that can be sent/received by client
-        Network.register(client);
+        NetworkRegistration.register(client);
 
         Log.info("Client has started successfully.");
     }
@@ -189,7 +189,7 @@ public class MClient implements IEndpoint, IClientConnector {
          */
         /* NOTE: use UDP port for discovering hosts! */
         Log.info("Client: Searching in WLAN for hosts...");
-        List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
+        List<InetAddress> discoveredHosts = client.discoverHosts(NetworkRegistration.PORT_UDP, NetworkRegistration.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
         return discoveredHosts;
     }
@@ -204,7 +204,7 @@ public class MClient implements IEndpoint, IClientConnector {
             Log.info("Client: Try to connect to " + hostAddress.toString());
 
             try {
-                client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_TCP, Network.PORT_UDP);
+                client.connect(NetworkRegistration.TIMEOUT_MS, hostAddress.getHostAddress(), NetworkRegistration.PORT_TCP, NetworkRegistration.PORT_UDP);
                 Log.info("Client: Connection to host " + hostAddress + " established");
                 isConnected = true;
 

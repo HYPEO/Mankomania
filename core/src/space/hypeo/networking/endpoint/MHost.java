@@ -10,7 +10,7 @@ import java.io.IOException;
 import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
-import space.hypeo.networking.network.Network;
+import space.hypeo.networking.network.NetworkRegistration;
 import space.hypeo.networking.packages.Acknowledge;
 import space.hypeo.networking.packages.HorseRaceResult;
 import space.hypeo.networking.packages.Notification;
@@ -151,11 +151,11 @@ public class MHost implements IEndpoint, IHostConnector {
 
         server = new Server();
         // register classes that can be sent/received by server
-        Network.register(server);
+        NetworkRegistration.register(server);
 
         try {
             // opens a TCP and UDP server
-            server.bind(Network.PORT_TCP, Network.PORT_UDP);
+            server.bind(NetworkRegistration.PORT_TCP, NetworkRegistration.PORT_UDP);
         } catch (IOException e) {
             Log.error(e.getMessage());
         }

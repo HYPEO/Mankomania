@@ -7,7 +7,7 @@ import space.hypeo.networking.player.PlayerNT;
 /**
  * This class is a factory to create instances of the different player in layer:
  *  - Business Layer
- *  - Network Layer
+ *  - NetworkRegistration Layer
  */
 public class PlayerFactory {
     private final PlayerManager playerManager;

@@ -15,8 +15,7 @@ import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.LobbyStage;
-import space.hypeo.mankomania.stages.MainMenuStage;
-import space.hypeo.networking.network.Network;
+import space.hypeo.networking.network.NetworkRegistration;
 import space.hypeo.networking.network.Role;
 import space.hypeo.networking.player.PlayerNT;
 
@@ -67,7 +66,7 @@ public class PlayerManager extends GameStateManager {
     public void setPlayerSkeleton(final PlayerSkeleton playerSkeleton) {
         this.playerSkeleton = playerSkeleton;
 
-        lobby = new Lobby(Network.MAX_PLAYER);
+        lobby = new Lobby(NetworkRegistration.MAX_PLAYER);
         lobby.put(playerSkeleton.getPlayerID(), playerSkeleton);
     }
 
