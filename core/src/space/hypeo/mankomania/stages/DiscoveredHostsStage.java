@@ -57,7 +57,7 @@ public class DiscoveredHostsStage extends Stage {
         layout.add(title).width(300).height(100);
         layout.row();
 
-        Log.info("Discovered Network: Host-List contains:");
+        Log.info("Discovered NetworkRegistration: Host-List contains:");
 
         if( foundHosts != null && ! foundHosts.isEmpty() ) {
 

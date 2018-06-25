@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import space.hypeo.networking.network.Network;
+import space.hypeo.networking.network.NetworkRegistration;
 
 /**
  * This class represents the list of player that joined the game,
@@ -20,7 +20,7 @@ import space.hypeo.networking.network.Network;
 public class Lobby {
 
     protected int maxPlayer;
-    protected static final int MAX_PLAYER = Network.MAX_PLAYER;
+    protected static final int MAX_PLAYER = NetworkRegistration.MAX_PLAYER;
 
     /**
      * The data structure that holds the players, that are connected.
