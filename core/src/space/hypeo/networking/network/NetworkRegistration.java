@@ -17,13 +17,13 @@ import space.hypeo.networking.packages.RouletteResult;
 import space.hypeo.networking.packages.StartGame;
 
 /**
- * The class Network is a auxiliary class
+ * The class NetworkRegistration is a auxiliary class
  * to keep things common to both the client and server.
  */
-public final class Network {
+public final class NetworkRegistration {
 
     // this class is not instantiable!
-    private Network() {}
+    private NetworkRegistration() {}
 
     // communication ports
     public static final int PORT_TCP = 54555;

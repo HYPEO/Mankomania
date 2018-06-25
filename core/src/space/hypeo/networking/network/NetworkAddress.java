@@ -66,7 +66,7 @@ public final class NetworkAddress {
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 
-            Log.info("Available Network-Addresses:");
+            Log.info("Available NetworkRegistration-Addresses:");
 
             while( interfaces.hasMoreElements() ) {
                 NetworkInterface iface = interfaces.nextElement();
