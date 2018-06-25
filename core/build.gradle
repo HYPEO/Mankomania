@@ -21,8 +21,18 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
+                    '**/stages**',
+                    '**/StageFactory**',
+
+                    '**/factories**',
+
+                    '**/Colors**',
+                    '**/YourTurnIndicator**',
+
+                    '**/NetworkRegistration**',
                     '**/*packages**',
-                    '**/stages**'
+                    '**/MHost**',
+                    '**/MClient**'
             ])
         })
     }
