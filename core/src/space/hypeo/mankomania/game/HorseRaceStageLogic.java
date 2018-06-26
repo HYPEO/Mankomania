@@ -92,13 +92,8 @@ public class HorseRaceStageLogic {
     }
 
     public boolean checkUniqueHorseTimes(float horse1, float horse2, float horse3, float horse4) {
-        if(horse1 != horse2 && horse1 != horse3 && horse1 != horse4 && horse2 != horse3 &&
-                horse2 != horse4 && horse3 != horse4) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (horse1 != horse2 && horse1 != horse3 && horse1 != horse4 && horse2 != horse3 &&
+                horse2 != horse4 && horse3 != horse4);
     }
 
     public HorseActor calculateWinningHorse(HorseActor horse1, HorseActor horse2, HorseActor horse3, HorseActor horse4) {
@@ -190,7 +185,7 @@ public class HorseRaceStageLogic {
             case 2: return horse2.getQuote();
             case 3: return horse3.getQuote();
             case 4: return horse4.getQuote();
+            default: return 0;
         }
-        return 0;
     }
 }

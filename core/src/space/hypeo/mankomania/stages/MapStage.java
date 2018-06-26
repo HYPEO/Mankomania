@@ -54,6 +54,8 @@ public class MapStage extends Stage {
             this.addActor(actor);
             this.addActor(actor.getPlayerDetailActor());
         }
+
+
     }
 
 

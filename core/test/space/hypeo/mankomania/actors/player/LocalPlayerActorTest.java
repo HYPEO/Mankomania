@@ -14,12 +14,10 @@ import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.GameTest;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
-
-import static org.junit.Assert.assertEquals;
-
 import space.hypeo.mankomania.sensor.DiceSensorManager;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.never;
 
 /**
@@ -38,15 +36,18 @@ public class LocalPlayerActorTest extends GameTest {
     private GameStateManager gameStateManager;
     @Mock
     private DiceSensorManager diceSensorManager;
+    @Mock
+    private Image yourTurnImage;
 
     private PlayerActor playerActor;
+
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Before
     public void setUp() {
-        playerActor = new LocalPlayerActor(actorImage, BALANCE, diceSensorManager, gameStateManager, playerDetailActor, "", "");
+        playerActor = new LocalPlayerActor(actorImage, BALANCE, diceSensorManager, gameStateManager, playerDetailActor, "", "", yourTurnImage);
         playerActor.initializeState(fieldActor);
     }
 

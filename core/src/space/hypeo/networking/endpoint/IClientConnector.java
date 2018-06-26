@@ -9,13 +9,6 @@ import java.util.List;
 public interface IClientConnector {
 
     /**
-     * Joins the game another host has set up.
-     * @param playerID
-     * @return
-     */
-    public boolean joinGame(String playerID);
-
-    /**
      * discover host (run as server) in LAN and WLAN.
      * broadcast a UDP message on the LAN to discover any servers (hosts) running.
      *
@@ -24,6 +17,22 @@ public interface IClientConnector {
      *  + LAN: discovery only works on a LAN with the same subnet.
      *  + WLAN: discovery not possible if client-isolation-settings of the hotspot.
      */
-    public List<InetAddress> discoverHosts();
+    List<InetAddress> discoverHosts();
 
+    /**
+     * Connects the client to the host.
+     * @param hostAddr IP address of host
+     */
+    void connectToHost(InetAddress hostAddr);
+
+    /**
+     * Has client been established connection with host?
+     * @return true when connected to host
+     */
+    boolean isConnected();
+
+    /**
+     * Disconnects the client from the host.
+     */
+    void disconnect();
 }

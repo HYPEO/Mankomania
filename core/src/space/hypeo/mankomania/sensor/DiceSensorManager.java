@@ -14,7 +14,7 @@ import space.hypeo.mankomania.actors.player.PlayerActor;
 public class DiceSensorManager {
     private Random die = new Random();
     private static final float EARTH_GRAVITY = 9.81f;
-    private static final float GRAVITY_FORCE_THRESHOLD = 1.9f;
+    private static final float GRAVITY_FORCE_THRESHOLD = 1.2f;
     private StageManager stageManager;
     private StageFactory stageFactory;
 
@@ -38,12 +38,9 @@ public class DiceSensorManager {
         gForce = (float) Math.sqrt(xValue * xValue + yValue * yValue + zValue * zValue);
 
         if (gForce > GRAVITY_FORCE_THRESHOLD) {
-
             int moveFields = die.nextInt(6) + 1;
             playerActor.move(moveFields);
             stageManager.push(stageFactory.getDiceResultStage(moveFields));
-
-            // TODO: maybe cheat function here (for example: if other player is playing roulette)
         }
     }
 

@@ -9,19 +9,19 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
+import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
+import space.hypeo.networking.network.NetworkRegistration;
 import space.hypeo.networking.network.NetworkAddress;
 import space.hypeo.networking.packages.Acknowledge;
-import space.hypeo.mankomania.player.Lobby;
-import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.HorseRaceResult;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
-import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.RouletteResult;
 import space.hypeo.networking.packages.StartGame;
 
@@ -33,6 +33,9 @@ public class MClient implements IEndpoint, IClientConnector {
 
     // instance of the client
     private com.esotericsoftware.kryonet.Client client;
+
+    // is connected to host?
+    private boolean isConnected;
 
     // host, that the client is connected to
     private PlayerHost hostPlayer;
@@ -46,6 +49,7 @@ public class MClient implements IEndpoint, IClientConnector {
     public MClient(PlayerManager playerManager) {
         this.playerManager = playerManager;
         this.start();
+        isConnected = false;
     }
 
     /**
@@ -65,17 +69,13 @@ public class MClient implements IEndpoint, IClientConnector {
         }
 
         /**
-         * If has diconnected from host.
+         * If has diconnected from host or call methode client.close().
          * @param connection
          */
         @Override
         public void disconnected(Connection connection) {
             super.disconnected(connection);
-
-            connection.sendTCP( new PlayerDisconnect(playerManager.getPlayerSkeleton()) );
-
-            hostPlayer = null;
-            connection.close();
+            Log.info("MClient: Callback disconnected()");
         }
 
         /**
@@ -113,12 +113,9 @@ public class MClient implements IEndpoint, IClientConnector {
                 Log.info("Client: Received info of host, to be connected with: " + hostPlayer);
 
             } else if(object instanceof PlayerDisconnect) {
-                PlayerDisconnect playerDisconnect = (PlayerDisconnect) object;
                 Log.info("Client: Received order to disconnect from host");
 
-                Log.info("Client: Order is for me ");
-                client.sendTCP(playerDisconnect);
-                close();
+                playerManager.signalDisconneced();
 
             } else if(object instanceof StartGame) {
                 Log.info("Client: Received order to start the game");
@@ -152,7 +149,7 @@ public class MClient implements IEndpoint, IClientConnector {
         client = new Client();
         client.start();
         // register classes that can be sent/received by client
-        Network.register(client);
+        NetworkRegistration.register(client);
 
         Log.info("Client has started successfully.");
     }
@@ -180,14 +177,19 @@ public class MClient implements IEndpoint, IClientConnector {
     public void close() {
         Log.info("Client will be closed.");
         client.close();
+        isConnected = false;
+        hostPlayer = null;
     }
 
     @Override
     public List<InetAddress> discoverHosts() {
-        // TODO: check if WLAN has "Wireless Isolation" enabled => no discovery possible
-        // use UDP port for discovering hosts
+        /* TODO
+         *          1. check if WLAN is on (at device)
+         *          2. check if WLAN has "Wireless Isolation" enabled => no discovery possible
+         */
+        /* NOTE: use UDP port for discovering hosts! */
         Log.info("Client: Searching in WLAN for hosts...");
-        List<InetAddress> discoveredHosts = client.discoverHosts(Network.PORT_UDP, Network.TIMEOUT_MS);
+        List<InetAddress> discoveredHosts = client.discoverHosts(NetworkRegistration.PORT_UDP, NetworkRegistration.TIMEOUT_MS);
         discoveredHosts = NetworkAddress.filterLoopback(discoveredHosts);
         return discoveredHosts;
     }
@@ -202,8 +204,9 @@ public class MClient implements IEndpoint, IClientConnector {
             Log.info("Client: Try to connect to " + hostAddress.toString());
 
             try {
-                client.connect(Network.TIMEOUT_MS, hostAddress.getHostAddress(), Network.PORT_TCP, Network.PORT_UDP);
+                client.connect(NetworkRegistration.TIMEOUT_MS, hostAddress.getHostAddress(), NetworkRegistration.PORT_TCP, NetworkRegistration.PORT_UDP);
                 Log.info("Client: Connection to host " + hostAddress + " established");
+                isConnected = true;
 
             } catch (IOException e) {
                 Log.error(e.getMessage());
@@ -228,11 +231,6 @@ public class MClient implements IEndpoint, IClientConnector {
     }
 
     @Override
-    public boolean joinGame(String playerID) {
-        return false;
-    }
-
-    @Override
     public void broadCastLobby() {
         client.sendTCP(playerManager.getLobby());
     }
@@ -249,5 +247,19 @@ public class MClient implements IEndpoint, IClientConnector {
         RouletteResult winnerSlotId = new RouletteResult(playerManager.getPlayerSkeleton());
         winnerSlotId.setResultNo(slotId);
         client.sendTCP(winnerSlotId);
+    }
+
+    @Override
+    public boolean isConnected() {
+        return isConnected;
+    }
+
+    @Override
+    public void disconnect() {
+        if(isConnected) {
+            Log.info("MClient: Send PlayerDisconnect() to host");
+            client.sendTCP(new PlayerDisconnect(playerManager.getPlayerSkeleton()));
+            close();
+        }
     }
 }

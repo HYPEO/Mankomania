@@ -11,8 +11,14 @@ import java.util.Set;
  */
 public class Colors {
 
+    /**
+     * No instance of this class allowed.
+     */
     private Colors() {}
 
+    /**
+     * Allowed colors.
+     */
     private static final Set<Color> avaiableColors =
             new HashSet<>(Arrays.asList(
                     new Color(Color.CYAN),
@@ -21,6 +27,10 @@ public class Colors {
                     new Color(Color.YELLOW)
             ));
 
+    /**
+     * Gets available = defined colors.
+     * @return
+     */
     public static final Set<Color> getAvailableColors() {
         return avaiableColors;
     }

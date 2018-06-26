@@ -15,7 +15,7 @@ import space.hypeo.mankomania.GameTest;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the PlayerActor Class.
@@ -85,7 +85,7 @@ public class PlayerActorTest extends GameTest {
         // VERIFICATION:
         assertEquals(20000, playerActor.getBalance());
         // Verify that playerDetailActor has been notified to update.s
-        Mockito.verify(playerDetailActor).updateBalance(20000);
+        Mockito.verify(playerDetailActor).updateDetails(20000, "");
     }
 
     @Test
@@ -96,7 +96,7 @@ public class PlayerActorTest extends GameTest {
         playerActor.changeBalance(20);
         assertEquals(110, playerActor.getBalance());
 
-        Mockito.verify(playerDetailActor).updateBalance(110);
+        Mockito.verify(playerDetailActor).updateDetails(110, "");
     }
 
     @Test

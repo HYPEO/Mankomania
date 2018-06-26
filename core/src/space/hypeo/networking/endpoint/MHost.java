@@ -1,12 +1,17 @@
 package space.hypeo.networking.endpoint;
 
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
+
 import java.io.IOException;
 
-import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.Lobby;
+import space.hypeo.mankomania.player.PlayerManager;
 import space.hypeo.mankomania.player.PlayerSkeleton;
+import space.hypeo.networking.network.NetworkRegistration;
 import space.hypeo.networking.packages.Acknowledge;
-import space.hypeo.networking.network.Network;
 import space.hypeo.networking.packages.HorseRaceResult;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
@@ -16,11 +21,6 @@ import space.hypeo.networking.packages.PlayerDisconnect;
 import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.RouletteResult;
 import space.hypeo.networking.packages.StartGame;
-
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
-import com.esotericsoftware.minlog.Log;
 
 /**
  * This class represents the host process on the device.
@@ -151,11 +151,11 @@ public class MHost implements IEndpoint, IHostConnector {
 
         server = new Server();
         // register classes that can be sent/received by server
-        Network.register(server);
+        NetworkRegistration.register(server);
 
         try {
             // opens a TCP and UDP server
-            server.bind(Network.PORT_TCP, Network.PORT_UDP);
+            server.bind(NetworkRegistration.PORT_TCP, NetworkRegistration.PORT_UDP);
         } catch (IOException e) {
             Log.error(e.getMessage());
         }
@@ -187,11 +187,6 @@ public class MHost implements IEndpoint, IHostConnector {
         }
 
         Log.info("Server closed.");
-    }
-
-    @Override
-    public void advertiseGame() {
-        // TODO: start out of the lobby here if each player is ready
     }
 
     @Override
@@ -262,5 +257,13 @@ public class MHost implements IEndpoint, IHostConnector {
         RouletteResult winnerSlotId = new RouletteResult(playerManager.getPlayerSkeleton());
         winnerSlotId.setResultNo(slotId);
         server.sendToAllTCP(slotId);
+    }
+
+    @Override
+    public void disconnect() {
+        Log.info("MHost: Send PlayerDisconnect() broadcast.");
+        for(Connection connection : server.getConnections()) {
+            connection.sendTCP(new PlayerDisconnect());
+        }
     }
 }

@@ -16,29 +16,54 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import space.hypeo.mankomania.StageManager;
+import space.hypeo.mankomania.actors.common.RectangleActor;
 
 public class DiceResultStage extends Stage {
+    final StageManager stageManager;
+
+    ImageButton diceButton;
+    Label title;
+    Drawable dice;
+    Texture diceResult;
+    Skin skin;
+
     public DiceResultStage(Viewport viewport, final StageManager stageManager, int moveFields) {
         super(viewport);
+        this.stageManager = stageManager;
 
-        // Set up skin
-        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-        Texture diceResult = new Texture("dice/dice" + moveFields + ".png");
-        Drawable dice = new TextureRegionDrawable(new TextureRegion(diceResult));
+        diceResult = new Texture("dice/dice" + moveFields + ".png");
+        dice = new TextureRegionDrawable(new TextureRegion(diceResult));
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
-        // Set up button
-        ImageButton diceButton = new ImageButton(dice);
+        setUpBackground();
+        createWidgets(moveFields);
+        setUpClickListeners();
+        setUpLayout();
+    }
 
-        Label title = new Label("  You rolled a " + moveFields + " - tap dice to move", skin);
+    private void setUpBackground() {
+        RectangleActor background = new RectangleActor(0, 0, this.getViewport().getWorldWidth(), this.getViewport().getWorldHeight());
+        // Set up background.
+        background.setColor(237f / 255f, 30f / 255f, 121f / 255f, 1f);
 
-        // Add click listeners.
+        this.addActor(background);
+    }
+
+    private void createWidgets(int moveFields) {
+        diceButton = new ImageButton(dice);
+        title = new Label("  You rolled a " + moveFields + " - tap dice to move", skin);
+    }
+
+    private void setUpClickListeners() {
         diceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageManager.remove(DiceResultStage.this);
             }
         });
+    }
 
+    private void setUpLayout() {
         Table table = new Table();
         table.setWidth(this.getWidth());
         table.align(Align.center);
@@ -47,8 +72,6 @@ public class DiceResultStage extends Stage {
         table.row();
         table.add(diceButton).width(350).height(350);
 
-        // Add dice-button to stage.
         this.addActor(table);
-
     }
 }
