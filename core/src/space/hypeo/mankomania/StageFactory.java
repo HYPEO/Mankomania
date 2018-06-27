@@ -19,6 +19,7 @@ import space.hypeo.mankomania.stages.CreatePlayerActorStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.EndGameStage;
+import space.hypeo.mankomania.stages.EvilOneStage;
 import space.hypeo.mankomania.stages.FinishedHotelStage;
 import space.hypeo.mankomania.stages.HorseRaceResultStage;
 import space.hypeo.mankomania.stages.HorseRaceStage;
@@ -118,6 +119,9 @@ public class StageFactory {
         return new RouletteStage(viewport,stageManager);
     }
 
+    public Stage getEvilOneStage(PlayerActor playerActor){
+        return new EvilOneStage(viewport,stageManager,playerActor);
+    }
     public Stage getEndGameStage(PlayerActor winningPlayer) {
         return new EndGameStage(viewport, stageManager, winningPlayer.getPlayerDetailActor());
     }

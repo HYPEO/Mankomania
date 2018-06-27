@@ -8,6 +8,7 @@ import java.util.Random;
 import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.fields.ClickerFieldActor;
+import space.hypeo.mankomania.actors.fields.EvilOneFieldActor;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.fields.BuildHotel;
@@ -50,7 +51,9 @@ public class FieldFactory {
                        currentField = new LotteryFieldPay(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), randomGenerator.nextInt(10), new Texture("transparent.png"), detailActor, stageManager, stageFactory);
                     } else if (random >= 6 && random < 7){
                         currentField = new HorseRaceFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), 0, new Texture("transparent.png"), detailActor, stageManager, stageFactory);
-                    } else {
+                    } else if (random >= 7 && random < 8)
+                        currentField = new EvilOneFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), 0, new Texture("transparent.png"), detailActor, stageManager, stageFactory);
+                    else {
                         currentField = new ClickerFieldActor(xMargin + (fieldIndex * xDirection), yMargin + (fieldIndex * yDirection), new Texture("transparent.png"), randomGenerator.nextInt(10), detailActor, stageManager, stageFactory);
                     }
 
