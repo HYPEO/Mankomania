@@ -35,7 +35,7 @@ public class FieldFactory {
 
     public FieldActor generateField(int fieldIndex, float xDirection, float yDirection, float xMargin, float yMargin, Stage parentStage) {
         Random randomGenerator = new Random();
-        int random = randomGenerator.nextInt(9);
+        int random = randomGenerator.nextInt(10);
         // Create new Field
         FieldActor currentField;
 
