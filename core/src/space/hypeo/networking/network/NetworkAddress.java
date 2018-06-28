@@ -42,7 +42,7 @@ public final class NetworkAddress {
 
         if(matcher.find()) {
             validIpAddress = matcher.group();
-        };
+        }
 
         if(validIpAddress != null) {
             Log.info("IP " + validIpAddress + " is correct");
@@ -66,7 +66,7 @@ public final class NetworkAddress {
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
 
-            Log.info("Available Network-Addresses:");
+            Log.info("Available NetworkRegistration-Addresses:");
 
             while( interfaces.hasMoreElements() ) {
                 NetworkInterface iface = interfaces.nextElement();
@@ -105,7 +105,7 @@ public final class NetworkAddress {
             List<InetAddress> ipAddresses = NetworkAddress.getAllAvailableNetworkAddresses();
 
             for( InetAddress addr : ipAddresses ) {
-                ip = validateIpAddress(addr.getHostAddress().toString());
+                ip = validateIpAddress(addr.getHostAddress());
                 if(ip != null) {
                     break;
                 }

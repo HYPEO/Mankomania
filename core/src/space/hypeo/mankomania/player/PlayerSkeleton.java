@@ -8,6 +8,9 @@ import java.util.UUID;
 
 import space.hypeo.networking.network.NetworkAddress;
 
+/**
+ * This class represents the "raw-player" of a player (on a device).
+ */
 public class PlayerSkeleton {
     protected String playerID;      // player ID
     protected String nickname;      // nickname
@@ -18,9 +21,16 @@ public class PlayerSkeleton {
     protected boolean isActive;     // true when it is my turn
     protected int balance;          // total amount of money
 
+    protected float xImagePosition;
+    protected float yImagePosition;
+
     /* NOTE: default constructor required for network traffic */
     public PlayerSkeleton() {}
 
+    /**
+     * Creates instance of PlayerSkeleton.
+     * @param nickname
+     */
     public PlayerSkeleton(String nickname) {
         this.nickname = nickname;
 
@@ -40,6 +50,10 @@ public class PlayerSkeleton {
         color = null;
         isActive = false;
         balance = PlayerFactory.START_BALANCE;
+
+        xImagePosition = 0;
+        yImagePosition = 0;
+
     }
 
     /**
@@ -56,49 +70,109 @@ public class PlayerSkeleton {
         }
     }
 
+    /**
+     * Gets ID of current player.
+     * @return
+     */
     public String getPlayerID() {
         return playerID;
     }
 
+    /**
+     * Gets nickname of current player.
+     * @return
+     */
     public String getNickname() {
         return nickname;
     }
 
+    /**
+     * Gets IP address of current player (in WLAN).
+     * @return
+     */
     public String getAddress() {
         return address;
     }
 
+    /**
+     * Is current player ready to start the game?
+     * @return
+     */
     public boolean isReady() {
         return isReady;
     }
 
+    /**
+     * Sets the current player ready to start the game.
+     * @param ready
+     */
     public void setReady(boolean ready) {
         isReady = ready;
     }
 
+    /**
+     * Gets the color of the current player.
+     * @return
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * Sets the color of the current player.
+     * @param color
+     */
     public void setColor(Color color) {
         this.color = color;
         Log.info("set my (" + nickname + ") color to " + color);
     }
 
+    /**
+     * Is current player active means is current player's turn?
+     * @return
+     */
     public boolean isActive() {
         return isActive;
     }
 
+    /**
+     * Sets current player active means it's its turn now.
+     * @param active
+     */
     public void setActive(boolean active) {
         isActive = active;
     }
 
+    /**
+     * Gets balance (total mony amount) of current player.
+     * @return
+     */
     public int getBalance() {
         return balance;
     }
 
+    /**
+     * Sets balance (total mony amount) of current player.
+     * @param balance
+     */
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+
+    public float getxImagePosition() {
+        return xImagePosition;
+    }
+
+    public void setxImagePosition(float xImagePosition) {
+        this.xImagePosition = xImagePosition;
+    }
+
+    public float getyImagePosition() {
+        return yImagePosition;
+    }
+
+    public void setyImagePosition(float yImagePosition) {
+        this.yImagePosition = yImagePosition;
     }
 
     /**
@@ -117,8 +191,9 @@ public class PlayerSkeleton {
      */
     @Override
     public String toString() {
-        return "ID " + playerID + ", nick " + nickname + ", addr " + address +
-                (color != null ? color : "") + ", " +
+        return "ID " + playerID + ", nick " + nickname + ", addr " + address + ", " +
+                (isReady ? " " : " Not ") + "Ready, " +
+                (color != null ? color : "<no color>") + ", " +
                 (isActive ? "active" : "inactive") +
                 ", balance " + balance + "€";
     }

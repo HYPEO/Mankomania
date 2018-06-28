@@ -14,8 +14,7 @@ public class Role {
         this.id = id;
     }
 
-    // TODO: public constructor is needed for network-registration
-    // but UNWANTED here in this class!
+    /* NOTE: public constructor is needed for network-registration, BUT unwanted */
     public Role() { this(STR_NOT_CONNECTED); }
 
     private static final String STR_CLIENT = "CLIENT";

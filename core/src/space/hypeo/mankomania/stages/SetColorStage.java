@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -16,14 +15,11 @@ import com.esotericsoftware.minlog.Log;
 
 import java.util.Set;
 
-import space.hypeo.mankomania.StageFactory;
 import space.hypeo.mankomania.StageManager;
 import space.hypeo.mankomania.actors.common.RectangleActor;
+import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.player.Colors;
-import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.mankomania.player.PlayerManager;
-import space.hypeo.mankomania.player.PlayerSkeleton;
-import space.hypeo.networking.network.Role;
 
 /**
  * This stage is the view to set the player color.
@@ -32,24 +28,31 @@ import space.hypeo.networking.network.Role;
 public class SetColorStage extends Stage {
     private StageManager stageManager;
     private final Viewport viewport;
-    private final StageFactory stageFactory;
     private PlayerManager playerManager;
 
-    public SetColorStage(StageManager stageManager, Viewport viewport, StageFactory stageFactory, PlayerManager playerManager) {
+    /**
+     * Creates new instance.
+     * @param stageManager
+     * @param viewport
+     * @param playerManager
+     */
+    public SetColorStage(StageManager stageManager, Viewport viewport, PlayerManager playerManager) {
+        super(viewport);
         this.stageManager = stageManager;
         this.viewport = viewport;
-        this.stageFactory = stageFactory;
         this.playerManager = playerManager;
 
         setupBackground();
         setupLayout();
     }
 
+    /**
+     * Sets the background color.
+     */
     private void setupBackground() {
         RectangleActor background = new RectangleActor(0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
         // Set up background.
         background.setColor(237f/255f, 30f/255f, 121f/255f, 1f);
-
         // Add listener for click on background events.
         background.addListener(new ClickListener() {
             @Override
@@ -61,6 +64,9 @@ public class SetColorStage extends Stage {
         this.addActor(background);
     }
 
+    /**
+     * Sets the layout of the stage.
+     */
     private void setupLayout() {
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
@@ -80,19 +86,19 @@ public class SetColorStage extends Stage {
         rootTable.row();
 
         /* buttons */
-        Set<Color> usedPlayerColors= playerManager.usedPlayerColors();
+        Set<Color> usedPlayerColors = playerManager.usedPlayerColors();
 
         /* inner table contains players from lobby: represented as button */
         Table btnTable = new Table();
-        int btnHeight = 100;
-        int btnWidth = 250;
+        int btnHeight = 150;
+        int btnWidth = 150;
 
         /* data rows */
         for( Color color : Colors.getAvailableColors()) {
 
             /* colors, that are not used by other players, are selectable */
             if(!usedPlayerColors.contains(color)) {
-                Button btnColor = new TextButton(color.toString(), skin);
+                Button btnColor = ButtonFactory.getPlayerButton(color);
                 btnColor.setColor(color);
 
                 btnColor.addListener(new ClickListener() {

@@ -11,7 +11,10 @@ import org.mockito.junit.MockitoRule;
 
 import java.util.EmptyStackException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Created by pichlermarc on 10.05.2018.

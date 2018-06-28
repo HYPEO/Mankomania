@@ -10,11 +10,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import space.hypeo.mankomania.GameStateManager;
 import space.hypeo.mankomania.GameTest;
 import space.hypeo.mankomania.actors.fields.FieldActor;
 import space.hypeo.mankomania.actors.map.PlayerDetailActor;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests the PlayerActor Class.
@@ -29,6 +30,8 @@ public class PlayerActorTest extends GameTest {
     private FieldActor fieldActor;
     @Mock
     private PlayerDetailActor playerDetailActor;
+    @Mock
+    private GameStateManager gameStateManager;
 
     private PlayerActor playerActor;
 
@@ -37,7 +40,7 @@ public class PlayerActorTest extends GameTest {
 
     @Before
     public void setUp() {
-        playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor);
+        playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor, gameStateManager, "", "");
         playerActor.initializeState(fieldActor);
     }
 
@@ -46,7 +49,7 @@ public class PlayerActorTest extends GameTest {
 
         // SET-UP:
         // Set up nonlocal Player
-        playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor);
+        playerActor = new PlayerActor(actorImage, BALANCE, playerDetailActor, gameStateManager, "", "");
         playerActor.initializeState(fieldActor);
 
         // Return predefined following field on method call.
@@ -82,7 +85,7 @@ public class PlayerActorTest extends GameTest {
         // VERIFICATION:
         assertEquals(20000, playerActor.getBalance());
         // Verify that playerDetailActor has been notified to update.s
-        Mockito.verify(playerDetailActor).updateBalance(20000);
+        Mockito.verify(playerDetailActor).updateDetails(20000, "");
     }
 
     @Test
@@ -92,6 +95,8 @@ public class PlayerActorTest extends GameTest {
         assertEquals(90, playerActor.getBalance());
         playerActor.changeBalance(20);
         assertEquals(110, playerActor.getBalance());
+
+        Mockito.verify(playerDetailActor).updateDetails(110, "");
     }
 
     @Test

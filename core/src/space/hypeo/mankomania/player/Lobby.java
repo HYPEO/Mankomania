@@ -9,8 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import space.hypeo.mankomania.player.PlayerSkeleton;
-import space.hypeo.networking.network.Network;
+import space.hypeo.networking.network.NetworkRegistration;
 
 /**
  * This class represents the list of player that joined the game,
@@ -21,7 +20,7 @@ import space.hypeo.networking.network.Network;
 public class Lobby {
 
     protected int maxPlayer;
-    protected static final int MAX_PLAYER = Network.MAX_PLAYER;
+    protected static final int MAX_PLAYER = NetworkRegistration.MAX_PLAYER;
 
     /**
      * The data structure that holds the players, that are connected.
@@ -31,6 +30,9 @@ public class Lobby {
      */
     protected Map<String, PlayerSkeleton> data;
 
+    /**
+     * Creates new instance of Lobby.
+     */
     public Lobby() {
         data = new HashMap<>();
         maxPlayer = MAX_PLAYER;
@@ -44,6 +46,10 @@ public class Lobby {
         this.maxPlayer = maxPlayer;
     }
 
+    /**
+     * Gets player limit.
+     * @return player limit
+     */
     public int getMaxPlayer() {
         return maxPlayer;
     }
@@ -54,9 +60,17 @@ public class Lobby {
      * @param p value, PlayerSkeleton
      */
     public void put(String playerId, PlayerSkeleton p) {
+        Log.info("Lobby contains " + data.size() + " player.");
+        Log.info("Insert or update ID '" + playerId + "'");
         data.put(playerId, p);
+        Log.info("Now Lobby contains " + data.size() + " player.");
     }
 
+    /**
+     * Gets PlayerSkeleton for player ID.
+     * @param playerId
+     * @return
+     */
     public PlayerSkeleton get(String playerId) {
         return data.get(playerId);
     }
@@ -77,10 +91,20 @@ public class Lobby {
         data.remove(player);
     }
 
+    /**
+     * Does lobby contain player with specified ID?
+     * @param playerId
+     * @return
+     */
     public boolean contains(String playerId) {
         return data.containsKey(playerId);
     }
 
+    /**
+     * Does lobby contain player that matches specified PlayerSkeleton object?
+     * @param player
+     * @return
+     */
     public boolean contains(PlayerSkeleton player) {
         return data.containsValue(player);
     }
@@ -93,6 +117,10 @@ public class Lobby {
         return data.keySet();
     }
 
+    /**
+     * Gets all player in Lobby.
+     * @return
+     */
     public Collection<PlayerSkeleton> values() { return data.values(); }
 
     /**
@@ -135,6 +163,23 @@ public class Lobby {
 
         for(PlayerSkeleton playerInLobby : data.values() ) {
             if(!playerInLobby.isReady()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if all player within the lobby have already set their color.
+     * @return boolean
+     */
+    public boolean areAllPlayerColored() {
+        if( this.isEmpty() ) {
+            return false;
+        }
+
+        for(PlayerSkeleton playerInLobby : data.values() ) {
+            if(playerInLobby.getColor() == null) {
                 return false;
             }
         }

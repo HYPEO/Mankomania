@@ -11,19 +11,35 @@ import space.hypeo.mankomania.sensor.DiceSensorManager;
  */
 public class LocalPlayerActor extends PlayerActor {
     private DiceSensorManager diceSensorManager;
-    private GameStateManager gameStateManager;
+    private Image yourTurn;
     private float timeElapsed;
 
     /**
      * @param actorImage Image that represents the actor.
      * @param balance    The player's current balance (starting balance)
      */
-    public LocalPlayerActor(Image actorImage, int balance, DiceSensorManager diceSensorManager, GameStateManager gameStateManager, PlayerDetailActor playerDetailActor) {
-        super(actorImage, balance, playerDetailActor);
+    public LocalPlayerActor(Image actorImage, int balance, DiceSensorManager diceSensorManager, GameStateManager gameStateManager, PlayerDetailActor playerDetailActor, String id, String nickname, Image yourTurn) {
+        super(actorImage, balance, playerDetailActor, gameStateManager, id, nickname);
         this.diceSensorManager = diceSensorManager;
-        this.gameStateManager = gameStateManager;
-        this.gameStateManager.addPlayer(this);
+        this.yourTurn = yourTurn;
         timeElapsed = 0;
+
+        yourTurn.setVisible(this.isActive);
+        this.addActor(yourTurn);
+    }
+
+    @Override
+    public void setActive() {
+        super.setActive();
+        if(yourTurn!=null)
+            yourTurn.setVisible(this.isActive);
+    }
+
+    @Override
+    public void setInactive() {
+        super.setInactive();
+        if(yourTurn!=null)
+            yourTurn.setVisible(this.isActive);
     }
 
     @Override
@@ -38,6 +54,7 @@ public class LocalPlayerActor extends PlayerActor {
 
     @Override
     public void act(float deltaTime) {
+        super.act(deltaTime);
         if (this.isActive) {
             timeElapsed += deltaTime;
             if (timeElapsed >= 0.18f) {

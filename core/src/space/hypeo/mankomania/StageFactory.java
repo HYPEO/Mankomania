@@ -4,24 +4,34 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import space.hypeo.mankomania.actors.fields.BuildHotel;
 import space.hypeo.mankomania.actors.horse.HorseActor;
 import space.hypeo.mankomania.actors.map.DetailActor;
 import space.hypeo.mankomania.actors.player.PlayerActor;
 import space.hypeo.mankomania.factories.ActorFactory;
-import space.hypeo.mankomania.factories.ButtonFactory;
 import space.hypeo.mankomania.factories.FieldFactory;
+import space.hypeo.mankomania.game.SlotMachineLogic;
 import space.hypeo.mankomania.player.PlayerManager;
+import space.hypeo.mankomania.stages.BuildHotelStage;
+import space.hypeo.mankomania.stages.ClickerStage;
+import space.hypeo.mankomania.stages.ClickerStageEndscreen;
+import space.hypeo.mankomania.stages.CreatePlayerActorStage;
 import space.hypeo.mankomania.stages.DiceResultStage;
 import space.hypeo.mankomania.stages.DiscoveredHostsStage;
 import space.hypeo.mankomania.stages.EndGameStage;
+import space.hypeo.mankomania.stages.EvilOneStage;
+import space.hypeo.mankomania.stages.FinishedHotelStage;
 import space.hypeo.mankomania.stages.HorseRaceResultStage;
 import space.hypeo.mankomania.stages.HorseRaceStage;
 import space.hypeo.mankomania.stages.LobbyStage;
+import space.hypeo.mankomania.stages.LotteryStage;
 import space.hypeo.mankomania.stages.MainMenuStage;
 import space.hypeo.mankomania.stages.MapStage;
 import space.hypeo.mankomania.stages.RouletteStage;
 import space.hypeo.mankomania.stages.SendMoneyStage;
 import space.hypeo.mankomania.stages.SetColorStage;
+import space.hypeo.mankomania.stages.SlotMachineResultStage;
+import space.hypeo.mankomania.stages.SlotMachineStage;
 import space.hypeo.mankomania.stages.TitleStage;
 
 /**
@@ -40,16 +50,20 @@ public class StageFactory {
         this.actorFactory = actorFactory;
     }
 
-    public Stage getMapStage(int playerCount)
+    public Stage getMapStage()
     {
-
         GameStateManager gameStateManager = new OfflineGameStateManager(stageManager, this);
 
-        actorFactory.getPlayerActor("", "", Color.GREEN,true, gameStateManager, this);
-        actorFactory.getPlayerActor("", "", Color.CYAN,true, gameStateManager, this);
-        actorFactory.getPlayerActor("", "", Color.YELLOW,true, gameStateManager, this);
-        actorFactory.getPlayerActor("", "", Color.PINK,true, gameStateManager, this);
+        actorFactory.getPlayerActor("Player 1", "Player 1", Color.GREEN,true, gameStateManager, this);
+        actorFactory.getPlayerActor("Player 2", "Player 2", Color.CYAN,true, gameStateManager, this);
+        actorFactory.getPlayerActor("Player 3", "Player 3", Color.YELLOW,true, gameStateManager, this);
+        actorFactory.getPlayerActor("Player 4", "Player 4", Color.PINK,true, gameStateManager, this);
 
+        return getMapStage(gameStateManager);
+    }
+
+    public Stage getMapStage(GameStateManager gameStateManager)
+    {
         DetailActor detailActor = actorFactory.getDetailActor();
         FieldFactory fieldFactory = new FieldFactory(detailActor, stageManager, this);
         return new MapStage(viewport, gameStateManager, detailActor, fieldFactory);
@@ -60,8 +74,7 @@ public class StageFactory {
     }
 
     public Stage getMainMenu() {
-        ButtonFactory buttonFactory = new ButtonFactory();
-        return new MainMenuStage(stageManager, viewport, this, publisher, buttonFactory);
+        return new MainMenuStage(stageManager, viewport, this, publisher);
     }
 
     public Stage getSendMoneyStage(PlayerManager playerManager) {
@@ -79,6 +92,11 @@ public class StageFactory {
 
     public Stage getHorseRaceResultStage(int backedHorseID, int bet, HorseActor winningHorse) {
         return new HorseRaceResultStage(viewport, stageManager, backedHorseID, bet, winningHorse);
+    }
+
+    public LotteryStage getLotteryStage(PlayerActor playerActor, boolean pay)
+     {
+        return new LotteryStage(viewport, stageManager, playerActor, pay);
     }
 
     /**
@@ -101,11 +119,41 @@ public class StageFactory {
         return new RouletteStage(viewport,stageManager);
     }
 
+    public Stage getEvilOneStage(PlayerActor playerActor){
+        return new EvilOneStage(viewport,stageManager,playerActor);
+    }
     public Stage getEndGameStage(PlayerActor winningPlayer) {
         return new EndGameStage(viewport, stageManager, winningPlayer.getPlayerDetailActor());
     }
 
     public Stage getSetColorStage(PlayerManager playerManager) {
-        return new SetColorStage(stageManager, viewport, this, playerManager);
+        return new SetColorStage(stageManager, viewport, playerManager);
     }
+
+    public Stage getCreatePlayerActorStage(PlayerManager playerManager) {
+        return new CreatePlayerActorStage(viewport, playerManager);
+    }
+
+    public Stage getSlotMachineStage(PlayerActor playerActor) {
+        return new SlotMachineStage(viewport, stageManager, this, playerActor);
+    }
+
+    public Stage getSlotMachineResultStage(SlotMachineLogic slotMachineLogic) {
+        return new SlotMachineResultStage(viewport, stageManager, slotMachineLogic);
+    }
+
+    public Stage buildHotelStage(PlayerActor player, BuildHotel build) {
+        return  new BuildHotelStage(viewport,stageManager,player,build);
+    }
+
+    public Stage finishedHotelStage(PlayerActor player, boolean owner) {
+        return new FinishedHotelStage(viewport,stageManager,player,owner );
+    }
+    public Stage clickerStage(PlayerActor player) {
+        return new ClickerStage(viewport,stageManager,this,player);
+    }
+    public Stage clickerStageEndscreen(PlayerActor playerActor, int score) {
+        return new ClickerStageEndscreen(viewport,stageManager, playerActor,score);
+    }
+
 }

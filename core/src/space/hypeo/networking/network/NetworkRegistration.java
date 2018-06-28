@@ -6,21 +6,24 @@ import com.esotericsoftware.kryonet.EndPoint;
 import space.hypeo.mankomania.player.Lobby;
 import space.hypeo.mankomania.player.PlayerSkeleton;
 import space.hypeo.networking.packages.Acknowledge;
+import space.hypeo.networking.packages.HorseRaceResult;
 import space.hypeo.networking.packages.Notification;
 import space.hypeo.networking.packages.PingRequest;
 import space.hypeo.networking.packages.PingResponse;
 import space.hypeo.networking.packages.PlayerConnect;
-import space.hypeo.networking.packages.PlayerHost;
 import space.hypeo.networking.packages.PlayerDisconnect;
+import space.hypeo.networking.packages.PlayerHost;
+import space.hypeo.networking.packages.RouletteResult;
+import space.hypeo.networking.packages.StartGame;
 
 /**
- * The class Network is a auxiliary class
+ * The class NetworkRegistration is a auxiliary class
  * to keep things common to both the client and server.
  */
-public final class Network {
+public final class NetworkRegistration {
 
     // this class is not instantiable!
-    private Network() {}
+    private NetworkRegistration() {}
 
     // communication ports
     public static final int PORT_TCP = 54555;
@@ -30,7 +33,7 @@ public final class Network {
     public static final int MAX_PLAYER = 5;
 
     // max time in milli-second to try to connect
-    public static final int TIMEOUT_MS = 5000;
+    public static final int TIMEOUT_MS = 3000;
 
     /**
      * Register objects for server|client that are going to be sent over the network.
@@ -54,8 +57,11 @@ public final class Network {
 
         kryo.register(PlayerSkeleton.class);
         kryo.register(Lobby.class);
-
         kryo.register(com.badlogic.gdx.graphics.Color.class);
+        kryo.register(StartGame.class);
+
+        kryo.register(HorseRaceResult.class);
+        kryo.register(RouletteResult.class);
     }
 
 }
